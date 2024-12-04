@@ -298,12 +298,20 @@ const Platformer: React.FC = () => {
                                 return newHealth;
                             }
                         });
+
+                        // Apply damage jump effect
+                        setPlayer((prevPlayer) => ({
+                            ...prevPlayer,
+                            vy: JUMP_SPEED / 2, // Apply upward velocity for a smaller jump
+                        }));
+
                         obstacle.hit = true;
                     }
                 } else {
                     obstacle.hit = false;
                 }
             });
+
 
             // Collectibles Collision
             setCollectibles((prevCollectibles) =>
