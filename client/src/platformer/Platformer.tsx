@@ -1,8 +1,5 @@
 const Platformer: React.FC = () => {
-
-    return(
-        <>aaa</>
-    )
-}
+  return <>aaa</>;
+};
 
 export default Platformer;
