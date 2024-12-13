@@ -8,11 +8,11 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
+import LoginPage from "./pages/Login.tsx";
 
 const imagesArray = [
-  'https://example.com/image1.jpg',
-  'https://example.com/image2.jpg',
-  'https://example.com/image3.jpg',
+  '/images/charaters/daughter.png',
+  '/images/charaters/mom.png',
 ];
 
 // Utility function to preload images
@@ -51,16 +51,17 @@ function App() {
   }, []);
 
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/city-run" element={<Platformer />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+      <>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/chat" element={<Chat/>}/>
+            <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/city-run" element={<Platformer/>}/>
+          </Routes>
+        </BrowserRouter>
+      </>
   );
 }
 
