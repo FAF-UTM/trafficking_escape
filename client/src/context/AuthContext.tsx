@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Navigate } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
 interface AuthContextProps {
     isAuthenticated: boolean;
@@ -16,7 +17,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return !!localStorage.getItem("authToken");
     });
     const [role, setRole] = useState<string | null>(() => {
-        return localStorage.getItem("userRole");
+        const token = localStorage.getItem("authToken");
+        if (token) {
+            const decoded: any = jwtDecode(token);
+            return decoded.role;
+        }
+        return null;
     });
 
     const login = async (username: string, password: string) => {
@@ -30,11 +36,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             });
 
             if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem("authToken", data.token);
-                localStorage.setItem("userRole", data.role);
+                // Check Content-Type to determine response format
+                const contentType = response.headers.get("Content-Type");
+
+                let token: string;
+
+                if (contentType && contentType.includes("application/json")) {
+                    const data = await response.json();
+                    token = data.token; // Extract token from JSON response
+                } else {
+                    token = await response.text(); // Parse as plain text
+                }
+
+                const decoded: any = jwtDecode(token);
+
+                localStorage.setItem("authToken", token);
                 setIsAuthenticated(true);
-                setRole(data.role);
+                setRole(decoded.role);
             } else {
                 console.error("Login failed");
             }
@@ -45,7 +63,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const logout = () => {
         localStorage.removeItem("authToken");
-        localStorage.removeItem("userRole");
         setIsAuthenticated(false);
         setRole(null);
     };
@@ -69,13 +86,13 @@ export const ProtectedRoute: React.FC<{ children: ReactNode; roles: string[] }> 
                                                                                        children,
                                                                                        roles,
                                                                                    }) => {
-    const { isAuthenticated, role: userRole } = useAuth();
+    const { isAuthenticated, role } = useAuth();
 
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }
 
-    if (!roles.includes(userRole || "")) {
+    if (!roles.includes(role || "")) {
         return <Navigate to="/login" replace />;
     }
 
