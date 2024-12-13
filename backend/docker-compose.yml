@@ -5,16 +5,17 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
-      - "5005:5005"
+      - "8080:8080" # App exposed port
+      - "5005:5005" # Debugging port
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
-      - SPRING_DATASOURCE_USERNAME=alex
-      - SPRING_DATASOURCE_PASSWORD=password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: alex
+      SPRING_DATASOURCE_PASSWORD: password
     depends_on:
       - db
     restart: on-failure
+    networks:
+      - app_network
 
   db:
     image: postgres:12
@@ -26,6 +27,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
 
 volumes:
   postgres_data:
+
+networks:
+  app_network:
