@@ -545,3 +545,25 @@ const Chat: React.FC = () => {
 };
 
 export default Chat;
+
+const styles: { [key: string]: React.CSSProperties } = {
+  container: {
+    display: 'flex',
+    height: '100vh',
+    width: '100vw',
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    backgroundColor: '#f0f2f5',
+  },
+  chatArea: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
+  },
+  header: {
+    padding: '15px 20px',
+    borderBottom: '1px solid #e0e0e0',
+    backgroundColor: '#007bff',
+    color: '#ffffff',
+  },
+};
