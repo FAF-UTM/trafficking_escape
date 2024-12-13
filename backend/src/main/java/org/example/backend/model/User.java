@@ -34,4 +34,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatUsers> chatUsers;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
 }

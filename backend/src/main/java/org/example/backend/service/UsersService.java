@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.backend.model.User;
 import org.example.backend.repos.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UsersService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -21,6 +23,7 @@ public class UsersService {
     }
 
     public User create(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
