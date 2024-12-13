@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+
+.character{
+    position: absolute;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+
+
+}
+.character_left{
+    left: -100%;
+    bottom: 10px;
+    transition: left 2s ease-in-out;
+    align-items: flex-start;
+}
+.character_right{
+    right: -100%;
+    bottom: 10px;
+    transition: right 2s ease-in-out;
+    align-items: flex-end;
+}
+.character_left{
+    right: 10px;
+    bottom: 10px;
+
+}
+#character_img_mom{
+    height: 60vh;
+}
+#character_img_daughter{
+    height: 60vh;
+}
+.character_show_left{
+    left: 10px;
+    z-index: 20;
+
+}
+.character_show_right{
+    right: 10px;
+    z-index: 20;
+}
+.character_message{
+    padding: 20px;
+    box-sizing: border-box;
+    background: #ffdd57;
+    color: #000;
+    font-family: 'Press Start 2P', sans-serif;
+    max-width: 80vh;
+    font-size: 28px;
+    line-height: 1;
+    f
+}
+.character_message_mom {
+   margin-left: 220px;
+}
+
