@@ -1,58 +1,79 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-
-.character{
-    position: absolute;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-
-
-}
-.character_left{
-    left: -100%;
-    bottom: 10px;
-    transition: left 2s ease-in-out;
-    align-items: flex-start;
-}
-.character_right{
-    right: -100%;
-    bottom: 10px;
-    transition: right 2s ease-in-out;
-    align-items: flex-end;
-}
-.character_left{
-    right: 10px;
-    bottom: 10px;
-
-}
-#character_img_mom{
-    height: 60vh;
-}
-#character_img_daughter{
-    height: 60vh;
-}
-.character_show_left{
-    left: 10px;
-    z-index: 20;
-
-}
-.character_show_right{
-    right: 10px;
-    z-index: 20;
-}
-.character_message{
-    padding: 20px;
-    box-sizing: border-box;
-    background: #ffdd57;
-    color: #000;
-    font-family: 'Press Start 2P', sans-serif;
-    max-width: 80vh;
-    font-size: 28px;
-    line-height: 1;
-    f
-}
-.character_message_mom {
-   margin-left: 220px;
+.character {
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
 }
 
+.character_left {
+  transform: translateX(-100%); /* Start offscreen */
+  bottom: 10px;
+  left: 10px;
+  align-items: flex-start;
+  transition:
+    transform 1s ease-in-out,
+    opacity 1s ease-in-out;
+  transition-delay: 0s; /* No delay when appearing */
+}
+
+.character_right {
+  transform: translateX(100%); /* Start offscreen */
+  right: 10px;
+  bottom: 10px;
+  transition:
+    transform 1s ease-in-out,
+    opacity 1s ease-in-out;
+  transition-delay: 0s; /* No delay when appearing */
+  align-items: flex-end;
+}
+
+#character_img_mom {
+  height: 60vh;
+}
+#character_message_mom {
+  margin-left: 30px;
+}
+#character_img_daughter {
+  height: 60vh;
+}
+
+.character_show_left {
+  left: 10px;
+  transform: translateX(0); /* Move to final position */
+  z-index: 20;
+  transition-delay: 0s; /* No delay when showing */
+}
+
+.character_show_right {
+  right: 10px;
+  transform: translateX(0); /* Move to final position */
+  z-index: 20;
+  transition-delay: 0s; /* No delay when showing */
+}
+
+.character_message {
+  padding: 20px;
+  box-sizing: border-box;
+  background: #ffdd57;
+  color: #000;
+  font-family: 'Press Start 2P', sans-serif;
+  max-width: 80vh;
+  font-size: 28px;
+  line-height: 1.2;
+  opacity: 0;
+  transition: opacity 1s ease-in-out; /* Smooth transition for opacity */
+}
+
+.message_visible {
+  opacity: 1; /* Fully visible */
+}
+
+.message_hidden {
+  opacity: 0; /* Fully hidden */
+}
+
+.character:not(.character_show_left):not(.character_show_right) {
+  transition-delay: 1s; /* Add delay before moving when disappearing */
+}
