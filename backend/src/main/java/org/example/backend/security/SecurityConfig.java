@@ -79,7 +79,7 @@ public class SecurityConfig {
         configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:3000")); // List your allowed origins here
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173")); // List your allowed origins here
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
