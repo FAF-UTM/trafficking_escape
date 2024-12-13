@@ -12,7 +12,7 @@ public class ChatDataDTO {
     private String from;
     private String fromImg;
     private String sendType;
-    private List<String> messages;
+    private List<ChatMessagesDTO> messages;
     private Instant createdAt;
     private Instant updatedAt;
     private ChatUsers chatUser;

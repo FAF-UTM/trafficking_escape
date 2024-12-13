@@ -20,10 +20,9 @@ public class ChatData {
     private String fromImg;
     private String sendType;
 
-    @ElementCollection
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @CollectionTable(name = "chat_messages", joinColumns = @JoinColumn(name = "chat_data_id"))
-    @Column(name = "message")
-    private List<String> messages;
+    private List<ChatMessages> messages;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
