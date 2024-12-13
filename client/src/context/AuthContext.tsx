@@ -65,17 +65,17 @@ export const useAuth = () => {
     return context;
 };
 
-export const ProtectedRoute: React.FC<{ children: ReactNode; role?: string }> = ({
-                                                                                     children,
-                                                                                     role,
-                                                                                 }) => {
+export const ProtectedRoute: React.FC<{ children: ReactNode; roles: string[] }> = ({
+                                                                                       children,
+                                                                                       roles,
+                                                                                   }) => {
     const { isAuthenticated, role: userRole } = useAuth();
 
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }
 
-    if (role && userRole !== role) {
+    if (!roles.includes(userRole || "")) {
         return <Navigate to="/login" replace />;
     }
 
