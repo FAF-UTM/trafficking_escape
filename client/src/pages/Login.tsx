@@ -25,14 +25,14 @@ const LoginPage: React.FC = () => {
         event.preventDefault();
         try {
             await login(username, password);
-            navigate("/chat"); // Redirect to a default protected route after login
+            navigate("/chat");
         } catch (err) {
             setError("Invalid username or password");
         }
     };
+
     return (
         <ThemeProvider theme={theme}>
-
             <Container className={styles.login} component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -76,21 +76,16 @@ const LoginPage: React.FC = () => {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2, padding: "10px 16px" }}
+                            sx={{ mt: 3, mb: 2 }}
                         >
                             Sign In
                         </Button>
                     </Box>
                 </Box>
             </Container>
-            <div className={styles.login_image}>
-
-            </div>
+            <div className={styles.login_image}></div>
         </ThemeProvider>
-
-
-    )
-        ;
+    );
 };
 
 export default LoginPage;
