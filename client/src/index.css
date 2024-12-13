@@ -1,9 +1,155 @@
+/* SF Pro Text - Regular */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* SF Pro Text - Regular Italic */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-RegularItalic.otf") format("opentype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* SF Pro Text - Bold */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* SF Pro Text - Bold Italic */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-BoldItalic.otf") format("opentype");
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* SF Pro Text - Black */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* SF Pro Text - Black Italic */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-BlackItalic.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+}
+
+/* SF Pro Text - Heavy */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-Heavy.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+/* SF Pro Text - Heavy Italic */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-HeavyItalic.otf") format("opentype");
+  font-weight: 800;
+  font-style: italic;
+}
+
+/* SF Pro Text - Semibold */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-Semibold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* SF Pro Text - Semibold Italic */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-SemiboldItalic.otf") format("opentype");
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* SF Pro Text - Medium */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* SF Pro Text - Medium Italic */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-MediumItalic.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* SF Pro Text - Light */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* SF Pro Text - Light Italic */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-LightItalic.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* SF Pro Text - Thin */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-Thin.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+/* SF Pro Text - Thin Italic */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-ThinItalic.otf") format("opentype");
+  font-weight: 100;
+  font-style: italic;
+}
+
+/* SF Pro Text - Ultralight */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-Ultralight.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+/* SF Pro Text - Ultralight Italic */
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/SF Pro Text/SF-Pro-Text-UltralightItalic.otf") format("opentype");
+  font-weight: 200;
+  font-style: italic;
+}
+#root{
+  position: relative;
+  overflow: hidden;
+}
 :root {
   font-family: Roboto, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-position: relative;
-  overflow: hidden;
+
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -12,8 +158,6 @@ position: relative;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-
 
   /* costume ctyles*/
   --web-wash: #f5f5f5;
