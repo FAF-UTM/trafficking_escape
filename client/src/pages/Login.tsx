@@ -8,25 +8,33 @@ import {
     CssBaseline,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import styles from "./pages.module.css"
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import styles from "./pages.module.css";
 
 const theme = createTheme();
 
 const LoginPage: React.FC = () => {
-    const [email, setEmail] = useState("");
+    const { login } = useAuth();
+    const navigate = useNavigate();
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log({ email, password });
-        // Handle login logic here
+        try {
+            await login(username, password);
+            navigate("/chat"); // Redirect to a default protected route after login
+        } catch (err) {
+            setError("Invalid username or password");
+        }
     };
-
     return (
         <ThemeProvider style={{}} theme={theme}>
 
             <Container className={styles.login} component="main" maxWidth="xs">
-                <CssBaseline/>
+                <CssBaseline />
                 <Box
                     sx={{
                         marginTop: 8,
@@ -38,18 +46,18 @@ const LoginPage: React.FC = () => {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} sx={{mt: 1}}>
+                    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
                             fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
+                            id="username"
+                            label="Username"
+                            name="username"
+                            autoComplete="username"
                             autoFocus
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
                         <TextField
                             margin="normal"
@@ -63,19 +71,18 @@ const LoginPage: React.FC = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
+                        {error && <Typography color="error">{error}</Typography>}
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{mt: 3, mb: 2}}
+                            sx={{ mt: 3, mb: 2 }}
                         >
                             Sign In
                         </Button>
                     </Box>
                 </Box>
-
             </Container>
-
             <div className={styles.login_image}>
 
             </div>

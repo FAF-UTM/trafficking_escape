@@ -9,6 +9,7 @@ import '@fontsource/roboto/700.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import LoginPage from "./pages/Login.tsx";
+import { AuthProvider, ProtectedRoute } from "./context/AuthContext";
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -52,15 +53,30 @@ function App() {
 
   return (
       <>
+          <AuthProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home/>}/>
-            <Route path="/" element={<Home/>}/>
-            <Route path="/chat" element={<Chat/>}/>
             <Route path="/login" element={<LoginPage/>}/>
-            <Route path="/city-run" element={<Platformer/>}/>
+            <Route
+                path="/chat"
+                element={
+                  <ProtectedRoute role="ROLE_USER">
+                    <Chat />
+                  </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/city-run"
+                element={
+                  <ProtectedRoute role="ROLE_USER">
+                    <Platformer />
+                  </ProtectedRoute>
+                }
+            />
           </Routes>
         </BrowserRouter>
+          </AuthProvider>
       </>
   );
 }
