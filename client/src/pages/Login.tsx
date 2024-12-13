@@ -31,7 +31,7 @@ const LoginPage: React.FC = () => {
         }
     };
     return (
-        <ThemeProvider style={{}} theme={theme}>
+        <ThemeProvider theme={theme}>
 
             <Container className={styles.login} component="main" maxWidth="xs">
                 <CssBaseline />
@@ -76,7 +76,7 @@ const LoginPage: React.FC = () => {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{ mt: 3, mb: 2, padding: "10px 16px" }}
                         >
                             Sign In
                         </Button>
