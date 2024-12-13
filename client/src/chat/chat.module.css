@@ -135,6 +135,16 @@ background: transparent;
     background: #FFF;
     box-shadow: 0px 0px 8px 0px rgba(52, 72, 84, 0.05);
     box-sizing: border-box;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    align-content: flex-start;
+    gap: 5px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
 }
 .chat_conversation_top_icons{
     width: 36px;
@@ -274,5 +284,49 @@ display: flex;
      flex-direction: column;
      align-items: flex-start;
  }
+ .chat_info_btn {
+     background: rgba(0, 0, 0, 0.04);
+     width: 100%;
+     cursor: pointer;
+     height: 40px;
+     padding: 0px 10px;
+     display: flex;
+     box-sizing: border-box;
+     color: #050505;
+     font-family: "SF Pro Text";
+     font-size: 15px;
+     font-style: normal;
+     font-weight: 600;
+     line-height: 20px; /* 133.333% */
+     align-items: center;
+     justify-content: center;
+     border-radius: 8px;
+     transition: filter 0.3s ease;
+ }
+ .chat_info_btn:hover{
+     filter: brightness(90%);
+ }
+
+.chat_info_halth{
+    width: calc(50% - 5px);
+}
+.chat_info_report{
+    background: #E03F19;
+    color: #fff;
+}
+.chat_info_help{
+    background: #0080FF;
+    color: #fff;
+}
+
+.chat_info_test{
+    width: calc(100% - 32px);
+   position: absolute;
+    bottom: 16px;
+    display: flex;
+    gap:5px;
+    flex-direction: column;
+}
+
 
 

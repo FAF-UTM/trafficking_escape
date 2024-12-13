@@ -1,10 +1,13 @@
 import styles from "./chat.module.css"
+import React, { useState } from 'react';
+import Character from "../components/character/Character.tsx";
 
 
 interface ChatUsers {
   imgSrc: string;
   name: string;
   message: string;
+  chatID:string;
 }
 let active_chat_name='Alex Cara'
 let active_chat_img="https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A"
@@ -12,22 +15,26 @@ const chatUsers: ChatUsers[] = [
   {
     imgSrc: "https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A",
     name: "Alex Cara",
-    message: " Ce mai faci?"
+    message: " Ce mai faci?",
+    chatID:"0023"
   },
   {
     imgSrc: "https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A",
     name: "Cristian Brinza",
-    message: "Cristian a trimis o ataşare."
+    message: "Cristian a trimis o ataşare.",
+    chatID:"0232"
   },
   {
     imgSrc: "https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A",
     name: "Bogdan Zlatovcen",
-    message: "Trimite poze"
+    message: "Trimite poze",
+    chatID:"1098"
   },
   {
     imgSrc: "https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A",
     name: "Mariana Catruc",
-    message: "Mariana a trimis o ataşare."
+    message: "Mariana a trimis o ataşare.",
+    chatID:"0123"
   }
 ];
 
@@ -61,10 +68,21 @@ const chatData: ChatData[] = [
   }
 ];
 
+// Define character configuration
+const characters = [
+  { id: "mom", name: "mom", type: "left", message: "hello my daughter, go to your room and do your homework"},
+  { id: "daughter", name: "daughter", type: "right" },
+];
+
 const Chat: React.FC = () => {
 
+  // State to track the currently visible character
+  const [visibleCharacter, setVisibleCharacter] = useState<string | null>(null);
 
-
+  // Toggle function
+  const toggleCharacter = (id: string) => {
+    setVisibleCharacter((prev) => (prev === id ? null : id));
+  };
 
 
   return (
@@ -192,11 +210,11 @@ const Chat: React.FC = () => {
                     }`}
                 >
                   {message.type === "got" && (
-                  <img
-                      className={styles.chat_conversation_middle_message_from_img}
-                      src={message.from_img}
-                      alt="avatar"
-                  />
+                      <img
+                          className={styles.chat_conversation_middle_message_from_img}
+                          src={message.from_img}
+                          alt="avatar"
+                      />
                   )}
                   <div className={styles.chat_conversation_middle_messages}>
                     {message.type === "got" && (
@@ -266,7 +284,43 @@ const Chat: React.FC = () => {
         </div>
         <div className={styles.chat_info}>
 
+          <div className={styles.chat_info_btn}>
+            Chat info
+          </div>
+          <div className={`${styles.chat_info_btn} ${styles.chat_info_halth} ${styles.chat_info_help}`}>
+            Help
+          </div>
+          <div className={`${styles.chat_info_btn} ${styles.chat_info_report} ${styles.chat_info_halth}`}>
+            Report
+          </div>
+
+
+          <div className={styles.chat_info_test}>
+            {characters.map((character) => (
+                <div
+                    key={character.id}
+                    className={styles.chat_info_btn}
+                    onClick={() => toggleCharacter(character.id)}
+                >
+                  Toggle {character.name}
+                </div>
+            ))}
+          </div>
+
         </div>
+
+
+        {characters.map((character) => (
+            <Character
+                key={character.id}
+                isVisible={visibleCharacter === character.id}
+                character={character.name.toLowerCase()}
+                altText={`${character.name} character`}
+                type={character.type}
+                message={character.message}
+            />
+        ))}
+
       </div>
   );
 };
