@@ -42,7 +42,9 @@
 
 .dialogue-container {
     position: relative;
-    width: 100%;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 50px;
     background-color: rgba(0,0,0,0.75);
     color: white;
     padding: 20px;
@@ -52,7 +54,7 @@
 
 .name-box {
     position: absolute;
-    top: -30px;
+    top: -38px;
     background-color: rgba(0,0,0,0.75);
     color: white;
     padding: 5px 10px;
@@ -61,7 +63,7 @@
 }
 
 .name-box.left {
-    left: 20px;
+    left: 0px;
 }
 
 .name-box.right {

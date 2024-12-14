@@ -203,7 +203,7 @@ export const dialogues = [
         DialogueNumber: 21,
         CharacterName: "",
         DialogueText: "*Mary slams her bedroom door, flopping onto her bed, staring at the ceiling. She feels trapped and frustrated, her mind buzzing with thoughts. She finally reaches for her laptop, opens it, and begins typing.*",
-        BgImage: "../../public/images/intro-assets/Background/roomDay.png",
+        BgImage: "../../public/images/intro-assets/Background/room.png",
         LeftSpriteImage: "",
         RightSpriteImage: "",
         CharacterSettings: "NoSpritesSpeaking",
