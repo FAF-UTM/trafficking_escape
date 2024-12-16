@@ -4,7 +4,11 @@ const Home: React.FC = () => {
   return (
     <div id={styles.home}>
       <div className={styles.home_button_container}>
-        <Button className={styles.home_button} variant="contained" href="/intro">
+        <Button
+          className={styles.home_button}
+          variant="contained"
+          href="/intro"
+        >
           Start Game
         </Button>
         <Button

@@ -31,7 +31,7 @@ i18next
     },
   });
 
-i18next.on('languageChanged', lng => {
+i18next.on('languageChanged', (lng) => {
   localStorage.setItem('i18nextLng', lng);
 });
 
