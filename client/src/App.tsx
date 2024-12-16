@@ -17,6 +17,7 @@ const imagesArray = [
     '/images/charaters/mom.png',
 ];
 
+// Utility function to preload images
 const preloadImages = (urls: string[]) => {
     const promises = urls.map((url) => {
         return new Promise((resolve, reject) => {
@@ -42,9 +43,11 @@ function App() {
                 });
         };
 
+        // Use requestIdleCallback if available to delay preloading until the browser is idle
         if ('requestIdleCallback' in window) {
             (window as any).requestIdleCallback(preloadAfterRender);
         } else {
+            // Fallback to setTimeout if requestIdleCallback is unavailable
             setTimeout(preloadAfterRender, 100);
         }
     }, []);
@@ -63,7 +66,7 @@ function App() {
                         <Route
                             path="/chat"
                             element={
-                                <ProtectedRoute role="ROLE_USER">
+                                <ProtectedRoute roles={["ROLE_USER", "ROLE_ADMIN"]}>
                                     <Chat />
                                 </ProtectedRoute>
                             }
@@ -71,7 +74,7 @@ function App() {
                         <Route
                             path="/city-run"
                             element={
-                                <ProtectedRoute role="ROLE_USER">
+                                <ProtectedRoute roles={["ROLE_USER", "ROLE_ADMIN"]}>
                                     <Platformer />
                                 </ProtectedRoute>
                             }
