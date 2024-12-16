@@ -229,7 +229,7 @@
 
 .chat_conversation_middle {
   width: 100%;
-  height: calc(100% - 100px);
+  height: calc(100% - 215px);
   display: flex;
   align-items: stretch;
   flex-direction: column-reverse;
@@ -479,5 +479,168 @@ text-align: center;
   }
   40% {
     opacity: 1;
+  }
+}
+
+
+/* For screens up to ~1200px wide (desktop/laptop) */
+@media screen and (max-width: 1200px) {
+  .chat {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .chat_leftbar {
+    width: 60px;
+    height: auto; /* Let it auto-fit content instead of forcing a large height */
+    flex-direction: row;
+    gap: 8px;
+    box-shadow: none;
+  }
+
+  .chat_navigation {
+    width: 320px;
+    margin-top: 8px;
+    height: auto; /* Let the container grow */
+  }
+
+  .chat_info {
+    width: 320px;
+    margin-top: 8px;
+    height: auto; /* Let the container grow */
+  }
+
+  .chat_conversation {
+    width: calc(100vw - 360px);
+    margin-top: 8px;
+    height: auto; /* Let container adjust to content */
+    min-height: 500px; /* Provide a minimum height to keep structure */
+  }
+}
+
+/* For screens up to ~992px wide (tablets, small laptops) */
+@media screen and (max-width: 992px) {
+  .chat {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chat_leftbar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .chat_navigation,
+  .chat_info {
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .chat_conversation {
+    width: 100%;
+    margin-bottom: 16px;
+    min-height: 400px;
+  }
+}
+
+/* For screens up to ~768px wide (portrait tablets, large phones) */
+@media screen and (max-width: 768px) {
+  .chat {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .chat_leftbar {
+    order: 1;
+  }
+
+  .chat_navigation {
+    order: 2;
+  }
+
+  .chat_conversation {
+    order: 3;
+    min-height: 300px;
+  }
+
+  .chat_info {
+    order: 4;
+  }
+}
+
+/* For screens up to ~576px wide (smaller phones) */
+@media screen and (max-width: 576px) {
+  .chat {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .chat_leftbar {
+    width: 100%;
+    height: auto;
+    margin-bottom: 8px;
+    justify-content: space-around;
+  }
+
+  .chat_navigation,
+  .chat_conversation,
+  .chat_info {
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    border-radius: 8px;
+    min-height: auto;
+  }
+
+  .chat_navigation {
+    margin-bottom: 8px;
+    padding: 8px;
+  }
+
+  .chat_conversation {
+    margin-bottom: 8px;
+    min-height: 300px;
+    padding: 8px;
+  }
+
+  .chat_info {
+    margin-bottom: 8px;
+    padding: 8px;
+    height: auto;
+  }
+
+  .chat_navigation_block,
+  .chat_info_btn {
+    width: auto;
+    aspect-ratio: unset;
+  }
+
+  .chat_conversation_middle {
+    height: 400px; /* example fixed height, adjust as desired */
+  }
+}
+
+/* For screens up to ~400px wide (very small phones) */
+@media screen and (max-width: 400px) {
+  .chat_conversation_middle_message {
+    max-width: 90%;
+    font-size: 14px;
+  }
+
+  .chat_navigation_block_img,
+  .chat_conversation_middle_message_from_img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .chat_typing_indicator {
+    font-size: 14px;
+    padding: 6px 10px;
   }
 }
