@@ -9,8 +9,8 @@ interface ChatUsers {
   chatID: string;
 }
 
-let active_chat_name = 'Alex Cara';
-let active_chat_img =
+const active_chat_name = 'Alex Cara';
+const active_chat_img =
   'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A';
 const chatUsers: ChatUsers[] = [
   {
@@ -546,24 +546,3 @@ const Chat: React.FC = () => {
 
 export default Chat;
 
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    display: 'flex',
-    height: '100vh',
-    width: '100vw',
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    backgroundColor: '#f0f2f5',
-  },
-  chatArea: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#ffffff',
-  },
-  header: {
-    padding: '15px 20px',
-    borderBottom: '1px solid #e0e0e0',
-    backgroundColor: '#007bff',
-    color: '#ffffff',
-  },
-};
