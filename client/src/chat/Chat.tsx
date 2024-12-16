@@ -1,6 +1,7 @@
 import styles from './chat.module.css';
-import React, { useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Character from '../components/character/Character.tsx';
+import {useAuth} from "../context/AuthContext.tsx";
 
 interface ChatUsers {
   imgSrc: string;
@@ -9,6 +10,8 @@ interface ChatUsers {
   chatID: string;
 }
 
+const backend_api='http://localhost:8080'
+const backend_api_generate=backend_api+'/api/v1/message-generation/generate'
 const active_chat_name = 'Alex Cara';
 const active_chat_img =
   'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A';
@@ -50,27 +53,6 @@ interface ChatData {
   messages: string[];
 }
 const chatData: ChatData[] = [
-  {
-    from: 'Cristi',
-    from_img:
-        'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    sendtype: 'send',
-    messages: ['Tot bine'],
-  },
-  {
-    from: 'Alex',
-    from_img:
-        'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    sendtype: 'got',
-    messages: ['Salut', 'Ce mai faci?'],
-  },
-  {
-    from: 'Cristi',
-    from_img:
-        'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    sendtype: 'send',
-    messages: ['Hei 👋'],
-  },
 ];
 
 // Define character configuration
@@ -94,28 +76,161 @@ const characters: {
   },
 ];
 
+const initialChatData: ChatData[] = [
+];
+
+interface ChatData {
+  from: string;
+  from_img: string;
+  sendtype: string;
+  messages: string[];
+}
+
+const from_img_default ='https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A';
+
 const Chat: React.FC = () => {
-  // State to track the currently visible character
-  const [visibleCharacter, setVisibleCharacter] = useState<string | null>(null);
 
-  // Toggle function
-  const toggleCharacter = (id: string) => {
-    setVisibleCharacter((prev) => (prev === id ? null : id));
-  };
+    // If your AuthContext provides the token or isAuthenticated, you can use it here:
+    const { isAuthenticated } = useAuth();   // or whatever your context returns
+    // Grab the token from localStorage (or from context if you store it there)
+    const token = localStorage.getItem('authToken');
 
-  const [popupVisibility, setPopupVisibility] = useState<{
-    [key: string]: boolean;
-  }>({});
+    // State to track the currently visible character
+    const [visibleCharacter, setVisibleCharacter] = useState<string | null>(null);
 
-  // Function to show a specific popup
-  const showPopup = (id: string) => {
-    setPopupVisibility((prev) => ({ ...prev, [id]: true }));
-  };
+    const [popupVisibility, setPopupVisibility] = useState<{ [key: string]: boolean }>({});
 
-  // Function to hide a specific popup
-  const hidePopup = (id: string) => {
-    setPopupVisibility((prev) => ({ ...prev, [id]: false }));
-  };
+    // *** Chat data state ***
+    const [chatData, setChatData] = useState<ChatData[]>(initialChatData);
+
+    // *** Option states returned by the AI endpoint ***
+    const [option1, setOption1] = useState<string>('');
+    const [option2, setOption2] = useState<string>('');
+    const [option3, setOption3] = useState<string>('');
+
+    // *** Danger level states ***
+    const [dangerLevel1, setDangerLevel1] = useState<number>(0);
+    const [dangerLevel2, setDangerLevel2] = useState<number>(0);
+    const [dangerLevel3, setDangerLevel3] = useState<number>(0);
+    const [updatedDangerLevel, setUpdatedDangerLevel] = useState<number>(0);
+
+
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+
+
+    // Toggle function for Character
+    const toggleCharacter = (id: string) => {
+      setVisibleCharacter((prev) => (prev === id ? null : id));
+    };
+
+    // Popup functions
+    const showPopup = (id: string) => {
+      setPopupVisibility((prev) => ({ ...prev, [id]: true }));
+    };
+    const hidePopup = (id: string) => {
+      setPopupVisibility((prev) => ({ ...prev, [id]: false }));
+    };
+
+    // *** This function calls the message-generation endpoint ***
+    const fetchAIResponse = async (lastMessage: string, currentDangerLevel: number, isTrafficker: boolean) => {
+      setIsTyping(true); // Show typing indicator
+      console.log('stop_typing')
+      try {
+        const response = await fetch(backend_api_generate, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // *** Attach token in the Authorization header ***
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({
+            context: 'A child is chatting with someone online.',
+            lastMessage: lastMessage,
+            currentDangerLevel: currentDangerLevel,
+            isTrafficker: isTrafficker,
+          }),
+        });
+
+        if (!response.ok) {
+          console.error('Error fetching AI response:', response.status, response.statusText);
+          return;
+        }
+
+        const data = await response.json();
+        /*
+          Example data structure we expect:
+          {
+            "dangerLevel3": 7,
+            "dangerLevel2": 4,
+            "dangerLevel1": 2,
+            "updatedDangerLevel": 10,
+            "option3": "\"I'd love to hang out! Where would we meet?\"",
+            "isTrafficker": true,
+            "chatResponse": "\"It's going pretty well, but let's hang out in person...\"",
+            "option1": "\"That sounds fun! ...\"",
+            "option2": "\"I don't know, meeting in person seems a bit scary...\""
+          }
+         */
+
+        // Parse out the new data
+        setOption1(data.option1 || '');
+        setOption2(data.option2 || '');
+        setOption3(data.option3 || '');
+        setDangerLevel1(data.dangerLevel1 || 0);
+        setDangerLevel2(data.dangerLevel2 || 0);
+        setDangerLevel3(data.dangerLevel3 || 0);
+        setUpdatedDangerLevel(data.updatedDangerLevel || 0);
+
+        // *** Add the AI's chatResponse to the chat as a "got" message ***
+        if (data.chatResponse) {
+          const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '');
+          const newMessage: ChatData = {
+            from: 'Alex',
+            from_img: 'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
+            sendtype: 'got',
+            messages: [cleanedResponse],
+          };
+
+          setChatData((prevChatData) => [...prevChatData, newMessage]);
+        }
+      } catch (error) {
+        console.error('Error in fetchAIResponse:', error);
+      }
+      finally {
+        setIsTyping(false); // Hide typing indicator
+        console.log('stop_typing')
+      }
+    };
+
+  // Only run the “Hello” request once
+  const hasFetchedRef = useRef(false);
+
+  // *** On Chat load, fetch the initial AI response with "Hello" as lastMessage ***
+  useEffect(() => {
+    if (!hasFetchedRef.current && isAuthenticated && token) {
+      hasFetchedRef.current = true;
+      fetchAIResponse('Hello', 3, false);
+    }
+    // If you don't require auth, remove the isAuthenticated check
+    // else { /* maybe handle error, redirect to login, etc. */ }
+  }, [isAuthenticated, token]);
+
+
+    // *** Handler when the user clicks one of the options ***
+    const handleOptionClick = (chosenOption: string) => {
+      // 1) Add the chosen message to chat as 'send'
+      const cleanedOption = chosenOption.replace(/^"|"$/g, '');
+      const userMessage: ChatData = {
+        from: 'Cristi',
+        from_img: 'https://example.com/cristi_image.png',
+        sendtype: 'send',
+        messages: [cleanedOption],
+      };
+      setChatData((prevChatData) => [...prevChatData, userMessage]);
+
+      // 2) Fire a new request with chosenOption as lastMessage
+      fetchAIResponse(chosenOption, updatedDangerLevel, false);
+    };
 
   return (
       <div className={styles.chat}>
@@ -313,41 +428,62 @@ const Chat: React.FC = () => {
             </div>
           </div>
 
-          <div className={styles.chat_conversation_middle}>
-            {chatData.map((message, index) => (
+          {/* MIDDLE: the actual messages */}
+          <div className={`${styles.chat_conversation_middle} ${styles.custom_scroll_container}`}>
+            {isTyping && (
+                <div
+                    className={`${styles.chat_conversation_middle_message_box} ${styles.chat_conversation_middle_message_got}`}>
+                  <img
+                      className={styles.chat_conversation_middle_message_from_img}
+                      src={from_img_default}
+                      style={{opacity:"0"}}
+                      alt="avatar"
+                  />
+                  <div className={styles.chat_conversation_middle_messages}>
+                    <div className={styles.chat_typing_indicator}>
+                      <span>.</span>
+                      <span>.</span>
+                      <span>.</span>
+                    </div>
+                  </div>
+                </div>
+            )}
+            {[...chatData].reverse().map((message, index) => (
                 <div
                     key={index}
                     className={`${styles.chat_conversation_middle_message_box} ${
-                        message.sendtype === 'send'
-                            ? styles.chat_conversation_middle_message_send
-                            : styles.chat_conversation_middle_message_got
-                    }`}
-                >
-                  {message.sendtype === 'got' && (
-                      <img
-                          className={styles.chat_conversation_middle_message_from_img}
-                          src={message.from_img}
-                          alt="avatar"
-                      />
-                  )}
-                  <div className={styles.chat_conversation_middle_messages}>
-                    {message.sendtype === 'got' && (
-                        <div className={styles.chat_conversation_middle_message_from}>
-                          {message.from}
-                        </div>
-                    )}
-                    {message.messages.map((msg, msgIndex) => (
-                        <div
-                            key={msgIndex}
-                            className={styles.chat_conversation_middle_message}
-                        >
-                          {msg}
-                        </div>
-                    ))}
-                  </div>
-                </div>
-            ))}
+                           message.sendtype === 'send'
+                               ? styles.chat_conversation_middle_message_send
+                               : styles.chat_conversation_middle_message_got
+                       }`}
+                   >
+                     {message.sendtype === 'got' && (
+                         <img
+                             className={styles.chat_conversation_middle_message_from_img}
+                             src={message.from_img}
+                             alt="avatar"
+                         />
+                     )}
+                     <div className={styles.chat_conversation_middle_messages}>
+                       {message.sendtype === 'got' && (
+                           <div className={`${styles.chat_conversation_middle_message_from}`}>
+                             {message.from}
+                           </div>
+                       )}
+                       {message.messages.map((msg, msgIndex) => (
+                           <div
+                               key={msgIndex}
+                               className={styles.chat_conversation_middle_message}
+                           >
+                             {msg}
+                           </div>
+                       ))}
+                     </div>
+                   </div>
+               ))}
+
           </div>
+          {/* BOTTOM: replaced input with 3 clickable options */}
           <div className={styles.chat_conversation_bottom}>
             <svg
                 onClick={() => showPopup('popup_2')}
@@ -422,26 +558,53 @@ const Chat: React.FC = () => {
               />
             </svg>
 
-            <input
-                className={styles.chat_conversation_bottom_input}
-                type="text"
-                placeholder="Aa"
-            />
-            <svg
-                className={`${styles.chat_pointer} $styles.chat_conversation_bottom_icon}`}
-                width="36"
-                height="37"
-                viewBox="0 0 36 37"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M18.0028 27.5213C22.7278 27.5213 26.5584 23.6907 26.5584 18.9657C26.5584 14.2407 22.7278 10.4102 18.0028 10.4102C13.2778 10.4102 9.44727 14.2407 9.44727 18.9657C9.44727 23.6907 13.2778 27.5213 18.0028 27.5213ZM13.9195 17.4102C13.9195 16.4379 14.3574 15.8546 15.0862 15.8546C15.8157 15.8546 16.2528 16.4379 16.2528 17.4102C16.2528 18.3824 15.8149 18.9657 15.0862 18.9657C14.3566 18.9657 13.9195 18.3824 13.9195 17.4102ZM19.7528 17.4102C19.7528 16.4379 20.1907 15.8546 20.9195 15.8546C21.649 15.8546 22.0862 16.4379 22.0862 17.4102C22.0862 18.3824 21.6483 18.9657 20.9195 18.9657C20.1899 18.9657 19.7528 18.3824 19.7528 17.4102ZM13.9039 21.6599C13.9698 21.5817 14.0504 21.5173 14.1412 21.4703C14.2319 21.4233 14.3311 21.3946 14.4329 21.3859C14.5348 21.3773 14.6373 21.3888 14.7347 21.4198C14.8321 21.4508 14.9225 21.5007 15.0006 21.5666C15.8394 22.2745 16.9021 22.662 17.9997 22.6602C19.143 22.6602 20.1876 22.2495 20.9988 21.5666C21.0769 21.5001 21.1673 21.4496 21.2649 21.4182C21.3625 21.3867 21.4654 21.3749 21.5676 21.3833C21.6698 21.3918 21.7693 21.4204 21.8604 21.4674C21.9515 21.5145 22.0324 21.5791 22.0984 21.6576C22.1645 21.736 22.2144 21.8268 22.2452 21.9246C22.276 22.0224 22.2872 22.1253 22.2781 22.2274C22.269 22.3296 22.2398 22.4289 22.1922 22.5197C22.1446 22.6105 22.0795 22.691 22.0006 22.7566C20.8814 23.7007 19.4639 24.2176 17.9997 24.2157C16.5354 24.2174 15.1179 23.7002 13.9988 22.7558C13.841 22.623 13.7425 22.4329 13.7248 22.2274C13.7072 22.0219 13.7719 21.8177 13.9047 21.6599H13.9039Z"
-                  fill="#0080FF"
-              />
-            </svg>
+            {/*<input*/}
+            {/*    className={styles.chat_conversation_bottom_input}*/}
+            {/*    type="text"*/}
+            {/*    placeholder="Aa"*/}
+            {/*/>*/}
+
+            <div className={styles.chat_options}>
+              {/* Option1 */}
+              <div
+                  className={`${styles.chat_option} ${styles.chat_conversation_bottom_option}`}
+                  onClick={() => handleOptionClick(option1)}
+              >
+                {option1 || "Option1..."}
+              </div>
+
+              {/* Option2 */}
+              <div
+                  className={`${styles.chat_option} ${styles.chat_conversation_bottom_option}`}
+                  onClick={() => handleOptionClick(option2)}
+              >
+                {option2 || "Option2..."}
+              </div>
+
+              {/* Option3 */}
+              <div
+                  className={`${styles.chat_option} ${styles.chat_conversation_bottom_option}`}
+                  onClick={() => handleOptionClick(option3)}
+              >
+                {option3 || "Option3..."}
+              </div>
+            </div>
+
+            {/*<svg*/}
+            {/*    className={`${styles.chat_pointer} $styles.chat_conversation_bottom_icon}`}*/}
+            {/*    width="36"*/}
+            {/*    height="37"*/}
+            {/*    viewBox="0 0 36 37"*/}
+            {/*    fill="none"*/}
+            {/*    xmlns="http://www.w3.org/2000/svg"*/}
+            {/*>*/}
+            {/*  <path*/}
+            {/*      fillRule="evenodd"*/}
+            {/*      clipRule="evenodd"*/}
+            {/*      d="M18.0028 27.5213C22.7278 27.5213 26.5584 23.6907 26.5584 18.9657C26.5584 14.2407 22.7278 10.4102 18.0028 10.4102C13.2778 10.4102 9.44727 14.2407 9.44727 18.9657C9.44727 23.6907 13.2778 27.5213 18.0028 27.5213ZM13.9195 17.4102C13.9195 16.4379 14.3574 15.8546 15.0862 15.8546C15.8157 15.8546 16.2528 16.4379 16.2528 17.4102C16.2528 18.3824 15.8149 18.9657 15.0862 18.9657C14.3566 18.9657 13.9195 18.3824 13.9195 17.4102ZM19.7528 17.4102C19.7528 16.4379 20.1907 15.8546 20.9195 15.8546C21.649 15.8546 22.0862 16.4379 22.0862 17.4102C22.0862 18.3824 21.6483 18.9657 20.9195 18.9657C20.1899 18.9657 19.7528 18.3824 19.7528 17.4102ZM13.9039 21.6599C13.9698 21.5817 14.0504 21.5173 14.1412 21.4703C14.2319 21.4233 14.3311 21.3946 14.4329 21.3859C14.5348 21.3773 14.6373 21.3888 14.7347 21.4198C14.8321 21.4508 14.9225 21.5007 15.0006 21.5666C15.8394 22.2745 16.9021 22.662 17.9997 22.6602C19.143 22.6602 20.1876 22.2495 20.9988 21.5666C21.0769 21.5001 21.1673 21.4496 21.2649 21.4182C21.3625 21.3867 21.4654 21.3749 21.5676 21.3833C21.6698 21.3918 21.7693 21.4204 21.8604 21.4674C21.9515 21.5145 22.0324 21.5791 22.0984 21.6576C22.1645 21.736 22.2144 21.8268 22.2452 21.9246C22.276 22.0224 22.2872 22.1253 22.2781 22.2274C22.269 22.3296 22.2398 22.4289 22.1922 22.5197C22.1446 22.6105 22.0795 22.691 22.0006 22.7566C20.8814 23.7007 19.4639 24.2176 17.9997 24.2157C16.5354 24.2174 15.1179 23.7002 13.9988 22.7558C13.841 22.623 13.7425 22.4329 13.7248 22.2274C13.7072 22.0219 13.7719 21.8177 13.9047 21.6599H13.9039Z"*/}
+            {/*      fill="#0080FF"*/}
+            {/*  />*/}
+            {/*</svg>*/}
 
             <svg
                 className={styles.chat_pointer}
@@ -450,6 +613,10 @@ const Chat: React.FC = () => {
                 viewBox="0 0 36 37"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                onClick={async () => {
+                  handleOptionClick("👍");
+                }}
+                style={{cursor: "pointer"}}
             >
               <path
                   d="M17.9914 8.96484C18.9514 8.96484 21.1827 9.59615 21.1827 13.4422C21.1827 14.5135 21.0758 15.1822 21.001 15.6457C20.9862 15.7366 20.9723 15.8276 20.9592 15.9188L20.9584 15.9231C20.9526 15.9676 20.9565 16.0128 20.9698 16.0556C20.983 16.0985 21.0053 16.138 21.0352 16.1715C21.065 16.2049 21.1017 16.2316 21.1428 16.2497C21.1838 16.2677 21.2283 16.2768 21.2732 16.2761C25.0984 16.2761 27.141 17.2883 27.141 18.3222C27.141 18.7857 26.9671 19.2092 26.6827 19.5353C26.6739 19.5456 26.6675 19.5576 26.6637 19.5706C26.6599 19.5836 26.6589 19.5973 26.6608 19.6106C26.6627 19.624 26.6674 19.6369 26.6747 19.6483C26.6819 19.6598 26.6914 19.6695 26.7027 19.677C26.9656 19.8432 27.1824 20.0729 27.3332 20.3449C27.484 20.6169 27.5638 20.9225 27.5653 21.2335C27.5653 21.9814 27.1505 22.6231 26.5088 22.9231C26.4967 22.9289 26.486 22.9372 26.4773 22.9474C26.4686 22.9576 26.4622 22.9696 26.4584 22.9825C26.4546 22.9953 26.4536 23.0089 26.4554 23.0221C26.4572 23.0354 26.4618 23.0482 26.4688 23.0596C26.6488 23.3448 26.7549 23.6796 26.7549 24.0405C26.7549 24.8631 26.2792 25.5544 25.5323 25.8048C25.5088 25.813 25.4894 25.83 25.4783 25.8523C25.4673 25.8746 25.4654 25.9003 25.4732 25.924C25.5262 26.084 25.5584 26.2544 25.5584 26.4318C25.5584 27.3501 24.014 28.0953 20.3845 28.0953C17.7323 28.0953 15.9027 27.6214 15.1992 27.2814C14.6818 27.0309 14.0897 26.577 14.0897 25.2466V19.9544C14.0897 18.4588 14.9227 17.4588 15.7514 16.464C16.574 15.4779 17.394 14.4953 17.394 13.0353C17.394 11.8701 17.3149 11.1309 17.2558 10.5857C17.2218 10.2657 17.1949 10.0118 17.1949 9.77876C17.1949 9.3205 17.5288 8.96658 17.9914 8.96484ZM11.481 18.5301H9.74185C8.87228 18.5301 8.4375 20.8657 8.4375 23.7475C8.4375 26.6292 8.87228 28.9648 9.74185 28.9648H11.481C11.7116 28.9648 11.9328 28.8732 12.0959 28.7102C12.2589 28.5471 12.3505 28.3259 12.3505 28.0953V19.3996C12.3505 19.169 12.2589 18.9478 12.0959 18.7848C11.9328 18.6217 11.7116 18.5301 11.481 18.5301Z"
@@ -461,12 +628,12 @@ const Chat: React.FC = () => {
         <div className={styles.chat_info}>
           <div className={styles.chat_info_btn}>Chat info</div>
           <div
-              className={`${styles.chat_info_btn} ${styles.chat_info_halth} ${styles.chat_info_help}`}
+              className={`${styles.chat_info_btn}  ${styles.chat_info_help}`}
           >
             Help
           </div>
           <div
-              className={`${styles.chat_info_btn} ${styles.chat_info_report} ${styles.chat_info_halth}`}
+              className={`${styles.chat_info_btn} ${styles.chat_info_report} `}
           >
             Report
           </div>
