@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 @Slf4j
 @Service
@@ -16,43 +15,114 @@ import java.util.Random;
 public class MessageGenerationService {
     private final GPTConfig gptConfig;
 
-    public Map<String, Object> generateChatOptions(String context, boolean isTrafficker) {
+    public Map<String, Object> continueConversation(String context, String lastMessage, int currentDangerLevel, boolean isTrafficker) {
         try {
-            // Generate the prompt dynamically based on the role
-            String role = isTrafficker ? "human trafficker" : "child";
-            String prompt = String.format(
-                    "You are a %s. The context is: \"%s\". Generate three conversational responses that fit the scenario.",
-                    role, context
-            );
+            // Generate the chat response based on the isTrafficker flag and danger level
+            String chatResponsePrompt = String.format("""
+                    This is an educational game designed to teach children about online safety. 
+                    The player is a 13-year-old girl chatting with someone online. 
+                    The AI must generate a single response from the person the player is chatting with.
+                    - If the person is a trafficker, their response should be manipulative, subtle, and increase tension.
+                    - If the person is another child, their response should be friendly and innocent.
+                    - Consider the current danger level (%d) and adjust the tone of the response accordingly.
+                    
+                    The current conversation context is: "%s".
+                    The last message from the player was: "%s".
+                    
+                    Provide only the response as a single line of text.
+                    """, currentDangerLevel, context, lastMessage);
 
-            // Call the GPT API
-            JsonNode gptResponse = gptConfig.sendGPTRequest(prompt);
+            JsonNode chatResponseJson = gptConfig.sendGPTRequest(chatResponsePrompt, "gpt-4o-mini");
+            String chatResponse = parseChatResponse(chatResponseJson);
 
-            // Extract and randomize danger levels
-            String option1 = gptResponse.get("choices").get(0).get("text").asText().trim();
-            String option2 = gptResponse.get("choices").get(1).get("text").asText().trim();
-            String option3 = gptResponse.get("choices").get(2).get("text").asText().trim();
+            // Generate three player response options to the chat response
+            String playerResponsePrompt = String.format("""
+                    This is an educational game designed to teach children about online safety. 
+                    The player is a 13-year-old girl chatting with someone online. 
+                    The AI must generate three distinct response options for the player to choose from, replying to the following message:
+                    
+                    "%s"
+                    
+                    - Each response should reflect realistic behavior for a cautious or naive 13-year-old girl.
+                    - For each response, assign a **Risk Level** (integer between 1 and 10).
+                    - Format strictly as:
+                    1. <Response Option> (Risk Level: <Integer>)
+                    2. <Response Option> (Risk Level: <Integer>)
+                    3. <Response Option> (Risk Level: <Integer>)
+                    """, chatResponse);
 
-            // Random danger levels (1-10)
-            Random random = new Random();
-            int dangerLevel1 = isTrafficker ? random.nextInt(4) + 7 : random.nextInt(3) + 1;
-            int dangerLevel2 = isTrafficker ? random.nextInt(4) + 7 : random.nextInt(3) + 1;
-            int dangerLevel3 = isTrafficker ? random.nextInt(4) + 7 : random.nextInt(3) + 1;
+            JsonNode playerResponseJson = gptConfig.sendGPTRequest(playerResponsePrompt, "gpt-4o-mini");
+
+            String[] options = new String[3];
+            int[] dangerLevels = new int[3];
+            parseResponses(playerResponseJson, options, dangerLevels);
+
+            // Update the current danger level
+            int updatedDangerLevel = currentDangerLevel + Math.max(dangerLevels[0], Math.max(dangerLevels[1], dangerLevels[2]));
 
             // Compile the result
             Map<String, Object> result = new HashMap<>();
-            result.put("option1", option1);
-            result.put("dangerLevel1", dangerLevel1);
-            result.put("option2", option2);
-            result.put("dangerLevel2", dangerLevel2);
-            result.put("option3", option3);
-            result.put("dangerLevel3", dangerLevel3);
+            result.put("chatResponse", chatResponse);
+            result.put("option1", options[0]);
+            result.put("dangerLevel1", dangerLevels[0]);
+            result.put("option2", options[1]);
+            result.put("dangerLevel2", dangerLevels[1]);
+            result.put("option3", options[2]);
+            result.put("dangerLevel3", dangerLevels[2]);
+            result.put("updatedDangerLevel", updatedDangerLevel);
             result.put("isTrafficker", isTrafficker);
 
             return result;
         } catch (Exception e) {
-            log.error("Error generating chat options", e);
-            throw new RuntimeException("Failed to generate chat options");
+            log.error("Error generating conversation options", e);
+            throw new RuntimeException("Failed to continue the conversation", e);
+        }
+    }
+
+    private String parseChatResponse(JsonNode chatResponseJson) {
+        JsonNode choices = chatResponseJson.get("choices");
+        if (choices == null || choices.isEmpty()) {
+            throw new RuntimeException("No responses received from GPT API for chat response.");
+        }
+        return choices.get(0).get("message").get("content").asText().trim();
+    }
+
+    private void parseResponses(JsonNode choicesJson, String[] options, int[] dangerLevels) {
+        int optionIndex = 0;
+
+        JsonNode choices = choicesJson.get("choices");
+        if (choices == null || choices.isEmpty()) {
+            throw new RuntimeException("No responses received from GPT API for player responses.");
+        }
+
+        for (JsonNode choice : choices) {
+            String text = choice.get("message").get("content").asText().trim();
+
+            // Match each response option
+            String[] lines = text.split("\n");
+            for (String line : lines) {
+                if (optionIndex >= 3) break;
+
+                String trimmedLine = line.trim();
+                if (trimmedLine.matches("\\d+\\. .*\\(Risk Level: \\d+\\)")) {
+                    // Extract response and risk level
+                    int start = trimmedLine.indexOf('.') + 1;
+                    int end = trimmedLine.lastIndexOf("(Risk Level:");
+                    String response = trimmedLine.substring(start, end).trim();
+                    int riskLevel = Integer.parseInt(trimmedLine.substring(trimmedLine.lastIndexOf(":") + 1, trimmedLine.lastIndexOf(')')).trim());
+
+                    options[optionIndex] = response;
+                    dangerLevels[optionIndex] = riskLevel;
+                    optionIndex++;
+                }
+            }
+        }
+
+        // Fill in defaults for any missing options
+        while (optionIndex < 3) {
+            options[optionIndex] = "I'm not sure what to say."; // Default fallback response
+            dangerLevels[optionIndex] = 1; // Low risk
+            optionIndex++;
         }
     }
 }
