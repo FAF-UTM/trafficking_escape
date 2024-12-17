@@ -2,6 +2,7 @@ import styles from './chat.module.css';
 import React, { useEffect, useRef, useState } from 'react';
 import Character from '../components/character/Character.tsx';
 import { useAuth } from '../context/AuthContext.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface ChatUsers {
   imgSrc: string;
@@ -89,6 +90,8 @@ const from_img_default =
   'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A';
 
 const Chat: React.FC = () => {
+  const { t, i18n } = useTranslation();
+
   // If your AuthContext provides the token or isAuthenticated, you can use it here:
   const { isAuthenticated } = useAuth(); // or whatever your context returns
   // Grab the token from localStorage (or from context if you store it there)
@@ -253,13 +256,18 @@ const Chat: React.FC = () => {
     if (savedOption) {
       // If it exists, use that
       setActiveLeftBarOption(savedOption);
-     //for testing - console.log(savedOption);
+      //for testing - console.log(savedOption);
     } else {
       // Otherwise default to "home"
       handleLeftBarClick('home');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const toggleLanguage = () => {
+    const newLanguage = i18n.language === 'en' ? 'nl' : 'en';
+    i18n.changeLanguage(newLanguage);
+  };
 
   return (
     <div className={styles.chat}>
@@ -364,7 +372,7 @@ const Chat: React.FC = () => {
       </div>
       <div className={styles.chat_navigation}>
         <div className={styles.chat_navigation_title}>
-          Conversaţii
+          {t('chat.conversations')}
           <div className={styles.chat_navigation_new}>
             <svg
               width="20"
@@ -401,7 +409,7 @@ const Chat: React.FC = () => {
             />
           </svg>
 
-          <input type="text" placeholder="Caută în Messenger" />
+          <input type="text" placeholder={t('chat.serach_in_mess')} />
         </div>
         {chatUsers.map((chat, index) => (
           <div key={index} className={styles.chat_navigation_block}>
@@ -688,7 +696,7 @@ const Chat: React.FC = () => {
         </div>
       </div>
       <div className={styles.chat_info}>
-        <div className={styles.chat_info_btn}>
+        <button className={styles.chat_info_btn}>
           <svg
             width="20"
             height="20"
@@ -701,13 +709,13 @@ const Chat: React.FC = () => {
               fill="black"
             />
           </svg>
-          Chat info
-        </div>
+          {t('chat.chat_info')}
+        </button>
         <div className={`${styles.chat_info_btn} ${styles.chat_info_help}`}>
-          Help
+          {t('chat.help')}
         </div>
         <div className={`${styles.chat_info_btn} ${styles.chat_info_report} `}>
-          Report
+          {t('chat.report')}
         </div>
 
         <div className={styles.chat_info_test}>
@@ -720,6 +728,10 @@ const Chat: React.FC = () => {
               Toggle {character.name}
             </div>
           ))}
+          <div className={styles.chat_info_btn} onClick={toggleLanguage}>
+            Toggle language <br />
+            current: {i18n.language.toUpperCase()}
+          </div>
         </div>
       </div>
 

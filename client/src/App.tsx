@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import LoginPage from './pages/Login.tsx';
 import { AuthProvider, ProtectedRoute } from './context/AuthContext';
 import IntroStory from './intro/IntroStory.tsx';
+import './i18n'; // Import the i18n configuration
 
 const imagesArray = [
   '/images/charaters/daughter.png',

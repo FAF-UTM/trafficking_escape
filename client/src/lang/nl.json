@@ -1,6 +1,10 @@
 {
-  "lang": "en",
+  "lang": "nl",
   "chat": {
-    "contact": "Conversations"
+    "conversations": "Gesprekken",
+    "serach_in_mess": "Zoeken in Messenger",
+    "chat_info": "Chatinformatie",
+    "help": "Hulp",
+    "report": "Melden"
   }
 }
