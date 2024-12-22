@@ -11,7 +11,7 @@ interface ChatUsers {
   chatID: string;
 }
 
-const backend_api = 'http://localhost:8080';
+const backend_api = 'https://backend.traffikingescape.com/';
 const backend_api_generate =
   backend_api + '/api/v1/message-generation/generate';
 const active_chat_name = 'Alex Cara';
@@ -711,27 +711,27 @@ const Chat: React.FC = () => {
           </svg>
           {t('chat.chat_info')}
         </button>
-        <div className={`${styles.chat_info_btn} ${styles.chat_info_help}`}>
+        <button className={`${styles.chat_info_btn} ${styles.chat_info_help}`}>
           {t('chat.help')}
-        </div>
-        <div className={`${styles.chat_info_btn} ${styles.chat_info_report} `}>
+        </button>
+        <button className={`${styles.chat_info_btn} ${styles.chat_info_report} `}>
           {t('chat.report')}
-        </div>
+        </button>
 
         <div className={styles.chat_info_test}>
           {characters.map((character) => (
-            <div
+            <button
               key={character.id}
               className={styles.chat_info_btn}
               onClick={() => toggleCharacter(character.id)}
             >
               Toggle {character.name}
-            </div>
+            </button>
           ))}
-          <div className={styles.chat_info_btn} onClick={toggleLanguage}>
+          <button className={styles.chat_info_btn} onClick={toggleLanguage}>
             Toggle language <br />
             current: {i18n.language.toUpperCase()}
-          </div>
+          </button>
         </div>
       </div>
 

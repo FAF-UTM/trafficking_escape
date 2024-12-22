@@ -89,6 +89,8 @@
 .chat_navigation_search input {
   background: transparent;
   border: 0;
+  width: 80%;
+  color: black;
 }
 .chat_conversation {
   width: calc(100vw - 1000px);
@@ -355,7 +357,7 @@
 
 .chat_info_halth {
   height: 40px;
-  width: calc((100 / 2) -5px);
+  width: calc((100 / 2) - 5px);
 }
 
 .chat_info_test {

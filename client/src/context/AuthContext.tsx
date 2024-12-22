@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await fetch('http://localhost:8080/api/v1/users/token', {
+      const response = await fetch('https://backend.traffikingescape.com/api/v1/users/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
