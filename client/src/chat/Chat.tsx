@@ -135,6 +135,8 @@ const Chat: React.FC = () => {
   // *** Chat data state ***
   const [chatData, setChatData] = useState<ChatData[]>(initialChatData);
 
+  const [disabledOptions, setDisabledOptions] = useState(false);
+
   // *** Option states returned by the AI endpoint ***
   const [option1, setOption1] = useState<string>('');
   const [option2, setOption2] = useState<string>('');
@@ -251,13 +253,22 @@ const Chat: React.FC = () => {
   //     .then(names => console.log('Generated Names:', names))
   //     .catch(error => console.error('Error:', error));
 
-
+  const usedImages = useRef<Set<string>>(new Set()).current;
   const generateNewChatUser = async ( message: string) => {
    let gender =getRandomItem(['male',"female"])
 
-    let imgSrc = await generateRandomImageUrl(gender)
+    let imgSrc = await generateRandomImageUrl(gender);
+    // Small loop to retry if the new imgSrc already exists in our set
+    let attempts = 0;
+    while (usedImages.has(imgSrc) && attempts < 10) {
+      imgSrc = await generateRandomImageUrl(gender);
+      attempts++;
+    }
+    usedImages.add(imgSrc);
+
+
     let name = await generateRandomName(gender)
-    const newChatUser: ChatUsers = {
+    const newChatUser: { chatID: string; name: string | null; message: string; imgSrc: string } = {
       imgSrc,
       name,
       message,
@@ -267,24 +278,28 @@ const Chat: React.FC = () => {
     setChatUsers((prevChatUsers) => [...prevChatUsers, newChatUser]);
   };
 
-  const generateRandomName = async (gender:string) => {
+  const generateRandomName = async (gender: string, retries = 3): Promise<string | null> => {
     try {
-      // Fetch GPT-generated names
-      const names = await fetchGPTNames(gender);
+      for (let attempt = 0; attempt < retries; attempt++) {
+        // Fetch GPT-generated names
+        const names = await fetchGPTNames(gender);
 
-      // Log and return the first generated name
-      if (names.length > 0) {
-        console.log('Generated Names:', names);
-        return names[0]; // Return the first name from the list
-      } else {
-        console.error('No names generated');
-        return null;
+        if (names.length > 0) {
+          console.log('Generated Names:', names);
+          return names[0]; // Return the first name from the list
+        } else {
+          console.warn(`No names generated. Retrying... (${attempt + 1}/${retries})`);
+        }
       }
+
+      console.error('Failed to generate names after retries');
+      return null; // Return null if retries are exhausted
     } catch (error) {
       console.error('Error:', error);
       return null;
     }
   };
+
 
 // Example usage
 //   const handleRandomName = async () => {
@@ -414,6 +429,7 @@ const Chat: React.FC = () => {
       console.error('Error in fetchAIResponse:', error);
     } finally {
       setIsTyping(false); // Hide typing indicator
+      setDisabledOptions(false); // Re-enable the options after the response is generated
       //for testing - console.log('stop_typing');
     }
   };
@@ -435,6 +451,7 @@ const Chat: React.FC = () => {
 
   // *** Handler when the user clicks one of the options ***
   const handleOptionClick = (chosenOption: string) => {
+    setDisabledOptions(true); // Disable the options
     // 1) Add the chosen message to chat as 'send'
     const cleanedOption = chosenOption.replace(/^"|"$/g, '');
     const userMessage: ChatData = {
@@ -447,6 +464,7 @@ const Chat: React.FC = () => {
 
     // 2) Fire a new request with chosenOption as lastMessage
     fetchAIResponse(chosenOption, updatedDangerLevel, false);
+
   };
 
   const [activeLeftBarOption, setActiveLeftBarOption] = useState<string>('');
@@ -849,7 +867,8 @@ const Chat: React.FC = () => {
           <div className={styles.chat_options}>
             {/* Option1 */}
             <div
-              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option}`}
+              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
+              disabled={disabledOptions}
               onClick={() => handleOptionClick(option1)}
             >
               {option1 || 'Option1...'}
@@ -857,7 +876,8 @@ const Chat: React.FC = () => {
 
             {/* Option2 */}
             <div
-              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option}`}
+              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
+              disabled={disabledOptions}
               onClick={() => handleOptionClick(option2)}
             >
               {option2 || 'Option2...'}
@@ -865,7 +885,8 @@ const Chat: React.FC = () => {
 
             {/* Option3 */}
             <div
-              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option}`}
+              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
+              disabled={disabledOptions}
               onClick={() => handleOptionClick(option3)}
             >
               {option3 || 'Option3...'}
@@ -957,11 +978,18 @@ const Chat: React.FC = () => {
           <button
               className={styles.chat_info_btn}
               onClick={() =>
-                  generateNewChatUser('John Doe', 'Hello, world!', 'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A')
+                  generateNewChatUser('Hello, world!')
               }
           >
             Add new chat
           </button>
+          <div
+              className={`${styles.chat_info_btn} ${styles.chat_info_report}`}
+              style={{cursor:"none"}}
+          >
+            Danger level <br/>
+            {updatedDangerLevel}
+          </div>
 
           <button className={styles.chat_info_btn} onClick={toggleLanguage}>
             Toggle language <br/>
