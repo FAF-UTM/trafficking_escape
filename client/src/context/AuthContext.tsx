@@ -29,13 +29,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await fetch('https://backend.traffikingescape.com/api/v1/users/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND}/api/v1/users/token`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        }
+      );
 
       if (response.ok) {
         // Check Content-Type to determine response format
