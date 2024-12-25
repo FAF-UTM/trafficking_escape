@@ -41,16 +41,17 @@ function getRandomAge(): number {
 // Helper: build the final image URL
 // ---------------
 
-async function generateRandomImageUrl(): Promise<string> {
+async function generateRandomImageUrl(gender:string): Promise<string> {
   const timeParam = Date.now();
-  const url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=all&age=12-18&etnic=all`;
+  console.log(gender)
+  const url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=${gender}&age=12-18&etnic=all`;
 
 
   /*
    We use the site you provided: https://this-person-does-not-exist.com/
    with query params for:
      - time = current timestamp (to avoid caching)
-     - gender=all
+     - gender=${gender}
      - age=12-18
      - etnic=all
  */
@@ -192,13 +193,13 @@ const Chat: React.FC = () => {
     // },
   ]);
 
-  async function fetchGPTNames(): Promise<string[]> {
+  async function fetchGPTNames(gender:string): Promise<string[]> {
     // Determine the appropriate prompt based on language
     const promptText = i18n.language.toLowerCase().startsWith('nl')
         ? `Geef me typische Nederlandse (Nederlandstalige) tienernamen (12-18) voor jongens.
        Laat je inspireren door realistische Nederlandse namen. Formaat: "Voornaam Achternaam"`
-        : `Give me a typical English (US or UK) teenage (12-18) male name.
-       Be inspired by realistic English names. Format: "Name Surname"`;
+        : `Give me a typical English (US or UK) teenage (12-18) ${gender} name.
+       Be inspired by realistic English names. Format: "Name Surname", never more than Name and Surname`;
 
     // OpenAI API URL
     const apiUrl = 'https://api.openai.com/v1/chat/completions';
@@ -251,7 +252,11 @@ const Chat: React.FC = () => {
   //     .catch(error => console.error('Error:', error));
 
 
-  const generateNewChatUser = (name: string, message: string, imgSrc: string) => {
+  const generateNewChatUser = async ( message: string) => {
+   let gender =getRandomItem(['male',"female"])
+
+    let imgSrc = await generateRandomImageUrl(gender)
+    let name = await generateRandomName(gender)
     const newChatUser: ChatUsers = {
       imgSrc,
       name,
@@ -262,10 +267,10 @@ const Chat: React.FC = () => {
     setChatUsers((prevChatUsers) => [...prevChatUsers, newChatUser]);
   };
 
-  const generateRandomName = async () => {
+  const generateRandomName = async (gender:string) => {
     try {
       // Fetch GPT-generated names
-      const names = await fetchGPTNames();
+      const names = await fetchGPTNames(gender);
 
       // Log and return the first generated name
       if (names.length > 0) {
@@ -323,10 +328,12 @@ const Chat: React.FC = () => {
     } catch (error) {
       console.error('Error fetching chats:', error);
 
-      generateNewChatUser(await generateRandomName(), 'Hello, world!', await generateRandomImageUrl())
-      generateNewChatUser(await generateRandomName(), 'Hello, world!', await generateRandomImageUrl())
+      generateNewChatUser('Hello, world!')
+      generateNewChatUser('Hello, world!')
 
     }
+
+    fetchAIResponse('Hello', 3, false);
   };
 
 
@@ -418,8 +425,9 @@ const Chat: React.FC = () => {
   useEffect(() => {
     if (!hasFetchedRef.current && isAuthenticated && token) {
       hasFetchedRef.current = true;
-      fetchAIResponse('Hello', 3, false);
       fetchChats()
+
+
     }
     // If you don't require auth, remove the isAuthenticated check
     // else { /* maybe handle error, redirect to login, etc. */ }
