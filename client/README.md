@@ -5,6 +5,7 @@
 1. Add the `.env` file to project ( in `client/.env`):
 ```json
 VITE_BACKEND="http://localhost:8080" #default backend for testing
+VITE_GPT_TOKEN="sk-..." #add your gpt token
 ```
 2. Use `yarn install` to **Install Dependencies**
 - This project is developed with `yarn`, why?🤔:

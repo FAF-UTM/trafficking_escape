@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Character from '../components/character/Character.tsx';
 import { useAuth } from '../context/AuthContext.tsx';
 import { useTranslation } from 'react-i18next';
+import i18n from "../i18n.tsx";
 
 interface ChatUsers {
   imgSrc: string;
@@ -11,41 +12,69 @@ interface ChatUsers {
   chatID: string;
 }
 
-const backend_api_generate =
-  import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
+const backend_api_generate = import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
+const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/v1/get-chats';
+const gptToken = import.meta.env.VITE_GPT_TOKEN;
+
 const active_chat_name = 'Alex Cara';
 const active_chat_img =
   'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A';
-const chatUsers: ChatUsers[] = [
-  {
-    imgSrc:
-      'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    name: 'Alex Cara',
-    message: ' Ce mai faci?',
-    chatID: '0023',
-  },
-  {
-    imgSrc:
-      'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    name: 'Cristian Brinza',
-    message: 'Cristian a trimis o ataşare.',
-    chatID: '0232',
-  },
-  {
-    imgSrc:
-      'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    name: 'Bogdan Zlatovcen',
-    message: 'Trimite poze',
-    chatID: '1098',
-  },
-  {
-    imgSrc:
-      'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    name: 'Mariana Catruc',
-    message: 'Mariana a trimis o ataşare.',
-    chatID: '0123',
-  },
-];
+
+
+
+function getRandomItem<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+
+
+
+// ---------------
+// Helper: pick a random age between 12 and 18 (inclusive)
+// ---------------
+function getRandomAge(): number {
+  const ages = [12, 13, 14, 15, 16, 17, 18];
+  return getRandomItem(ages);
+}
+
+// ---------------
+// Helper: build the final image URL
+// ---------------
+
+async function generateRandomImageUrl(): Promise<string> {
+  const timeParam = Date.now();
+  const url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=all&age=12-18&etnic=all`;
+
+
+  /*
+   We use the site you provided: https://this-person-does-not-exist.com/
+   with query params for:
+     - time = current timestamp (to avoid caching)
+     - gender=all
+     - age=12-18
+     - etnic=all
+ */
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (data.generated === "true" && data.src) {
+      // Return the full URL by combining the base URL and the `src` path
+      return `https://this-person-does-not-exist.com${data.src}`;
+    } else {
+      throw new Error("Unexpected response structure.");
+    }
+  } catch (error) {
+    console.error("Error fetching random image URL:", error);
+    throw error;
+  }
+}
+
+
 
 interface ChatData {
   from: string;
@@ -53,7 +82,6 @@ interface ChatData {
   sendtype: string;
   messages: string[];
 }
-// const chatData: ChatData[] = [];
 
 // Define character configuration
 const characters: {
@@ -131,6 +159,178 @@ const Chat: React.FC = () => {
   const hidePopup = (id: string) => {
     setPopupVisibility((prev) => ({ ...prev, [id]: false }));
   };
+
+
+  const [chatUsers, setChatUsers] = useState<ChatUsers[]>([
+    // {
+    //   imgSrc:
+    //       'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
+    //   name: 'Alex Cara',
+    //   message: 'Ce mai faci?',
+    //   chatID: '0023',
+    // },
+    // {
+    //   imgSrc:
+    //       'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
+    //   name: 'Cristian Brinza',
+    //   message: 'Cristian a trimis o ataşare.',
+    //   chatID: '0232',
+    // },
+    // {
+    //   imgSrc:
+    //       'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
+    //   name: 'Bogdan Zlatovcen',
+    //   message: 'Trimite poze',
+    //   chatID: '1098',
+    // },
+    // {
+    //   imgSrc:
+    //       'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
+    //   name: 'Mariana Catruc',
+    //   message: 'Mariana a trimis o ataşare.',
+    //   chatID: '0123',
+    // },
+  ]);
+
+  async function fetchGPTNames(): Promise<string[]> {
+    // Determine the appropriate prompt based on language
+    const promptText = i18n.language.toLowerCase().startsWith('nl')
+        ? `Geef me typische Nederlandse (Nederlandstalige) tienernamen (12-18) voor jongens.
+       Laat je inspireren door realistische Nederlandse namen. Formaat: "Voornaam Achternaam"`
+        : `Give me a typical English (US or UK) teenage (12-18) male name.
+       Be inspired by realistic English names. Format: "Name Surname"`;
+
+    // OpenAI API URL
+    const apiUrl = 'https://api.openai.com/v1/chat/completions';
+
+    try {
+      // Send the request to the OpenAI API
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${gptToken}`, // Add Bearer token
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini', // Use the model specified
+          messages: [
+            { role: 'system', content: 'You are a helpful assistant.' },
+            { role: 'user', content: promptText },
+          ],
+          max_tokens: 150,
+          temperature: 0.7,
+        }),
+      });
+
+      // Handle non-OK responses
+      if (!response.ok) {
+        throw new Error(`Failed to fetch names: ${response.status} ${response.statusText}`);
+      }
+
+      // Parse and extract names from the response
+      const data = await response.json();
+      const allGeneratedNames = data.choices[0]?.message?.content?.trim()?.split('\n') || [];
+
+      // Access the existing chat users array directly
+      const existingNames = chatUsers.map((user) => user.name);
+      // Filter out names that already exist
+      const uniqueNames = allGeneratedNames.filter(
+          (name) => !existingNames.includes(name.trim())
+      );
+
+      return uniqueNames;
+    } catch (error) {
+      // Log and rethrow errors for debugging
+      console.error('Error fetching GPT names:', error);
+      throw error;
+    }
+  }
+
+  // fetchGPTNames()
+  //     .then(names => console.log('Generated Names:', names))
+  //     .catch(error => console.error('Error:', error));
+
+
+  const generateNewChatUser = (name: string, message: string, imgSrc: string) => {
+    const newChatUser: ChatUsers = {
+      imgSrc,
+      name,
+      message,
+      chatID: Date.now().toString(),
+    };
+
+    setChatUsers((prevChatUsers) => [...prevChatUsers, newChatUser]);
+  };
+
+  const generateRandomName = async () => {
+    try {
+      // Fetch GPT-generated names
+      const names = await fetchGPTNames();
+
+      // Log and return the first generated name
+      if (names.length > 0) {
+        console.log('Generated Names:', names);
+        return names[0]; // Return the first name from the list
+      } else {
+        console.error('No names generated');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      return null;
+    }
+  };
+
+// Example usage
+//   const handleRandomName = async () => {
+//     const random_name = await generateRandomName();
+//     console.log('Random Name:', random_name);
+//   };
+
+
+  const fetchChats = async () => {
+    try {
+
+      // Fetch chats from the backend API
+      const response = await fetch(backend_api_chats, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // *** Attach token in the Authorization header ***
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      // Check if the response is successful
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Parse the response JSON
+      const data = await response.json();
+
+      // Validate response structure
+      if (data && Array.isArray(data.chatUsers)) {
+        setChatUsers(data.chatUsers.map(chat => ({
+          imgSrc: chat.imgSrc || from_img_default,
+          name: chat.name || 'Unknown User',
+          message: chat.message || 'No message available',
+          chatID: chat.chatID || Date.now().toString(),
+        })));
+      } else {
+        throw new Error('Invalid response structure');
+      }
+    } catch (error) {
+      console.error('Error fetching chats:', error);
+
+      generateNewChatUser(await generateRandomName(), 'Hello, world!', await generateRandomImageUrl())
+      generateNewChatUser(await generateRandomName(), 'Hello, world!', await generateRandomImageUrl())
+
+    }
+  };
+
+
+
 
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
@@ -219,6 +419,7 @@ const Chat: React.FC = () => {
     if (!hasFetchedRef.current && isAuthenticated && token) {
       hasFetchedRef.current = true;
       fetchAIResponse('Hello', 3, false);
+      fetchChats()
     }
     // If you don't require auth, remove the isAuthenticated check
     // else { /* maybe handle error, redirect to login, etc. */ }
@@ -229,8 +430,8 @@ const Chat: React.FC = () => {
     // 1) Add the chosen message to chat as 'send'
     const cleanedOption = chosenOption.replace(/^"|"$/g, '');
     const userMessage: ChatData = {
-      from: 'Cristi',
-      from_img: 'https://example.com/cristi_image.png',
+      from: 'You',
+      from_img: '',
       sendtype: 'send',
       messages: [cleanedOption],
     };
@@ -267,6 +468,10 @@ const Chat: React.FC = () => {
     const newLanguage = i18n.language === 'en' ? 'nl' : 'en';
     i18n.changeLanguage(newLanguage);
   };
+
+
+
+
 
   return (
     <div className={styles.chat}>
@@ -697,15 +902,15 @@ const Chat: React.FC = () => {
       <div className={styles.chat_info}>
         <button className={styles.chat_info_btn}>
           <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.521 6.904 10.713 6.712C10.905 6.52 11.0007 6.28267 11 6C10.9993 5.71733 10.9033 5.48 10.712 5.288C10.5207 5.096 10.2833 5 10 5C9.71667 5 9.47933 5.096 9.288 5.288C9.09667 5.48 9.00067 5.71733 9 6C8.99933 6.28267 9.09533 6.52033 9.288 6.713C9.48067 6.90567 9.718 7.00133 10 7ZM10 20C8.61667 20 7.31667 19.7373 6.1 19.212C4.88334 18.6867 3.825 17.9743 2.925 17.075C2.025 16.1757 1.31267 15.1173 0.788001 13.9C0.263335 12.6827 0.000667932 11.3827 1.26582e-06 10C-0.000665401 8.61733 0.262001 7.31733 0.788001 6.1C1.314 4.88267 2.02633 3.82433 2.925 2.925C3.82367 2.02567 4.882 1.31333 6.1 0.788C7.318 0.262667 8.618 0 10 0C11.382 0 12.682 0.262667 13.9 0.788C15.118 1.31333 16.1763 2.02567 17.075 2.925C17.9737 3.82433 18.6863 4.88267 19.213 6.1C19.7397 7.31733 20.002 8.61733 20 10C19.998 11.3827 19.7353 12.6827 19.212 13.9C18.6887 15.1173 17.9763 16.1757 17.075 17.075C16.1737 17.9743 15.1153 18.687 13.9 19.213C12.6847 19.739 11.3847 20.0013 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18Z"
-              fill="black"
+                d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.521 6.904 10.713 6.712C10.905 6.52 11.0007 6.28267 11 6C10.9993 5.71733 10.9033 5.48 10.712 5.288C10.5207 5.096 10.2833 5 10 5C9.71667 5 9.47933 5.096 9.288 5.288C9.09667 5.48 9.00067 5.71733 9 6C8.99933 6.28267 9.09533 6.52033 9.288 6.713C9.48067 6.90567 9.718 7.00133 10 7ZM10 20C8.61667 20 7.31667 19.7373 6.1 19.212C4.88334 18.6867 3.825 17.9743 2.925 17.075C2.025 16.1757 1.31267 15.1173 0.788001 13.9C0.263335 12.6827 0.000667932 11.3827 1.26582e-06 10C-0.000665401 8.61733 0.262001 7.31733 0.788001 6.1C1.314 4.88267 2.02633 3.82433 2.925 2.925C3.82367 2.02567 4.882 1.31333 6.1 0.788C7.318 0.262667 8.618 0 10 0C11.382 0 12.682 0.262667 13.9 0.788C15.118 1.31333 16.1763 2.02567 17.075 2.925C17.9737 3.82433 18.6863 4.88267 19.213 6.1C19.7397 7.31733 20.002 8.61733 20 10C19.998 11.3827 19.7353 12.6827 19.212 13.9C18.6887 15.1173 17.9763 16.1757 17.075 17.075C16.1737 17.9743 15.1153 18.687 13.9 19.213C12.6847 19.739 11.3847 20.0013 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18Z"
+                fill="black"
             />
           </svg>
           {t('chat.chat_info')}
@@ -714,71 +919,92 @@ const Chat: React.FC = () => {
           {t('chat.help')}
         </button>
         <button
-          className={`${styles.chat_info_btn} ${styles.chat_info_report} `}
+            className={`${styles.chat_info_btn} ${styles.chat_info_report} `}
         >
           {t('chat.report')}
+        </button>
+        <button className={styles.chat_info_btn}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M10.325 4.317C10.751 2.561 13.249 2.561 13.675 4.317C13.7389 4.5808 13.8642 4.82578 14.0407 5.032C14.2172 5.23822 14.4399 5.39985 14.6907 5.50375C14.9414 5.60764 15.2132 5.65085 15.4838 5.62987C15.7544 5.60889 16.0162 5.5243 16.248 5.383C17.791 4.443 19.558 6.209 18.618 7.753C18.4769 7.98466 18.3924 8.24634 18.3715 8.51677C18.3506 8.78721 18.3938 9.05877 18.4975 9.30938C18.6013 9.55999 18.7627 9.78258 18.9687 9.95905C19.1747 10.1355 19.4194 10.2609 19.683 10.325C21.439 10.751 21.439 13.249 19.683 13.675C19.4192 13.7389 19.1742 13.8642 18.968 14.0407C18.7618 14.2172 18.6001 14.4399 18.4963 14.6907C18.3924 14.9414 18.3491 15.2132 18.3701 15.4838C18.3911 15.7544 18.4757 16.0162 18.617 16.248C19.557 17.791 17.791 19.558 16.247 18.618C16.0153 18.4769 15.7537 18.3924 15.4832 18.3715C15.2128 18.3506 14.9412 18.3938 14.6906 18.4975C14.44 18.6013 14.2174 18.7627 14.0409 18.9687C13.8645 19.1747 13.7391 19.4194 13.675 19.683C13.249 21.439 10.751 21.439 10.325 19.683C10.2611 19.4192 10.1358 19.1742 9.95929 18.968C9.7828 18.7618 9.56011 18.6001 9.30935 18.4963C9.05859 18.3924 8.78683 18.3491 8.51621 18.3701C8.24559 18.3911 7.98375 18.4757 7.752 18.617C6.209 19.557 4.442 17.791 5.382 16.247C5.5231 16.0153 5.60755 15.7537 5.62848 15.4832C5.64942 15.2128 5.60624 14.9412 5.50247 14.6906C5.3987 14.44 5.23726 14.2174 5.03127 14.0409C4.82529 13.8645 4.58056 13.7391 4.317 13.675C2.561 13.249 2.561 10.751 4.317 10.325C4.5808 10.2611 4.82578 10.1358 5.032 9.95929C5.23822 9.7828 5.39985 9.56011 5.50375 9.30935C5.60764 9.05859 5.65085 8.78683 5.62987 8.51621C5.60889 8.24559 5.5243 7.98375 5.383 7.752C4.443 6.209 6.209 4.442 7.753 5.382C8.753 5.99 10.049 5.452 10.325 4.317Z"
+                stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+                d="M9 12C9 12.7956 9.31607 13.5587 9.87868 14.1213C10.4413 14.6839 11.2044 15 12 15C12.7956 15 13.5587 14.6839 14.1213 14.1213C14.6839 13.5587 15 12.7956 15 12C15 11.2044 14.6839 10.4413 14.1213 9.87868C13.5587 9.31607 12.7956 9 12 9C11.2044 9 10.4413 9.31607 9.87868 9.87868C9.31607 10.4413 9 11.2044 9 12Z"
+                stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+
+          {t('chat.chat_settings')}
         </button>
 
         <div className={styles.chat_info_test}>
           {characters.map((character) => (
-            <button
-              key={character.id}
-              className={styles.chat_info_btn}
-              onClick={() => toggleCharacter(character.id)}
-            >
-              Toggle {character.name}
-            </button>
+              <button
+                  key={character.id}
+                  className={styles.chat_info_btn}
+                  onClick={() => toggleCharacter(character.id)}
+              >
+                Toggle {character.name}
+              </button>
           ))}
+          <button
+              className={styles.chat_info_btn}
+              onClick={() =>
+                  generateNewChatUser('John Doe', 'Hello, world!', 'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A')
+              }
+          >
+            Add new chat
+          </button>
+
           <button className={styles.chat_info_btn} onClick={toggleLanguage}>
-            Toggle language <br />
+            Toggle language <br/>
             current: {i18n.language.toUpperCase()}
           </button>
         </div>
       </div>
 
       {characters.map((character) => (
-        <Character
-          key={character.id}
-          isVisible={visibleCharacter === character.id}
-          character={character.name.toLowerCase()}
-          altText={`${character.name} character`}
-          position={character.position}
-          message={character.message}
-        />
+          <Character
+              key={character.id}
+              isVisible={visibleCharacter === character.id}
+              character={character.name.toLowerCase()}
+              altText={`${character.name} character`}
+              position={character.position}
+              message={character.message}
+          />
       ))}
 
       {/* Popup 1 */}
       {popupVisibility['popup_1'] && (
-        <div className={styles.chat_popup_container}>
-          <div className={styles.chat_popup}>
-            <div className={styles.chat_popup_text}>
-              Are you sure you want to contact this person?
-            </div>
-            <div className={styles.chat_popup_buttons}>
-              <div
-                className={`${styles.chat_info_btn} ${styles.chat_info_halth} ${styles.chat_info_help}`}
-              >
-                yes
+          <div className={styles.chat_popup_container}>
+            <div className={styles.chat_popup}>
+              <div className={styles.chat_popup_text}>
+                Are you sure you want to contact this person?
               </div>
-              <div
-                className={`${styles.chat_info_btn} ${styles.chat_info_report} ${styles.chat_info_halth}`}
-                onClick={() => hidePopup('popup_1')}
-              >
-                no
+              <div className={styles.chat_popup_buttons}>
+                <div
+                    className={`${styles.chat_info_btn} ${styles.chat_info_halth} ${styles.chat_info_help}`}
+                >
+                  yes
+                </div>
+                <div
+                    className={`${styles.chat_info_btn} ${styles.chat_info_report} ${styles.chat_info_halth}`}
+                    onClick={() => hidePopup('popup_1')}
+                >
+                  no
+                </div>
               </div>
             </div>
           </div>
-        </div>
       )}
       {popupVisibility['popup_2'] && (
-        <div className={styles.chat_popup_container}>
-          <div className={styles.chat_popup}>
-            <div className={styles.chat_popup_text}>
-              Are you sure you want share pictures this person?
-            </div>
-            <div className={styles.chat_popup_buttons}>
-              <div
-                className={`${styles.chat_info_btn} ${styles.chat_info_halth} ${styles.chat_info_help}`}
+          <div className={styles.chat_popup_container}>
+            <div className={styles.chat_popup}>
+              <div className={styles.chat_popup_text}>
+                Are you sure you want share pictures this person?
+              </div>
+              <div className={styles.chat_popup_buttons}>
+                <div
+                    className={`${styles.chat_info_btn} ${styles.chat_info_halth} ${styles.chat_info_help}`}
               >
                 yes
               </div>
