@@ -200,7 +200,7 @@ const Chat: React.FC = () => {
     const promptText = i18n.language.toLowerCase().startsWith('nl')
         ? `Geef me typische Nederlandse (Nederlandstalige) tienernamen (12-18) voor jongens.
        Laat je inspireren door realistische Nederlandse namen. Formaat: "Voornaam Achternaam"`
-        : `Give me a typical English (US or UK) teenage (12-18) ${gender} name.
+        : `Give me a unique English (US or UK) teenage (12-18) ${gender} name.
        Be inspired by realistic English names. Format: "Name Surname", never more than Name and Surname`;
 
     // OpenAI API URL
@@ -343,6 +343,8 @@ const Chat: React.FC = () => {
     } catch (error) {
       console.error('Error fetching chats:', error);
 
+      generateNewChatUser('Hello, world!')
+      generateNewChatUser('Hello, world!')
       generateNewChatUser('Hello, world!')
       generateNewChatUser('Hello, world!')
 
@@ -641,6 +643,7 @@ const Chat: React.FC = () => {
 
           <input type="text" placeholder={t('chat.serach_in_mess')} />
         </div>
+        <div className={styles.chat_navigation_blocks}>
         {chatUsers.map((chat, index) => (
           <div key={index} className={styles.chat_navigation_block}>
             <img
@@ -658,6 +661,7 @@ const Chat: React.FC = () => {
             </div>
           </div>
         ))}
+        </div>
       </div>
       <div className={styles.chat_conversation}>
         <div className={styles.chat_conversation_top}>

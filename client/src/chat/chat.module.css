@@ -456,10 +456,12 @@
   border-radius: 18px;
   border: 1px solid #fff;
   background: #f0f0f0;
-  padding: 8px 12px;
+  padding: 10px 12px;
   height: 12px;
-  padding-top: 15px;
   margin-top: -4px;
+  border-radius: 16px 16px 16px 4px;
+  -webkit-border-radius: 16px 16px 16px 4px;
+  -moz-border-radius: 16px 16px 16px 4px;
 }
 
 .dot {
@@ -724,5 +726,12 @@
 
 .chat_conversation_bottom_option{
   width: 32%;
+}
+
+.chat_navigation_blocks{
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  align-items: stretch;
 }
 
