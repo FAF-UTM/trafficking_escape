@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Character from '../components/character/Character.tsx';
 import { useAuth } from '../context/AuthContext.tsx';
 import { useTranslation } from 'react-i18next';
-import i18n from "../i18n.tsx";
 
 interface ChatUsers {
   imgSrc: string;
@@ -32,10 +31,10 @@ function getRandomItem<T>(arr: T[]): T {
 // ---------------
 // Helper: pick a random age between 12 and 18 (inclusive)
 // ---------------
-function getRandomAge(): number {
-  const ages = [12, 13, 14, 15, 16, 17, 18];
-  return getRandomItem(ages);
-}
+// function getRandomAge(): number {
+//   const ages = [12, 13, 14, 15, 16, 17, 18];
+//   return getRandomItem(ages);
+// }
 
 // ---------------
 // Helper: build the final image URL
@@ -238,7 +237,7 @@ const Chat: React.FC = () => {
       const existingNames = chatUsers.map((user) => user.name);
       // Filter out names that already exist
       const uniqueNames = allGeneratedNames.filter(
-          (name) => !existingNames.includes(name.trim())
+          (name: string) => !existingNames.includes(name.trim())
       );
 
       return uniqueNames;
@@ -268,9 +267,10 @@ const Chat: React.FC = () => {
 
 
     let name = await generateRandomName(gender)
-    const newChatUser: { chatID: string; name: string | null; message: string; imgSrc: string } = {
+    //const newChatUser: { chatID: string; name: string | null; message: string; imgSrc: string } = {
+    const newChatUser: ChatUsers = {
       imgSrc,
-      name,
+      name: name ?? 'Unknown user',   // Provide a fallback so it's always a string
       message,
       chatID: Date.now().toString(),
     };
@@ -331,7 +331,7 @@ const Chat: React.FC = () => {
 
       // Validate response structure
       if (data && Array.isArray(data.chatUsers)) {
-        setChatUsers(data.chatUsers.map(chat => ({
+        setChatUsers(data.chatUsers.map((chat: ChatUsers) => ({
           imgSrc: chat.imgSrc || from_img_default,
           name: chat.name || 'Unknown User',
           message: chat.message || 'No message available',
@@ -871,27 +871,36 @@ const Chat: React.FC = () => {
           <div className={styles.chat_options}>
             {/* Option1 */}
             <div
-              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
-              disabled={disabledOptions}
-              onClick={() => handleOptionClick(option1)}
+                className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
+                onClick={() => {
+                  if (!disabledOptions) {
+                    handleOptionClick(option1);
+                  }
+                }}
             >
               {option1 || 'Option1...'}
             </div>
 
             {/* Option2 */}
             <div
-              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
-              disabled={disabledOptions}
-              onClick={() => handleOptionClick(option2)}
+                className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
+                onClick={() => {
+                  if (!disabledOptions) {
+                    handleOptionClick(option2);
+                  }
+                }}
             >
               {option2 || 'Option2...'}
             </div>
 
             {/* Option3 */}
             <div
-              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
-              disabled={disabledOptions}
-              onClick={() => handleOptionClick(option3)}
+                className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
+                onClick={() => {
+                  if (!disabledOptions) {
+                    handleOptionClick(option3);
+                  }
+                }}
             >
               {option3 || 'Option3...'}
             </div>
