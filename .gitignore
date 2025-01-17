@@ -1,3 +1,5 @@
-
 client/yarn.lock
 client/.env
+/docker-compose.yml
+/.env
+/service-checker/target/

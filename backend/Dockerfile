@@ -4,13 +4,14 @@ FROM maven:3.8.1-openjdk-17 AS builder
 # Set the working directory
 WORKDIR /app
 
-# Copy the Maven project file
+# Copy the Maven project file and download dependencies
 COPY pom.xml .
+RUN mvn dependency:go-offline -B
 
 # Copy the source code
 COPY src ./src
 
-# Package the application, skipping tests for speed
+# Package the application, skipping tests for faster builds
 RUN mvn clean package -DskipTests
 
 # Stage 2: Run the application
@@ -22,9 +23,13 @@ WORKDIR /app
 # Copy the packaged jar file from the builder stage
 COPY --from=builder /app/target/*.jar /app.jar
 
-# Expose port 8080 and 5005 for debugging
+# Expose necessary ports
 EXPOSE 8080
 EXPOSE 5005
 
+# Healthcheck to monitor the application's health
+HEALTHCHECK --interval=1m --timeout=10s --start-period=30s \
+  CMD wget -q -O- http://localhost:8080/actuator/health || exit 1
+
 # Run the application with debugging enabled
-ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "/app.jar"]
+CMD ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "/app.jar"]

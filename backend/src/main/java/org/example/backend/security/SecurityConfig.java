@@ -42,7 +42,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/v1/users/token", "/api/v1/users/register", "/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml", "/swagger-ui.html").permitAll()
+                        .requestMatchers(
+                                "/api/v1/users/token",
+                                "/api/v1/users/register",
+                                "/h2-console/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs.yaml",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -59,27 +67,43 @@ public class SecurityConfig {
         return new JwtFilter();
     }
 
-    @Bean
-    public CorsFilter corsFilter() {
-        LOGGER.info("Creating CorsFilter bean");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
+    /**
+     * Option 1: Provide a CorsFilter bean explicitly.
+     * If you do this, you can remove or modify 'corsConfigurationSource()' accordingly.
+     */
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        LOGGER.info("Creating CorsFilter bean");
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//        // Allow credentials if needed (e.g., for cookies).
+//        config.setAllowCredentials(true);
+//        // Allow any origin.
+//        config.addAllowedOriginPattern("*");
+//        // Or if you prefer just addAllowedOrigin("*"), but addAllowedOriginPattern("*") covers subdomains as well.
+//        config.addAllowedHeader("*");
+//        config.addAllowedMethod("*");
+//        source.registerCorsConfiguration("/**", config);
+//        return new CorsFilter(source);
+//    }
 
+    /**
+     * Option 2: Provide a CORS configuration source bean, which Spring Security will use.
+     * Either method works, but typically you pick just one approach.
+     */
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         LOGGER.info("Creating UrlBasedCorsConfigurationSource bean");
         CorsConfiguration configuration = new CorsConfiguration();
+        // Allow credentials if you need session/cookie details in the requests
         configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173")); // List your allowed origins here
+
+        // ************ IMPORTANT CHANGE HERE ************
+        // Switch to allow any origin by using "*"
+        configuration.setAllowedOriginPatterns(List.of("*"));
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -92,7 +116,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder, CustomUserDetailsService userDetailsService) throws Exception {
+    public AuthenticationManager authenticationManager(
+            HttpSecurity http,
+            PasswordEncoder passwordEncoder,
+            CustomUserDetailsService userDetailsService
+    ) throws Exception {
         LOGGER.info("Creating AuthenticationManager bean");
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailsService)

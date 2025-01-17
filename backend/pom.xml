@@ -86,17 +86,17 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator-core</artifactId>
-            <version>0.46</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.webjars</groupId>-->
+<!--            <artifactId>webjars-locator-core</artifactId>-->
+<!--            <version>0.46</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>io.github.classgraph</groupId>
-            <artifactId>classgraph</artifactId>
-            <version>4.8.112</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.github.classgraph</groupId>-->
+<!--            <artifactId>classgraph</artifactId>-->
+<!--            <version>4.8.112</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>javax.xml.bind</groupId>
