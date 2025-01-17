@@ -5,3 +5,5 @@ client/.env
 /.idea
 /service-checker/target/
 /service-checker/.idea/
+/nginx/certs/nginx.crt
+/nginx/certs/nginx.key
