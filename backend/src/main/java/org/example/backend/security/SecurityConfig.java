@@ -94,9 +94,19 @@ public class SecurityConfig {
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         LOGGER.info("Creating UrlBasedCorsConfigurationSource bean");
+
         CorsConfiguration configuration = new CorsConfiguration();
         // Allow credentials if you need session/cookie details in the requests
         configuration.setAllowCredentials(true);
+
+        // Use allowed origin patterns to let Spring handle the wildcard properly.
+        configuration.setAllowedOriginPatterns(List.of("*"));
+
+        // Alternatively, if you do NOT require credentials, you can simply do:
+        // configuration.addAllowedOrigin("*");
+        // configuration.setAllowCredentials(false);
+
+        // Allow all headers and methods
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
 
@@ -106,8 +116,10 @@ public class SecurityConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
