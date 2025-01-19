@@ -15,8 +15,8 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 120px;
-    min-height: 70px;
+    width: 240px;
+    min-height: 140px;
     background-color: rgba(0, 0, 0, 0.6);
     padding: 8px;
     display: flex;
@@ -29,8 +29,8 @@
 
 /* Each item in the inventory */
 .inventory-item {
-    width: 32px;
-    height: 32px;
+    width: 64px;
+    height: 64px;
     border: 2px solid transparent;
     cursor: pointer;
     display: flex;
@@ -39,8 +39,8 @@
 }
 
 .inventory-item img {
-    max-width: 24px;
-    max-height: 24px;
+    max-width: 96px;
+    max-height: 96px;
 }
 
 /* Highlight selected item in inventory */
@@ -52,7 +52,7 @@
 .clickable-zone {
     position: absolute;
     cursor: pointer;
-    border: 2px dashed rgba(255,255,255,0.2);
+    /*border: 2px dashed rgba(255,255,255,0.2);*/
     transition: border-color 0.2s;
 }
 .clickable-zone:hover {

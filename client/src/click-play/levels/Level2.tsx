@@ -10,12 +10,13 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
     const [wireCutterFound, setWireCutterFound] = useState(false);
     const [noteFound, setNoteFound] = useState(false);
     const [electricityOff, setElectricityOff] = useState(false);
+    const [doorUnlocked, setDoorUnlocked] = useState(false);
 
     // Inventory
     const [inventory, setInventory] = useState<string[]>([]);
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
-    // Modal / Message states
+    // Modal logic
     const [modalVisible, setModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState('');
     const [modalText, setModalText] = useState('');
@@ -24,7 +25,11 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
     const [showCodeDialog, setShowCodeDialog] = useState(false);
     const [enteredCode, setEnteredCode] = useState('');
 
-    // Helper to open general item/info modals
+    /* -----------------------
+     *  Utility: Modal & Inventory
+     * ----------------------- */
+
+    // Opens a modal with an image and text
     const openModal = (img: string, text: string) => {
         setModalImage(img);
         setModalText(text);
@@ -32,34 +37,41 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
     };
 
     const closeModal = () => {
-        // Clear modal states
+        // Clear the image/text
         setModalImage('');
         setModalText('');
         setModalVisible(false);
     };
 
-    // Check if a "door unlocked" message was just closed, then move on
-    useEffect(() => {
-        // Only run if the modal was closed (modalVisible === false),
-        // and the modal text had "door is unlocked" before closing.
-        if (!modalVisible && modalText.includes('door is unlocked')) {
-            onComplete();
+    // Handle selecting/deselecting an item in inventory
+    const handleSelectItem = (item: string) => {
+        if (selectedItem === item) {
+            // Deselect if clicked again
+            setSelectedItem(null);
+            return;
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [modalVisible]);
+        setSelectedItem(item);
 
-    // Hotspot Interactions
-    // 1. Scattered papers → pick up note
+        // If user selects the note from inventory, show it again
+        if (item === 'note2') {
+            openModal('/assets/note2.png', 'The note reads: "2451"');
+        }
+    };
+
+    /* -----------------------
+     *  Puzzle / Hotspots
+     * ----------------------- */
+
+    // 1. Papers → pick up a note
     const handlePapersClick = () => {
         if (!noteFound) {
             setNoteFound(true);
-            // Add the note to inventory
             setInventory((prev) => [...prev, 'note2']);
             openModal('/assets/note2.png', 'You found a note! It says: "2451"');
         }
     };
 
-    // 2. Stack of crates → find crowbar
+    // 2. Crates → crowbar
     const handleCratesClick = () => {
         if (!crowbarFound) {
             setCrowbarFound(true);
@@ -68,7 +80,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
         }
     };
 
-    // 3. Chest → use crowbar to open it and find wire cutters
+    // 3. Chest → wire cutters (need crowbar)
     const handleChestClick = () => {
         if (!wireCutterFound && selectedItem === 'crowbar') {
             setWireCutterFound(true);
@@ -77,7 +89,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
         }
     };
 
-    // 4. Electric cables → use wire cutters to turn electricity off
+    // 4. Cables → turn electricity off (need wire cutters)
     const handleCablesClick = () => {
         if (!electricityOff && selectedItem === 'wirecutter') {
             setElectricityOff(true);
@@ -85,18 +97,21 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
         }
     };
 
-    // 5. Office door → either ask for code or auto-unlock if electricity is off
+    // 5. Door → either code input if electricity is on, or auto-unlock if off
     const handleDoorClick = () => {
         if (electricityOff) {
-            // If power is off, the lock is disabled
-            openModal('', 'The door is unlocked with the electricity off!');
-            return;
+            // If power is off, lock is disabled
+            setDoorUnlocked(true);
+            openModal('', 'The door is unlocked with the electricity off! (Click outside to continue...)');
+        } else {
+            // Show code input if electricity is on
+            setShowCodeDialog(true);
         }
-        // Otherwise, show a code input
-        setShowCodeDialog(true);
     };
 
-    // Code Dialog Handling
+    /* -----------------------
+     *  Code Dialog
+     * ----------------------- */
     const handleCloseCodeDialog = () => {
         setShowCodeDialog(false);
         setEnteredCode('');
@@ -104,31 +119,26 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
 
     const handleSubmitCode = () => {
         if (enteredCode === '2451') {
-            // Correct code
+            // Correct code → unlock door
+            setDoorUnlocked(true);
             setShowCodeDialog(false);
             setEnteredCode('');
-            openModal('', 'Correct code! The door is unlocked.');
+            openModal('', 'Correct code! The door is unlocked. (Click outside to continue...)');
         } else {
             // Wrong code
             alert('Wrong code! Try again.');
         }
     };
 
-    // Inventory Handling
-    const handleSelectItem = (item: string) => {
-        // If the user clicks the same item, deselect it
-        if (selectedItem === item) {
-            setSelectedItem(null);
-            return;
+    /* -----------------------
+     *  Advancing to Next Level
+     * ----------------------- */
+    useEffect(() => {
+        // Once the modal is closed AND doorUnlocked is true, move on
+        if (!modalVisible && doorUnlocked) {
+            onComplete();
         }
-
-        setSelectedItem(item);
-
-        // If the user selected the note, show the note again
-        if (item === 'note2') {
-            openModal('/assets/note2.png', 'The note reads: "2451"');
-        }
-    };
+    }, [modalVisible, doorUnlocked, onComplete]);
 
     return (
         <div
@@ -197,6 +207,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
                 </div>
             )}
 
+            {/* Code Dialog */}
             {showCodeDialog && (
                 <div className="modal-overlay" onClick={handleCloseCodeDialog}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
