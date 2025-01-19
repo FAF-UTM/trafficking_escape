@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Level1Props {
     onComplete: () => void;
@@ -15,6 +15,9 @@ const Level1: React.FC<Level1Props> = ({ onComplete }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState('');
     const [modalText, setModalText] = useState('');
+
+    // Track if door is unlocked
+    const [doorUnlocked, setDoorUnlocked] = useState(false);
 
     // Opens a modal with an image and text
     const openModal = (img: string, text: string) => {
@@ -50,19 +53,17 @@ const Level1: React.FC<Level1Props> = ({ onComplete }) => {
     // Door logic
     const handleDoorClick = () => {
         if (selectedItem === 'key') {
-            // Finish level 1
+            setDoorUnlocked(true);
             openModal('', 'You unlocked the door! (Click outside to continue...)');
         }
     };
 
-    // In case the user closes the “door unlocked” modal
-    React.useEffect(() => {
-        // If the modal text is specifically our "unlocked" message and we close it, that means we advance
-        if (!modalVisible && modalText.includes('unlocked the door')) {
+    // After the modal closes, if door is unlocked, go to next level
+    useEffect(() => {
+        if (!modalVisible && doorUnlocked) {
             onComplete();
         }
-        // eslint-disable-next-line
-    }, [modalVisible]);
+    }, [modalVisible, doorUnlocked, onComplete]);
 
     // Note logic
     const handleNoteClick = () => {

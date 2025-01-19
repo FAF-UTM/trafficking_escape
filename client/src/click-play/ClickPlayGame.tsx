@@ -14,7 +14,7 @@ const ClickPlayGame: React.FC = () => {
     return (
         <div className="click-play-container">
             {currentLevel === 1 && <Level1 onComplete={handleLevelComplete} />}
-            {/*{currentLevel === 2 && <Level2 onComplete={handleLevelComplete} />}*/}
+            {currentLevel === 2 && <Level2 onComplete={handleLevelComplete} />}
             {/*{currentLevel === 3 && <Level3 onComplete={handleLevelComplete} />}*/}
         </div>
     );
