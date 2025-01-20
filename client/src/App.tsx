@@ -11,11 +11,8 @@ import { useEffect } from 'react';
 import LoginPage from './pages/Login.tsx';
 import { AuthProvider, ProtectedRoute } from './context/AuthContext';
 import IntroStory from './intro/IntroStory.tsx';
+import './i18n';
 import ClickPlayGame from './click-play/ClickPlayGame.tsx';
-import './i18n';
-import './i18n';
-import { ThemeProvider } from '@mui/material/styles'; // Import the i18n configuration
-import theme from './theme/theme';
 
 
 const imagesArray = [
@@ -59,8 +56,37 @@ function App() {
   }, []);
 
   return (
-              <Route path="/click-play" element={<ClickPlayGame />} />
+      <>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/intro" element={<IntroStory />} />
+
               {/* Our single click-play route for all 3 levels */}
+              <Route path="/click-play" element={<ClickPlayGame />} />
+
+              <Route
+                  path="/chat"
+                  element={
+                    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                      <Chat />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="/city-run"
+                  element={
+                    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                      <Platformer />
+                    </ProtectedRoute>
+                  }
+              />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </>
   );
 }
 
