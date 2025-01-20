@@ -7,12 +7,11 @@ import {
   Container,
   CssBaseline,
 } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../theme/theme'; // Import the updated theme
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import styles from './pages.module.css';
-
-const theme = createTheme();
 
 const LoginPage: React.FC = () => {
   const { login } = useAuth();
@@ -35,6 +34,7 @@ const LoginPage: React.FC = () => {
     <ThemeProvider theme={theme}>
       <Container className={styles.login} component="main" maxWidth="xs">
         <CssBaseline />
+
         <Box
           sx={{
             marginTop: 8,
@@ -44,13 +44,21 @@ const LoginPage: React.FC = () => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign in
+            Traffiking Escape
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ mt: 1 }}
+            noValidate
+            autoComplete="off"
+          >
             <TextField
               margin="normal"
               required
               fullWidth
+              variant="outlined"
               id="username"
               label="Username"
               name="username"
@@ -74,8 +82,9 @@ const LoginPage: React.FC = () => {
             {error && <Typography color="error">{error}</Typography>}
             <Button
               type="submit"
-              fullWidth
               variant="contained"
+              color="primary"
+              fullWidth
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
