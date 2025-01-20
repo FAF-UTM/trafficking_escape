@@ -1,0 +1,87 @@
+.click-play-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    cursor: default;
+    user-select: none;
+    font-family: 'Press Start 2P', 'Courier New', monospace; /* Example pixel font */
+}
+
+/* Inventory in the top-right corner */
+.inventory-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 240px;
+    min-height: 140px;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+/* Each item in the inventory */
+.inventory-item {
+    width: 64px;
+    height: 64px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inventory-item img {
+    max-width: 96px;
+    max-height: 96px;
+}
+
+/* Highlight selected item in inventory */
+.inventory-item.selected {
+    border: 2px solid yellow;
+}
+
+/* Clickable hotspot zones */
+.clickable-zone {
+    position: absolute;
+    cursor: pointer;
+    /*border: 2px dashed rgba(255,255,255,0.2);*/
+    transition: border-color 0.2s;
+}
+.clickable-zone:hover {
+    border-color: yellow;
+}
+
+/* Modal overlay for found items */
+.modal-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content {
+    width: 60%;
+    background-color: #333;
+    border: 2px solid #fff;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+}
+.modal-content img {
+    max-width: 80%;
+}
+.pixel-text {
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 16px;
+    margin-top: 10px;
+}
