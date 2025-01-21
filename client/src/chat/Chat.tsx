@@ -267,7 +267,8 @@ const Chat: React.FC = () => {
   //     .catch(error => console.error('Error:', error));
 
   const usedImages = useRef<Set<string>>(new Set()).current;
-  const generateNewChatUser = async (message: string) => {
+  const generateNewChatUser = async () => {
+    fetchAIResponse('Hello', 3, false);
     let gender = getRandomItem(['male', 'female']);
 
     let imgSrc = await generateRandomImageUrl(gender);
@@ -284,7 +285,7 @@ const Chat: React.FC = () => {
     const newChatUser: ChatUsers = {
       imgSrc,
       name: name ?? 'Unknown user', // Provide a fallback so it's always a string
-      message,
+      current_answer,
       chatID: Date.now().toString(),
     };
 
@@ -366,9 +367,9 @@ const Chat: React.FC = () => {
       generateNewChatUser('Hello, world!');
     }
 
-    fetchAIResponse('Hello', 3, false);
-  };
 
+  };
+  let current_answer=''
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
     lastMessage: string,
@@ -437,6 +438,7 @@ const Chat: React.FC = () => {
           messages: [cleanedResponse],
         };
 
+         current_answer=cleanedResponse
         setChatData((prevChatData) => [...prevChatData, newMessage]);
       }
     } catch (error) {
