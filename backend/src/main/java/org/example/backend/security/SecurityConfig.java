@@ -1,6 +1,6 @@
 package org.example.backend.security;
 
-import org.example.backend.service.CustomUserDetailsService;
+import org.example.backend.services.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;

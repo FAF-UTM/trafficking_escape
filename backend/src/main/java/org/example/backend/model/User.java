@@ -33,7 +33,7 @@ public class User {
     private Instant updatedAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChatUsers> chatUsers;
+    private List<Chat> chats;
 
     @PrePersist
     public void prePersist() {

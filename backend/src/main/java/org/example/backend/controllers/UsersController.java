@@ -6,7 +6,7 @@ import org.example.backend.converters.UserConverter;
 import org.example.backend.dto.UserDTO;
 import org.example.backend.model.User;
 import org.example.backend.repos.UserRepository;
-import org.example.backend.service.UsersService;
+import org.example.backend.services.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.example.backend.security.JwtUtil;
