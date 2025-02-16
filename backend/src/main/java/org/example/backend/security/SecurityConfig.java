@@ -28,10 +28,7 @@ public class SecurityConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 
-    private final CustomUserDetailsService userDetailsService;
-
     public SecurityConfig(CustomUserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
     }
 
     @Bean

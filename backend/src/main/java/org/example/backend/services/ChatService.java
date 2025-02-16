@@ -32,7 +32,7 @@ public class ChatService {
         Chat existingChat = chatRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Chat not found"));
 
-        if (!existingChat.getUser().getId().equals(currentUserId)) {
+        if (!existingChat.getUserId().equals(currentUserId)) {
             throw new AccessDeniedException("You do not own this chat.");
         }
 
@@ -48,7 +48,7 @@ public class ChatService {
         Chat chat = chatRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Chat not found"));
 
-        if (!chat.getUser().getId().equals(currentUserId)) {
+        if (!chat.getUserId().equals(currentUserId)) {
             throw new AccessDeniedException("You do not own this chat.");
         }
 
@@ -68,7 +68,7 @@ public class ChatService {
         Chat chat = chatRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Chat not found"));
 
-        if (!chat.getUser().getId().equals(currentUserId)) {
+        if (!chat.getUserId().equals(currentUserId)) {
             throw new AccessDeniedException("You do not own this chat.");
         }
 

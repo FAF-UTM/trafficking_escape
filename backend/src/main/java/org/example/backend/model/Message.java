@@ -17,9 +17,12 @@ public class Message {
     private Long id;
 
     // Each message belongs to a chat.
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_id", nullable = false)
-    private Chat chat;
+    @Column(name = "chat_id", nullable = false)
+    private Long chatId;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "chat_id", nullable = false)
+//    private Chat chat;
 
     // Indicates if the message is outgoing (sent by the logged-in user).
     @Column(name = "is_outgoing", nullable = false)

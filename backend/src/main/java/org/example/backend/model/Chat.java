@@ -18,9 +18,12 @@ public class Chat {
     private Long id;
 
     // Each chat is owned by a user.
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private User user;
 
     // URL or path to the chat image.
     @Column(name = "chat_image_url")
@@ -41,7 +44,11 @@ public class Chat {
     private Instant updatedAt;
 
     // A chat can contain many messages.
-    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Message> messages;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "chat_id", referencedColumnName = "id")
     private List<Message> messages;
 
     @PrePersist

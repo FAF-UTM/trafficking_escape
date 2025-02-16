@@ -59,6 +59,7 @@ public class UsersController {
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             Map<String, Object> claims = new    HashMap<>();
+            claims.put("id", user.getId());
             claims.put("username", user.getUsername());
             claims.put("role", user.getRole());
             String token = JwtUtil.generateToken(claims);
