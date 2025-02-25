@@ -1,4 +1,4 @@
-package org.example.backend.service;
+package org.example.backend.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
