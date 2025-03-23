@@ -14,55 +14,67 @@ const TimelinePuzzle: React.FC = () => {
       .map(({ item }) => item);
   }
 
-  // State for cards not in dropzones
+  // State for cards that are not in dropzones
   const [cardPositions, setCardPositions] = useState<PuzzleCard[]>(
     shuffleArray([...puzzleLevels[currentLevel].cards])
   );
 
-  // State for dropzones; each drop slot starts empty (null)
+  // State for dropzones (null if empty, or a PuzzleCard if filled)
   const dropzoneCount = puzzleLevels[currentLevel].cards.length;
   const [dropzones, setDropzones] = useState<(PuzzleCard | null)[]>(
     Array(dropzoneCount).fill(null)
   );
 
-  // Drag events
+  // DRAG EVENTS
   const handleDragStart = (e: React.DragEvent, card: PuzzleCard) => {
     e.dataTransfer.setData('application/my-card', JSON.stringify(card));
   };
 
   const handleDragOver = (e: React.DragEvent) => {
+    // Enable dropping
     e.preventDefault();
   };
 
-  // Handle drop onto a dropzone slot
+  // Drop on one of the placeholders
   const handleDropOnDropzone = (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
     const data = e.dataTransfer.getData('application/my-card');
     const card: PuzzleCard = JSON.parse(data);
+    // If the dropzone is already occupied, do nothing
     if (dropzones[dropIndex] !== null) return;
+    // Remove the card from the available cards
     setCardPositions((prev) => prev.filter((c) => c.id !== card.id));
+    // Place the card in the dropzone
     const newDropzones = [...dropzones];
     newDropzones[dropIndex] = card;
     setDropzones(newDropzones);
   };
 
-  // Allow dropping back onto the cards container
+  // Drop back onto the cards container
   const handleDropOnCardsArea = (e: React.DragEvent) => {
     e.preventDefault();
     const data = e.dataTransfer.getData('application/my-card');
     const card: PuzzleCard = JSON.parse(data);
+    // Remove the card from dropzones if it exists there
     setDropzones((prev) =>
-      prev.map((dz) => (dz?.id === card.id ? null : dz))
+      prev.map((dz) => (dz && dz.id === card.id ? null : dz))
     );
-    setCardPositions((prev) => [...prev, card]);
+    // Only add the card back if it isn't already in the cardPositions
+    setCardPositions((prev) => {
+      if (prev.some((c) => c.id === card.id)) {
+        return prev;
+      }
+      return [...prev, card];
+    });
   };
 
-  // Check if the solution is correct
   const checkSolution = () => {
+    // If any dropzone is empty, it's incorrect
     if (dropzones.some((dz) => dz === null)) {
       resetPuzzle();
       return;
     }
+    // Check correctness
     for (let i = 0; i < dropzones.length; i++) {
       const card = dropzones[i];
       if (!card || card.correctIndex !== i) {
@@ -70,6 +82,7 @@ const TimelinePuzzle: React.FC = () => {
         return;
       }
     }
+    // If all are correct
     nextLevel();
   };
 
@@ -132,9 +145,7 @@ const TimelinePuzzle: React.FC = () => {
             {dz && (
               <div
                 className="card"
-                style={{
-                  background: `url(${dz.image}) center/cover no-repeat`,
-                }}
+                style={{ background: `url(${dz.image}) center/cover no-repeat` }}
               >
                 <div className="card-text-overlay">{dz.text}</div>
               </div>
