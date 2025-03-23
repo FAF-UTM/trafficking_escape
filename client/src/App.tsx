@@ -13,6 +13,7 @@ import { AuthProvider, ProtectedRoute } from './context/AuthContext';
 import IntroStory from './intro/IntroStory.tsx';
 import './i18n';
 import ClickPlayGame from './click-play/ClickPlayGame.tsx';
+import TimelinePuzzle from './timeline/TimelinePuzzle.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -84,6 +85,14 @@ function App() {
                 <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
                   <Platformer />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/timeline-puzzle"
+              element={
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                  <TimelinePuzzle />
+                // </ProtectedRoute>
               }
             />
           </Routes>

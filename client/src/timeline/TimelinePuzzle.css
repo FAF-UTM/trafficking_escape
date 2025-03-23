@@ -1,0 +1,86 @@
+.puzzle-container {
+    width: 100vw;
+    height: 100vh;
+    background: #222;
+    color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.puzzle-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cards-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.card {
+    width: 120px;
+    height: 80px;
+    border: 2px solid #888;
+    cursor: grab;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* The background image is set in the inline style within TimelinePuzzle.tsx */
+}
+
+/* Overlay for the text so it remains visible over the background */
+.card-text-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0,0,0,0.5);
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.dropzone-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.dropzone {
+    width: 120px;
+    height: 80px;
+    background-color: #666; /* Gray placeholder for each drop slot */
+    border: 2px dashed #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.dropzone.filled {
+    border-color: yellow;
+}
+
+button {
+    margin: 10px;
+    padding: 10px;
+    cursor: pointer;
+    background: #666;
+    color: #fff;
+    border: 2px solid #aaa;
+}
+
+button:hover {
+    background: #444;
+}
