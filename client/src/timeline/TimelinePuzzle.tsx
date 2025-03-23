@@ -1,4 +1,3 @@
-// src/timeline/TimelinePuzzle.tsx
 import React, { useState } from 'react';
 import { puzzleLevels, PuzzleCard } from './puzzleData';
 import './TimelinePuzzle.css';
