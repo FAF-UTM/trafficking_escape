@@ -1,5 +1,5 @@
 import './App.css';
-import Platformer from './platformer/Platformer.tsx';
+import Platformer from './game/platformer/Platformer.tsx';
 import Home from './pages/home/Home.tsx';
 import Chat from './chat/Chat.tsx';
 import '@fontsource/roboto/300.css';
@@ -10,9 +10,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import LoginPage from './pages/login/Login.tsx';
 import { AuthProvider, ProtectedRoute } from './context/AuthContext';
-import IntroStory from './intro/IntroStory.tsx';
+import IntroStory from './game/intro/IntroStory.tsx';
 import './i18n';
-import ClickPlayGame from './click-play/ClickPlayGame.tsx';
+import ClickPlayGame from './game/click-play/ClickPlayGame.tsx';
 import TimelinePuzzle from './game/timeline/TimelinePuzzle.tsx';
 import Settings from './pages/settings/Settings.tsx';
 import CombinationLockWrapper from './game/combination_lock/CombinationLockWrapper.tsx';
@@ -23,6 +23,7 @@ import WordChoiceWrapper from './game/word_choice_game/WordChoiceWrapper.tsx';
 import EmojiStoryDecoderWrapper from './game/emoji_story_decoder/EmojiStoryDecoderWrapper.tsx';
 import SafetyChecklistBuilderWrapper from './game/safety_checklist_builder/SafetyChecklistBuilderWrapper.tsx';
 import DangerWordHighlightWrapper from './game/danger_word_highlight/DangerWordHighlightWrapper.tsx';
+import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -160,6 +161,14 @@ function App() {
               element={
                 // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
                 <DangerWordHighlightWrapper />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/word-scramble"
+              element={
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <WordScrambleWrapper />
                 // </ProtectedRoute>
               }
             />
