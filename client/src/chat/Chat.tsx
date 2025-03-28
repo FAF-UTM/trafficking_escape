@@ -33,13 +33,13 @@ interface ChatUsers {
 }
 
 const backend_api_generate =
-    import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
+  import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
 const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/v1/get-chats';
 const gptToken = import.meta.env.VITE_GPT_TOKEN;
 
 const active_chat_name = 'Alex Cara';
 const active_chat_img =
-    'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=UMzx0jQb2o8Q7kNvgG0oVPl&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=AoaENjXIhGkML-t7RcrHDvy&oh=00_AYBi5fLyomg-2KlROCNUPF2ShbJAj7PidECeiX3nCbGd2A&oe=67B482FA';
+  'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=UMzx0jQb2o8Q7kNvgG0oVPl&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=AoaENjXIhGkML-t7RcrHDvy&oh=00_AYBi5fLyomg-2KlROCNUPF2ShbJAj7PidECeiX3nCbGd2A&oe=67B482FA';
 
 let from_img_default = active_chat_img;
 
@@ -74,9 +74,9 @@ async function generateRandomImageUrl(gender: string): Promise<string> {
 async function fetchGPTNames(gender: string, lang: string): Promise<string[]> {
   // Determine the appropriate prompt based on language
   const promptText = lang.toLowerCase().startsWith('nl')
-      ? `Geef me typische Nederlandse (Nederlandstalige) tienernamen (12-18) voor ${gender}. 
+    ? `Geef me typische Nederlandse (Nederlandstalige) tienernamen (12-18) voor ${gender}. 
        Laat je inspireren door realistische Nederlandse namen. Formaat: "Voornaam Achternaam"`
-      : `Give me a unique English teenage (12-18) ${gender} name.
+    : `Give me a unique English teenage (12-18) ${gender} name.
        Format: "Name Surname", no more than name and surname.`;
 
   // OpenAI API URL
@@ -103,14 +103,14 @@ async function fetchGPTNames(gender: string, lang: string): Promise<string[]> {
 
     if (!response.ok) {
       throw new Error(
-          `Failed to fetch names: ${response.status} ${response.statusText}`
+        `Failed to fetch names: ${response.status} ${response.statusText}`
       );
     }
 
     // Parse and extract names from the response
     const data = await response.json();
     const allGeneratedNames =
-        data.choices[0]?.message?.content?.trim()?.split('\n') || [];
+      data.choices[0]?.message?.content?.trim()?.split('\n') || [];
 
     return allGeneratedNames;
   } catch (error) {
@@ -145,7 +145,9 @@ const Chat: React.FC = () => {
   const token = localStorage.getItem('authToken');
 
   const [visibleCharacter, setVisibleCharacter] = useState<string | null>(null);
-  const [popupVisibility, setPopupVisibility] = useState<{ [key: string]: boolean }>({});
+  const [popupVisibility, setPopupVisibility] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [infoVisibility, setInfoVisibility] = useState(false);
   const [settingsVisibility, setSettingsVisibility] = useState(false);
 
@@ -183,12 +185,12 @@ const Chat: React.FC = () => {
     setPopupVisibility((prev) => ({ ...prev, [id]: false }));
   };
 
-  // On left bar: store which is active
-  const [activeLeftBarOption, setActiveLeftBarOption] = useState<string>('');
-  const handleLeftBarClick = (optionId: string) => {
-    setActiveLeftBarOption(optionId);
-    localStorage.setItem('activeLeftBarOption', optionId);
-  };
+  // // On left bar: store which is active
+  // const [activeLeftBarOption, setActiveLeftBarOption] = useState<string>('');
+  // const handleLeftBarClick = (optionId: string) => {
+  //   setActiveLeftBarOption(optionId);
+  //   localStorage.setItem('activeLeftBarOption', optionId);
+  // };
   useEffect(() => {
     const savedOption = localStorage.getItem('activeLeftBarOption');
     if (savedOption) {
@@ -197,11 +199,6 @@ const Chat: React.FC = () => {
       handleLeftBarClick('home');
     }
   }, []);
-
-  const toggleLanguage = () => {
-    const newLanguage = i18n.language === 'en' ? 'nl' : 'en';
-    i18n.changeLanguage(newLanguage);
-  };
 
   // Helper: create a new chat user with random image & GPT name,
   // plus a default conversation (starting with "Hello")
@@ -254,17 +251,17 @@ const Chat: React.FC = () => {
 
   // Replaces old "fetchAIResponse", now updates the correct chat
   const fetchAIResponse = async (
-      lastMessage: string,
-      currentDangerLevel: number,
-      isTrafficker: boolean,
-      chatID: string
+    lastMessage: string,
+    currentDangerLevel: number,
+    isTrafficker: boolean,
+    chatID: string
   ) => {
     try {
       // Mark isTyping for that chat
       setChatUsers((prev) =>
-          prev.map((cu) =>
-              cu.chatID === chatID ? { ...cu, isTyping: true } : cu
-          )
+        prev.map((cu) =>
+          cu.chatID === chatID ? { ...cu, isTyping: true } : cu
+        )
       );
 
       const response = await fetch(backend_api_generate, {
@@ -283,15 +280,15 @@ const Chat: React.FC = () => {
 
       if (!response.ok) {
         console.error(
-            'Error fetching AI response:',
-            response.status,
-            response.statusText
+          'Error fetching AI response:',
+          response.status,
+          response.statusText
         );
         // Stop isTyping
         setChatUsers((prev) =>
-            prev.map((cu) =>
-                cu.chatID === chatID ? { ...cu, isTyping: false } : cu
-            )
+          prev.map((cu) =>
+            cu.chatID === chatID ? { ...cu, isTyping: false } : cu
+          )
         );
         return;
       }
@@ -312,49 +309,49 @@ const Chat: React.FC = () => {
       */
 
       const cleanedResponse = data.chatResponse
-          ? data.chatResponse.replace(/^"|"$/g, '')
-          : '';
+        ? data.chatResponse.replace(/^"|"$/g, '')
+        : '';
 
       // Now update that specific chat with new conversation, danger levels, etc.
       setChatUsers((prev) =>
-          prev.map((cu) => {
-            if (cu.chatID !== chatID) return cu;
+        prev.map((cu) => {
+          if (cu.chatID !== chatID) return cu;
 
-            // Add the AI message to the conversation
-            const newAIMessage: ChatData = {
-              from: cu.name || 'Unknown user',
-              from_img: cu.imgSrc || from_img_default,
-              sendtype: 'got',
-              messages: [cleanedResponse],
-            };
+          // Add the AI message to the conversation
+          const newAIMessage: ChatData = {
+            from: cu.name || 'Unknown user',
+            from_img: cu.imgSrc || from_img_default,
+            sendtype: 'got',
+            messages: [cleanedResponse],
+          };
 
-            const updatedConversation = [...cu.conversation, newAIMessage];
-            // For preview: if there's a first message, we show its first 20 chars
-            let shortPreview = cleanedResponse.slice(0, 20);
-            if (cleanedResponse.length > 20) shortPreview += '...';
+          const updatedConversation = [...cu.conversation, newAIMessage];
+          // For preview: if there's a first message, we show its first 20 chars
+          let shortPreview = cleanedResponse.slice(0, 20);
+          if (cleanedResponse.length > 20) shortPreview += '...';
 
-            return {
-              ...cu,
-              conversation: updatedConversation,
-              option1: data.option1 || '',
-              option2: data.option2 || '',
-              option3: data.option3 || '',
-              dangerLevel1: data.dangerLevel1 || 0,
-              dangerLevel2: data.dangerLevel2 || 0,
-              dangerLevel3: data.dangerLevel3 || 0,
-              updatedDangerLevel: data.updatedDangerLevel || 0,
-              isTyping: false,
-              // put the short preview into 'message'
-              message: shortPreview || cu.message,
-            };
-          })
+          return {
+            ...cu,
+            conversation: updatedConversation,
+            option1: data.option1 || '',
+            option2: data.option2 || '',
+            option3: data.option3 || '',
+            dangerLevel1: data.dangerLevel1 || 0,
+            dangerLevel2: data.dangerLevel2 || 0,
+            dangerLevel3: data.dangerLevel3 || 0,
+            updatedDangerLevel: data.updatedDangerLevel || 0,
+            isTyping: false,
+            // put the short preview into 'message'
+            message: shortPreview || cu.message,
+          };
+        })
       );
     } catch (error) {
       console.error('Error in fetchAIResponse:', error);
       setChatUsers((prev) =>
-          prev.map((cu) =>
-              cu.chatID === chatID ? { ...cu, isTyping: false } : cu
-          )
+        prev.map((cu) =>
+          cu.chatID === chatID ? { ...cu, isTyping: false } : cu
+        )
       );
     }
   };
@@ -365,30 +362,30 @@ const Chat: React.FC = () => {
     // 1) Add the chosen message to that chat's conversation
     const cleanedOption = chosenOption.replace(/^"|"$/g, '');
     setChatUsers((prev) =>
-        prev.map((cu) => {
-          if (cu.chatID !== activeChatID) return cu;
+      prev.map((cu) => {
+        if (cu.chatID !== activeChatID) return cu;
 
-          const userMessage: ChatData = {
-            from: 'You',
-            from_img: '',
-            sendtype: 'send',
-            messages: [cleanedOption],
-          };
-          return {
-            ...cu,
-            conversation: [...cu.conversation, userMessage],
-          };
-        })
+        const userMessage: ChatData = {
+          from: 'You',
+          from_img: '',
+          sendtype: 'send',
+          messages: [cleanedOption],
+        };
+        return {
+          ...cu,
+          conversation: [...cu.conversation, userMessage],
+        };
+      })
     );
 
     // 2) Call fetchAIResponse for that chat
     const chatObj = chatUsers.find((c) => c.chatID === activeChatID);
     if (chatObj) {
       fetchAIResponse(
-          chosenOption,
-          chatObj.updatedDangerLevel,
-          false,
-          activeChatID
+        chosenOption,
+        chatObj.updatedDangerLevel,
+        false,
+        activeChatID
       );
     }
   };
@@ -490,25 +487,23 @@ const Chat: React.FC = () => {
   // (Any other code you need here is unchanged)
   // ...
 
-
-
-  // *** Handler when the user clicks one of the options ***
-  const handleOptionClick = (chosenOption: string) => {
-    setDisabledOptions(true); // Disable the options
-    // 1) Add the chosen message to chat as 'send'
-    const cleanedOption = chosenOption.replace(/^"|"$/g, '');
-    const userMessage: ChatData = {
-      from: 'You',
-      from_img: '',
-      sendtype: 'send',
-      messages: [cleanedOption],
-    };
-    setChatData((prevChatData) => [...prevChatData, userMessage]);
-
-    // 2) Fire a new request with chosenOption as lastMessage
-    fetchAIResponse(chosenOption, updatedDangerLevel, false);
-  };
-
+  //
+  // // *** Handler when the user clicks one of the options ***
+  // const handleOptionClick = (chosenOption: string) => {
+  //   setDisabledOptions(true); // Disable the options
+  //   // 1) Add the chosen message to chat as 'send'
+  //   const cleanedOption = chosenOption.replace(/^"|"$/g, '');
+  //   const userMessage: ChatData = {
+  //     from: 'You',
+  //     from_img: '',
+  //     sendtype: 'send',
+  //     messages: [cleanedOption],
+  //   };
+  //   setChatData((prevChatData) => [...prevChatData, userMessage]);
+  //
+  //   // 2) Fire a new request with chosenOption as lastMessage
+  //   fetchAIResponse(chosenOption, updatedDangerLevel, false);
+  // };
 
   // Handler for left-bar option clicks
   const handleLeftBarClick = (optionId: string) => {

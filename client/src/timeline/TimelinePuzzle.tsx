@@ -7,7 +7,7 @@ const TimelinePuzzle: React.FC = () => {
 
   function shuffleArray(arr: PuzzleCard[]): PuzzleCard[] {
     return arr
-      .map(item => ({ item, sort: Math.random() }))
+      .map((item) => ({ item, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map(({ item }) => item);
   }
@@ -33,7 +33,7 @@ const TimelinePuzzle: React.FC = () => {
     const data = e.dataTransfer.getData('application/my-card');
     const card: PuzzleCard = JSON.parse(data);
     if (dropzones[dropIndex] !== null) return;
-    setCardPositions(prev => prev.filter(c => c.id !== card.id));
+    setCardPositions((prev) => prev.filter((c) => c.id !== card.id));
     const newDropzones = [...dropzones];
     newDropzones[dropIndex] = card;
     setDropzones(newDropzones);
@@ -43,12 +43,16 @@ const TimelinePuzzle: React.FC = () => {
     e.preventDefault();
     const data = e.dataTransfer.getData('application/my-card');
     const card: PuzzleCard = JSON.parse(data);
-    setDropzones(prev => prev.map(dz => (dz && dz.id === card.id ? null : dz)));
-    setCardPositions(prev => (prev.some(c => c.id === card.id) ? prev : [...prev, card]));
+    setDropzones((prev) =>
+      prev.map((dz) => (dz && dz.id === card.id ? null : dz))
+    );
+    setCardPositions((prev) =>
+      prev.some((c) => c.id === card.id) ? prev : [...prev, card]
+    );
   };
 
   const checkSolution = () => {
-    if (dropzones.some(dz => dz === null)) {
+    if (dropzones.some((dz) => dz === null)) {
       resetPuzzle(false);
       return;
     }
@@ -86,7 +90,9 @@ const TimelinePuzzle: React.FC = () => {
   return (
     <div className="puzzle-container">
       <div className="puzzle-header">
-        <h2>Timeline Puzzle (Level {puzzleLevels[currentLevel].levelNumber})</h2>
+        <h2>
+          Timeline Puzzle (Level {puzzleLevels[currentLevel].levelNumber})
+        </h2>
         <p>{puzzleLevels[currentLevel].levelDescription}</p>
       </div>
 
@@ -95,7 +101,7 @@ const TimelinePuzzle: React.FC = () => {
         onDragOver={handleDragOver}
         onDrop={handleDropOnCardsArea}
       >
-        {cardPositions.map(card => (
+        {cardPositions.map((card) => (
           <div
             key={card.id}
             className="card"

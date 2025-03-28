@@ -8,12 +8,13 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
-import LoginPage from './pages/Login.tsx';
+import LoginPage from './pages/login/Login.tsx';
 import { AuthProvider, ProtectedRoute } from './context/AuthContext';
 import IntroStory from './intro/IntroStory.tsx';
 import './i18n';
 import ClickPlayGame from './click-play/ClickPlayGame.tsx';
 import TimelinePuzzle from './timeline/TimelinePuzzle.tsx';
+import Settings from './pages/settings/Settings.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -63,6 +64,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/intro" element={<IntroStory />} />
+            <Route path="/settings" element={<Settings />} />
             <Route
               path="/click-play"
               element={
@@ -91,7 +93,7 @@ function App() {
               path="/timeline-puzzle"
               element={
                 // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                  <TimelinePuzzle />
+                <TimelinePuzzle />
                 // </ProtectedRoute>
               }
             />
