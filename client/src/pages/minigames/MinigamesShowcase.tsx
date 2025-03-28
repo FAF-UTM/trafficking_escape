@@ -36,6 +36,26 @@ const minigames: Minigame[] = [
     route: '/true-false',
     description: 'Test your knowledge with quick fact-checking flashcards.',
   },
+  {
+    name: 'Word Choice',
+    route: '/word-choice',
+    description: 'Complete sentences by choosing the correct word.',
+  },
+  {
+    name: 'Emoji Story',
+    route: '/emoji-story',
+    description: 'Decode emoji stories and pick the right meaning.',
+  },
+  {
+    name: 'Checklist Builder',
+    route: '/safety-checklist',
+    description: 'Select smart items to prepare your safety pack.',
+  },
+  {
+    name: 'Danger Words',
+    route: '/danger-highlight',
+    description: 'Spot red flag words in a fake job ad.',
+  },
 ];
 
 const MinigamesShowcase: React.FC = () => {

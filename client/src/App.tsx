@@ -1,6 +1,6 @@
 import './App.css';
 import Platformer from './platformer/Platformer.tsx';
-import Home from './game/home/Home.tsx';
+import Home from './pages/home/Home.tsx';
 import Chat from './chat/Chat.tsx';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -18,6 +18,11 @@ import Settings from './pages/settings/Settings.tsx';
 import CombinationLockWrapper from './game/combination_lock/CombinationLockWrapper.tsx';
 import WhoToTrustGameWrapper from './game/who_to_trust_game/WhoToTrustGameWrapper.tsx';
 import MinigamesShowcase from './pages/minigames/MinigamesShowcase.tsx';
+import TrueFalseFlashCardsWrapper from './game/true_false_flash_cards/TrueFalseFlashCardsWrapper.tsx';
+import WordChoiceWrapper from './game/word_choice_game/WordChoiceWrapper.tsx';
+import EmojiStoryDecoderWrapper from './game/emoji_story_decoder/EmojiStoryDecoderWrapper.tsx';
+import SafetyChecklistBuilderWrapper from './game/safety_checklist_builder/SafetyChecklistBuilderWrapper.tsx';
+import DangerWordHighlightWrapper from './game/danger_word_highlight/DangerWordHighlightWrapper.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -115,6 +120,46 @@ function App() {
               element={
                 // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
                 <WhoToTrustGameWrapper />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/true-false"
+              element={
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <TrueFalseFlashCardsWrapper />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/word-choice"
+              element={
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <WordChoiceWrapper />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/emoji-story"
+              element={
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <EmojiStoryDecoderWrapper />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/safety-checklist"
+              element={
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <SafetyChecklistBuilderWrapper />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/danger-highlight"
+              element={
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <DangerWordHighlightWrapper />
                 // </ProtectedRoute>
               }
             />

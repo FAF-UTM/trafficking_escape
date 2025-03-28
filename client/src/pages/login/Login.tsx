@@ -12,6 +12,7 @@ import theme from '../../theme/theme'; // Import the updated theme
 import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './login.module.css';
+import { t } from 'i18next';
 
 const LoginPage: React.FC = () => {
   const { login } = useAuth();
@@ -108,7 +109,7 @@ const LoginPage: React.FC = () => {
             fill-rule="evenodd"
           ></path>
         </svg>
-        home
+        {t('general.home')}
       </Link>
     </ThemeProvider>
   );
