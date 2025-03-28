@@ -7,5 +7,13 @@
     "help": "Help",
     "report": "Report",
     "chat_settings": "Settings"
+  },
+  "general": {
+    "home": "Home"
+  },
+  "settings": {
+    "settings": "Settings",
+    "language": "Language",
+    "mode": "Mode"
   }
 }

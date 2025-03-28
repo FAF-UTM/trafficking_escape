@@ -13,8 +13,9 @@ import { AuthProvider, ProtectedRoute } from './context/AuthContext';
 import IntroStory from './intro/IntroStory.tsx';
 import './i18n';
 import ClickPlayGame from './click-play/ClickPlayGame.tsx';
-import TimelinePuzzle from './timeline/TimelinePuzzle.tsx';
+import TimelinePuzzle from './game/timeline/TimelinePuzzle.tsx';
 import Settings from './pages/settings/Settings.tsx';
+import CombinationLockWrapper from './game/combination_lock/CombinationLockWrapper.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -94,6 +95,14 @@ function App() {
               element={
                 // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
                 <TimelinePuzzle />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/combination-lock"
+              element={
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <CombinationLockWrapper />
                 // </ProtectedRoute>
               }
             />

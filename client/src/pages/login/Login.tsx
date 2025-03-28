@@ -108,7 +108,7 @@ const LoginPage: React.FC = () => {
             fill-rule="evenodd"
           ></path>
         </svg>
-        back
+        home
       </Link>
     </ThemeProvider>
   );
