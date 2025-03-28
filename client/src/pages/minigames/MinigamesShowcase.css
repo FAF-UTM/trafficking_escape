@@ -1,0 +1,65 @@
+.minigames-container {
+  width: 100vw;
+  min-height: 100vh;
+  background: url('/assets/showcase_background.png') center/cover no-repeat;
+  color: #fff;
+  padding: 40px;
+  box-sizing: border-box;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  text-align: center;
+}
+
+.minigames-title {
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.minigames-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.minigame-card {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 2px solid #fff;
+  padding: 20px;
+  width: 300px;
+  box-sizing: border-box;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+  position: relative;
+}
+
+.minigame-card:hover {
+  transform: scale(1.05);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.minigame-name {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.minigame-description {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  height: 130px;
+}
+
+.play-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #222;
+  color: #fff;
+  border: 2px solid #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.play-button:hover {
+  background-color: #444;
+}

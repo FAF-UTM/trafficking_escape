@@ -1,3 +1,8 @@
+:root {
+  /*--settings_border_color_1: rgba(157, 174, 255, 0.76);*/
+  --settings_border_color_1: #213547;
+}
+
 .settings {
   width: 100vw;
   height: 100vh;
@@ -59,23 +64,23 @@
   display: flex;
 }
 .settings_inside_lang_types_btn {
-  border: 1px solid #213547;
+  border: 1px solid var(--settings_border_color_1);
   padding: 3px 15px;
   box-sizing: border-box;
   cursor: pointer;
-  border-left: 0px solid #213547;
+  border-left: 0px solid var(--settings_border_color_1);
 }
 .settings_inside_lang_types :first-child {
   border-radius: 100px 0px 0px 100px;
-  border-right: 1px solid #213547;
-  border-left: 1px solid #213547;
+  border-right: 1px solid var(--settings_border_color_1);
+  border-left: 1px solid var(--settings_border_color_1);
 }
 .settings_inside_lang_types :last-child {
   border-radius: 0px 100px 100px 0px;
-  border-left: 0px solid #213547;
+  border-left: 0px solid var(--settings_border_color_1);
 }
 .settings_inside_lang_types_btn_selected {
-  background: #21354730;
+  background: rgba(157, 174, 255, 0.64);
 }
 .settings_inside_lang_title {
   width: 100px;
@@ -86,6 +91,9 @@
 .settings_inside_links {
   display: flex;
   gap: 10px;
+  margin-top: 0;
+}
+.settings_inside_links_first_of_type {
   margin-top: 20px;
 }
 .settings_inside_links_btn {

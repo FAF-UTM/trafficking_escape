@@ -94,7 +94,9 @@ const SettingsPage: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className={styles.settings_inside_links}>
+        <div
+          className={`${styles.settings_inside_links} ${styles.settings_inside_links_first_of_type} `}
+        >
           <Link to={'/login'} className={styles.settings_inside_links_btn}>
             Login
           </Link>
@@ -103,6 +105,23 @@ const SettingsPage: React.FC = () => {
             className={styles.settings_inside_links_btn}
           >
             Credentials
+          </Link>
+        </div>
+        <div className={styles.settings_inside_links}>
+          <Link to={'/login'} className={styles.settings_inside_links_btn}>
+            Documentation
+          </Link>
+          <Link
+            to={'/credentials'}
+            className={styles.settings_inside_links_btn}
+          >
+            Development
+          </Link>
+          <Link
+            to={'/credentials'}
+            className={styles.settings_inside_links_btn}
+          >
+            Legal
           </Link>
         </div>
       </div>

@@ -16,6 +16,8 @@ import ClickPlayGame from './click-play/ClickPlayGame.tsx';
 import TimelinePuzzle from './game/timeline/TimelinePuzzle.tsx';
 import Settings from './pages/settings/Settings.tsx';
 import CombinationLockWrapper from './game/combination_lock/CombinationLockWrapper.tsx';
+import WhoToTrustGameWrapper from './game/who_to_trust_game/WhoToTrustGameWrapper.tsx';
+import MinigamesShowcase from './pages/minigames/MinigamesShowcase.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -66,14 +68,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/intro" element={<IntroStory />} />
             <Route path="/settings" element={<Settings />} />
-            <Route
-              path="/click-play"
-              element={
-                <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                  <ClickPlayGame />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/mini-games" element={<MinigamesShowcase />} />
             <Route
               path="/chat"
               element={
@@ -83,11 +78,19 @@ function App() {
               }
             />
             <Route
+              path="/click-play"
+              element={
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <ClickPlayGame />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
               path="/city-run"
               element={
-                <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                  <Platformer />
-                </ProtectedRoute>
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <Platformer />
+                // </ProtectedRoute>
               }
             />
             <Route
@@ -103,6 +106,15 @@ function App() {
               element={
                 // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
                 <CombinationLockWrapper />
+                // <RandomCombinationLock onComplete={() => navigate('/somewhere-else')} />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/who-to-trust"
+              element={
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <WhoToTrustGameWrapper />
                 // </ProtectedRoute>
               }
             />
