@@ -6,7 +6,7 @@ import org.example.backend.converters.UserConverter;
 import org.example.backend.dto.UserDTO;
 import org.example.backend.model.User;
 import org.example.backend.repos.UserRepository;
-import org.example.backend.service.UsersService;
+import org.example.backend.services.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.example.backend.security.JwtUtil;
@@ -59,6 +59,7 @@ public class UsersController {
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             Map<String, Object> claims = new    HashMap<>();
+            claims.put("id", user.getId());
             claims.put("username", user.getUsername());
             claims.put("role", user.getRole());
             String token = JwtUtil.generateToken(claims);

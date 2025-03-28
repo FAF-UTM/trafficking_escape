@@ -2,7 +2,7 @@ package org.example.backend.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.backend.service.MessageGenerationService;
+import org.example.backend.services.MessageGenerationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
