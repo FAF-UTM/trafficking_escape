@@ -5,3 +5,4 @@ client/.env
 /.idea
 /service-checker/target/
 /service-checker/.idea/
+.DS_Store
