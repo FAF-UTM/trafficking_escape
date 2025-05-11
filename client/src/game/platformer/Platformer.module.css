@@ -18,9 +18,12 @@
 /* Player */
 .player {
   position: absolute;
-  background-color: red;
-  transition: height 0.1s;
+  /*background-color: red;*/
+  /*transition: height 0.1s;*/
   z-index: 2;
+  background-size: cover;
+  background-repeat: no-repeat;
+
 }
 
 /* Platforms */

@@ -10,8 +10,8 @@ import DeathScreen from './components/DeathScreen';
 
 const WORLD_WIDTH = 5000;
 const WORLD_HEIGHT = 1000;
-const PLAYER_WIDTH = 50;
-const PLAYER_HEIGHT = 100;
+const PLAYER_WIDTH = 80;
+const PLAYER_HEIGHT = 120;
 const GRAVITY = 0.5; // Updated gravity
 const JUMP_SPEED = -12; // Updated jump speed
 const ACCELERATION = 1; // Updated acceleration
@@ -212,6 +212,9 @@ const Platformer: React.FC = () => {
     };
   }, []);
 
+  const [playerState, setPlayerState] = useState<'idle' | 'walk' | 'jump' | 'sit'>('idle');
+  const [playerDirection, setPlayerDirection] = useState<'left' | 'right'>('right');
+
   const gameLoop = () => {
     setPlayer((prev) => {
       let { x, y, vx, vy, onGround, height, onPlatform } = prev;
@@ -219,9 +222,13 @@ const Platformer: React.FC = () => {
       // Horizontal Movement
       if (keys.current['ArrowLeft'] || keys.current['KeyA']) {
         vx -= ACCELERATION;
+        setPlayerDirection('left');
+        setPlayerState('walk');
       }
       if (keys.current['ArrowRight'] || keys.current['KeyD']) {
         vx += ACCELERATION;
+        setPlayerDirection('right');
+        setPlayerState('walk');
       }
 
       // Apply friction
@@ -229,6 +236,13 @@ const Platformer: React.FC = () => {
 
       // Limit speed
       vx = Math.max(-MAX_SPEED, Math.min(MAX_SPEED, vx));
+
+
+
+      // Idle if no horizontal movement
+      if (!keys.current['ArrowLeft'] && !keys.current['ArrowRight'] && !keys.current['KeyA'] && !keys.current['KeyD']) {
+        setPlayerState('idle');
+      }
 
       // Jumping
       if (
@@ -247,7 +261,9 @@ const Platformer: React.FC = () => {
         keys.current['ArrowDown'] ||
         keys.current['KeyS']
       ) {
-        height = PLAYER_HEIGHT / 2;
+        // height = PLAYER_HEIGHT / 2;
+        setPlayerState('sit');
+
       } else {
         height = PLAYER_HEIGHT;
       }
@@ -255,6 +271,7 @@ const Platformer: React.FC = () => {
       // Apply Gravity
       if (!onGround) {
         vy += GRAVITY;
+        if (vy < 0) setPlayerState('jump');
       }
 
       x += vx;
@@ -433,6 +450,8 @@ const Platformer: React.FC = () => {
           y={player.y - camera.y}
           width={player.width}
           height={player.height}
+          state={playerState}
+          direction={playerDirection}
         />
 
         {/* Platforms */}
