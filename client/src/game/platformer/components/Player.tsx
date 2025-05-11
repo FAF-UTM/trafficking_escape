@@ -11,7 +11,14 @@ interface PlayerProps {
   direction: 'left' | 'right';
 }
 
-const Player: React.FC<PlayerProps> = ({ x, y, width, height, state, direction }) => {
+const Player: React.FC<PlayerProps> = ({
+  x,
+  y,
+  width,
+  height,
+  state,
+  direction,
+}) => {
   const [frame, setFrame] = useState(0);
 
   useEffect(() => {

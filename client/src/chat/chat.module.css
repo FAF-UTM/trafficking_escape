@@ -7,15 +7,15 @@
   display: flex;
   gap: 16px;
 }
-.chat_wrap{
+.chat_wrap {
   width: 100vw;
-  height:100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
-.chat_bottom{
+.chat_bottom {
   width: 100vw;
-  height:120px;
+  height: 120px;
   padding: 16px;
   box-sizing: border-box;
   display: flex;

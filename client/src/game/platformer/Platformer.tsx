@@ -212,8 +212,12 @@ const Platformer: React.FC = () => {
     };
   }, []);
 
-  const [playerState, setPlayerState] = useState<'idle' | 'walk' | 'jump' | 'sit'>('idle');
-  const [playerDirection, setPlayerDirection] = useState<'left' | 'right'>('right');
+  const [playerState, setPlayerState] = useState<
+    'idle' | 'walk' | 'jump' | 'sit'
+  >('idle');
+  const [playerDirection, setPlayerDirection] = useState<'left' | 'right'>(
+    'right'
+  );
 
   const gameLoop = () => {
     setPlayer((prev) => {
@@ -237,10 +241,13 @@ const Platformer: React.FC = () => {
       // Limit speed
       vx = Math.max(-MAX_SPEED, Math.min(MAX_SPEED, vx));
 
-
-
       // Idle if no horizontal movement
-      if (!keys.current['ArrowLeft'] && !keys.current['ArrowRight'] && !keys.current['KeyA'] && !keys.current['KeyD']) {
+      if (
+        !keys.current['ArrowLeft'] &&
+        !keys.current['ArrowRight'] &&
+        !keys.current['KeyA'] &&
+        !keys.current['KeyD']
+      ) {
         setPlayerState('idle');
       }
 
@@ -263,7 +270,6 @@ const Platformer: React.FC = () => {
       ) {
         // height = PLAYER_HEIGHT / 2;
         setPlayerState('sit');
-
       } else {
         height = PLAYER_HEIGHT;
       }
