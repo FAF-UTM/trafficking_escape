@@ -109,9 +109,9 @@ button {
   font-family: 'Press Start 2P', 'Courier New', monospace;
 }
 
-button:hover {
-  background: #222;
-}
+/*button:hover {*/
+/*  background: #222;*/
+/*}*/
 
 .action-buttons-container {
   width: 100%;

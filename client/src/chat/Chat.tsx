@@ -19,7 +19,7 @@ const gptToken = import.meta.env.VITE_GPT_TOKEN;
 
 const active_chat_name = 'Alex Cara';
 const active_chat_img =
-  'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=UMzx0jQb2o8Q7kNvgG0oVPl&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=AoaENjXIhGkML-t7RcrHDvy&oh=00_AYBi5fLyomg-2KlROCNUPF2ShbJAj7PidECeiX3nCbGd2A&oe=67B482FA';
+  'https://scontent-otp1-1.xx.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=31SphODCOLIQ7kNvwE32Nje&_nc_oc=Adknk7GF9oSbP_1zw41Md8h9m3_bO-RibDYDBhgAJktRcrZKCaSY5oYg36ALnmUfzCk&_nc_zt=24&_nc_ht=scontent-otp1-1.xx&oh=00_AfL9IyOp7xUaqn4wdrdjCjlFZVYkT1k-rjnTU-3ad0oQlg&oe=6847F2BA';
 
 let from_img_default = active_chat_img;
 
@@ -267,8 +267,7 @@ const Chat: React.FC = () => {
   //     .catch(error => console.error('Error:', error));
 
   const usedImages = useRef<Set<string>>(new Set()).current;
-  const generateNewChatUser = async () => {
-    fetchAIResponse('Hello', 3, false);
+  const generateNewChatUser = async (message: string) => {
     let gender = getRandomItem(['male', 'female']);
 
     let imgSrc = await generateRandomImageUrl(gender);
@@ -285,7 +284,7 @@ const Chat: React.FC = () => {
     const newChatUser: ChatUsers = {
       imgSrc,
       name: name ?? 'Unknown user', // Provide a fallback so it's always a string
-      current_answer,
+      message,
       chatID: Date.now().toString(),
     };
 
@@ -367,9 +366,9 @@ const Chat: React.FC = () => {
       generateNewChatUser('Hello, world!');
     }
 
-
+    fetchAIResponse('Hello', 3, false);
   };
-  let current_answer=''
+
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
     lastMessage: string,
@@ -438,7 +437,6 @@ const Chat: React.FC = () => {
           messages: [cleanedResponse],
         };
 
-        current_answer=cleanedResponse
         setChatData((prevChatData) => [...prevChatData, newMessage]);
       }
     } catch (error) {
@@ -515,6 +513,7 @@ const Chat: React.FC = () => {
   // };
 
   return (
+    <div className={styles.chat_wrap}>
     <div className={styles.chat}>
       <div className={styles.chat_leftbar}>
         <div
@@ -875,49 +874,13 @@ const Chat: React.FC = () => {
             />
           </svg>
 
-          {/*<input*/}
-          {/*    className={styles.chat_conversation_bottom_input}*/}
-          {/*    type="text"*/}
-          {/*    placeholder="Aa"*/}
-          {/*/>*/}
+          <input
+              className={styles.chat_conversation_bottom_input}
+              type="text"
+              placeholder="Aa"
+          />
 
-          <div className={styles.chat_options}>
-            {/* Option1 */}
-            <div
-              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
-              onClick={() => {
-                if (!disabledOptions) {
-                  handleOptionClick(option1);
-                }
-              }}
-            >
-              {option1 || 'Option1...'}
-            </div>
 
-            {/* Option2 */}
-            <div
-              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
-              onClick={() => {
-                if (!disabledOptions) {
-                  handleOptionClick(option2);
-                }
-              }}
-            >
-              {option2 || 'Option2...'}
-            </div>
-
-            {/* Option3 */}
-            <div
-              className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
-              onClick={() => {
-                if (!disabledOptions) {
-                  handleOptionClick(option3);
-                }
-              }}
-            >
-              {option3 || 'Option3...'}
-            </div>
-          </div>
 
           {/*<svg*/}
           {/*    className={`${styles.chat_pointer} $styles.chat_conversation_bottom_icon}`}*/}
@@ -974,11 +937,6 @@ const Chat: React.FC = () => {
           {t('chat.help')}
         </button>
         <button
-          className={`${styles.chat_info_btn} ${styles.chat_info_report} `}
-        >
-          {t('chat.report')}
-        </button>
-        <button
           onClick={toggleSettingsVisibility}
           className={styles.chat_info_btn}
         >
@@ -1007,6 +965,12 @@ const Chat: React.FC = () => {
 
           {t('chat.chat_settings')}
         </button>
+        <button
+          className={`${styles.chat_info_btn} ${styles.chat_info_report} `}
+        >
+          {t('chat.report')}
+        </button>
+
 
         <div className={styles.chat_info_test}>
           {characters.map((character) => (
@@ -1152,6 +1116,46 @@ const Chat: React.FC = () => {
           <b>Settings</b>
         </div>
       )}
+    </div>
+      <div className={styles.chat_bottom}>
+        <div className={styles.chat_options}>
+          {/* Option1 */}
+          <div
+            className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
+            onClick={() => {
+              if (!disabledOptions) {
+                handleOptionClick(option1);
+              }
+            }}
+          >
+            {option1 || 'Option1...'}
+          </div>
+
+          {/* Option2 */}
+          <div
+            className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
+            onClick={() => {
+              if (!disabledOptions) {
+                handleOptionClick(option2);
+              }
+            }}
+          >
+            {option2 || 'Option2...'}
+          </div>
+
+          {/* Option3 */}
+          <div
+            className={`${styles.chat_option} ${styles.chat_conversation_bottom_option} ${disabledOptions ? styles.disabled : ''}`}
+            onClick={() => {
+              if (!disabledOptions) {
+                handleOptionClick(option3);
+              }
+            }}
+          >
+            {option3 || 'Option3...'}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

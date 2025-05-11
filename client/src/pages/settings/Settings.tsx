@@ -10,7 +10,7 @@ const SettingsPage: React.FC = () => {
 
   const toggleLanguage = (lang: string | undefined) => {
     i18n.changeLanguage(lang);
-    setselectedLanguage(lang);
+    // setselectedLanguage(lang);
   };
   const [mode, setMode] = useState('');
 
