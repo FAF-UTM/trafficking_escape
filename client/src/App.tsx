@@ -88,9 +88,9 @@ function App() {
             <Route
               path="/chat"
               element={
-                // <ProtectedRoute roles={[ 'ROLE_USER', 'ROLE_ADMIN' ]}>
+                <ProtectedRoute roles={[ 'ROLE_USER', 'ROLE_ADMIN' ]}>
                   <Chat />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               }
             />
             <Route path="/click-play" element={<ClickPlayGame />} />
@@ -105,96 +105,6 @@ function App() {
             <Route path="/danger-highlight" element={<DangerWordHighlightWrapper />} />
             <Route path="/word-scramble" element={<WordScrambleWrapper />} />
           </Routes>
-          {/*<Route*/}
-          {/*  path="/click-play"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <ClickPlayGame />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          {/*<Route*/}
-          {/*  path="/city-run"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <Platformer />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          {/*<Route*/}
-          {/*  path="/timeline-puzzle"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <TimelinePuzzle />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          {/*<Route*/}
-          {/*  path="/combination-lock"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <CombinationLockWrapper />*/}
-          {/*    <RandomCombinationLock onComplete={() => navigate('/somewhere-else')} />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          {/*<Route*/}
-          {/*  path="/who-to-trust"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <WhoToTrustGameWrapper />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          {/*<Route*/}
-          {/*  path="/true-false"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <TrueFalseFlashCardsWrapper />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          {/*<Route*/}
-          {/*  path="/word-choice"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <WordChoiceWrapper />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          {/*<Route*/}
-          {/*  path="/emoji-story"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <EmojiStoryDecoderWrapper />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          {/*<Route*/}
-          {/*  path="/safety-checklist"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <SafetyChecklistBuilderWrapper />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          {/*<Route*/}
-          {/*  path="/danger-highlight"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <DangerWordHighlightWrapper />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          {/*<Route*/}
-          {/*  path="/word-scramble"*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>*/}
-          {/*    <WordScrambleWrapper />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-        {/*</Routes>*/}
         </BrowserRouter>
       </AudioProvider>
     </AuthProvider>
