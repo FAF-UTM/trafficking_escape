@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MinigamesShowcase.css';
+import {useAudio} from '../../context/AudioContext.tsx';
 
 interface Minigame {
   name: string;
@@ -65,6 +66,7 @@ const minigames: Minigame[] = [
 
 const MinigamesShowcase: React.FC = () => {
   const navigate = useNavigate();
+  const {playClick} = useAudio();
 
   return (
     <div className="minigames-container">
@@ -76,7 +78,7 @@ const MinigamesShowcase: React.FC = () => {
             <p className="minigame-description">{game.description}</p>
             <button
               className="play-button"
-              onClick={() => navigate(game.route)}
+              onClick={() => {playClick(3); navigate(game.route);}}
             >
               Play
             </button>

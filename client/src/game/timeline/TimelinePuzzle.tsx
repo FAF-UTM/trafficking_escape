@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { puzzleLevels, PuzzleCard } from './puzzleData';
 import './TimelinePuzzle.css';
+import { useAudio } from '../../context/AudioContext';
 
 const TimelinePuzzle: React.FC = () => {
   const [currentLevel, setCurrentLevel] = useState(0);
+  const { playClick } = useAudio();
 
   function shuffleArray(arr: PuzzleCard[]): PuzzleCard[] {
     return arr
@@ -32,6 +34,7 @@ const TimelinePuzzle: React.FC = () => {
     e.preventDefault();
     const data = e.dataTransfer.getData('application/my-card');
     const card: PuzzleCard = JSON.parse(data);
+    playClick(7);
     if (dropzones[dropIndex] !== null) return;
     setCardPositions((prev) => prev.filter((c) => c.id !== card.id));
     const newDropzones = [...dropzones];
@@ -139,10 +142,13 @@ const TimelinePuzzle: React.FC = () => {
       </div>
 
       <div className="action-buttons-container">
-        <div className="action-button" onClick={() => resetPuzzle(true)}>
+        <div className="action-button" onClick={() => {playClick(3); resetPuzzle(true);}}>
           Reset
         </div>
-        <div className="action-button" onClick={checkSolution}>
+        <div className="action-button" onClick={() => {
+          playClick(3);
+          checkSolution();
+        }}>
           Check
         </div>
       </div>
