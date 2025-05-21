@@ -7,13 +7,21 @@ import s4 from '../components/sounds/4.wav';
 import s5 from '../components/sounds/5.wav';
 import s6 from '../components/sounds/6.wav';
 import s7 from '../components/sounds/7.wav';
+import s8 from '../components/sounds/8.mp3';
 import bg1 from '../components/sounds/bg1.mp3';
+import bg2 from '../components/sounds/bg2.mp3';
+import bg3 from '../components/sounds/bg3.mp3';
+import bg4 from '../components/sounds/bg4.mp3';
+
 
 const bgmMap: Record<number, string> = {
   1: bg1,
+  2: bg2,
+  3: bg3,
+  4: bg4,
 };
 
-const defaultBgm = bgmMap[1];
+const defaultBgm = bgmMap[2];
 
 const soundMap: Record<number, string> = {
   1: s1,
@@ -23,6 +31,7 @@ const soundMap: Record<number, string> = {
   5: s5,
   6: s6,
   7: s7,
+  8: s8,
 };
 
 interface AudioAPI {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAudio } from '../../../context/AudioContext';
 
 interface Level2Props {
   onComplete: () => void; // Callback to move on to the next level
@@ -25,9 +26,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
   const [showCodeDialog, setShowCodeDialog] = useState(false);
   const [enteredCode, setEnteredCode] = useState('');
 
-  /* -----------------------
-   *  Utility: Modal & Inventory
-   * ----------------------- */
+  const { playClick } = useAudio();
 
   // Opens a modal with an image and text
   const openModal = (img: string, text: string) => {
@@ -45,6 +44,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
 
   // Handle selecting/deselecting an item in inventory
   const handleSelectItem = (item: string) => {
+    playClick(8);
     if (selectedItem === item) {
       // Deselect if clicked again
       setSelectedItem(null);
@@ -58,39 +58,51 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
     }
   };
 
-  /* -----------------------
-   *  Puzzle / Hotspots
-   * ----------------------- */
-
   // 1. Papers → pick up a note
   const handlePapersClick = () => {
+    playClick(8);
     if (!noteFound) {
       setNoteFound(true);
-      setInventory((prev) => [...prev, 'note2']);
+      setInventory((prev) => {
+        const next = [...prev, 'note2'];
+        setSelectedItem('note2');
+        return next;
+      });
       openModal('/assets/note2.png', 'You found a note! It says: "2451"');
     }
   };
 
   // 2. Crates → crowbar
   const handleCratesClick = () => {
+    playClick(8);
     if (!crowbarFound) {
       setCrowbarFound(true);
-      setInventory((prev) => [...prev, 'crowbar']);
+      setInventory((prev) => {
+        const next = [...prev, 'crowbar'];
+        setSelectedItem('crowbar');
+        return next;
+      });
       openModal('/assets/crowbar.png', 'You found a crowbar!');
     }
   };
 
   // 3. Chest → wire cutters (need crowbar)
   const handleChestClick = () => {
+    playClick(8);
     if (!wireCutterFound && selectedItem === 'crowbar') {
       setWireCutterFound(true);
-      setInventory((prev) => [...prev, 'wirecutter']);
+      setInventory((prev) => {
+        const next = [...prev, 'wirecutter'];
+        setSelectedItem('wirecutter');
+        return next;
+      });
       openModal('/assets/wirecutter.png', 'You found wire cutters!');
     }
   };
 
   // 4. Cables → turn electricity off (need wire cutters)
   const handleCablesClick = () => {
+    playClick(8);
     if (!electricityOff && selectedItem === 'wirecutter') {
       setElectricityOff(true);
       openModal('', 'You cut the cables! The door lock is offline.');
@@ -99,6 +111,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
 
   // 5. Door → either code input if electricity is on, or auto-unlock if off
   const handleDoorClick = () => {
+    playClick(8);
     if (electricityOff) {
       // If power is off, lock is disabled
       setDoorUnlocked(true);
@@ -112,9 +125,6 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
     }
   };
 
-  /* -----------------------
-   *  Code Dialog
-   * ----------------------- */
   const handleCloseCodeDialog = () => {
     setShowCodeDialog(false);
     setEnteredCode('');
