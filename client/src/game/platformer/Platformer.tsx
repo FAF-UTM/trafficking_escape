@@ -21,7 +21,7 @@ const MAX_SPEED = 10; // Updated max speed
 interface GameObject {
   x: number;
   y: number;
-  width?: number;
+  width: number;
   height: number;
 }
 
