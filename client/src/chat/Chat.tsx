@@ -1,76 +1,26 @@
 import styles from './chat.module.css';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Character from '../components/character/Character.tsx';
-import { useAuth } from '../context/AuthContext.tsx';
+// import { useAuth } from '../context/AuthContext.tsx';
 import { useTranslation } from 'react-i18next';
-//import { useNavigate } from 'react-router-dom';
 
-interface ChatUsers {
-  imgSrc: string;
-  name: string;
-  message: string;
-  chatID: string;
-}
+
+// interface ChatUsers {
+//   imgSrc: string;
+//   name: string;
+//   message: string;
+//   chatID: string;
+// }
 
 const backend_api_generate =
   import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
-const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/v1/get-chats';
-const gptToken = import.meta.env.VITE_GPT_TOKEN;
+// const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/v1/get-chats';
+// const person_url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=${gender}&age=12-18&etnic=all`;
 
 const active_chat_name = 'Alex Cara';
 const active_chat_img =
   'https://scontent-otp1-1.xx.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=31SphODCOLIQ7kNvwE32Nje&_nc_oc=Adknk7GF9oSbP_1zw41Md8h9m3_bO-RibDYDBhgAJktRcrZKCaSY5oYg36ALnmUfzCk&_nc_zt=24&_nc_ht=scontent-otp1-1.xx&oh=00_AfL9IyOp7xUaqn4wdrdjCjlFZVYkT1k-rjnTU-3ad0oQlg&oe=6847F2BA';
 
-let from_img_default = active_chat_img;
-
-function getRandomItem<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-// ---------------
-// Helper: pick a random age between 12 and 18 (inclusive)
-// ---------------
-// function getRandomAge(): number {
-//   const ages = [12, 13, 14, 15, 16, 17, 18];
-//   return getRandomItem(ages);
-// }
-
-// ---------------
-// Helper: build the final image URL
-// ---------------
-
-async function generateRandomImageUrl(gender: string): Promise<string> {
-  const timeParam = Date.now();
-  console.log(gender);
-  const url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=${gender}&age=12-18&etnic=all`;
-
-  /*
-   We use the site you provided: https://this-person-does-not-exist.com/
-   with query params for:
-     - time = current timestamp (to avoid caching)
-     - gender=${gender}
-     - age=12-18
-     - etnic=all
- */
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    if (data.generated === 'true' && data.src) {
-      // Return the full URL by combining the base URL and the `src` path
-      return `https://this-person-does-not-exist.com${data.src}`;
-    } else {
-      throw new Error('Unexpected response structure.');
-    }
-  } catch (error) {
-    console.error('Error fetching random image URL:', error);
-    throw error;
-  }
-}
 
 interface ChatData {
   from: string;
@@ -112,9 +62,7 @@ interface ChatData {
 const Chat: React.FC = () => {
   const { t, i18n } = useTranslation();
 
-  // If your AuthContext provides the token or isAuthenticated, you can use it here:
-  const { isAuthenticated } = useAuth(); // or whatever your context returns
-  // Grab the token from localStorage (or from context if you store it there)
+  // const { isAuthenticated } = useAuth(); // or whatever your context returns
   const token = localStorage.getItem('authToken');
 
   // State to track the currently visible character
@@ -143,7 +91,7 @@ const Chat: React.FC = () => {
     setSettingsVisibility(false);
   };
 
-  // *** Chat data state ***
+
   const [chatData, setChatData] = useState<ChatData[]>(initialChatData);
 
   const [disabledOptions, setDisabledOptions] = useState(false);
@@ -174,201 +122,8 @@ const Chat: React.FC = () => {
     setPopupVisibility((prev) => ({ ...prev, [id]: false }));
   };
 
-  const [chatUsers, setChatUsers] = useState<ChatUsers[]>([
-    // {
-    //   imgSrc:
-    //       'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    //   name: 'Alex Cara',
-    //   message: 'Ce mai faci?',
-    //   chatID: '0023',
-    // },
-    // {
-    //   imgSrc:
-    //       'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    //   name: 'Cristian Brinza',
-    //   message: 'Cristian a trimis o ataşare.',
-    //   chatID: '0232',
-    // },
-    // {
-    //   imgSrc:
-    //       'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    //   name: 'Bogdan Zlatovcen',
-    //   message: 'Trimite poze',
-    //   chatID: '1098',
-    // },
-    // {
-    //   imgSrc:
-    //       'https://scontent.fkiv7-1.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s200x200&_nc_cat=110&ccb=1-7&_nc_sid=136b72&_nc_ohc=mKje_Qww9A4Q7kNvgG4YRdl&_nc_ad=z-m&_nc_cid=1396&_nc_zt=24&_nc_ht=scontent.fkiv7-1.fna&_nc_gid=A0zQGhvjZMya7EY1vtrUps2&oh=00_AYBKj9P_6SKmstVBXe53zc5qsD6bP65Yu7YuGSANbC61Bw&oe=6783833A',
-    //   name: 'Mariana Catruc',
-    //   message: 'Mariana a trimis o ataşare.',
-    //   chatID: '0123',
-    // },
-  ]);
 
-  async function fetchGPTNames(gender: string): Promise<string[]> {
-    // Determine the appropriate prompt based on language
-    const promptText = i18n.language.toLowerCase().startsWith('nl')
-      ? `Geef me typische Nederlandse (Nederlandstalige) tienernamen (12-18) voor jongens.
-       Laat je inspireren door realistische Nederlandse namen. Formaat: "Voornaam Achternaam"`
-      : `Give me a unique English (US or UK) teenage (12-18) ${gender} name.
-       Be inspired by realistic English names. Format: "Name Surname", never more than Name and Surname`;
 
-    // OpenAI API URL
-    const apiUrl = 'https://api.openai.com/v1/chat/completions';
-
-    try {
-      // Send the request to the OpenAI API
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${gptToken}`, // Add Bearer token
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini', // Use the model specified
-          messages: [
-            { role: 'system', content: 'You are a helpful assistant.' },
-            { role: 'user', content: promptText },
-          ],
-          max_tokens: 150,
-          temperature: 0.7,
-        }),
-      });
-
-      // Handle non-OK responses
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch names: ${response.status} ${response.statusText}`
-        );
-      }
-
-      // Parse and extract names from the response
-      const data = await response.json();
-      const allGeneratedNames =
-        data.choices[0]?.message?.content?.trim()?.split('\n') || [];
-
-      // Access the existing chat users array directly
-      const existingNames = chatUsers.map((user) => user.name);
-      // Filter out names that already exist
-      const uniqueNames = allGeneratedNames.filter(
-        (name: string) => !existingNames.includes(name.trim())
-      );
-
-      return uniqueNames;
-    } catch (error) {
-      // Log and rethrow errors for debugging
-      console.error('Error fetching GPT names:', error);
-      throw error;
-    }
-  }
-
-  // fetchGPTNames()
-  //     .then(names => console.log('Generated Names:', names))
-  //     .catch(error => console.error('Error:', error));
-
-  const usedImages = useRef<Set<string>>(new Set()).current;
-  const generateNewChatUser = async (message: string) => {
-    let gender = getRandomItem(['male', 'female']);
-
-    let imgSrc = await generateRandomImageUrl(gender);
-    // Small loop to retry if the new imgSrc already exists in our set
-    let attempts = 0;
-    while (usedImages.has(imgSrc) && attempts < 10) {
-      imgSrc = await generateRandomImageUrl(gender);
-      attempts++;
-    }
-    usedImages.add(imgSrc);
-
-    let name = await generateRandomName(gender);
-    // let name = 'test'
-    //const newChatUser: { chatID: string; name: string | null; message: string; imgSrc: string } = {
-    const newChatUser: ChatUsers = {
-      imgSrc,
-      name: name ?? 'Unknown user', // Provide a fallback so it's always a string
-      message,
-      chatID: Date.now().toString(),
-    };
-
-    setChatUsers((prevChatUsers) => [...prevChatUsers, newChatUser]);
-  };
-
-  const generateRandomName = async (
-    gender: string,
-    retries = 3
-  ): Promise<string | null> => {
-    try {
-      for (let attempt = 0; attempt < retries; attempt++) {
-        // Fetch GPT-generated names
-        const names = await fetchGPTNames(gender);
-
-        if (names.length > 0) {
-          console.log('Generated Names:', names);
-          return names[0]; // Return the first name from the list
-        } else {
-          console.warn(
-            `No names generated. Retrying... (${attempt + 1}/${retries})`
-          );
-        }
-      }
-
-      console.error('Failed to generate names after retries');
-      return null; // Return null if retries are exhausted
-    } catch (error) {
-      console.error('Error:', error);
-      return null;
-    }
-  };
-
-  // Example usage
-  //   const handleRandomName = async () => {
-  //     const random_name = await generateRandomName();
-  //     console.log('Random Name:', random_name);
-  //   };
-
-  const fetchChats = async () => {
-    try {
-      // Fetch chats from the backend API
-      const response = await fetch(backend_api_chats, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          // *** Attach token in the Authorization header ***
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
-
-      // Check if the response is successful
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      // Parse the response JSON
-      const data = await response.json();
-
-      // Validate response structure
-      if (data && Array.isArray(data.chatUsers)) {
-        setChatUsers(
-          data.chatUsers.map((chat: ChatUsers) => ({
-            imgSrc: chat.imgSrc || { from_img_default },
-            name: chat.name || 'Unknown User',
-            message: chat.message || 'No message available',
-            chatID: chat.chatID || Date.now().toString(),
-          }))
-        );
-      } else {
-        throw new Error('Invalid response structure');
-      }
-    } catch (error) {
-      console.error('Error fetching chats:', error);
-
-      generateNewChatUser('Hello, world!');
-      generateNewChatUser('Hello, world!');
-      generateNewChatUser('Hello, world!');
-      generateNewChatUser('Hello, world!');
-    }
-
-    fetchAIResponse('Hello', 3, false);
-  };
 
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
@@ -404,22 +159,6 @@ const Chat: React.FC = () => {
       }
 
       const data = await response.json();
-      /*
-          Example data structure we expect:
-          {
-            "dangerLevel3": 7,
-            "dangerLevel2": 4,
-            "dangerLevel1": 2,
-            "updatedDangerLevel": 10,
-            "option3": "\"I'd love to hang out! Where would we meet?\"",
-            "isTrafficker": true,
-            "chatResponse": "\"It's going pretty well, but let's hang out in person...\"",
-            "option1": "\"That sounds fun! ...\"",
-            "option2": "\"I don't know, meeting in person seems a bit scary...\""
-          }
-         */
-
-      // Parse out the new data
       setOption1(data.option1 || '');
       setOption2(data.option2 || '');
       setOption3(data.option3 || '');
@@ -433,7 +172,7 @@ const Chat: React.FC = () => {
         const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '');
         const newMessage: ChatData = {
           from: 'Alex',
-          from_img: from_img_default,
+          from_img: active_chat_img,
           sendtype: 'got',
           messages: [cleanedResponse],
         };
@@ -450,17 +189,8 @@ const Chat: React.FC = () => {
   };
 
   // Only run the “Hello” request once
-  const hasFetchedRef = useRef(false);
+  // const hasFetchedRef = useRef(false);
 
-  // *** On Chat load, fetch the initial AI response with "Hello" as lastMessage ***
-  useEffect(() => {
-    if (!hasFetchedRef.current && isAuthenticated && token) {
-      hasFetchedRef.current = true;
-      fetchChats();
-    }
-    // If you don't require auth, remove the isAuthenticated check
-    // else { /* maybe handle error, redirect to login, etc. */ }
-  }, [isAuthenticated, token]);
 
   // *** Handler when the user clicks one of the options ***
   const handleOptionClick = (chosenOption: string) => {
@@ -507,11 +237,6 @@ const Chat: React.FC = () => {
     i18n.changeLanguage(newLanguage);
   };
 
-  //const navigate = useNavigate();
-
-  // const goToSettings = () => {
-  //   navigate('/settings');
-  // };
 
   return (
     <div className={styles.chat_wrap}>
@@ -657,23 +382,23 @@ const Chat: React.FC = () => {
             <input type="text" placeholder={t('chat.serach_in_mess')} />
           </div>
           <div className={styles.chat_navigation_blocks}>
-            {chatUsers.map((chat, index) => (
-              <div key={index} className={styles.chat_navigation_block}>
-                <img
-                  className={styles.chat_navigation_block_img}
-                  src={chat.imgSrc}
-                  alt="avatar"
-                />
-                <div className={styles.chat_navigation_block_text}>
-                  <div className={styles.chat_navigation_block_text_name}>
-                    {chat.name}
-                  </div>
-                  <div className={styles.chat_navigation_block_text_message}>
-                    {chat.message}
-                  </div>
-                </div>
-              </div>
-            ))}
+            {/*{chatUsers.map((chat, index) => (*/}
+            {/*  <div key={index} className={styles.chat_navigation_block}>*/}
+            {/*    <img*/}
+            {/*      className={styles.chat_navigation_block_img}*/}
+            {/*      src={chat.imgSrc}*/}
+            {/*      alt="avatar"*/}
+            {/*    />*/}
+            {/*    <div className={styles.chat_navigation_block_text}>*/}
+            {/*      <div className={styles.chat_navigation_block_text_name}>*/}
+            {/*        {chat.name}*/}
+            {/*      </div>*/}
+            {/*      <div className={styles.chat_navigation_block_text_message}>*/}
+            {/*        {chat.message}*/}
+            {/*      </div>*/}
+            {/*    </div>*/}
+            {/*  </div>*/}
+            {/*))}*/}
           </div>
         </div>
         <div className={styles.chat_conversation}>
@@ -751,7 +476,7 @@ const Chat: React.FC = () => {
               >
                 <img
                   className={styles.chat_conversation_middle_message_from_img}
-                  src={from_img_default}
+                  src={active_chat_name}
                   style={{ opacity: '0' }}
                   alt="avatar"
                 />
@@ -987,7 +712,7 @@ const Chat: React.FC = () => {
             ))}
             <button
               className={styles.chat_info_btn}
-              onClick={() => generateNewChatUser('Hello, world!')}
+              // onClick={() => generateNewChatUser('Hello, world!')}
             >
               Add new chat
             </button>
