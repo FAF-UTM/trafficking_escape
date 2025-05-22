@@ -24,6 +24,7 @@ import EmojiStoryDecoderWrapper from './game/emoji_story_decoder/EmojiStoryDecod
 import SafetyChecklistBuilderWrapper from './game/safety_checklist_builder/SafetyChecklistBuilderWrapper.tsx';
 import DangerWordHighlightWrapper from './game/danger_word_highlight/DangerWordHighlightWrapper.tsx';
 import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.tsx';
+import { AudioProvider, useAudio } from './context/AudioContext';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -65,10 +66,19 @@ function App() {
     }
   }, []);
 
+  const BackgroundMusicStarter: React.FC = () => {
+    const { playMusic } = useAudio();
+    useEffect(() => {
+      playMusic();
+    }, [playMusic]);
+    return null;
+  };
+
   return (
-    <>
-      <AuthProvider>
+    <AuthProvider>
+      <AudioProvider>
         <BrowserRouter>
+          <BackgroundMusicStarter />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
@@ -78,104 +88,26 @@ function App() {
             <Route
               path="/chat"
               element={
-                <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                <ProtectedRoute roles={[ 'ROLE_USER', 'ROLE_ADMIN' ]}>
                   <Chat />
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/click-play"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <ClickPlayGame />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/city-run"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <Platformer />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/timeline-puzzle"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <TimelinePuzzle />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/combination-lock"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <CombinationLockWrapper />
-                // <RandomCombinationLock onComplete={() => navigate('/somewhere-else')} />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/who-to-trust"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <WhoToTrustGameWrapper />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/true-false"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <TrueFalseFlashCardsWrapper />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/word-choice"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <WordChoiceWrapper />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/emoji-story"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <EmojiStoryDecoderWrapper />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/safety-checklist"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <SafetyChecklistBuilderWrapper />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/danger-highlight"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <DangerWordHighlightWrapper />
-                // </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/word-scramble"
-              element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                <WordScrambleWrapper />
-                // </ProtectedRoute>
-              }
-            />
+            <Route path="/click-play" element={<ClickPlayGame />} />
+            <Route path="/city-run" element={<Platformer />} />
+            <Route path="/timeline-puzzle" element={<TimelinePuzzle />} />
+            <Route path="/combination-lock" element={<CombinationLockWrapper />} />
+            <Route path="/who-to-trust" element={<WhoToTrustGameWrapper />} />
+            <Route path="/true-false" element={<TrueFalseFlashCardsWrapper />} />
+            <Route path="/word-choice" element={<WordChoiceWrapper />} />
+            <Route path="/emoji-story" element={<EmojiStoryDecoderWrapper />} />
+            <Route path="/safety-checklist" element={<SafetyChecklistBuilderWrapper />} />
+            <Route path="/danger-highlight" element={<DangerWordHighlightWrapper />} />
+            <Route path="/word-scramble" element={<WordScrambleWrapper />} />
           </Routes>
         </BrowserRouter>
-      </AuthProvider>
-    </>
+      </AudioProvider>
+    </AuthProvider>
   );
 }
 

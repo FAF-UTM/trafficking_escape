@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAudio } from '../../../context/AudioContext';
 
 interface Level1Props {
   onComplete: () => void;
@@ -15,6 +16,8 @@ const Level1: React.FC<Level1Props> = ({ onComplete }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalImage, setModalImage] = useState('');
   const [modalText, setModalText] = useState('');
+
+  const { playClick } = useAudio();
 
   // Track if door is unlocked
   const [doorUnlocked, setDoorUnlocked] = useState(false);
@@ -34,24 +37,35 @@ const Level1: React.FC<Level1Props> = ({ onComplete }) => {
 
   // Floorboard logic
   const handleFloorboardClick = () => {
+    playClick(8);
     if (!fileFound) {
       setFileFound(true);
-      setInventory((prev) => [...prev, 'file']);
+      setInventory((prev) => {
+        const next = [...prev, 'file'];
+        setSelectedItem('file');
+        return next;
+      });
       openModal('/assets/file.png', 'You found a file!');
     }
   };
 
   // Cupboard logic
   const handleCupboardClick = () => {
+    playClick(8);
     if (!keyFound && selectedItem === 'file') {
       setKeyFound(true);
-      setInventory((prev) => [...prev, 'key']);
+      setInventory((prev) => {
+        const next = [...prev, 'key'];
+        setSelectedItem('key');
+        return next;
+      });
       openModal('/assets/key.png', 'You found a key!');
     }
   };
 
   // Door logic
   const handleDoorClick = () => {
+    playClick(8);
     if (selectedItem === 'key') {
       setDoorUnlocked(true);
       openModal('', 'You unlocked the door! (Click outside to continue...)');
@@ -67,6 +81,7 @@ const Level1: React.FC<Level1Props> = ({ onComplete }) => {
 
   // Note logic
   const handleNoteClick = () => {
+    playClick(8);
     openModal(
       '/assets/note.png',
       'A note: "Check under the jacket. You’ll find what you need."'

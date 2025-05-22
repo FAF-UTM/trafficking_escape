@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAudio } from '../../../context/AudioContext';
 
 const Level3: React.FC = () => {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ const Level3: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalImage, setModalImage] = useState('');
   const [modalText, setModalText] = useState('');
+
+  const { playClick } = useAudio();
 
   // Opens a modal
   const openModal = (img: string, text: string) => {
@@ -42,17 +45,27 @@ const Level3: React.FC = () => {
 
   // The rest is the same puzzle logic
   const handleShedClick = () => {
+    playClick(8);
     if (!shovelFound) {
       setShovelFound(true);
-      setInventory((prev) => [...prev, 'shovel']);
+      setInventory((prev) => {
+        const next = [...prev, 'shovel'];
+        setSelectedItem('shovel');
+        return next;
+      });
       openModal('/assets/shovel.png', 'You found a shovel inside the shed!');
     }
   };
 
   const handleMoundClick = () => {
+    playClick(8);
     if (!handleFound && selectedItem === 'shovel') {
       setHandleFound(true);
-      setInventory((prev) => [...prev, 'metal-handle']);
+      setInventory((prev) => {
+        const next = [...prev, 'metal-handle'];
+        setSelectedItem('metal-handle');
+        return next;
+      });
       openModal(
         '/assets/metal-handle.png',
         'You dug up a makeshift metal handle!'
@@ -61,9 +74,14 @@ const Level3: React.FC = () => {
   };
 
   const handleBoxClick = () => {
+    playClick(8);
     if (!keyFound && selectedItem === 'metal-handle') {
       setKeyFound(true);
-      setInventory((prev) => [...prev, 'final-key']);
+      setInventory((prev) => {
+        const next = [...prev, 'final-key'];
+        setSelectedItem('final-key');
+        return next;
+      });
       openModal(
         '/assets/final-key.png',
         'You unlocked the metal box and found a key!'
@@ -72,6 +90,7 @@ const Level3: React.FC = () => {
   };
 
   const handleGateClick = () => {
+    playClick(8);
     if (!gateUnlocked && selectedItem === 'final-key') {
       setGateUnlocked(true);
       openModal(
@@ -82,6 +101,7 @@ const Level3: React.FC = () => {
   };
 
   const handleSelectItem = (item: string) => {
+    playClick(8);
     if (selectedItem === item) {
       setSelectedItem(null);
     } else {
