@@ -1,3 +1,4 @@
+-- Existing app_user table with improved column naming for passwords
 CREATE TABLE app_user (
                           id SERIAL PRIMARY KEY,
                           username VARCHAR(255) NOT NULL,
@@ -7,29 +8,31 @@ CREATE TABLE app_user (
                           created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                           updated_at TIMESTAMP
 );
-CREATE TABLE chat_users (
-                            id SERIAL PRIMARY KEY,
-                            img_src VARCHAR(255),
-                            name VARCHAR(255),
-                            message TEXT,
-                            chat_id VARCHAR(255),
-                            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                            updated_at TIMESTAMP,
-                            user_id BIGINT NOT NULL,
-                            CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES app_user (id) ON DELETE CASCADE
+
+-- Chats table: each chat is linked to one user (the owner)
+CREATE TABLE chats (
+                       id SERIAL PRIMARY KEY,
+                       user_id INTEGER NOT NULL,  -- FK referencing app_user
+                       chat_image_url VARCHAR(255),  -- URL or path for the chat image
+                       chat_name VARCHAR(255) NOT NULL,  -- name or title of the chat
+                       is_trafficker BOOLEAN NOT NULL DEFAULT FALSE,  -- flag for trafficking status
+                       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                       updated_at TIMESTAMP,
+                       CONSTRAINT fk_chats_user
+                           FOREIGN KEY (user_id)
+                               REFERENCES app_user(id)
+                               ON DELETE CASCADE
 );
-CREATE TABLE chat_data (
-                           id SERIAL PRIMARY KEY,
-                           "from" VARCHAR(255),
-                           from_img VARCHAR(255),
-                           send_type VARCHAR(50),
-                           created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                           updated_at TIMESTAMP,
-                           chat_user_id BIGINT NOT NULL,
-                           CONSTRAINT fk_chat_user FOREIGN KEY (chat_user_id) REFERENCES chat_users (id) ON DELETE CASCADE
-);
-CREATE TABLE chat_messages (
-                               chat_data_id BIGINT NOT NULL,
-                               message TEXT NOT NULL,
-                               CONSTRAINT fk_chat_data FOREIGN KEY (chat_data_id) REFERENCES chat_data (id) ON DELETE CASCADE
+
+-- Messages table: each message is linked to one chat
+CREATE TABLE messages (
+                          id SERIAL PRIMARY KEY,
+                          chat_id INTEGER NOT NULL,  -- FK referencing chats
+                          is_outgoing BOOLEAN NOT NULL,  -- true if the message is sent by the logged-in user
+                          message_text TEXT NOT NULL,  -- content of the message
+                          sent_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                          CONSTRAINT fk_messages_chat
+                              FOREIGN KEY (chat_id)
+                                  REFERENCES chats(id)
+                                  ON DELETE CASCADE
 );

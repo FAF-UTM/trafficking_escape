@@ -1,0 +1,237 @@
+.random-lock-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  cursor: default;
+  user-select: none;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+}
+
+/* Intro screen styling */
+.intro-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 40px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 1s ease-out;
+}
+
+.intro-title {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.intro-text {
+  font-size: 18px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.intro-button {
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #222;
+  color: #fff;
+  border: 2px solid #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.intro-button:hover {
+  background-color: #444;
+}
+
+/* Puzzle stage styling */
+.puzzle-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 1s ease-out;
+}
+
+/* Clue zone styling */
+.clue-zone {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  /* For debugging: border: 2px dashed yellow; */
+}
+
+.display-code {
+  width: 260px;
+  height: 60px;
+  border: 2px solid #fff;
+  margin-bottom: 20px;
+  font-size: 32px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Keypad styling */
+.keypad-container {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  grid-gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.keypad-button {
+  width: 80px;
+  height: 80px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.keypad-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: scale(1.05);
+}
+
+/* Bounce animation for keypad buttons */
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bounce {
+  animation: bounce 0.5s ease;
+}
+
+/* Success screen styling */
+.success-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 40px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 1s ease-out;
+}
+
+.success-title {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.success-text {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+/* Placeholder for success animation (e.g., door opening) */
+.success-animation {
+  width: 200px;
+  height: 200px;
+  background: url('/assets/success_door.png') center/cover no-repeat;
+  animation: doorOpen 1s ease-out;
+}
+
+/* Modal overlay for the clue */
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.modal-content {
+  width: 60%;
+  background-color: #333;
+  border: 2px solid #fff;
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.modal-content img {
+  max-width: 80%;
+}
+
+.pixel-text {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Door open animation for success screen */
+@keyframes doorOpen {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

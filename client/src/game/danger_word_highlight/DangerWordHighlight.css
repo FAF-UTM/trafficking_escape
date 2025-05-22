@@ -1,0 +1,77 @@
+.danger-highlight-container {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  background: url('/assets/danger_highlight_background.png') center/cover
+    no-repeat;
+  color: #fff;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  padding: 40px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.title {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.instruction {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.text-block {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border: 2px solid #fff;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  display: inline-block;
+  text-align: left;
+}
+
+.word {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.word.selected {
+  background-color: rgba(255, 0, 0, 0.6);
+}
+
+.submit-button,
+.finish-button {
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #222;
+  color: #fff;
+  border: 2px solid #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover,
+.finish-button:hover {
+  background-color: #444;
+}
+
+.feedback-screen {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 40px;
+  border: 2px solid #fff;
+  display: inline-block;
+}
+
+.feedback {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.correct {
+  color: lightgreen;
+}
+
+.incorrect {
+  color: red;
+}

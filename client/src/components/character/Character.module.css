@@ -9,7 +9,7 @@
 
 .character_left {
   transform: translateX(-100%); /* Start offscreen */
-  bottom: 10px;
+  bottom: 120px;
   left: 10px;
   align-items: flex-start;
   transition:
@@ -21,7 +21,7 @@
 .character_right {
   transform: translateX(100%); /* Start offscreen */
   right: 10px;
-  bottom: 10px;
+  bottom: 120px;
   transition:
     transform 1s ease-in-out,
     opacity 1s ease-in-out;
@@ -56,14 +56,16 @@
 .character_message {
   padding: 20px;
   box-sizing: border-box;
-  background: #ffdd57;
-  color: #000;
+  /*background: #ffdd57;*/
+  background-color: rgba(26, 26, 26, 0.81);
   font-family: 'Press Start 2P', sans-serif;
   max-width: 80vh;
-  font-size: 28px;
-  line-height: 1.2;
+  font-size: 16px;
+  /*line-height: 1.2;*/
   opacity: 0;
   transition: opacity 1s ease-in-out; /* Smooth transition for opacity */
+  border: 2px solid #fff;
+  color: #fff;
 }
 
 .message_visible {

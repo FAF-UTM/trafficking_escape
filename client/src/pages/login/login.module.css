@@ -1,0 +1,33 @@
+.login_image {
+  position: fixed;
+  width: calc(100vw - 500px);
+  height: 100vh;
+  right: 0;
+  top: 0;
+  background: url('/images/login_v2.png');
+  background-size: cover;
+}
+.login {
+  padding-left: 70px !important;
+}
+.back_home {
+  font-size: 12px;
+  opacity: 0.8;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  position: fixed;
+  left: 30px;
+  top: 30px;
+  text-decoration: none;
+  color: #050505;
+}
+.back_home:hover {
+  text-decoration: underline;
+}
+.back_home svg {
+  transform: scale(0.9) rotate(180deg);
+  margin-right: 5px;
+}
