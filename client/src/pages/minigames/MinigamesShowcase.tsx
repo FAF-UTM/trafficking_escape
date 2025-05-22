@@ -56,11 +56,11 @@ const minigames: Minigame[] = [
     route: '/danger-highlight',
     description: 'Spot red flag words in a fake job ad.',
   },
-  //   {
-  //       name: 'Word Scramble',
-  //       route: '/word-scramble',
-  //       description: 'Unscramble words to reveal safety-related terms.',
-  //   }
+    {
+        name: 'Word Scramble',
+        route: '/word-scramble',
+        description: 'Unscramble words to reveal safety-related terms.',
+    }
 ];
 
 const MinigamesShowcase: React.FC = () => {
