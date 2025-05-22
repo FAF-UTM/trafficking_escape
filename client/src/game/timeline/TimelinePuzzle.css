@@ -26,12 +26,12 @@ body {
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .card {
-  width: 300px;
-  height: 200px;
+  width: 250px;
+  height: 110px;
   border-radius: 15px;
   border: 2px solid rgba(255, 255, 255, 0.5);
   cursor: grab;
@@ -83,8 +83,8 @@ body {
 }
 
 .dropzone {
-  width: 300px;
-  height: 200px;
+  width: 250px;
+  height: 110px;
   background-color: #333;
   border-radius: 15px;
   border: 2px dashed #777;
@@ -109,16 +109,12 @@ button {
   font-family: 'Press Start 2P', 'Courier New', monospace;
 }
 
-/*button:hover {*/
-/*  background: #222;*/
-/*}*/
-
 .action-buttons-container {
   width: 100%;
   display: flex;
   justify-content: center;
   gap: 40px;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .action-button {
@@ -127,7 +123,6 @@ button {
   background-color: rgba(0, 0, 0, 0.7);
   color: #fff;
   border: 2px solid #aaa;
-  /*border-radius: 10px;*/
   display: flex;
   align-items: center;
   justify-content: center;
