@@ -17,12 +17,16 @@ const Collectible: React.FC<CollectibleProps> = ({
   height,
   type,
 }) => {
-  const color = type === 'health' ? 'red' : 'yellow';
+  const img =
+    type === 'health'
+      ? 'assets/platformer/coin.png'
+      : 'assets/platformer/health_1.png';
   return (
-    <div
+    <img
+      src={img}
       className={styles.collectible}
-      style={{ left: x, top: y, width, height, backgroundColor: color }}
-    ></div>
+      style={{ left: x, top: y, width, height }}
+    />
   );
 };
 
