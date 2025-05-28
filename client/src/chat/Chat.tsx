@@ -1,26 +1,16 @@
 import styles from './chat.module.css';
 import React, { useEffect, useState } from 'react';
 import Character from '../components/character/Character.tsx';
-// import { useAuth } from '../context/AuthContext.tsx';
 import { useTranslation } from 'react-i18next';
-
-
-// interface ChatUsers {
-//   imgSrc: string;
-//   name: string;
-//   message: string;
-//   chatID: string;
-// }
+import { useAuth } from '../context/AuthContext.tsx';
 
 const backend_api_generate =
   import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
-// const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/v1/get-chats';
-// const person_url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=${gender}&age=12-18&etnic=all`;
 
 const active_chat_name = 'Alex Cara';
 const active_chat_img =
   'https://scontent-otp1-1.xx.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=31SphODCOLIQ7kNvwE32Nje&_nc_oc=Adknk7GF9oSbP_1zw41Md8h9m3_bO-RibDYDBhgAJktRcrZKCaSY5oYg36ALnmUfzCk&_nc_zt=24&_nc_ht=scontent-otp1-1.xx&oh=00_AfL9IyOp7xUaqn4wdrdjCjlFZVYkT1k-rjnTU-3ad0oQlg&oe=6847F2BA';
-
+const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/chats';
 
 interface ChatData {
   from: string;
@@ -61,7 +51,6 @@ interface ChatData {
 
 const Chat: React.FC = () => {
   const { t, i18n } = useTranslation();
-
   // const { isAuthenticated } = useAuth(); // or whatever your context returns
   const token = localStorage.getItem('authToken');
 
@@ -90,7 +79,6 @@ const Chat: React.FC = () => {
   const hideSettings = () => {
     setSettingsVisibility(false);
   };
-
 
   const [chatData, setChatData] = useState<ChatData[]>(initialChatData);
 
@@ -121,9 +109,6 @@ const Chat: React.FC = () => {
   const hidePopup = (id: string) => {
     setPopupVisibility((prev) => ({ ...prev, [id]: false }));
   };
-
-
-
 
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
@@ -191,7 +176,6 @@ const Chat: React.FC = () => {
   // Only run the “Hello” request once
   // const hasFetchedRef = useRef(false);
 
-
   // *** Handler when the user clicks one of the options ***
   const handleOptionClick = (chosenOption: string) => {
     setDisabledOptions(true); // Disable the options
@@ -237,6 +221,113 @@ const Chat: React.FC = () => {
     i18n.changeLanguage(newLanguage);
   };
 
+  const [chatUsers, setChatUsers] = useState<
+    { id: number; imgSrc: string; name: string; message: string }[]
+  >([]);
+
+  const { userId } = useAuth();
+  const now = new Date().toISOString();
+  useEffect(() => {
+    if (userId) {
+      fetchOrCreateChat('Alex Cara'); // or pass a dynamic name
+      // console.log('authToken', token);
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${backend_api}/api/chats/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error('Failed to fetch chats');
+        const chats = await res.json();
+
+        // Format the chat list
+        const formatted = chats.map((chat: any) => ({
+          id: chat.id,
+          imgSrc: chat.chatImageUrl || '/default.png',
+          name: chat.chatName,
+          message:
+            chat.messages?.[chat.messages.length - 1]?.messageText || 'No messages yet',
+        }));
+
+        setChatUsers(formatted);
+      } catch (error) {
+        console.error('Error fetching chats:', error);
+      }
+    };
+
+    if (userId) fetchChats();
+  }, [userId]);
+
+
+  const fetchOrCreateChat = async (chatName: string) => {
+    const token = localStorage.getItem('authToken');
+
+    try {
+      if (!userId) {
+        console.error('No userId available in context.');
+        return;
+      }
+      const res = await fetch(`${backend_api_chats}/user/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // *** Attach token in the Authorization header ***
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+      if (!res.ok) throw new Error('Failed to fetch chats');
+
+      const chats = await res.json();
+      console.log('Fetched chat by userId:', chats);
+      if (chats.length > 0) {
+        console.log('User already has chats:', chats);
+        return chats;
+      } else {
+        // No chats found, create one
+        const createRes = await fetch(backend_api_chats, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({
+            chatImageUrl: 'https://example.com/avatar.png',
+            chatName: chatName,
+            isTrafficker: true,
+            createdAt: now,
+            updatedAt: now,
+            // messages: [
+            //   {
+            //     id: 1,
+            //     chatId: 0,
+            //     isOutgoing: true,
+            //     messageText: 'Hello!',
+            //     sentAt: now,
+            //   },
+            // ],
+          }),
+        });
+
+        console.log(now);
+
+        if (!createRes.ok) throw new Error('Failed to create chat');
+
+        const newChat = await createRes.json();
+        console.log('Created new chat:', newChat);
+        return [newChat];
+      }
+    } catch (error) {
+      console.error('Error in fetchOrCreateChat:', error);
+      return [];
+    }
+  };
 
   return (
     <div className={styles.chat_wrap}>
@@ -382,23 +473,23 @@ const Chat: React.FC = () => {
             <input type="text" placeholder={t('chat.serach_in_mess')} />
           </div>
           <div className={styles.chat_navigation_blocks}>
-            {/*{chatUsers.map((chat, index) => (*/}
-            {/*  <div key={index} className={styles.chat_navigation_block}>*/}
-            {/*    <img*/}
-            {/*      className={styles.chat_navigation_block_img}*/}
-            {/*      src={chat.imgSrc}*/}
-            {/*      alt="avatar"*/}
-            {/*    />*/}
-            {/*    <div className={styles.chat_navigation_block_text}>*/}
-            {/*      <div className={styles.chat_navigation_block_text_name}>*/}
-            {/*        {chat.name}*/}
-            {/*      </div>*/}
-            {/*      <div className={styles.chat_navigation_block_text_message}>*/}
-            {/*        {chat.message}*/}
-            {/*      </div>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*))}*/}
+            {chatUsers.map((chat, index) => (
+              <div key={index} className={styles.chat_navigation_block}>
+                <img
+                  className={styles.chat_navigation_block_img}
+                  src={chat.imgSrc}
+                  alt="avatar"
+                />
+                <div className={styles.chat_navigation_block_text}>
+                  <div className={styles.chat_navigation_block_text_name}>
+                    {chat.name}
+                  </div>
+                  <div className={styles.chat_navigation_block_text_message}>
+                    {chat.message}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <div className={styles.chat_conversation}>
@@ -713,6 +804,7 @@ const Chat: React.FC = () => {
             <button
               className={styles.chat_info_btn}
               // onClick={() => generateNewChatUser('Hello, world!')}
+              // onClick={() => fetchAIResponse('Hello', 3, false)}
             >
               Add new chat
             </button>
