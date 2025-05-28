@@ -7,6 +7,7 @@ interface AuthContextProps {
   role: string | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
+  userId: string | null;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -26,6 +27,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
     return null;
   });
+  const [userId, setUserId] = useState<string | null>(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      return decoded.id || null;
+    }
+    return null;
+  });
+
 
   const login = async (username: string, password: string) => {
     try {
@@ -58,6 +68,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         localStorage.setItem('authToken', token);
         setIsAuthenticated(true);
         setRole(decoded.role);
+        setUserId(decoded.id);
+        // console.log('User ID from token:', decoded.id);
       } else {
         console.error('Login failed');
       }
@@ -73,7 +85,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, role, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, role, login, logout, userId }}>
       {children}
     </AuthContext.Provider>
   );
