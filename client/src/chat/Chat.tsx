@@ -167,13 +167,28 @@ const Chat: React.FC = () => {
 
       // *** Add the AI's chatResponse to the chat as a "got" message ***
       if (data.chatResponse) {
-        const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '');
+        // const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '');
+        // const newMessage: ChatData = {
+        //   from: 'Alex',
+        //   from_img: active_chat_img,
+        //   sendtype: 'got',
+        //   messages: [cleanedResponse],
+        // };
+        const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '').trim();
+
+// Split by sentence-ending punctuation followed by space or end of string
+        const messageChunks = cleanedResponse
+          .split(/(?<=[.!?])\s+/)
+          .map((chunk) => chunk.trim())
+          .filter((chunk) => chunk.length > 0);
+
         const newMessage: ChatData = {
           from: 'Alex',
           from_img: active_chat_img,
           sendtype: 'got',
-          messages: [cleanedResponse],
+          messages: messageChunks,
         };
+
 
         setChatData((prevChatData) => [...prevChatData, newMessage]);
       }
