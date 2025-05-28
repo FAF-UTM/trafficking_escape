@@ -238,7 +238,7 @@ const Chat: React.FC = () => {
     const fetchChats = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const res = await fetch(`${backend_api}/api/chats/user/${userId}`, {
+        const res = await fetch(`${backend_api_chats}/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
