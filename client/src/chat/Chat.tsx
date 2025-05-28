@@ -131,6 +131,8 @@ const Chat: React.FC = () => {
     currentDangerLevel: number,
     isTrafficker: boolean
   ) => {
+    setDisabledOptions(true);  // ← disable the buttons
+
     try {
       const res = await fetch(backend_api_generate, {
         method: 'POST',
@@ -154,6 +156,8 @@ const Chat: React.FC = () => {
       setUpdatedDangerLevel(data.updatedDangerLevel || currentDangerLevel);
     } catch (err) {
       console.error('Error fetching suggestions:', err);
+    }finally {
+      setDisabledOptions(false); // ← re-enable them
     }
   };
 
@@ -354,12 +358,6 @@ const Chat: React.FC = () => {
     { id: number; imgSrc: string; name: string; message: string }[]
   >([]);
 
-  // if we have at least one chat and nothing’s selected yet…
-  // if (chatUsers.length > 0 && activeChat === null) {
-  //   // pick the last chat in the list
-  //   const last = chatUsers[chatUsers.length - 1];
-  //   handleChatSelect(last);
-  // }
 
 
   const getRandomChatUser = async (): Promise<{
@@ -640,7 +638,12 @@ const Chat: React.FC = () => {
   };
 
 
-
+  useEffect(() => {
+    if (chatUsers.length > 0 && activeChat === null) {
+      const last = chatUsers[chatUsers.length - 1];
+      handleChatSelect(last);
+    }
+  }, [chatUsers, activeChat]);
 
 
   return (
@@ -1268,7 +1271,7 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option1 || 'Option1...'}
+            {option1 || 'Option1 Loading...'}
           </div>
 
           {/* Option2 */}
@@ -1280,7 +1283,7 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option2 || 'Option2...'}
+            {option2 || 'Option2 Loading...'}
           </div>
 
           {/* Option3 */}
@@ -1292,7 +1295,7 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option3 || 'Option3...'}
+            {option3 || 'Option3 Loading...'}
           </div>
         </div>
       </div>
