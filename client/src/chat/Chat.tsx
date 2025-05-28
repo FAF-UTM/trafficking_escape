@@ -11,6 +11,7 @@ const active_chat_name = 'Alex Cara';
 const active_chat_img =
   'https://scontent-otp1-1.xx.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=31SphODCOLIQ7kNvwE32Nje&_nc_oc=Adknk7GF9oSbP_1zw41Md8h9m3_bO-RibDYDBhgAJktRcrZKCaSY5oYg36ALnmUfzCk&_nc_zt=24&_nc_ht=scontent-otp1-1.xx&oh=00_AfL9IyOp7xUaqn4wdrdjCjlFZVYkT1k-rjnTU-3ad0oQlg&oe=6847F2BA';
 const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/chats';
+const backend_api_messages = import.meta.env.VITE_BACKEND + '/api/messages';
 
 // const person_url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=${gender}&age=12-18&etnic=all`;
 
@@ -205,46 +206,56 @@ const Chat: React.FC = () => {
   // const hasFetchedRef = useRef(false);
 
   // *** Handler when the user clicks one of the options ***
-  const handleOptionClick = (chosenOption: string) => {
-    setDisabledOptions(true); // Disable the options
-    // 1) Add the chosen message to chat as 'send'
-    const cleanedOption = chosenOption.replace(/^"|"$/g, '');
+  const handleOptionClick = async (chosenOption: string) => {
+    if (!activeChat) return;
+    setDisabledOptions(true);
+
+    const cleaned = chosenOption.replace(/^"|"$/g, '').trim();
     const userMessage: ChatData = {
       from: 'You',
       from_img: '',
       sendtype: 'send',
-      messages: [cleanedOption],
+      messages: [cleaned],
     };
-    setChatData((prevChatData) => [...prevChatData, userMessage]);
 
-    // 2) Fire a new request with chosenOption as lastMessage
-    // fetchAIResponse(chosenOption, updatedDangerLevel, false);
-    // useEffect(() => {
-    //   if (userId) {
-    //     fetchOrCreateChat();
-    //   }
-    // }, [userId]);
+    // 1) Optimistically update UI
+    setChatData(prev => [...prev, userMessage]);
 
-    // ✅ CONTINUE CHAT: Use fetchAIResponse
-    // ✅ CONTINUE CHAT with random delay (700ms–1800ms)
-    if (activeChat) {
-      const shouldDelay = Math.random() < 0.2; // 70% chance to delay
-
-      if (shouldDelay) {
-        const delay = 2100 + Math.random() * 400 | 0;
-        setTimeout(() => {
-          fetchAIResponse(cleanedOption, updatedDangerLevel, activeChat.isTrafficker);
-        }, delay);
-      } else {
-        const delay = 1000 + Math.random() * 400 | 0;
-        setTimeout(() => {
-          fetchAIResponse(cleanedOption, updatedDangerLevel, activeChat.isTrafficker);
-        }, delay);
-      }
+    // 2) Persist to backend
+    try {
+      const token = localStorage.getItem('authToken');
+      await fetch(backend_api_messages, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          chatId: activeChat.id,
+          isOutgoing: true,
+          messageText: cleaned,
+        }),
+      });
+      // 3) Update last-message preview in left bar
+      setChatUsers(prev =>
+        prev.map(c =>
+          c.id === activeChat.id ? { ...c, message: cleaned } : c
+        )
+      );
+    } catch (err) {
+      console.error('Error saving outgoing message:', err);
     }
 
+    // 4) Kick off AI reply with random delay
+    const delay = Math.random() < 0.2
+      ? 2100 + Math.random() * 400 | 0
+      : 1000 + Math.random() * 400 | 0;
 
+    setTimeout(() => {
+      fetchAIResponse(cleaned, updatedDangerLevel, activeChat.isTrafficker);
+    }, delay);
   };
+
 
   const [activeLeftBarOption, setActiveLeftBarOption] = useState<string>('');
 
@@ -536,12 +547,41 @@ const Chat: React.FC = () => {
           messages: [m.messageText],
         }));
         setChatData(formattedMessages);
+        // Persist each AI-generated chunk
+        try {
+          const token = localStorage.getItem('authToken');
+          for (const text of messageChunks) {
+            await fetch(backend_api_messages, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              },
+              body: JSON.stringify({
+                chatId: activeChat!.id,
+                isOutgoing: false,
+                messageText: text,
+              }),
+            });
+          }
+          // Update last-message preview in left bar
+          const last = messageChunks[messageChunks.length - 1];
+          setChatUsers(prev =>
+            prev.map(c =>
+              c.id === activeChat!.id ? { ...c, message: last } : c
+            )
+          );
+        } catch (err) {
+          console.error('Error saving incoming message:', err);
+        }
+
       }
     } catch (err) {
       console.error('Error loading chat:', err);
     }
   };
 
+  const backend_api_messages = import.meta.env.VITE_BACKEND + '/api/messages';
 
 
 
