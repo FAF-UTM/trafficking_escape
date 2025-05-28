@@ -12,6 +12,9 @@ const active_chat_img =
   'https://scontent-otp1-1.xx.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=31SphODCOLIQ7kNvwE32Nje&_nc_oc=Adknk7GF9oSbP_1zw41Md8h9m3_bO-RibDYDBhgAJktRcrZKCaSY5oYg36ALnmUfzCk&_nc_zt=24&_nc_ht=scontent-otp1-1.xx&oh=00_AfL9IyOp7xUaqn4wdrdjCjlFZVYkT1k-rjnTU-3ad0oQlg&oe=6847F2BA';
 const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/chats';
 
+// const person_url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=${gender}&age=12-18&etnic=all`;
+
+
 interface ChatData {
   from: string;
   from_img: string;
@@ -225,14 +228,46 @@ const Chat: React.FC = () => {
     { id: number; imgSrc: string; name: string; message: string }[]
   >([]);
 
+
+  const getRandomChatUser = async (): Promise<{
+    fullName: string;
+    gender: string;
+    image: string;
+  } | null> => {
+    try {
+      const res = await fetch('/json/chat_names.json');
+      if (!res.ok) throw new Error('Failed to load chat names JSON');
+      const data = await res.json();
+
+      if (!Array.isArray(data) || data.length === 0) return null;
+
+      const randomIndex = Math.floor(Math.random() * data.length);
+      const user = data[randomIndex];
+      return {
+        fullName: `${user.name} ${user.surname}`,
+        gender: user.gender,
+        image: user.image,
+      };
+    } catch (err) {
+      console.error('Error fetching random chat user:', err);
+      return null;
+    }
+  };
+
+
+
   const { userId } = useAuth();
   const now = new Date().toISOString();
   useEffect(() => {
     if (userId) {
-      fetchOrCreateChat('Alex Cara'); // or pass a dynamic name
+      fetchOrCreateChat(); // or pass a dynamic name
       // console.log('authToken', token);
     }
+    fetchAIResponse('Hello', 3, false)
   }, []);
+
+
+
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -266,8 +301,27 @@ const Chat: React.FC = () => {
   }, [userId]);
 
 
-  const fetchOrCreateChat = async (chatName: string) => {
+  const fetchOrCreateChat = async () => {
     const token = localStorage.getItem('authToken');
+
+    let randomUser = await getRandomChatUser();
+
+    // Try up to 2 more times if name already exists
+    let attempts = 0;
+    while (randomUser && isNameAlreadyUsed(randomUser.fullName) && attempts < 2) {
+      console.warn(`Duplicate name "${randomUser.fullName}" detected. Retrying...`);
+      randomUser = await getRandomChatUser();
+      attempts++;
+    }
+
+    if (!randomUser || isNameAlreadyUsed(randomUser.fullName)) {
+      console.warn('Still duplicate after 3 attempts or failed to fetch user. Aborting.');
+      return;
+    }
+
+
+
+
 
     try {
       if (!userId) {
@@ -298,9 +352,9 @@ const Chat: React.FC = () => {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           body: JSON.stringify({
-            chatImageUrl: '/assets/chat/img_default_avatar.png',
-            chatName: chatName,
-            isTrafficker: true,
+            chatImageUrl: randomUser.image,
+            chatName: randomUser.fullName,
+            isTrafficker: Math.random() < 0.2, // 20% chance to be true
             createdAt: now,
             updatedAt: now,
             // messages: [
@@ -320,6 +374,15 @@ const Chat: React.FC = () => {
         if (!createRes.ok) throw new Error('Failed to create chat');
 
         const newChat = await createRes.json();
+        setChatUsers((prev) => [
+          ...prev,
+          {
+            id: newChat.id,
+            imgSrc: newChat.chatImageUrl,
+            name: newChat.chatName,
+            message: 'No messages yet',
+          },
+        ]);
         console.log('Created new chat:', newChat);
         return [newChat];
       }
@@ -333,17 +396,33 @@ const Chat: React.FC = () => {
     const token = localStorage.getItem('authToken');
     const now = new Date().toISOString();
 
-    const createRes = await fetch(`${backend_api_chats}`, {
+      let randomUser = await getRandomChatUser();
+
+      // Try up to 2 more times if name already exists
+      let attempts = 0;
+      while (randomUser && isNameAlreadyUsed(randomUser.fullName) && attempts < 2) {
+        console.warn(`Duplicate name "${randomUser.fullName}" detected. Retrying...`);
+        randomUser = await getRandomChatUser();
+        attempts++;
+      }
+
+      if (!randomUser || isNameAlreadyUsed(randomUser.fullName)) {
+        console.warn('Still duplicate after 3 attempts or failed to fetch user. Aborting.');
+        return;
+      }
+
+
+
+      const createRes = await fetch(`${backend_api_chats}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: JSON.stringify({
-        chatImageUrl:
-          '/assets/chat/img_default_avatar.png',
-        chatName: 'Cristian Brinza',
-        isTrafficker: false,
+        chatImageUrl: randomUser.image,
+        chatName: randomUser.fullName,
+        isTrafficker: Math.random() < 0.2, // 20% chance to be true
         createdAt: now,
         updatedAt: now,
       }),
@@ -364,6 +443,9 @@ const Chat: React.FC = () => {
     } else {
       console.error('Failed to create new chat');
     }
+  };
+  const isNameAlreadyUsed = (name: string): boolean => {
+    return chatUsers.some((chat) => chat.name === name);
   };
 
 

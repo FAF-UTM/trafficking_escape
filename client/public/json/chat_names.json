@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Emma",
+    "surname": "Johnson",
+    "gender": "female",
+    "image": "/assets/chat/img_avatar_1.png"
+  },
+  {
+    "name": "Liam",
+    "surname": "Smith",
+    "gender": "male",
+    "image": "/assets/chat/img_avatar_2.png"
+  },
+  {
+    "name": "Olivia",
+    "surname": "Brown",
+    "gender": "female",
+    "image": "/assets/chat/img_avatar_3.png"
+  }
+]
