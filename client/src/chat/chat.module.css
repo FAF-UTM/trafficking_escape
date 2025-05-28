@@ -365,6 +365,11 @@
   background: rgba(224, 63, 25, 0.2);
   color: #f14e29;
 }
+.chat_info_green {
+  border: 1px solid #5bf129;
+  background: rgba(25, 224, 52, 0.2);
+  color: #5bf129;
+}
 .chat_info_help {
   border: 1px solid #0080ff;
   background: rgba(0, 128, 255, 0.2);

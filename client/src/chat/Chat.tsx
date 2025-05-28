@@ -156,6 +156,9 @@ const Chat: React.FC = () => {
     }
   };
 
+  const truncate = (str: string, max: number) =>
+    str.length > max ? str.slice(0, max) + "..." : str;
+
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
     lastMessage: string,
@@ -422,12 +425,12 @@ const Chat: React.FC = () => {
 
     let randomUser = await getRandomChatUser();
 
-    // Try up to 2 more times if name already exists
+    // Try up to 4 more times if name already exists
     let attempts = 0;
     while (
       randomUser &&
       isNameAlreadyUsed(randomUser.fullName) &&
-      attempts < 2
+      attempts < 4
     ) {
       console.warn(
         `Duplicate name "${randomUser.fullName}" detected. Retrying...`
@@ -438,7 +441,7 @@ const Chat: React.FC = () => {
 
     if (!randomUser || isNameAlreadyUsed(randomUser.fullName)) {
       console.warn(
-        'Still duplicate after 3 attempts or failed to fetch user. Aborting.'
+        'Still duplicate after 5 attempts or failed to fetch user. Aborting.'
       );
       return;
     }
@@ -815,7 +818,7 @@ const Chat: React.FC = () => {
                     {chat.name}
                   </div>
                   <div className={styles.chat_navigation_block_text_message}>
-                    {chat.message}
+                    {truncate(chat.message, 40)}
                   </div>
                 </div>
               </div>
@@ -1158,6 +1161,18 @@ const Chat: React.FC = () => {
               Toggle language <br />
               current: {i18n.language.toUpperCase()}
             </button>
+            <div
+              className={`${styles.chat_info_btn} ${
+                activeChat?.isTrafficker
+                  ? styles.chat_info_report
+                  : styles.chat_info_green
+              }`}
+              style={{ cursor: 'none' }}
+            >
+              Is traffickant
+              <br />
+              {activeChat?.isTrafficker ? 'true' : 'false'}
+            </div>
           </div>
         </div>
 

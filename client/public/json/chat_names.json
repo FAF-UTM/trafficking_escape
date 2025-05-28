@@ -16,5 +16,23 @@
     "surname": "Brown",
     "gender": "female",
     "image": "/assets/chat/img_avatar_3.png"
+  },
+  {
+    "name": "Noah",
+    "surname": "Davis",
+    "gender": "male",
+    "image": "/assets/chat/img_avatar_4.png"
+  },
+  {
+    "name": "Ava",
+    "surname": "Wilson",
+    "gender": "female",
+    "image": "/assets/chat/img_avatar_5.png"
+  },
+  {
+    "name": "Mason",
+    "surname": "Taylor",
+    "gender": "male",
+    "image": "/assets/chat/img_avatar_6.png"
   }
 ]
