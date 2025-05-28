@@ -124,6 +124,40 @@ const Chat: React.FC = () => {
     setPopupVisibility((prev) => ({ ...prev, [id]: false }));
   };
 
+
+// only fetches the 3 options (no appending of chat bubbles)
+  const fetchSuggestions = async (
+    lastMessage: string,
+    currentDangerLevel: number,
+    isTrafficker: boolean
+  ) => {
+    try {
+      const res = await fetch(backend_api_generate, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          context: 'A child is chatting with someone online.',
+          lastMessage,
+          currentDangerLevel,
+          isTrafficker,
+        }),
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setOption1(data.option1 || '');
+      setOption2(data.option2 || '');
+      setOption3(data.option3 || '');
+      // and update danger-level if you want
+      setUpdatedDangerLevel(data.updatedDangerLevel || currentDangerLevel);
+    } catch (err) {
+      console.error('Error fetching suggestions:', err);
+    }
+  };
+
+
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
     lastMessage: string,
@@ -179,7 +213,7 @@ const Chat: React.FC = () => {
 
 // Split by sentence-ending punctuation followed by space or end of string
         const messageChunks = cleanedResponse
-          .split(/(?<=[.!?])\s+/)
+          .split(/(?<=[.!?;])\s+/)
           .map((chunk) => chunk.trim())
           .filter((chunk) => chunk.length > 0);
 
@@ -192,6 +226,37 @@ const Chat: React.FC = () => {
 
 
         setChatData((prevChatData) => [...prevChatData, newMessage]);
+
+// Save each chunk to backend
+        if (activeChat?.id) {
+          try {
+            for (const text of messageChunks) {
+              await fetch(backend_api_messages, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+                body: JSON.stringify({
+                  chatId: activeChat.id,
+                  isOutgoing: false,
+                  messageText: text,
+                }),
+              });
+            }
+
+            // Update preview with last message
+            const last = messageChunks[messageChunks.length - 1];
+            setChatUsers((prev) =>
+              prev.map((c) =>
+                c.id === activeChat.id ? { ...c, message: last } : c
+              )
+            );
+          } catch (err) {
+            console.error('Error saving incoming message:', err);
+          }
+        }
+
       }
     } catch (error) {
       console.error('Error in fetchAIResponse:', error);
@@ -288,6 +353,13 @@ const Chat: React.FC = () => {
   const [chatUsers, setChatUsers] = useState<
     { id: number; imgSrc: string; name: string; message: string }[]
   >([]);
+
+  // if we have at least one chat and nothing’s selected yet…
+  // if (chatUsers.length > 0 && activeChat === null) {
+  //   // pick the last chat in the list
+  //   const last = chatUsers[chatUsers.length - 1];
+  //   handleChatSelect(last);
+  // }
 
 
   const getRandomChatUser = async (): Promise<{
@@ -547,33 +619,19 @@ const Chat: React.FC = () => {
           messages: [m.messageText],
         }));
         setChatData(formattedMessages);
-        // Persist each AI-generated chunk
-        try {
-          const token = localStorage.getItem('authToken');
-          for (const text of messageChunks) {
-            await fetch(backend_api_messages, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                ...(token ? { Authorization: `Bearer ${token}` } : {}),
-              },
-              body: JSON.stringify({
-                chatId: activeChat!.id,
-                isOutgoing: false,
-                messageText: text,
-              }),
-            });
-          }
-          // Update last-message preview in left bar
-          const last = messageChunks[messageChunks.length - 1];
-          setChatUsers(prev =>
-            prev.map(c =>
-              c.id === activeChat!.id ? { ...c, message: last } : c
-            )
+// if the last message we just loaded was from the AI, re-fetch the 3 replies
+        const last = formattedMessages[formattedMessages.length - 1];
+        if (last.sendtype === 'got') {
+          // grab the last chunk of text
+          const lastText = last.messages[last.messages.length - 1];
+          fetchSuggestions(
+            lastText,
+            /* your currentDangerLevel  */ updatedDangerLevel,
+            /* the chat’s isTrafficker */ chatData.isTrafficker
           );
-        } catch (err) {
-          console.error('Error saving incoming message:', err);
         }
+
+
 
       }
     } catch (err) {
