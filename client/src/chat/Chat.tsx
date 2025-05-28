@@ -329,6 +329,44 @@ const Chat: React.FC = () => {
     }
   };
 
+  const createNewChat = async () => {
+    const token = localStorage.getItem('authToken');
+    const now = new Date().toISOString();
+
+    const createRes = await fetch(`${backend_api_chats}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({
+        chatImageUrl:
+          '/assets/chat/img_default_avatar.png',
+        chatName: 'Cristian Brinza',
+        isTrafficker: false,
+        createdAt: now,
+        updatedAt: now,
+      }),
+    });
+
+    if (createRes.ok) {
+      const newChat = await createRes.json();
+
+      setChatUsers((prev) => [
+        ...prev,
+        {
+          id: newChat.id,
+          imgSrc: newChat.chatImageUrl,
+          name: newChat.chatName,
+          message: 'No messages yet',
+        },
+      ]);
+    } else {
+      console.error('Failed to create new chat');
+    }
+  };
+
+
   return (
     <div className={styles.chat_wrap}>
       <div className={styles.chat}>
@@ -805,6 +843,7 @@ const Chat: React.FC = () => {
               className={styles.chat_info_btn}
               // onClick={() => generateNewChatUser('Hello, world!')}
               // onClick={() => fetchAIResponse('Hello', 3, false)}
+              onClick={createNewChat}
             >
               Add new chat
             </button>
