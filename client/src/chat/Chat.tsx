@@ -105,6 +105,16 @@ const Chat: React.FC = () => {
     setVisibleCharacter((prev) => (prev === id ? null : id));
   };
 
+  const [activeChat, setActiveChat] = useState<{
+    id: number;
+    name: string;
+    img: string;
+    isTrafficker: boolean;
+  } | null>(null);
+
+
+
+
   // Popup functions
   const showPopup = (id: string) => {
     setPopupVisibility((prev) => ({ ...prev, [id]: true }));
@@ -193,7 +203,13 @@ const Chat: React.FC = () => {
     setChatData((prevChatData) => [...prevChatData, userMessage]);
 
     // 2) Fire a new request with chosenOption as lastMessage
-    fetchAIResponse(chosenOption, updatedDangerLevel, false);
+    // fetchAIResponse(chosenOption, updatedDangerLevel, false);
+    useEffect(() => {
+      if (userId) {
+        fetchOrCreateChat();
+      }
+    }, [userId]);
+
   };
 
   const [activeLeftBarOption, setActiveLeftBarOption] = useState<string>('');
@@ -449,6 +465,48 @@ const Chat: React.FC = () => {
   };
 
 
+  const handleChatSelect = async (chat: {
+    id: number;
+    imgSrc: string;
+    name: string;
+    message: string;
+  }) => {
+    const token = localStorage.getItem('authToken');
+    try {
+      const res = await fetch(`${backend_api_chats}/${chat.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error('Failed to fetch selected chat');
+      const chatData = await res.json();
+
+      setActiveChat({
+        id: chatData.id,
+        name: chatData.chatName,
+        img: chatData.chatImageUrl,
+        isTrafficker: chatData.isTrafficker,
+      });
+
+      // Reset chatData and regenerate options if no messages
+      if (!chatData.messages || chatData.messages.length === 0) {
+        setChatData([]);
+        await fetchAIResponse('Hello', 0, chatData.isTrafficker);
+      } else {
+        const formattedMessages = chatData.messages.map((m: any) => ({
+          from: m.isOutgoing ? 'You' : chatData.chatName,
+          from_img: m.isOutgoing ? '' : chatData.chatImageUrl,
+          sendtype: m.isOutgoing ? 'send' : 'got',
+          messages: [m.messageText],
+        }));
+        setChatData(formattedMessages);
+      }
+    } catch (err) {
+      console.error('Error loading chat:', err);
+    }
+  };
+
+
   return (
     <div className={styles.chat_wrap}>
       <div className={styles.chat}>
@@ -594,7 +652,7 @@ const Chat: React.FC = () => {
           </div>
           <div className={styles.chat_navigation_blocks}>
             {chatUsers.map((chat, index) => (
-              <div key={index} className={styles.chat_navigation_block}>
+              <div key={index} className={styles.chat_navigation_block}  onClick={() => handleChatSelect(chat)}>
                 <img
                   className={styles.chat_navigation_block_img}
                   src={chat.imgSrc}
@@ -617,10 +675,10 @@ const Chat: React.FC = () => {
             <div className={styles.chat_conversation_top_left}>
               <img
                 className={styles.chat_conversation_top_picture}
-                src={active_chat_img}
+                src={activeChat?.img || '/default.png'}
                 alt="avatar"
               />
-              <span>{active_chat_name}</span>
+              <span>{activeChat?.name ?? 'No chat selected'}</span>
             </div>
 
             <div className={styles.chat_conversation_top_right}>
