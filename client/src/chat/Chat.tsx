@@ -204,11 +204,30 @@ const Chat: React.FC = () => {
 
     // 2) Fire a new request with chosenOption as lastMessage
     // fetchAIResponse(chosenOption, updatedDangerLevel, false);
-    useEffect(() => {
-      if (userId) {
-        fetchOrCreateChat();
+    // useEffect(() => {
+    //   if (userId) {
+    //     fetchOrCreateChat();
+    //   }
+    // }, [userId]);
+
+    // ✅ CONTINUE CHAT: Use fetchAIResponse
+    // ✅ CONTINUE CHAT with random delay (700ms–1800ms)
+    if (activeChat) {
+      const shouldDelay = Math.random() < 0.2; // 70% chance to delay
+
+      if (shouldDelay) {
+        const delay = 2100 + Math.random() * 400 | 0;
+        setTimeout(() => {
+          fetchAIResponse(cleanedOption, updatedDangerLevel, activeChat.isTrafficker);
+        }, delay);
+      } else {
+        const delay = 1000 + Math.random() * 400 | 0;
+        setTimeout(() => {
+          fetchAIResponse(cleanedOption, updatedDangerLevel, activeChat.isTrafficker);
+        }, delay);
       }
-    }, [userId]);
+    }
+
 
   };
 
@@ -279,7 +298,7 @@ const Chat: React.FC = () => {
       fetchOrCreateChat(); // or pass a dynamic name
       // console.log('authToken', token);
     }
-    fetchAIResponse('Hello', 3, false)
+    // fetchAIResponse('Hello', 3, false)
   }, []);
 
 
@@ -301,13 +320,15 @@ const Chat: React.FC = () => {
         // Format the chat list
         const formatted = chats.map((chat: any) => ({
           id: chat.id,
-          imgSrc: chat.chatImageUrl || '/default.png',
+          imgSrc: chat.chatImageUrl || '/assets/chat/img_default_avatar.png',
           name: chat.chatName,
           message:
             chat.messages?.[chat.messages.length - 1]?.messageText || 'No messages yet',
         }));
 
         setChatUsers(formatted);
+
+
       } catch (error) {
         console.error('Error fetching chats:', error);
       }
@@ -505,6 +526,8 @@ const Chat: React.FC = () => {
       console.error('Error loading chat:', err);
     }
   };
+
+
 
 
   return (
@@ -745,11 +768,15 @@ const Chat: React.FC = () => {
               >
                 <img
                   className={styles.chat_conversation_middle_message_from_img}
-                  src={active_chat_name}
-                  style={{ opacity: '0' }}
+                  // src={active_chat_name}
+                  src={activeChat?.img || '/assets/chat/img_default_avatar.png'}
+                  // style={{ opacity: '0' }}
                   alt="avatar"
                 />
                 <div className={styles.chat_conversation_middle_messages}>
+                  {/*<div className={styles.chat_conversation_middle_message_from}>*/}
+                  {/*  {activeChat?.name || ''}*/}
+                  {/*</div>*/}
                   <div className={styles.chat_typing_indicator}>
                     <span className={styles.dot}></span>
                     <span className={styles.dot}></span>
@@ -770,7 +797,8 @@ const Chat: React.FC = () => {
                 {message.sendtype === 'got' && (
                   <img
                     className={styles.chat_conversation_middle_message_from_img}
-                    src={message.from_img}
+                    // src={message.from_img}
+                    src={activeChat?.img || '/assets/chat/img_default_avatar.png'}
                     alt="avatar"
                   />
                 )}
@@ -779,7 +807,7 @@ const Chat: React.FC = () => {
                     <div
                       className={`${styles.chat_conversation_middle_message_from}`}
                     >
-                      {message.from}
+                      {activeChat?.name || ''}
                     </div>
                   )}
                   {message.messages.map((msg, msgIndex) => (
