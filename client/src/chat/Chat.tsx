@@ -215,8 +215,8 @@ const Chat: React.FC = () => {
         // Split by sentence-ending punctuation followed by space or end of string
         const messageChunks = cleanedResponse
           .split(/(?<=[.!?;])\s+/)
-          .map((chunk) => chunk.trim())
-          .filter((chunk) => chunk.length > 0);
+          .map((chunk: string) => chunk.trim())
+          .filter((chunk: string | any[]) => chunk.length > 0);
 
         const newMessage: ChatData = {
           from: 'Alex',
