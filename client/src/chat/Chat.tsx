@@ -15,7 +15,6 @@ const backend_api_messages = import.meta.env.VITE_BACKEND + '/api/messages';
 
 // const person_url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=${gender}&age=12-18&etnic=all`;
 
-
 interface ChatData {
   from: string;
   from_img: string;
@@ -113,9 +112,6 @@ const Chat: React.FC = () => {
     isTrafficker: boolean;
   } | null>(null);
 
-
-
-
   // Popup functions
   const showPopup = (id: string) => {
     setPopupVisibility((prev) => ({ ...prev, [id]: true }));
@@ -124,14 +120,13 @@ const Chat: React.FC = () => {
     setPopupVisibility((prev) => ({ ...prev, [id]: false }));
   };
 
-
-// only fetches the 3 options (no appending of chat bubbles)
+  // only fetches the 3 options (no appending of chat bubbles)
   const fetchSuggestions = async (
     lastMessage: string,
     currentDangerLevel: number,
     isTrafficker: boolean
   ) => {
-    setDisabledOptions(true);  // ← disable the buttons
+    setDisabledOptions(true); // ← disable the buttons
 
     try {
       const res = await fetch(backend_api_generate, {
@@ -156,11 +151,10 @@ const Chat: React.FC = () => {
       setUpdatedDangerLevel(data.updatedDangerLevel || currentDangerLevel);
     } catch (err) {
       console.error('Error fetching suggestions:', err);
-    }finally {
+    } finally {
       setDisabledOptions(false); // ← re-enable them
     }
   };
-
 
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
@@ -215,7 +209,7 @@ const Chat: React.FC = () => {
         // };
         const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '').trim();
 
-// Split by sentence-ending punctuation followed by space or end of string
+        // Split by sentence-ending punctuation followed by space or end of string
         const messageChunks = cleanedResponse
           .split(/(?<=[.!?;])\s+/)
           .map((chunk) => chunk.trim())
@@ -228,10 +222,9 @@ const Chat: React.FC = () => {
           messages: messageChunks,
         };
 
-
         setChatData((prevChatData) => [...prevChatData, newMessage]);
 
-// Save each chunk to backend
+        // Save each chunk to backend
         if (activeChat?.id) {
           try {
             for (const text of messageChunks) {
@@ -260,7 +253,6 @@ const Chat: React.FC = () => {
             console.error('Error saving incoming message:', err);
           }
         }
-
       }
     } catch (error) {
       console.error('Error in fetchAIResponse:', error);
@@ -288,7 +280,7 @@ const Chat: React.FC = () => {
     };
 
     // 1) Optimistically update UI
-    setChatData(prev => [...prev, userMessage]);
+    setChatData((prev) => [...prev, userMessage]);
 
     // 2) Persist to backend
     try {
@@ -306,8 +298,8 @@ const Chat: React.FC = () => {
         }),
       });
       // 3) Update last-message preview in left bar
-      setChatUsers(prev =>
-        prev.map(c =>
+      setChatUsers((prev) =>
+        prev.map((c) =>
           c.id === activeChat.id ? { ...c, message: cleaned } : c
         )
       );
@@ -316,15 +308,15 @@ const Chat: React.FC = () => {
     }
 
     // 4) Kick off AI reply with random delay
-    const delay = Math.random() < 0.2
-      ? 2100 + Math.random() * 400 | 0
-      : 1000 + Math.random() * 400 | 0;
+    const delay =
+      Math.random() < 0.2
+        ? (2100 + Math.random() * 400) | 0
+        : (1000 + Math.random() * 400) | 0;
 
     setTimeout(() => {
       fetchAIResponse(cleaned, updatedDangerLevel, activeChat.isTrafficker);
     }, delay);
   };
-
 
   const [activeLeftBarOption, setActiveLeftBarOption] = useState<string>('');
 
@@ -358,8 +350,6 @@ const Chat: React.FC = () => {
     { id: number; imgSrc: string; name: string; message: string }[]
   >([]);
 
-
-
   const getRandomChatUser = async (): Promise<{
     fullName: string;
     gender: string;
@@ -385,8 +375,6 @@ const Chat: React.FC = () => {
     }
   };
 
-
-
   const { userId } = useAuth();
   const now = new Date().toISOString();
   useEffect(() => {
@@ -396,9 +384,6 @@ const Chat: React.FC = () => {
     }
     // fetchAIResponse('Hello', 3, false)
   }, []);
-
-
-
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -419,12 +404,11 @@ const Chat: React.FC = () => {
           imgSrc: chat.chatImageUrl || '/assets/chat/img_default_avatar.png',
           name: chat.chatName,
           message:
-            chat.messages?.[chat.messages.length - 1]?.messageText || 'No messages yet',
+            chat.messages?.[chat.messages.length - 1]?.messageText ||
+            'No messages yet',
         }));
 
         setChatUsers(formatted);
-
-
       } catch (error) {
         console.error('Error fetching chats:', error);
       }
@@ -433,7 +417,6 @@ const Chat: React.FC = () => {
     if (userId) fetchChats();
   }, [userId]);
 
-
   const fetchOrCreateChat = async () => {
     const token = localStorage.getItem('authToken');
 
@@ -441,20 +424,24 @@ const Chat: React.FC = () => {
 
     // Try up to 2 more times if name already exists
     let attempts = 0;
-    while (randomUser && isNameAlreadyUsed(randomUser.fullName) && attempts < 2) {
-      console.warn(`Duplicate name "${randomUser.fullName}" detected. Retrying...`);
+    while (
+      randomUser &&
+      isNameAlreadyUsed(randomUser.fullName) &&
+      attempts < 2
+    ) {
+      console.warn(
+        `Duplicate name "${randomUser.fullName}" detected. Retrying...`
+      );
       randomUser = await getRandomChatUser();
       attempts++;
     }
 
     if (!randomUser || isNameAlreadyUsed(randomUser.fullName)) {
-      console.warn('Still duplicate after 3 attempts or failed to fetch user. Aborting.');
+      console.warn(
+        'Still duplicate after 3 attempts or failed to fetch user. Aborting.'
+      );
       return;
     }
-
-
-
-
 
     try {
       if (!userId) {
@@ -529,24 +516,30 @@ const Chat: React.FC = () => {
     const token = localStorage.getItem('authToken');
     const now = new Date().toISOString();
 
-      let randomUser = await getRandomChatUser();
+    let randomUser = await getRandomChatUser();
 
-      // Try up to 2 more times if name already exists
-      let attempts = 0;
-      while (randomUser && isNameAlreadyUsed(randomUser.fullName) && attempts < 2) {
-        console.warn(`Duplicate name "${randomUser.fullName}" detected. Retrying...`);
-        randomUser = await getRandomChatUser();
-        attempts++;
-      }
+    // Try up to 2 more times if name already exists
+    let attempts = 0;
+    while (
+      randomUser &&
+      isNameAlreadyUsed(randomUser.fullName) &&
+      attempts < 2
+    ) {
+      console.warn(
+        `Duplicate name "${randomUser.fullName}" detected. Retrying...`
+      );
+      randomUser = await getRandomChatUser();
+      attempts++;
+    }
 
-      if (!randomUser || isNameAlreadyUsed(randomUser.fullName)) {
-        console.warn('Still duplicate after 3 attempts or failed to fetch user. Aborting.');
-        return;
-      }
+    if (!randomUser || isNameAlreadyUsed(randomUser.fullName)) {
+      console.warn(
+        'Still duplicate after 3 attempts or failed to fetch user. Aborting.'
+      );
+      return;
+    }
 
-
-
-      const createRes = await fetch(`${backend_api_chats}`, {
+    const createRes = await fetch(`${backend_api_chats}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -581,7 +574,6 @@ const Chat: React.FC = () => {
     return chatUsers.some((chat) => chat.name === name);
   };
 
-
   const handleChatSelect = async (chat: {
     id: number;
     imgSrc: string;
@@ -591,9 +583,7 @@ const Chat: React.FC = () => {
     const token = localStorage.getItem('authToken');
     try {
       const res = await fetch(`${backend_api_chats}/${chat.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error('Failed to fetch selected chat');
       const chatData = await res.json();
@@ -605,32 +595,52 @@ const Chat: React.FC = () => {
         isTrafficker: chatData.isTrafficker,
       });
 
-      // Reset chatData and regenerate options if no messages
+      // no history → clear & start fresh
       if (!chatData.messages || chatData.messages.length === 0) {
         setChatData([]);
         await fetchAIResponse('Hello', 0, chatData.isTrafficker);
       } else {
-        const formattedMessages = chatData.messages.map((m: any) => ({
+        // build one‐chunk‐per‐message array
+        const formattedMessages: ChatData[] = chatData.messages.map((m: any) => ({
           from: m.isOutgoing ? 'You' : chatData.chatName,
           from_img: m.isOutgoing ? '' : chatData.chatImageUrl,
           sendtype: m.isOutgoing ? 'send' : 'got',
           messages: [m.messageText],
         }));
-        setChatData(formattedMessages);
-// if the last message we just loaded was from the AI, re-fetch the 3 replies
-        const last = formattedMessages[formattedMessages.length - 1];
+
+        // now collapse any back‐to‐back "got" entries
+        const grouped: ChatData[] = [];
+        for (const msg of formattedMessages) {
+          if (
+            msg.sendtype === 'got' &&
+            grouped.length > 0 &&
+            grouped[grouped.length - 1].sendtype === 'got'
+          ) {
+            // merge into previous incoming block
+            grouped[grouped.length - 1].messages.push(...msg.messages);
+          } else {
+            // start a new group
+            grouped.push({
+              from: msg.from,
+              from_img: msg.from_img,
+              sendtype: msg.sendtype,
+              messages: [...msg.messages],
+            });
+          }
+        }
+
+        setChatData(grouped);
+
+        // if the last loaded message was from the AI, fetch fresh suggestions
+        const last = grouped[grouped.length - 1];
         if (last.sendtype === 'got') {
-          // grab the last chunk of text
           const lastText = last.messages[last.messages.length - 1];
           fetchSuggestions(
             lastText,
-            /* your currentDangerLevel  */ updatedDangerLevel,
-            /* the chat’s isTrafficker */ chatData.isTrafficker
+            updatedDangerLevel,
+            chatData.isTrafficker
           );
         }
-
-
-
       }
     } catch (err) {
       console.error('Error loading chat:', err);
@@ -644,7 +654,6 @@ const Chat: React.FC = () => {
       handleChatSelect(last);
     }
   }, [chatUsers, activeChat]);
-
 
   return (
     <div className={styles.chat_wrap}>
@@ -791,7 +800,11 @@ const Chat: React.FC = () => {
           </div>
           <div className={styles.chat_navigation_blocks}>
             {chatUsers.map((chat, index) => (
-              <div key={index} className={styles.chat_navigation_block}  onClick={() => handleChatSelect(chat)}>
+              <div
+                key={index}
+                className={styles.chat_navigation_block}
+                onClick={() => handleChatSelect(chat)}
+              >
                 <img
                   className={styles.chat_navigation_block_img}
                   src={chat.imgSrc}
@@ -914,7 +927,9 @@ const Chat: React.FC = () => {
                   <img
                     className={styles.chat_conversation_middle_message_from_img}
                     // src={message.from_img}
-                    src={activeChat?.img || '/assets/chat/img_default_avatar.png'}
+                    src={
+                      activeChat?.img || '/assets/chat/img_default_avatar.png'
+                    }
                     alt="avatar"
                   />
                 )}
