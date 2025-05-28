@@ -298,7 +298,7 @@ const Chat: React.FC = () => {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           body: JSON.stringify({
-            chatImageUrl: 'https://example.com/avatar.png',
+            chatImageUrl: '/assets/chat/img_default_avatar.png',
             chatName: chatName,
             isTrafficker: true,
             createdAt: now,
