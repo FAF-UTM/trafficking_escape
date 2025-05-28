@@ -581,7 +581,7 @@ const Chat: React.FC = () => {
     }
   };
 
-  const backend_api_messages = import.meta.env.VITE_BACKEND + '/api/messages';
+
 
 
 
