@@ -44,7 +44,7 @@ public class MessageGenerationService {
                     "%s"
                     
                     - Each response should reflect realistic behavior for a cautious or naive 13-year-old girl.
-                    - For each response, assign a **Risk Level** (integer between 1 and 10).
+                    - For each response, assign a **Risk Level** (integer between -10 and 10).
                     - Format strictly as:
                     1. <Response Option> (Risk Level: <Integer>)
                     2. <Response Option> (Risk Level: <Integer>)
