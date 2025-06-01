@@ -15,40 +15,52 @@ import java.util.Map;
 public class MessageGenerationService {
     private final GPTConfig gptConfig;
 
-    public Map<String, Object> continueConversation(String context, String lastMessage, int currentDangerLevel, boolean isTrafficker) {
+    public Map<String, Object> continueConversation(String context,
+                                                    String lastMessage,
+                                                    int currentDangerLevel,
+                                                    boolean isTrafficker) {
         try {
-            // Generate the chat response based on the isTrafficker flag and danger level
+            /* ----------------------------------------------------------
+             * 1. NPC (trafficker / child) reply -- now with emoji guidance
+             * ---------------------------------------------------------- */
             String chatResponsePrompt = String.format("""
-                    This is an educational game designed to teach children about online safety. 
-                    The player is a 13-year-old girl chatting with someone online. 
-                    The AI must generate a single response from the person the player is chatting with.
-                    - If the person is a trafficker, their response should be manipulative, subtle, and increase tension.
-                    - If the person is another child, their response should be friendly and innocent.
-                    - Consider the current danger level (%d) and adjust the tone of the response accordingly.
-                    
-                    The current conversation context is: "%s".
-                    The last message from the player was: "%s".
-                    
-                    Provide only the response as a single line of text.
+                    This is an educational game designed to teach children about online safety.
+                    The player is a 13-year-old girl chatting with someone online.
+                    The AI must generate a **single** reply from the person the player is chatting with.
+
+                    • If the person **is a trafficker**, the reply should be subtle, manipulative, raise tension **and use 1–2 “groomer-style” emojis** (e.g. 😉✨, 😏👍, 😘😉).  
+                    • If the person **is another child**, the reply should be friendly, innocent, and contain **at least one playful emoji** suitable for a 13-year-old (e.g. 😊, 😂, 🤗).  
+                    • Take the current danger level (%d) into account when deciding tone and wording.
+
+                    Conversation so far: "%s"
+                    Player’s last message: "%s"
+
+                    👉 Return only the NPC’s reply as **one line of text**.
                     """, currentDangerLevel, context, lastMessage);
 
             JsonNode chatResponseJson = gptConfig.sendGPTRequest(chatResponsePrompt, "gpt-4o-mini");
             String chatResponse = parseChatResponse(chatResponseJson);
 
-            // Generate three player response options to the chat response
+            /* ----------------------------------------------------------
+             * 2. Three player-response options -- each with one emoji
+             * ---------------------------------------------------------- */
             String playerResponsePrompt = String.format("""
-                    This is an educational game designed to teach children about online safety. 
-                    The player is a 13-year-old girl chatting with someone online. 
-                    The AI must generate three distinct response options for the player to choose from, replying to the following message:
-                    
+                    This is an educational game designed to teach children about online safety.
+                    The player is a 13-year-old girl chatting with someone online.
+
+                    Generate **three** distinct replies the player could send back to **the message below** (she can be naive or cautious):
+
                     "%s"
-                    
-                    - Each response should reflect realistic behavior for a cautious or naive 13-year-old girl.
-                    - For each response, assign a **Risk Level** (integer between -10 and 10).
-                    - Format strictly as:
-                    1. <Response Option> (Risk Level: <Integer>)
-                    2. <Response Option> (Risk Level: <Integer>)
-                    3. <Response Option> (Risk Level: <Integer>)
+
+                    Rules for each option:
+                    • Must feel natural for a 13-year-old girl.
+                    • **Include exactly one emoji** that fits the emotional tone.
+                    • Assign a **Risk Level** integer (−10 to 10) indicating how risky that reply is.
+
+                    Format **exactly** like:
+                    1. <Response option> (Risk Level: <Integer>)
+                    2. <Response option> (Risk Level: <Integer>)
+                    3. <Response option> (Risk Level: <Integer>)
                     """, chatResponse);
 
             JsonNode playerResponseJson = gptConfig.sendGPTRequest(playerResponsePrompt, "gpt-4o-mini");
@@ -57,10 +69,10 @@ public class MessageGenerationService {
             int[] dangerLevels = new int[3];
             parseResponses(playerResponseJson, options, dangerLevels);
 
-            // Update the current danger level
-            int updatedDangerLevel = currentDangerLevel + Math.max(dangerLevels[0], Math.max(dangerLevels[1], dangerLevels[2]));
+            int updatedDangerLevel =
+                    currentDangerLevel + Math.max(dangerLevels[0],
+                            Math.max(dangerLevels[1], dangerLevels[2]));
 
-            // Compile the result
             Map<String, Object> result = new HashMap<>();
             result.put("chatResponse", chatResponse);
             result.put("option1", options[0]);
@@ -71,13 +83,15 @@ public class MessageGenerationService {
             result.put("dangerLevel3", dangerLevels[2]);
             result.put("updatedDangerLevel", updatedDangerLevel);
             result.put("isTrafficker", isTrafficker);
-
             return result;
+
         } catch (Exception e) {
             log.error("Error generating conversation options", e);
             throw new RuntimeException("Failed to continue the conversation", e);
         }
     }
+
+    /* ---------- helpers (unchanged) ---------- */
 
     private String parseChatResponse(JsonNode chatResponseJson) {
         JsonNode choices = chatResponseJson.get("choices");
@@ -89,7 +103,6 @@ public class MessageGenerationService {
 
     private void parseResponses(JsonNode choicesJson, String[] options, int[] dangerLevels) {
         int optionIndex = 0;
-
         JsonNode choices = choicesJson.get("choices");
         if (choices == null || choices.isEmpty()) {
             throw new RuntimeException("No responses received from GPT API for player responses.");
@@ -97,31 +110,26 @@ public class MessageGenerationService {
 
         for (JsonNode choice : choices) {
             String text = choice.get("message").get("content").asText().trim();
-
-            // Match each response option
-            String[] lines = text.split("\n");
-            for (String line : lines) {
+            for (String line : text.split("\n")) {
                 if (optionIndex >= 3) break;
-
-                String trimmedLine = line.trim();
-                if (trimmedLine.matches("\\d+\\. .*\\(Risk Level: \\d+\\)")) {
-                    // Extract response and risk level
-                    int start = trimmedLine.indexOf('.') + 1;
-                    int end = trimmedLine.lastIndexOf("(Risk Level:");
-                    String response = trimmedLine.substring(start, end).trim();
-                    int riskLevel = Integer.parseInt(trimmedLine.substring(trimmedLine.lastIndexOf(":") + 1, trimmedLine.lastIndexOf(')')).trim());
-
-                    options[optionIndex] = response;
-                    dangerLevels[optionIndex] = riskLevel;
+                String trimmed = line.trim();
+                if (trimmed.matches("\\d+\\. .*\\(Risk Level: \\-?\\d+\\)")) {
+                    int start = trimmed.indexOf('.') + 1;
+                    int end = trimmed.lastIndexOf("(Risk Level:");
+                    options[optionIndex] =
+                            trimmed.substring(start, end).trim();
+                    dangerLevels[optionIndex] =
+                            Integer.parseInt(trimmed.substring(
+                                    trimmed.lastIndexOf(':') + 1,
+                                    trimmed.lastIndexOf(')')).trim());
                     optionIndex++;
                 }
             }
         }
 
-        // Fill in defaults for any missing options
-        while (optionIndex < 3) {
-            options[optionIndex] = "I'm not sure what to say."; // Default fallback response
-            dangerLevels[optionIndex] = 1; // Low risk
+        while (optionIndex < 3) {          // fallback values
+            options[optionIndex] = "I'm not sure what to say. 🤔";
+            dangerLevels[optionIndex] = 1;
             optionIndex++;
         }
     }
