@@ -12,7 +12,7 @@ const WORLD_WIDTH = 5000;
 const WORLD_HEIGHT = 1000;
 const PLAYER_WIDTH = 80;
 const PLAYER_HEIGHT = 120;
-const GRAVITY = 0.5; // Updated gravity
+const GRAVITY = 0.45; // Updated gravity
 const JUMP_SPEED = -12; // Updated jump speed
 const ACCELERATION = 1; // Updated acceleration
 const FRICTION = 0.85; // Updated friction
@@ -55,7 +55,7 @@ const Platformer: React.FC = () => {
   const [camera, setCamera] = useState({ x: 0, y: 0 });
   const [player, setPlayer] = useState({
     x: 100,
-    y: WORLD_HEIGHT - PLAYER_HEIGHT,
+    y: WORLD_HEIGHT - PLAYER_HEIGHT - 20,
     width: PLAYER_WIDTH,
     height: PLAYER_HEIGHT,
     vx: 0,
@@ -99,36 +99,37 @@ const Platformer: React.FC = () => {
   const obstacles: ObstacleType[] = [
     {
       x: 400,
-      y: WORLD_HEIGHT - 40,
-      width: 20,
-      height: 40,
+      y: WORLD_HEIGHT - 55,
+      height: 70,
+      width: 63,
       damage: 25,
-      color: 'gray',
+      color: '/assets/platformer/obstacle_1.png',
     },
+
     {
       x: 800,
-      y: WORLD_HEIGHT - 60,
-      width: 30,
-      height: 60,
+      y: WORLD_HEIGHT - 90,
+      width: 96,
+      height: 100,
       damage: 50,
-      color: 'darkgray',
+      color: '/assets/platformer/obstacle_2.png',
     },
     // Additional obstacles
     {
       x: 1200,
       y: WORLD_HEIGHT - 50,
-      width: 25,
-      height: 50,
+      height: 70,
+      width: 63,
       damage: 25,
-      color: 'gray',
+      color: '/assets/platformer/obstacle_1.png',
     },
     {
       x: 1600,
       y: WORLD_HEIGHT - 70,
-      width: 35,
-      height: 70,
+      width: 96,
+      height: 100,
       damage: 50,
-      color: 'darkgray',
+      color: '/assets/platformer/obstacle_2.png',
     },
     // ... Add more obstacles as needed
   ];
@@ -139,24 +140,24 @@ const Platformer: React.FC = () => {
     ...Array.from({ length: 10 }, (_, i) => ({
       x: 200 + i * 400, // Spread along the ground
       y: WORLD_HEIGHT - 50, // On top of the ground
-      width: 20,
-      height: 20,
+      width: 50,
+      height: 50,
       collected: false,
       type: Math.random() < 0.5 ? ('health' as const) : ('score' as const), // Type assertion here
-      baseY: WORLD_HEIGHT - 50,
+      baseY: WORLD_HEIGHT - 80,
       floatOffset: Math.random() * Math.PI * 2,
     })),
     // Collectibles on platforms
     ...platforms
       .filter((platform) => platform.y < WORLD_HEIGHT - 50) // Exclude the ground platform
       .map((platform) => ({
-        x: platform.x + platform.width / 2 - 10, // Centered on the platform
-        y: platform.y - 20, // On top of the platform
-        width: 20,
-        height: 20,
+        x: platform.x + platform.width / 2 - 25, // Centered on the platform
+        y: platform.y + 120, // On top of the platform
+        width: 50,
+        height: 50,
         collected: false,
         type: Math.random() < 0.5 ? ('health' as const) : ('score' as const), // Type assertion here
-        baseY: platform.y - 20,
+        baseY: platform.y - 60,
         floatOffset: Math.random() * Math.PI * 2,
       })),
   ]);
@@ -489,7 +490,7 @@ const Platformer: React.FC = () => {
             y={obstacle.y - camera.y}
             width={obstacle.width}
             height={obstacle.height}
-            color={obstacle.color}
+            element={obstacle.color}
           />
         ))}
 

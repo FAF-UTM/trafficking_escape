@@ -1,26 +1,19 @@
 import styles from './chat.module.css';
 import React, { useEffect, useState } from 'react';
 import Character from '../components/character/Character.tsx';
-// import { useAuth } from '../context/AuthContext.tsx';
 import { useTranslation } from 'react-i18next';
-
-
-// interface ChatUsers {
-//   imgSrc: string;
-//   name: string;
-//   message: string;
-//   chatID: string;
-// }
+import { useAuth } from '../context/AuthContext.tsx';
 
 const backend_api_generate =
   import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
-// const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/v1/get-chats';
-// const person_url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=${gender}&age=12-18&etnic=all`;
 
 const active_chat_name = 'Alex Cara';
 const active_chat_img =
   'https://scontent-otp1-1.xx.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=31SphODCOLIQ7kNvwE32Nje&_nc_oc=Adknk7GF9oSbP_1zw41Md8h9m3_bO-RibDYDBhgAJktRcrZKCaSY5oYg36ALnmUfzCk&_nc_zt=24&_nc_ht=scontent-otp1-1.xx&oh=00_AfL9IyOp7xUaqn4wdrdjCjlFZVYkT1k-rjnTU-3ad0oQlg&oe=6847F2BA';
+const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/chats';
+const backend_api_messages = import.meta.env.VITE_BACKEND + '/api/messages';
 
+// const person_url = `https://this-person-does-not-exist.com/new?time=${timeParam}&gender=${gender}&age=12-18&etnic=all`;
 
 interface ChatData {
   from: string;
@@ -61,7 +54,6 @@ interface ChatData {
 
 const Chat: React.FC = () => {
   const { t, i18n } = useTranslation();
-
   // const { isAuthenticated } = useAuth(); // or whatever your context returns
   const token = localStorage.getItem('authToken');
 
@@ -91,7 +83,6 @@ const Chat: React.FC = () => {
     setSettingsVisibility(false);
   };
 
-
   const [chatData, setChatData] = useState<ChatData[]>(initialChatData);
 
   const [disabledOptions, setDisabledOptions] = useState(false);
@@ -114,6 +105,13 @@ const Chat: React.FC = () => {
     setVisibleCharacter((prev) => (prev === id ? null : id));
   };
 
+  const [activeChat, setActiveChat] = useState<{
+    id: number;
+    name: string;
+    img: string;
+    isTrafficker: boolean;
+  } | null>(null);
+
   // Popup functions
   const showPopup = (id: string) => {
     setPopupVisibility((prev) => ({ ...prev, [id]: true }));
@@ -122,8 +120,44 @@ const Chat: React.FC = () => {
     setPopupVisibility((prev) => ({ ...prev, [id]: false }));
   };
 
+  // only fetches the 3 options (no appending of chat bubbles)
+  const fetchSuggestions = async (
+    lastMessage: string,
+    currentDangerLevel: number,
+    isTrafficker: boolean
+  ) => {
+    setDisabledOptions(true); // ← disable the buttons
 
+    try {
+      const res = await fetch(backend_api_generate, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          context: 'A child is chatting with someone online.',
+          lastMessage,
+          currentDangerLevel,
+          isTrafficker,
+        }),
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setOption1(data.option1 || '');
+      setOption2(data.option2 || '');
+      setOption3(data.option3 || '');
+      // and update danger-level if you want
+      setUpdatedDangerLevel(data.updatedDangerLevel || currentDangerLevel);
+    } catch (err) {
+      console.error('Error fetching suggestions:', err);
+    } finally {
+      setDisabledOptions(false); // ← re-enable them
+    }
+  };
 
+  const truncate = (str: string, max: number) =>
+    str.length > max ? str.slice(0, max) + "..." : str;
 
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
@@ -169,15 +203,59 @@ const Chat: React.FC = () => {
 
       // *** Add the AI's chatResponse to the chat as a "got" message ***
       if (data.chatResponse) {
-        const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '');
+        // const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '');
+        // const newMessage: ChatData = {
+        //   from: 'Alex',
+        //   from_img: active_chat_img,
+        //   sendtype: 'got',
+        //   messages: [cleanedResponse],
+        // };
+        const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '').trim();
+
+        // Split by sentence-ending punctuation followed by space or end of string
+        const messageChunks = cleanedResponse
+          .split(/(?<=[.!?;])\s+/)
+          .map((chunk: string) => chunk.trim())
+          .filter((chunk: string | any[]) => chunk.length > 0);
+
         const newMessage: ChatData = {
           from: 'Alex',
           from_img: active_chat_img,
           sendtype: 'got',
-          messages: [cleanedResponse],
+          messages: messageChunks,
         };
 
         setChatData((prevChatData) => [...prevChatData, newMessage]);
+
+        // Save each chunk to backend
+        if (activeChat?.id) {
+          try {
+            for (const text of messageChunks) {
+              await fetch(backend_api_messages, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+                body: JSON.stringify({
+                  chatId: activeChat.id,
+                  isOutgoing: false,
+                  messageText: text,
+                }),
+              });
+            }
+
+            // Update preview with last message
+            const last = messageChunks[messageChunks.length - 1];
+            setChatUsers((prev) =>
+              prev.map((c) =>
+                c.id === activeChat.id ? { ...c, message: last } : c
+              )
+            );
+          } catch (err) {
+            console.error('Error saving incoming message:', err);
+          }
+        }
       }
     } catch (error) {
       console.error('Error in fetchAIResponse:', error);
@@ -191,22 +269,56 @@ const Chat: React.FC = () => {
   // Only run the “Hello” request once
   // const hasFetchedRef = useRef(false);
 
-
   // *** Handler when the user clicks one of the options ***
-  const handleOptionClick = (chosenOption: string) => {
-    setDisabledOptions(true); // Disable the options
-    // 1) Add the chosen message to chat as 'send'
-    const cleanedOption = chosenOption.replace(/^"|"$/g, '');
+  const handleOptionClick = async (chosenOption: string) => {
+    if (!activeChat) return;
+    setDisabledOptions(true);
+
+    const cleaned = chosenOption.replace(/^"|"$/g, '').trim();
     const userMessage: ChatData = {
       from: 'You',
       from_img: '',
       sendtype: 'send',
-      messages: [cleanedOption],
+      messages: [cleaned],
     };
-    setChatData((prevChatData) => [...prevChatData, userMessage]);
 
-    // 2) Fire a new request with chosenOption as lastMessage
-    fetchAIResponse(chosenOption, updatedDangerLevel, false);
+    // 1) Optimistically update UI
+    setChatData((prev) => [...prev, userMessage]);
+
+    // 2) Persist to backend
+    try {
+      const token = localStorage.getItem('authToken');
+      await fetch(backend_api_messages, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          chatId: activeChat.id,
+          isOutgoing: true,
+          messageText: cleaned,
+        }),
+      });
+      // 3) Update last-message preview in left bar
+      setChatUsers((prev) =>
+        prev.map((c) =>
+          c.id === activeChat.id ? { ...c, message: cleaned } : c
+        )
+      );
+    } catch (err) {
+      console.error('Error saving outgoing message:', err);
+    }
+
+    // 4) Kick off AI reply with random delay
+    const delay =
+      Math.random() < 0.2
+        ? (2100 + Math.random() * 400) | 0
+        : (1000 + Math.random() * 400) | 0;
+
+    setTimeout(() => {
+      fetchAIResponse(cleaned, updatedDangerLevel, activeChat.isTrafficker);
+    }, delay);
   };
 
   const [activeLeftBarOption, setActiveLeftBarOption] = useState<string>('');
@@ -237,6 +349,314 @@ const Chat: React.FC = () => {
     i18n.changeLanguage(newLanguage);
   };
 
+  const [chatUsers, setChatUsers] = useState<
+    { id: number; imgSrc: string; name: string; message: string }[]
+  >([]);
+
+  const getRandomChatUser = async (): Promise<{
+    fullName: string;
+    gender: string;
+    image: string;
+  } | null> => {
+    try {
+      const res = await fetch('/json/chat_names.json');
+      if (!res.ok) throw new Error('Failed to load chat names JSON');
+      const data = await res.json();
+
+      if (!Array.isArray(data) || data.length === 0) return null;
+
+      const randomIndex = Math.floor(Math.random() * data.length);
+      const user = data[randomIndex];
+      return {
+        fullName: `${user.name} ${user.surname}`,
+        gender: user.gender,
+        image: user.image,
+      };
+    } catch (err) {
+      console.error('Error fetching random chat user:', err);
+      return null;
+    }
+  };
+
+  const { userId } = useAuth();
+  const now = new Date().toISOString();
+  useEffect(() => {
+    if (userId) {
+      fetchOrCreateChat(); // or pass a dynamic name
+      // console.log('authToken', token);
+    }
+    // fetchAIResponse('Hello', 3, false)
+  }, []);
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${backend_api_chats}/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error('Failed to fetch chats');
+        const chats = await res.json();
+
+        // Format the chat list
+        const formatted = chats.map((chat: any) => ({
+          id: chat.id,
+          imgSrc: chat.chatImageUrl || '/assets/chat/img_default_avatar.png',
+          name: chat.chatName,
+          message:
+            chat.messages?.[chat.messages.length - 1]?.messageText ||
+            'No messages yet',
+        }));
+
+        setChatUsers(formatted);
+      } catch (error) {
+        console.error('Error fetching chats:', error);
+      }
+    };
+
+    if (userId) fetchChats();
+  }, [userId]);
+
+  const fetchOrCreateChat = async () => {
+    const token = localStorage.getItem('authToken');
+
+    let randomUser = await getRandomChatUser();
+
+    // Try up to 4 more times if name already exists
+    let attempts = 0;
+    while (
+      randomUser &&
+      isNameAlreadyUsed(randomUser.fullName) &&
+      attempts < 4
+    ) {
+      console.warn(
+        `Duplicate name "${randomUser.fullName}" detected. Retrying...`
+      );
+      randomUser = await getRandomChatUser();
+      attempts++;
+    }
+
+    if (!randomUser || isNameAlreadyUsed(randomUser.fullName)) {
+      console.warn(
+        'Still duplicate after 5 attempts or failed to fetch user. Aborting.'
+      );
+      return;
+    }
+
+    try {
+      if (!userId) {
+        console.error('No userId available in context.');
+        return;
+      }
+      const res = await fetch(`${backend_api_chats}/user/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // *** Attach token in the Authorization header ***
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+      if (!res.ok) throw new Error('Failed to fetch chats');
+
+      const chats = await res.json();
+      console.log('Fetched chat by userId:', chats);
+      if (chats.length > 0) {
+        console.log('User already has chats:', chats);
+        return chats;
+      } else {
+        // No chats found, create one
+        const createRes = await fetch(backend_api_chats, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({
+            chatImageUrl: randomUser.image,
+            chatName: randomUser.fullName,
+            isTrafficker: Math.random() < 0.2, // 20% chance to be true
+            createdAt: now,
+            updatedAt: now,
+            // messages: [
+            //   {
+            //     id: 1,
+            //     chatId: 0,
+            //     isOutgoing: true,
+            //     messageText: 'Hello!',
+            //     sentAt: now,
+            //   },
+            // ],
+          }),
+        });
+
+        console.log(now);
+
+        if (!createRes.ok) throw new Error('Failed to create chat');
+
+        const newChat = await createRes.json();
+        setChatUsers((prev) => [
+          ...prev,
+          {
+            id: newChat.id,
+            imgSrc: newChat.chatImageUrl,
+            name: newChat.chatName,
+            message: 'No messages yet',
+          },
+        ]);
+        console.log('Created new chat:', newChat);
+        return [newChat];
+      }
+    } catch (error) {
+      console.error('Error in fetchOrCreateChat:', error);
+      return [];
+    }
+  };
+
+  const createNewChat = async () => {
+    const token = localStorage.getItem('authToken');
+    const now = new Date().toISOString();
+
+    let randomUser = await getRandomChatUser();
+
+    // Try up to 2 more times if name already exists
+    let attempts = 0;
+    while (
+      randomUser &&
+      isNameAlreadyUsed(randomUser.fullName) &&
+      attempts < 2
+    ) {
+      console.warn(
+        `Duplicate name "${randomUser.fullName}" detected. Retrying...`
+      );
+      randomUser = await getRandomChatUser();
+      attempts++;
+    }
+
+    if (!randomUser || isNameAlreadyUsed(randomUser.fullName)) {
+      console.warn(
+        'Still duplicate after 3 attempts or failed to fetch user. Aborting.'
+      );
+      return;
+    }
+
+    const createRes = await fetch(`${backend_api_chats}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({
+        chatImageUrl: randomUser.image,
+        chatName: randomUser.fullName,
+        isTrafficker: Math.random() < 0.2, // 20% chance to be true
+        createdAt: now,
+        updatedAt: now,
+      }),
+    });
+
+    if (createRes.ok) {
+      const newChat = await createRes.json();
+
+      setChatUsers((prev) => [
+        ...prev,
+        {
+          id: newChat.id,
+          imgSrc: newChat.chatImageUrl,
+          name: newChat.chatName,
+          message: 'No messages yet',
+        },
+      ]);
+    } else {
+      console.error('Failed to create new chat');
+    }
+  };
+  const isNameAlreadyUsed = (name: string): boolean => {
+    return chatUsers.some((chat) => chat.name === name);
+  };
+
+  const handleChatSelect = async (chat: {
+    id: number;
+    imgSrc: string;
+    name: string;
+    message: string;
+  }) => {
+    const token = localStorage.getItem('authToken');
+    try {
+      const res = await fetch(`${backend_api_chats}/${chat.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error('Failed to fetch selected chat');
+      const chatData = await res.json();
+
+      setActiveChat({
+        id: chatData.id,
+        name: chatData.chatName,
+        img: chatData.chatImageUrl,
+        isTrafficker: chatData.isTrafficker,
+      });
+
+      // no history → clear & start fresh
+      if (!chatData.messages || chatData.messages.length === 0) {
+        setChatData([]);
+        await fetchAIResponse('Hello', 0, chatData.isTrafficker);
+      } else {
+        // build one‐chunk‐per‐message array
+        const formattedMessages: ChatData[] = chatData.messages.map((m: any) => ({
+          from: m.isOutgoing ? 'You' : chatData.chatName,
+          from_img: m.isOutgoing ? '' : chatData.chatImageUrl,
+          sendtype: m.isOutgoing ? 'send' : 'got',
+          messages: [m.messageText],
+        }));
+
+        // now collapse any back‐to‐back "got" entries
+        const grouped: ChatData[] = [];
+        for (const msg of formattedMessages) {
+          if (
+            msg.sendtype === 'got' &&
+            grouped.length > 0 &&
+            grouped[grouped.length - 1].sendtype === 'got'
+          ) {
+            // merge into previous incoming block
+            grouped[grouped.length - 1].messages.push(...msg.messages);
+          } else {
+            // start a new group
+            grouped.push({
+              from: msg.from,
+              from_img: msg.from_img,
+              sendtype: msg.sendtype,
+              messages: [...msg.messages],
+            });
+          }
+        }
+
+        setChatData(grouped);
+
+        // if the last loaded message was from the AI, fetch fresh suggestions
+        const last = grouped[grouped.length - 1];
+        if (last.sendtype === 'got') {
+          const lastText = last.messages[last.messages.length - 1];
+          fetchSuggestions(
+            lastText,
+            updatedDangerLevel,
+            chatData.isTrafficker
+          );
+        }
+      }
+    } catch (err) {
+      console.error('Error loading chat:', err);
+    }
+  };
+
+
+  useEffect(() => {
+    if (chatUsers.length > 0 && activeChat === null) {
+      const last = chatUsers[chatUsers.length - 1];
+      handleChatSelect(last);
+    }
+  }, [chatUsers, activeChat]);
 
   return (
     <div className={styles.chat_wrap}>
@@ -382,23 +802,27 @@ const Chat: React.FC = () => {
             <input type="text" placeholder={t('chat.serach_in_mess')} />
           </div>
           <div className={styles.chat_navigation_blocks}>
-            {/*{chatUsers.map((chat, index) => (*/}
-            {/*  <div key={index} className={styles.chat_navigation_block}>*/}
-            {/*    <img*/}
-            {/*      className={styles.chat_navigation_block_img}*/}
-            {/*      src={chat.imgSrc}*/}
-            {/*      alt="avatar"*/}
-            {/*    />*/}
-            {/*    <div className={styles.chat_navigation_block_text}>*/}
-            {/*      <div className={styles.chat_navigation_block_text_name}>*/}
-            {/*        {chat.name}*/}
-            {/*      </div>*/}
-            {/*      <div className={styles.chat_navigation_block_text_message}>*/}
-            {/*        {chat.message}*/}
-            {/*      </div>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*))}*/}
+            {chatUsers.map((chat, index) => (
+              <div
+                key={index}
+                className={styles.chat_navigation_block}
+                onClick={() => handleChatSelect(chat)}
+              >
+                <img
+                  className={styles.chat_navigation_block_img}
+                  src={chat.imgSrc}
+                  alt="avatar"
+                />
+                <div className={styles.chat_navigation_block_text}>
+                  <div className={styles.chat_navigation_block_text_name}>
+                    {chat.name}
+                  </div>
+                  <div className={styles.chat_navigation_block_text_message}>
+                    {truncate(chat.message, 40)}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <div className={styles.chat_conversation}>
@@ -406,10 +830,10 @@ const Chat: React.FC = () => {
             <div className={styles.chat_conversation_top_left}>
               <img
                 className={styles.chat_conversation_top_picture}
-                src={active_chat_img}
+                src={activeChat?.img || '/default.png'}
                 alt="avatar"
               />
-              <span>{active_chat_name}</span>
+              <span>{activeChat?.name ?? 'No chat selected'}</span>
             </div>
 
             <div className={styles.chat_conversation_top_right}>
@@ -476,11 +900,15 @@ const Chat: React.FC = () => {
               >
                 <img
                   className={styles.chat_conversation_middle_message_from_img}
-                  src={active_chat_name}
-                  style={{ opacity: '0' }}
+                  // src={active_chat_name}
+                  src={activeChat?.img || '/assets/chat/img_default_avatar.png'}
+                  // style={{ opacity: '0' }}
                   alt="avatar"
                 />
                 <div className={styles.chat_conversation_middle_messages}>
+                  {/*<div className={styles.chat_conversation_middle_message_from}>*/}
+                  {/*  {activeChat?.name || ''}*/}
+                  {/*</div>*/}
                   <div className={styles.chat_typing_indicator}>
                     <span className={styles.dot}></span>
                     <span className={styles.dot}></span>
@@ -501,7 +929,10 @@ const Chat: React.FC = () => {
                 {message.sendtype === 'got' && (
                   <img
                     className={styles.chat_conversation_middle_message_from_img}
-                    src={message.from_img}
+                    // src={message.from_img}
+                    src={
+                      activeChat?.img || '/assets/chat/img_default_avatar.png'
+                    }
                     alt="avatar"
                   />
                 )}
@@ -510,7 +941,7 @@ const Chat: React.FC = () => {
                     <div
                       className={`${styles.chat_conversation_middle_message_from}`}
                     >
-                      {message.from}
+                      {activeChat?.name || ''}
                     </div>
                   )}
                   {message.messages.map((msg, msgIndex) => (
@@ -713,6 +1144,8 @@ const Chat: React.FC = () => {
             <button
               className={styles.chat_info_btn}
               // onClick={() => generateNewChatUser('Hello, world!')}
+              // onClick={() => fetchAIResponse('Hello', 3, false)}
+              onClick={createNewChat}
             >
               Add new chat
             </button>
@@ -728,6 +1161,18 @@ const Chat: React.FC = () => {
               Toggle language <br />
               current: {i18n.language.toUpperCase()}
             </button>
+            <div
+              className={`${styles.chat_info_btn} ${
+                activeChat?.isTrafficker
+                  ? styles.chat_info_report
+                  : styles.chat_info_green
+              }`}
+              style={{ cursor: 'none' }}
+            >
+              Is traffickant
+              <br />
+              {activeChat?.isTrafficker ? 'true' : 'false'}
+            </div>
           </div>
         </div>
 
@@ -856,7 +1301,7 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option1 || 'Option1...'}
+            {option1 || 'Option1 Loading...'}
           </div>
 
           {/* Option2 */}
@@ -868,7 +1313,7 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option2 || 'Option2...'}
+            {option2 || 'Option2 Loading...'}
           </div>
 
           {/* Option3 */}
@@ -880,7 +1325,7 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option3 || 'Option3...'}
+            {option3 || 'Option3 Loading...'}
           </div>
         </div>
       </div>
