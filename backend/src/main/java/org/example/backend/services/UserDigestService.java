@@ -1,4 +1,3 @@
-// service/UserDigestService.java
 package org.example.backend.services;
 
 import lombok.RequiredArgsConstructor;
@@ -12,25 +11,36 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserDigestService {
 
-    private final ChatRepository chatRepo;
+    private final ChatRepository    chatRepo;
     private final MessageRepository msgRepo;
+
+    /** Linear score:  average −10 → 100,  0 → 50,  +10 → 1 */
+    private int score(double avgDanger) {
+        int s = (int) Math.round((-avgDanger + 10) * 5);  // 0-100
+        return Math.max(1, Math.min(100, s));             // clamp
+    }
 
     @Transactional(readOnly = true)
     public UserDangerDigestDTO build(Long userId) {
 
         long chats = chatRepo.countByUserId(userId);
-        var stats = msgRepo.aggregateForUser(userId);
+        var  st    = msgRepo.aggregateForUser(userId);
 
-        if (stats == null) {     // no messages yet
-            return new UserDangerDigestDTO(chats, 0, 0.0, 0, 0);
+        if (st == null) {        // user has no messages yet
+            return new UserDangerDigestDTO(
+                    100,         // perfect score by default
+                    chats, 0, 0.0, 0, 0);
         }
 
+        int score = score(st.getAvg());
+
         return new UserDangerDigestDTO(
+                score,
                 chats,
-                stats.getTotal(),
-                stats.getAvg(),
-                stats.getMax(),
-                stats.getMin()
+                st.getTotal(),
+                st.getAvg(),
+                st.getMax(),
+                st.getMin()
         );
     }
 }
