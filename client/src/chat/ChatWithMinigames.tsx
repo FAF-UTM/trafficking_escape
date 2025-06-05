@@ -33,32 +33,34 @@ const ChatWithMinigames: React.FC = () => {
   const [currentGame, setCurrentGame] = useState(0);
   const [showGame, setShowGame] = useState(false);
   const [transitionClass, setTransitionClass] = useState<string>('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [intervalMinutes] = useState(() => {
     const stored = localStorage.getItem('minigameInterval');
-    return stored ? parseInt(stored, 10) : DEFAULT_INTERVAL;
+    return stored ? parseFloat(stored) : DEFAULT_INTERVAL;
   });
 
   useEffect(() => {
     const id = setTimeout(() => {
       setTransitionClass(transition.close);
-      playClick(1);
+      playClick(9);
       setTimeout(() => {
-        changeMusic(3);
+        changeMusic(1);
         setShowGame(true);
-        setTransitionClass(transition.open);
+        setTransitionClass('');
       }, 600);
     }, intervalMinutes * 60 * 1000);
     return () => clearTimeout(id);
   }, [currentGame, intervalMinutes, playClick, changeMusic]);
 
   const handleComplete = () => {
-    playClick(2);
+    playClick(9);
     setTransitionClass(transition.close);
     setTimeout(() => {
       changeMusic(2);
       setShowGame(false);
       setCurrentGame((prev) => (prev + 1) % games.length);
       setTransitionClass(transition.open);
+      setTimeout(() => setTransitionClass(''), 600);
     }, 600);
   };
 
@@ -66,7 +68,9 @@ const ChatWithMinigames: React.FC = () => {
 
   return (
     <div className={styles.chat_wrap}>
-      <div className={`${transition.screen} ${transitionClass}`}></div>
+      {transitionClass && (
+        <div className={`${transition.screen} ${transitionClass}`}></div>
+      )}
       {!showGame && <Chat />}
       {showGame && <GameComponent onComplete={handleComplete} />}
     </div>

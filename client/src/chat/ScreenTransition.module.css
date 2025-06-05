@@ -4,42 +4,73 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    /*background: #16222A;*/
-    /*background: -webkit-linear-gradient(to left, #16222A, #3A6073);*/
-    /*background: linear-gradient(to left, #16222A, #3A6073);*/
-
-    background-size: cover;
     pointer-events: none;
-    animation-duration: 0.6s;
-    animation-fill-mode: forwards;
+    overflow: hidden;
+    z-index: 1000;
 }
 
-.close {
-    animation-name: tv-close;
+.screen::before,
+.screen::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: #000;
 }
 
-.open {
-    animation-name: tv-open;
+.close::before {
+    top: -50%;
+    animation: close-top 0.6s forwards;
 }
 
-@keyframes tv-close {
-    0% {
-        transform: scaleY(1);
-        opacity: 1;
+.close::after {
+    bottom: -50%;
+    animation: close-bottom 0.6s forwards;
+}
+
+.open::before {
+    top: 0;
+    animation: open-top 0.6s forwards;
+}
+
+.open::after {
+    bottom: 0;
+    animation: open-bottom 0.6s forwards;
+}
+
+@keyframes close-top {
+    from {
+        top: -50%;
     }
-    100% {
-        transform: scaleY(0);
-        opacity: 0;
+    to {
+        top: 0;
     }
 }
 
-@keyframes tv-open {
-    0% {
-        transform: scaleY(0);
-        opacity: 0;
+@keyframes close-bottom {
+    from {
+        bottom: -50%;
     }
-    100% {
-        transform: scaleY(1);
-        opacity: 1;
+    to {
+        bottom: 0;
+    }
+}
+
+@keyframes open-top {
+    from {
+        top: 0;
+    }
+    to {
+        top: -50%;
+    }
+}
+
+@keyframes open-bottom {
+    from {
+        bottom: 0;
+    }
+    to {
+        bottom: -50%;
     }
 }
