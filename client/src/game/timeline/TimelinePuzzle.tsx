@@ -3,7 +3,11 @@ import { puzzleLevels, PuzzleCard } from './puzzleData';
 import './TimelinePuzzle.css';
 import { useAudio } from '../../context/AudioContext';
 
-const TimelinePuzzle: React.FC = () => {
+interface TimelinePuzzleProps {
+  onComplete?: () => void;
+}
+
+const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
   const [currentLevel, setCurrentLevel] = useState(0);
   const { playClick } = useAudio();
 
@@ -86,7 +90,7 @@ const TimelinePuzzle: React.FC = () => {
       setCardPositions(shuffleArray([...puzzleLevels[next].cards]));
       setDropzones(Array(puzzleLevels[next].cards.length).fill(null));
     } else {
-      alert('All levels complete! Returning home...');
+      if (onComplete) onComplete();
     }
   };
 

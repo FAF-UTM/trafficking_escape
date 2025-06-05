@@ -1,7 +1,8 @@
 import './App.css';
 import Platformer from './game/platformer/Platformer.tsx';
 import Home from './pages/home/Home.tsx';
-import Chat from './chat/Chat.tsx';
+// import Chat from './chat/Chat.tsx';
+import ChatWithMinigames from './chat/ChatWithMinigames.tsx';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -89,7 +90,8 @@ function App() {
               path="/chat"
               element={
                 <ProtectedRoute roles={[ 'ROLE_USER', 'ROLE_ADMIN' ]}>
-                  <Chat />
+                  {/*<Chat />*/}
+                  <ChatWithMinigames />
                 </ProtectedRoute>
               }
             />

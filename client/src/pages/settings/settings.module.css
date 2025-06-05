@@ -121,5 +121,8 @@
   display: flex;
   align-content: center;
   flex-direction: column;
+}
 
+input[type='range'] {
+  margin-left: 10px;
 }
