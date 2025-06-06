@@ -22,6 +22,15 @@ interface ChatData {
   messages: string[];
 }
 
+interface UserDigest {
+  score: number;
+  totalChats: number;
+  totalMessages: number;
+  averageDanger: number;
+  worstDanger: number;
+  safestDanger: number;
+}
+
 // Define character configuration
 const characters: {
   id: string;
@@ -97,6 +106,8 @@ const Chat: React.FC = () => {
   const [_dangerLevel2, setDangerLevel2] = useState<number>(0);
   const [_dangerLevel3, setDangerLevel3] = useState<number>(0);
   const [updatedDangerLevel, setUpdatedDangerLevel] = useState<number>(0);
+
+  const [userDigest, setUserDigest] = useState<UserDigest | null>(null);
 
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
@@ -418,6 +429,30 @@ const Chat: React.FC = () => {
     };
 
     if (userId) fetchChats();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchDigest = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND}/api/v1/users/${userId}/digest`,
+          {
+            headers: {
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setUserDigest(data);
+        }
+      } catch (err) {
+        console.error('Error fetching user digest:', err);
+      }
+    };
+
+    if (userId) fetchDigest();
   }, [userId]);
 
   const fetchOrCreateChat = async () => {
@@ -1267,6 +1302,28 @@ const Chat: React.FC = () => {
             <div>
               savedOption: <b>{localStorage.getItem('activeLeftBarOption')}</b>
             </div>
+            {userDigest && (
+              <>
+                <div>
+                  score: <b>{userDigest.score}</b>
+                </div>
+                <div>
+                  totalChats: <b>{userDigest.totalChats}</b>
+                </div>
+                <div>
+                  totalMessages: <b>{userDigest.totalMessages}</b>
+                </div>
+                <div>
+                  avgDanger: <b>{userDigest.averageDanger}</b>
+                </div>
+                <div>
+                  worstDanger: <b>{userDigest.worstDanger}</b>
+                </div>
+                <div>
+                  safestDanger: <b>{userDigest.safestDanger}</b>
+                </div>
+              </>
+            )}
           </div>
         )}
 
