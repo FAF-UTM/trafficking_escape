@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import Character from '../components/character/Character.tsx';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext.tsx';
+import Notification from '../components/notification/Notification.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const backend_api_generate =
   import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
 
-const active_chat_name = '';
+// const active_chat_name = '';
 const active_chat_img =
   'https://scontent-otp1-1.xx.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=31SphODCOLIQ7kNvwE32Nje&_nc_oc=Adknk7GF9oSbP_1zw41Md8h9m3_bO-RibDYDBhgAJktRcrZKCaSY5oYg36ALnmUfzCk&_nc_zt=24&_nc_ht=scontent-otp1-1.xx&oh=00_AfL9IyOp7xUaqn4wdrdjCjlFZVYkT1k-rjnTU-3ad0oQlg&oe=6847F2BA';
 const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/chats';
@@ -110,7 +112,7 @@ const Chat: React.FC = () => {
   const [userDigest, setUserDigest] = useState<UserDigest | null>(null);
 
   const [isTyping, setIsTyping] = useState<boolean>(false);
-
+  const navigate = useNavigate();
   // Toggle function for Character
   const toggleCharacter = (id: string) => {
     setVisibleCharacter((prev) => (prev === id ? null : id));
@@ -1194,6 +1196,88 @@ const Chat: React.FC = () => {
               {t('chat.report')}
             </button>
           </div>
+
+          <div className={styles.chat_info_menu_option}>
+            <div className={styles.chat_info_menu_option_btn}>
+              <div className={styles.chat_info_menu_option_btn_left}>
+                <div className={styles.chat_info_menu_option_circle}>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M2 8H2.66667M8 2V2.66667M13.3333 8H14M3.73333 3.73333L4.2 4.2M12.2667 3.73333L11.8 4.2M6.46667 11.3333H9.53333M6 10.6667C5.44031 10.2469 5.02689 9.66168 4.81829 8.99389C4.60969 8.32611 4.61649 7.60961 4.83772 6.94591C5.05896 6.2822 5.48341 5.70493 6.05097 5.29586C6.61852 4.88679 7.30039 4.66667 8 4.66667C8.69961 4.66667 9.38148 4.88679 9.94903 5.29586C10.5166 5.70493 10.941 6.2822 11.1623 6.94591C11.3835 7.60961 11.3903 8.32611 11.1817 8.99389C10.9731 9.66168 10.5597 10.2469 10 10.6667C9.73971 10.9243 9.54373 11.2396 9.42791 11.5871C9.3121 11.9345 9.2797 12.3044 9.33333 12.6667C9.33333 13.0203 9.19286 13.3594 8.94281 13.6095C8.69276 13.8595 8.35362 14 8 14C7.64638 14 7.30724 13.8595 7.05719 13.6095C6.80714 13.3594 6.66667 13.0203 6.66667 12.6667C6.7203 12.3044 6.6879 11.9345 6.57209 11.5871C6.45627 11.2396 6.26029 10.9243 6 10.6667Z"
+                      stroke="black"
+                      stroke-width="1.33333"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                Get a hint
+              </div>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M5.41066 14.0885C5.33325 14.0112 5.27185 13.9193 5.22996 13.8182C5.18807 13.717 5.1665 13.6087 5.1665 13.4992C5.1665 13.3898 5.18807 13.2814 5.22996 13.1803C5.27185 13.0791 5.33325 12.9873 5.41066 12.9099L10.204 8.11654C10.2351 8.0853 10.2526 8.04299 10.2526 7.99887C10.2526 7.95476 10.2351 7.91245 10.204 7.88121L5.41066 3.08787C5.2589 2.93066 5.17497 2.72014 5.17693 2.50164C5.17889 2.28314 5.26659 2.07416 5.42114 1.91969C5.57569 1.76523 5.78473 1.67765 6.00322 1.67581C6.22172 1.67397 6.4322 1.75803 6.58933 1.90987L12.0893 7.40987C12.1667 7.48726 12.2281 7.57913 12.27 7.68025C12.3119 7.78137 12.3335 7.88975 12.3335 7.99921C12.3335 8.10866 12.3119 8.21704 12.27 8.31816C12.2281 8.41928 12.1667 8.51115 12.0893 8.58854L6.58933 14.0885C6.51194 14.1659 6.42007 14.2273 6.31895 14.2692C6.21783 14.3111 6.10945 14.3327 5.99999 14.3327C5.89054 14.3327 5.78216 14.3111 5.68104 14.2692C5.57992 14.2273 5.48804 14.1659 5.41066 14.0885Z"
+                  fill="black"
+                />
+              </svg>
+            </div>
+            <div
+              className={styles.chat_info_menu_option_btn}
+              onClick={() => navigate('/ending')}
+            >
+              <div className={styles.chat_info_menu_option_btn_left}>
+                <div className={styles.chat_info_menu_option_circle}>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g clip-path="url(#clip0_12221_996)">
+                      <path
+                        d="M3.91125 0.1925C4.0342 0.0693941 4.20101 0.000153171 4.375 0L9.625 0C9.79913 0 9.96537 0.069125 10.0887 0.1925L13.8075 3.91125C13.9309 4.03375 14 4.20087 14 4.375V9.625C13.9998 9.79899 13.9306 9.9658 13.8075 10.0887L10.0887 13.8075C9.9658 13.9306 9.79899 13.9998 9.625 14H4.375C4.20101 13.9998 4.0342 13.9306 3.91125 13.8075L0.1925 10.0887C0.0693941 9.9658 0.000153171 9.79899 0 9.625L0 4.375C0 4.20087 0.069125 4.03462 0.1925 3.91125L3.91125 0.1925ZM4.64625 1.3125L1.3125 4.64625V9.35375L4.64625 12.6875H9.35375L12.6875 9.35375V4.64625L9.35375 1.3125H4.64625ZM7 3.5C7.17405 3.5 7.34097 3.56914 7.46404 3.69221C7.58711 3.81528 7.65625 3.9822 7.65625 4.15625V7.21875C7.65625 7.3928 7.58711 7.55972 7.46404 7.68279C7.34097 7.80586 7.17405 7.875 7 7.875C6.82595 7.875 6.65903 7.80586 6.53596 7.68279C6.41289 7.55972 6.34375 7.3928 6.34375 7.21875V4.15625C6.34375 3.9822 6.41289 3.81528 6.53596 3.69221C6.65903 3.56914 6.82595 3.5 7 3.5ZM7 10.5C6.76794 10.5 6.54538 10.4078 6.38128 10.2437C6.21719 10.0796 6.125 9.85706 6.125 9.625C6.125 9.39294 6.21719 9.17038 6.38128 9.00628C6.54538 8.84219 6.76794 8.75 7 8.75C7.23206 8.75 7.45462 8.84219 7.61872 9.00628C7.78281 9.17038 7.875 9.39294 7.875 9.625C7.875 9.85706 7.78281 10.0796 7.61872 10.2437C7.45462 10.4078 7.23206 10.5 7 10.5Z"
+                        fill="black"
+                      />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_12221_996">
+                        <rect width="14" height="14" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </div>
+                Force end game
+              </div>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M5.41066 14.0885C5.33325 14.0112 5.27185 13.9193 5.22996 13.8182C5.18807 13.717 5.1665 13.6087 5.1665 13.4992C5.1665 13.3898 5.18807 13.2814 5.22996 13.1803C5.27185 13.0791 5.33325 12.9873 5.41066 12.9099L10.204 8.11654C10.2351 8.0853 10.2526 8.04299 10.2526 7.99887C10.2526 7.95476 10.2351 7.91245 10.204 7.88121L5.41066 3.08787C5.2589 2.93066 5.17497 2.72014 5.17693 2.50164C5.17889 2.28314 5.26659 2.07416 5.42114 1.91969C5.57569 1.76523 5.78473 1.67765 6.00322 1.67581C6.22172 1.67397 6.4322 1.75803 6.58933 1.90987L12.0893 7.40987C12.1667 7.48726 12.2281 7.57913 12.27 7.68025C12.3119 7.78137 12.3335 7.88975 12.3335 7.99921C12.3335 8.10866 12.3119 8.21704 12.27 8.31816C12.2281 8.41928 12.1667 8.51115 12.0893 8.58854L6.58933 14.0885C6.51194 14.1659 6.42007 14.2273 6.31895 14.2692C6.21783 14.3111 6.10945 14.3327 5.99999 14.3327C5.89054 14.3327 5.78216 14.3111 5.68104 14.2692C5.57992 14.2273 5.48804 14.1659 5.41066 14.0885Z"
+                  fill="black"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
 
         {characters.map((character) => (
@@ -1418,6 +1502,11 @@ const Chat: React.FC = () => {
           </div>
         </div>
       </div>
+      <Notification
+        isVisible={true}
+        from={'Mom'}
+        message={'Hey, Come downstairs, dinner is ready...'}
+      />
     </div>
   );
 };

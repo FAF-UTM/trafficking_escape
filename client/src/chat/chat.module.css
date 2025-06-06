@@ -475,6 +475,44 @@
   /*align-items: stretch;*/
 }
 
+.chat_info_menu_option {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  padding: 16px;
+}
+.chat_info_menu_option_btn {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  color: #050505;
+  line-height: 1.4;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'SF Pro Text';
+  height: 45px;
+  cursor: pointer;
+}
+.chat_info_menu_option_btn_left {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+.chat_info_menu_option_circle {
+  height: 21px;
+  width: 21px;
+  border-radius: 100px;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  margin-bottom: 5px;
+}
+
 .chat_typing_indicator {
   display: flex;
   gap: 4px;

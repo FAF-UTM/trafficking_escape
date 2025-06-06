@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './notification.module.css';
 
 interface CharacterProps {
@@ -7,24 +7,22 @@ interface CharacterProps {
   from?: string;
 }
 
-const Notification: React.FC<CharacterProps> = ({ isVisible, message }) => {
-  const [showNotification, setNotification] = useState(false);
-
-  useEffect(() => {
-    if (isVisible) {
-      setNotification(true);
-    } else {
-      setNotification(false);
-    }
-  }, [isVisible]);
-
+const Notification: React.FC<CharacterProps> = ({
+  isVisible,
+  message,
+  from,
+}) => {
   return (
-    <div>
-      <div>
+    <div
+      className={`${styles.notification} ${isVisible && styles.notification_show}`}
+    >
+      <div className={styles.notification_small_text}>
         New notification from <b>{from}</b>
       </div>
+      <div className={styles.notification_text}>{message}</div>
+      <div className={styles.notification_time}>12:00 AM</div>
     </div>
   );
 };
 
-export default Character;
+export default Notification;
