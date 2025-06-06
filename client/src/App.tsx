@@ -89,7 +89,7 @@ function App() {
             <Route
               path="/chat"
               element={
-                <ProtectedRoute roles={[ 'ROLE_USER', 'ROLE_ADMIN' ]}>
+                <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
                   {/*<Chat />*/}
                   <ChatWithMinigames />
                 </ProtectedRoute>
@@ -98,13 +98,25 @@ function App() {
             <Route path="/click-play" element={<ClickPlayGame />} />
             <Route path="/city-run" element={<Platformer />} />
             <Route path="/timeline-puzzle" element={<TimelinePuzzle />} />
-            <Route path="/combination-lock" element={<CombinationLockWrapper />} />
+            <Route
+              path="/combination-lock"
+              element={<CombinationLockWrapper />}
+            />
             <Route path="/who-to-trust" element={<WhoToTrustGameWrapper />} />
-            <Route path="/true-false" element={<TrueFalseFlashCardsWrapper />} />
+            <Route
+              path="/true-false"
+              element={<TrueFalseFlashCardsWrapper />}
+            />
             <Route path="/word-choice" element={<WordChoiceWrapper />} />
             <Route path="/emoji-story" element={<EmojiStoryDecoderWrapper />} />
-            <Route path="/safety-checklist" element={<SafetyChecklistBuilderWrapper />} />
-            <Route path="/danger-highlight" element={<DangerWordHighlightWrapper />} />
+            <Route
+              path="/safety-checklist"
+              element={<SafetyChecklistBuilderWrapper />}
+            />
+            <Route
+              path="/danger-highlight"
+              element={<DangerWordHighlightWrapper />}
+            />
             <Route path="/word-scramble" element={<WordScrambleWrapper />} />
           </Routes>
         </BrowserRouter>

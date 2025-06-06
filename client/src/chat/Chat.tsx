@@ -168,7 +168,7 @@ const Chat: React.FC = () => {
   };
 
   const truncate = (str: string, max: number) =>
-    str.length > max ? str.slice(0, max) + "..." : str;
+    str.length > max ? str.slice(0, max) + '...' : str;
 
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
@@ -639,12 +639,14 @@ const Chat: React.FC = () => {
         await fetchAIResponse('Hello', 0, chatData.isTrafficker);
       } else {
         // build one‐chunk‐per‐message array
-        const formattedMessages: ChatData[] = chatData.messages.map((m: any) => ({
-          from: m.isOutgoing ? 'You' : chatData.chatName,
-          from_img: m.isOutgoing ? '' : chatData.chatImageUrl,
-          sendtype: m.isOutgoing ? 'send' : 'got',
-          messages: [m.messageText],
-        }));
+        const formattedMessages: ChatData[] = chatData.messages.map(
+          (m: any) => ({
+            from: m.isOutgoing ? 'You' : chatData.chatName,
+            from_img: m.isOutgoing ? '' : chatData.chatImageUrl,
+            sendtype: m.isOutgoing ? 'send' : 'got',
+            messages: [m.messageText],
+          })
+        );
 
         // now collapse any back‐to‐back "got" entries
         const grouped: ChatData[] = [];
@@ -673,11 +675,7 @@ const Chat: React.FC = () => {
         const last = grouped[grouped.length - 1];
         if (last.sendtype === 'got') {
           const lastText = last.messages[last.messages.length - 1];
-          fetchSuggestions(
-            lastText,
-            updatedDangerLevel,
-            chatData.isTrafficker
-          );
+          fetchSuggestions(lastText, updatedDangerLevel, chatData.isTrafficker);
         }
       }
     } catch (err) {
@@ -685,14 +683,12 @@ const Chat: React.FC = () => {
     }
   };
 
-
   useEffect(() => {
     if (chatUsers.length > 0 && activeChat === null) {
       const last = chatUsers[chatUsers.length - 1];
       handleChatSelect(last);
     }
   }, [chatUsers, activeChat]);
-
 
   const [loadingDots, setLoadingDots] = useState('');
   useEffect(() => {
@@ -707,7 +703,6 @@ const Chat: React.FC = () => {
 
     return () => clearInterval(interval);
   }, []);
-
 
   return (
     <div className={styles.chat_wrap}>
@@ -1375,7 +1370,6 @@ const Chat: React.FC = () => {
             }}
           >
             {option1 || `[Option 1] Loading${loadingDots}`}
-
           </div>
 
           {/* Option2 */}

@@ -42,7 +42,6 @@ const SettingsPage: React.FC = () => {
 
   return (
     <div className={styles.settings}>
-
       <div className={styles.settings_container}>
         <Link to={'/'} className={styles.back_home}>
           <svg
@@ -61,7 +60,7 @@ const SettingsPage: React.FC = () => {
           </svg>
           {t('general.home')}
         </Link>
-          <div className={styles.settings_card}>
+        <div className={styles.settings_card}>
           <div className={styles.settings_title}>{t('settings.settings')}</div>
           <div className={styles.settings_inside}>
             <div className={styles.settings_inside_lang}>
@@ -107,20 +106,24 @@ const SettingsPage: React.FC = () => {
                 >
                   Contrast
                 </div>
-              {/*</div>*/}
+                {/*</div>*/}
+              </div>
+              {/*<div*/}
+              {/*  className={`${styles.settings_inside_links} ${styles.settings_inside_links_first_of_type} `}*/}
+              {/*>*/}
             </div>
-            {/*<div*/}
-            {/*  className={`${styles.settings_inside_links} ${styles.settings_inside_links_first_of_type} `}*/}
-            {/*>*/}
-          </div>
             <div className={styles.settings_inside_lang}>
-              <div className={styles.settings_inside_lang_title}>Minigame Interval: {minigameInterval}m</div>
+              <div className={styles.settings_inside_lang_title}>
+                Minigame Interval: {minigameInterval}m
+              </div>
               <input
                 type="range"
                 min="2"
                 max="15"
                 value={minigameInterval}
-                onChange={(e) => handleIntervalChange(parseInt(e.target.value, 10))}
+                onChange={(e) =>
+                  handleIntervalChange(parseInt(e.target.value, 10))
+                }
               />
             </div>
             <div

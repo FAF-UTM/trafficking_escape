@@ -146,13 +146,22 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
       </div>
 
       <div className="action-buttons-container">
-        <div className="action-button" onClick={() => {playClick(3); resetPuzzle(true);}}>
+        <div
+          className="action-button"
+          onClick={() => {
+            playClick(3);
+            resetPuzzle(true);
+          }}
+        >
           Reset
         </div>
-        <div className="action-button" onClick={() => {
-          playClick(3);
-          checkSolution();
-        }}>
+        <div
+          className="action-button"
+          onClick={() => {
+            playClick(3);
+            checkSolution();
+          }}
+        >
           Check
         </div>
       </div>

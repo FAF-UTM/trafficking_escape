@@ -14,7 +14,6 @@ import bg2 from '../components/sounds/bg2.mp3';
 import bg3 from '../components/sounds/bg3.mp3';
 import bg4 from '../components/sounds/bg4.mp3';
 
-
 const bgmMap: Record<number, string> = {
   1: bg1,
   2: bg2,
@@ -45,7 +44,9 @@ interface AudioAPI {
 
 const AudioCtx = createContext<AudioAPI | null>(null);
 
-export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AudioProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const clickAudio = useMemo(() => new Audio(), []);
   const bgmAudio = useMemo(() => {
     const a = new Audio(defaultBgm);
