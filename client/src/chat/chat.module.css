@@ -109,7 +109,7 @@
   color: black;
 }
 .chat_conversation {
-  width: calc(100vw - 1000px);
+  width: calc(100vw - 950px);
   /*height: calc(100vh - 32px);*/
   border-radius: 12px;
   background: #fff;
@@ -150,8 +150,7 @@
 }
 
 .chat_info {
-  width: 425px;
-  /*height: calc(100vh - 32px);*/
+  width: 375px;
   border-radius: 12px;
   background: #fff;
   box-shadow: 0px 0px 8px 0px rgba(52, 72, 84, 0.05);
@@ -161,10 +160,10 @@
   display: flex;
   align-content: flex-start;
   gap: 5px;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   position: relative;
 }
 .chat_conversation_top_icons {
@@ -362,8 +361,8 @@
 }
 
 .chat_info_report {
-  border: 1px solid #f14e29;
-  background: rgba(224, 63, 25, 0.2);
+  border: 1px solid #f14e29 !important;
+  background: rgba(224, 63, 25, 0.2) !important;
   color: #f14e29;
 }
 .chat_info_green {
@@ -372,8 +371,8 @@
   color: #5bf129;
 }
 .chat_info_help {
-  border: 1px solid #0080ff;
-  background: rgba(0, 128, 255, 0.2);
+  border: 1px solid #0080ff !important;
+  background: rgba(0, 128, 255, 0.2) !important;
   color: #0080ff;
 }
 
@@ -383,7 +382,8 @@
 }
 
 .chat_info_test {
-  width: calc(100% - 32px);
+  width: 300px;
+  margin-top: 20px;
   position: absolute;
   bottom: 16px;
   display: flex;
@@ -589,6 +589,61 @@
   fill: black;
 }
 
+.chat_info_avatar {
+  width: 80px;
+  height: auto;
+  border-radius: 100px;
+  margin: 10px auto 0;
+}
+.chat_info_name {
+  font-size: 17px;
+  font-weight: 600;
+  width: 100%;
+  line-height: 20px;
+  color: #222;
+  font-family: 'SF Pro Text';
+  text-align: center;
+  margin-top: 6px;
+}
+.chat_info_name_btn {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 15px;
+  color: #222;
+  font-family: 'SF Pro Text';
+  text-align: center;
+  background-color: #fff;
+  border: none;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
+}
+.chat_info_name_btn_circle {
+  height: 36px;
+  width: 36px;
+  border-radius: 100px;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  margin-bottom: 5px;
+}
+.chat_info_btns {
+  width: 100%;
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 /* For screens up to ~1200px wide (desktop/laptop) */
 @media screen and (max-width: 1200px) {
   .chat {
@@ -783,6 +838,7 @@
   line-height: 28.08px;
   padding: 20px;
   box-sizing: border-box;
+  z-index: 999;
 }
 .chat_info_menu_close_svg {
   position: absolute;
