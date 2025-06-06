@@ -14,16 +14,30 @@ const SettingsPage: React.FC = () => {
   };
   const [mode, setMode] = useState('');
 
+  const [minigameInterval, setMinigameInterval] = useState<number>(() => {
+    const stored = localStorage.getItem('minigameInterval');
+    return stored ? parseInt(stored, 10) : 5;
+  });
+
   const toggleMode = (mode: string | undefined) => {
     if (!mode) return;
     setMode(mode);
     localStorage.setItem('mode', mode);
   };
 
+  const handleIntervalChange = (value: number) => {
+    setMinigameInterval(value);
+    localStorage.setItem('minigameInterval', value.toString());
+  };
+
   useEffect(() => {
-    setselectedLanguage(i18n.language); // or your default lang
+    setselectedLanguage(i18n.language);
     const savedMode = localStorage.getItem('mode') || 'light';
     setMode(savedMode);
+    const savedInterval = localStorage.getItem('minigameInterval');
+    if (savedInterval) {
+      setMinigameInterval(parseInt(savedInterval, 10));
+    }
   }, []);
 
   return (
@@ -93,7 +107,21 @@ const SettingsPage: React.FC = () => {
                 >
                   Contrast
                 </div>
-              </div>
+              {/*</div>*/}
+            </div>
+            {/*<div*/}
+            {/*  className={`${styles.settings_inside_links} ${styles.settings_inside_links_first_of_type} `}*/}
+            {/*>*/}
+          </div>
+            <div className={styles.settings_inside_lang}>
+              <div className={styles.settings_inside_lang_title}>Minigame Interval: {minigameInterval}m</div>
+              <input
+                type="range"
+                min="2"
+                max="15"
+                value={minigameInterval}
+                onChange={(e) => handleIntervalChange(parseInt(e.target.value, 10))}
+              />
             </div>
             <div
               className={`${styles.settings_inside_links} ${styles.settings_inside_links_first_of_type} `}

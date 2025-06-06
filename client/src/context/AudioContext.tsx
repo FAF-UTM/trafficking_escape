@@ -8,6 +8,7 @@ import s5 from '../components/sounds/5.wav';
 import s6 from '../components/sounds/6.wav';
 import s7 from '../components/sounds/7.wav';
 import s8 from '../components/sounds/8.mp3';
+import s9 from '../components/sounds/9.mp3';
 import bg1 from '../components/sounds/bg1.mp3';
 import bg2 from '../components/sounds/bg2.mp3';
 import bg3 from '../components/sounds/bg3.mp3';
@@ -32,6 +33,7 @@ const soundMap: Record<number, string> = {
   6: s6,
   7: s7,
   8: s8,
+  9: s9,
 };
 
 interface AudioAPI {

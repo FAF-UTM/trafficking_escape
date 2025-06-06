@@ -107,6 +107,15 @@ const IntroStory: React.FC = () => {
       onClick={handleClick}
       style={{ backgroundImage: `url(${currentDialogue?.BgImage})` }}
     >
+      <div
+        className="skip-intro"
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate('/chat');
+        }}
+      >
+        Skip Intro
+      </div>
       <div className="sprites-container">
         {currentDialogue?.LeftSpriteImage && (
           <img

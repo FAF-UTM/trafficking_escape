@@ -90,3 +90,17 @@
 .dialogue-box {
   min-height: 100px;
 }
+
+.skip-intro {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  cursor: pointer;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  z-index: 10;
+}
+
+.skip-intro:hover {
+  color: lightgray;
+}
