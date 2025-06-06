@@ -693,6 +693,22 @@ const Chat: React.FC = () => {
     }
   }, [chatUsers, activeChat]);
 
+
+  const [loadingDots, setLoadingDots] = useState('');
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLoadingDots((prev) => {
+        if (prev === '') return '.';
+        if (prev === '.') return '..';
+        if (prev === '..') return '...';
+        return '';
+      });
+    }, 500); // adjust speed if needed
+
+    return () => clearInterval(interval);
+  }, []);
+
+
   return (
     <div className={styles.chat_wrap}>
       <div className={styles.chat}>
@@ -840,7 +856,7 @@ const Chat: React.FC = () => {
             {chatUsers.map((chat, index) => (
               <div
                 key={index}
-                className={styles.chat_navigation_block}
+                className={`${styles.chat_navigation_block} ${disabledOptions ? styles.disabled : ''}`}
                 onClick={() => handleChatSelect(chat)}
               >
                 <img
@@ -1358,7 +1374,8 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option1 || 'Option1 Loading...'}
+            {option1 || `[Option 1] Loading${loadingDots}`}
+
           </div>
 
           {/* Option2 */}
@@ -1370,7 +1387,7 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option2 || 'Option2 Loading...'}
+            {option2 || `[Option 2] Loading${loadingDots}`}
           </div>
 
           {/* Option3 */}
@@ -1382,7 +1399,7 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option3 || 'Option3 Loading...'}
+            {option3 || `[Option 3] Loading${loadingDots}`}
           </div>
         </div>
       </div>

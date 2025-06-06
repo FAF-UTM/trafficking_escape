@@ -6,6 +6,7 @@
   box-sizing: border-box;
   display: flex;
   gap: 16px;
+  border-radius: 0 0 10px 10px;
 }
 .chat_wrap {
   width: 100vw;
@@ -16,7 +17,7 @@
 .chat_bottom {
   width: 100vw;
   height: 120px;
-  padding: 16px;
+  padding: 3px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -442,9 +443,9 @@
 .chat_option {
   background: #f0f0f0;
   cursor: pointer;
-  border-radius: 100px;
+  border-radius: 10px;
   /*margin-top: 5px;*/
-  min-height: 35px;
+  min-height: 100px;
   padding: 10px 15px;
   text-align: center;
   box-sizing: border-box;
