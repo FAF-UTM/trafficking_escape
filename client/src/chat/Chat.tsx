@@ -242,9 +242,9 @@ const Chat: React.FC = () => {
         for (let i = 0; i < messageChunks.length; i++) {
           const chunk = messageChunks[i];
 
-          // pause 0.5 s before every chunk after the first
+          // pause 0.7 s before every chunk after the first
           if (i > 0) {
-            await new Promise((res) => setTimeout(res, 500));
+            await new Promise((res) => setTimeout(res, 700));
           }
 
           // simulate typing delay (40 ms/char up to 2 s)
