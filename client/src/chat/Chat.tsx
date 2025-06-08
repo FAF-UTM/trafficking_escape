@@ -133,10 +133,9 @@ const Chat: React.FC = () => {
     setPopupVisibility((prev) => ({ ...prev, [id]: false }));
   };
 
-
   // helper to add a message block (and merge if same sender)
   const addMessage = (newMsg: ChatData) => {
-    setChatData(prev => {
+    setChatData((prev) => {
       const last = prev[prev.length - 1];
       // if the last message is from the same side, merge into it
       if (
@@ -154,7 +153,6 @@ const Chat: React.FC = () => {
       return [...prev, newMsg];
     });
   };
-
 
   // only fetches the 3 options (no appending of chat bubbles)
   const fetchSuggestions = async (
@@ -234,19 +232,26 @@ const Chat: React.FC = () => {
 
       if (data.chatResponse) {
         // clean and split into sentence‐chunks
-        const cleaned = data.chatResponse.replace(/^"|"$/g, '').trim();
+        const cleaned = String(data.chatResponse).replace(/^"|"$/g, '').trim(); // cleaned is now inferred as string
         const messageChunks = cleaned
           .split(/(?<=[.!?;])\s+/)
-          .map(c => c.trim())
-          .filter(c => c.length);
+          .map((c) => c.trim()) // c is now inferred as string
+          .filter((c) => c.length > 0);
 
-        // sequentially “type” each chunk
-        for (const chunk of messageChunks) {
-          // simulate typing delay: e.g. 40ms per character
-          const delay = Math.min(2000, chunk.length * 40);
-          await new Promise(res => setTimeout(res, delay));
+        // sequentially “type” each chunk, with a 1 s pause before each but the first
+        for (let i = 0; i < messageChunks.length; i++) {
+          const chunk = messageChunks[i];
 
-          // append this chunk to the UI
+          // pause 0.5 s before every chunk after the first
+          if (i > 0) {
+            await new Promise((res) => setTimeout(res, 500));
+          }
+
+          // simulate typing delay (40 ms/char up to 2 s)
+          const typingDelay = Math.min(2000, chunk.length * 40);
+          await new Promise((res) => setTimeout(res, typingDelay));
+
+          // now append this chunk
           const newMessage: ChatData = {
             from: 'Alex',
             from_img: active_chat_img,
@@ -276,8 +281,8 @@ const Chat: React.FC = () => {
 
         // update last-message preview on the **right** chat
         const last = messageChunks[messageChunks.length - 1];
-        setChatUsers(prev =>
-          prev.map(c => (c.id === chatId ? { ...c, message: last } : c))
+        setChatUsers((prev) =>
+          prev.map((c) => (c.id === chatId ? { ...c, message: last } : c))
         );
       }
     } catch (err) {
@@ -287,7 +292,6 @@ const Chat: React.FC = () => {
       setDisabledOptions(false);
     }
   };
-
 
   // Only run the “Hello” request once
   // const hasFetchedRef = useRef(false);

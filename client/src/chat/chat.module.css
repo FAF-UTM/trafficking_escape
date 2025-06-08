@@ -849,6 +849,9 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+.chat_options .disabled {
+  color: transparent;
+}
 
 .chat_conversation_bottom_option {
   width: 33%;
