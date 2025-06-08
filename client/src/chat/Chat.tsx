@@ -173,39 +173,36 @@ const Chat: React.FC = () => {
     str.length > max ? str.slice(0, max) + '...' : str;
 
   // *** This function calls the message-generation endpoint ***
+  // *** This function calls the message-generation endpoint ***
+  // now takes an explicit chatId
   const fetchAIResponse = async (
     lastMessage: string,
     currentDangerLevel: number,
-    isTrafficker: boolean
+    isTrafficker: boolean,
+    chatId: number
   ) => {
-    setIsTyping(true); // Show typing indicator
-    //for testing - console.log('start_typing');
+    setIsTyping(true);
     try {
       const response = await fetch(backend_api_generate, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // *** Attach token in the Authorization header ***
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           context: 'A child is chatting with someone online.',
-          lastMessage: lastMessage,
-          currentDangerLevel: currentDangerLevel,
-          isTrafficker: isTrafficker,
+          lastMessage,
+          currentDangerLevel,
+          isTrafficker,
         }),
       });
-
       if (!response.ok) {
-        console.error(
-          'Error fetching AI response:',
-          response.status,
-          response.statusText
-        );
+        console.error('Error fetching AI response:', response.statusText);
         return;
       }
-
       const data = await response.json();
+
+      // update options & danger levels as before...
       setOption1(data.option1 || '');
       setOption2(data.option2 || '');
       setOption3(data.option3 || '');
@@ -214,68 +211,52 @@ const Chat: React.FC = () => {
       setDangerLevel3(data.dangerLevel3 || 0);
       setUpdatedDangerLevel(data.updatedDangerLevel || 0);
 
-      // *** Add the AI's chatResponse to the chat as a "got" message ***
       if (data.chatResponse) {
-        // const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '');
-        // const newMessage: ChatData = {
-        //   from: 'Alex',
-        //   from_img: active_chat_img,
-        //   sendtype: 'got',
-        //   messages: [cleanedResponse],
-        // };
-        const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '').trim();
-
-        // Split by sentence-ending punctuation followed by space or end of string
-        const messageChunks = cleanedResponse
+        const cleaned = data.chatResponse.replace(/^"|"$/g, '').trim();
+        const messageChunks = cleaned
           .split(/(?<=[.!?;])\s+/)
-          .map((chunk: string) => chunk.trim())
-          .filter((chunk: string | any[]) => chunk.length > 0);
+          .map((c) => c.trim())
+          .filter((c) => c.length);
 
+        // push into UI
         const newMessage: ChatData = {
           from: 'Alex',
           from_img: active_chat_img,
           sendtype: 'got',
           messages: messageChunks,
         };
+        setChatData((prev) => [...prev, newMessage]);
 
-        setChatData((prevChatData) => [...prevChatData, newMessage]);
-
-        // Save each chunk to backend
-        if (activeChat?.id) {
-          try {
-            for (const text of messageChunks) {
-              await fetch(backend_api_messages, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
-                },
-                body: JSON.stringify({
-                  chatId: activeChat.id,
-                  isOutgoing: false,
-                  messageText: text,
-                }),
-              });
-            }
-
-            // Update preview with last message
-            const last = messageChunks[messageChunks.length - 1];
-            setChatUsers((prev) =>
-              prev.map((c) =>
-                c.id === activeChat.id ? { ...c, message: last } : c
-              )
-            );
-          } catch (err) {
-            console.error('Error saving incoming message:', err);
+        // now save *to the correct chat* using the passed-in chatId
+        try {
+          for (const text of messageChunks) {
+            await fetch(backend_api_messages, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              },
+              body: JSON.stringify({
+                chatId,
+                isOutgoing: false,
+                messageText: text,
+              }),
+            });
           }
+          // update last-message preview on the **right** chat
+          const last = messageChunks[messageChunks.length - 1];
+          setChatUsers((prev) =>
+            prev.map((c) => (c.id === chatId ? { ...c, message: last } : c))
+          );
+        } catch (err) {
+          console.error('Error saving incoming message:', err);
         }
       }
-    } catch (error) {
-      console.error('Error in fetchAIResponse:', error);
+    } catch (err) {
+      console.error('Error in fetchAIResponse:', err);
     } finally {
-      setIsTyping(false); // Hide typing indicator
-      setDisabledOptions(false); // Re-enable the options after the response is generated
-      //for testing - console.log('stop_typing');
+      setIsTyping(false);
+      setDisabledOptions(false);
     }
   };
 
@@ -323,15 +304,12 @@ const Chat: React.FC = () => {
       console.error('Error saving outgoing message:', err);
     }
 
-    // 4) Kick off AI reply with random delay
-    const delay =
-      Math.random() < 0.2
-        ? (2100 + Math.random() * 400) | 0
-        : (1000 + Math.random() * 400) | 0;
-
-    setTimeout(() => {
-      fetchAIResponse(cleaned, updatedDangerLevel, activeChat.isTrafficker);
-    }, delay);
+    fetchAIResponse(
+      cleaned,
+      updatedDangerLevel,
+      activeChat.isTrafficker,
+      activeChat.id
+    );
   };
 
   const [activeLeftBarOption, setActiveLeftBarOption] = useState<string>('');
@@ -407,7 +385,6 @@ const Chat: React.FC = () => {
     didCreate.current = true;
     fetchOrCreateChat();
   }, [userId]);
-
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -628,7 +605,6 @@ const Chat: React.FC = () => {
     name: string;
     message: string;
   }) => {
-
     setDisabledOptions(true);
     const token = localStorage.getItem('authToken');
     try {
@@ -651,7 +627,8 @@ const Chat: React.FC = () => {
         setChatData([]);
 
         // 1) ask AI for the "Hello" greeting, which also pushes into chatData and saves chunks
-        await fetchAIResponse('Hello', 0, chatData.isTrafficker);
+        // await fetchAIResponse('Hello', 0, chatData.isTrafficker);
+        await fetchAIResponse('Hello', 0, chatData.isTrafficker, chatData.id);
 
         // // 2) persist the greeting itself as a single message to /api/messages
         // try {
@@ -713,8 +690,8 @@ const Chat: React.FC = () => {
       }
     } catch (err) {
       console.error('Error loading chat:', err);
-    }finally {
-        setDisabledOptions(false);
+    } finally {
+      setDisabledOptions(false);
     }
   };
 
