@@ -133,6 +133,29 @@ const Chat: React.FC = () => {
     setPopupVisibility((prev) => ({ ...prev, [id]: false }));
   };
 
+
+  // helper to add a message block (and merge if same sender)
+  const addMessage = (newMsg: ChatData) => {
+    setChatData(prev => {
+      const last = prev[prev.length - 1];
+      // if the last message is from the same side, merge into it
+      if (
+        last &&
+        last.sendtype === newMsg.sendtype
+        // if you only want to merge AI (“got”) blocks, add: && newMsg.sendtype === 'got'
+      ) {
+        return prev.map((m, i) =>
+          i === prev.length - 1
+            ? { ...m, messages: [...m.messages, ...newMsg.messages] }
+            : m
+        );
+      }
+      // otherwise start a brand new block
+      return [...prev, newMsg];
+    });
+  };
+
+
   // only fetches the 3 options (no appending of chat bubbles)
   const fetchSuggestions = async (
     lastMessage: string,
@@ -173,8 +196,6 @@ const Chat: React.FC = () => {
     str.length > max ? str.slice(0, max) + '...' : str;
 
   // *** This function calls the message-generation endpoint ***
-  // *** This function calls the message-generation endpoint ***
-  // now takes an explicit chatId
   const fetchAIResponse = async (
     lastMessage: string,
     currentDangerLevel: number,
@@ -202,7 +223,7 @@ const Chat: React.FC = () => {
       }
       const data = await response.json();
 
-      // update options & danger levels as before...
+      // update the three suggestion buttons & danger levels
       setOption1(data.option1 || '');
       setOption2(data.option2 || '');
       setOption3(data.option3 || '');
@@ -212,24 +233,30 @@ const Chat: React.FC = () => {
       setUpdatedDangerLevel(data.updatedDangerLevel || 0);
 
       if (data.chatResponse) {
+        // clean and split into sentence‐chunks
         const cleaned = data.chatResponse.replace(/^"|"$/g, '').trim();
         const messageChunks = cleaned
           .split(/(?<=[.!?;])\s+/)
-          .map((c) => c.trim())
-          .filter((c) => c.length);
+          .map(c => c.trim())
+          .filter(c => c.length);
 
-        // push into UI
-        const newMessage: ChatData = {
-          from: 'Alex',
-          from_img: active_chat_img,
-          sendtype: 'got',
-          messages: messageChunks,
-        };
-        setChatData((prev) => [...prev, newMessage]);
+        // sequentially “type” each chunk
+        for (const chunk of messageChunks) {
+          // simulate typing delay: e.g. 40ms per character
+          const delay = Math.min(2000, chunk.length * 40);
+          await new Promise(res => setTimeout(res, delay));
 
-        // now save *to the correct chat* using the passed-in chatId
-        try {
-          for (const text of messageChunks) {
+          // append this chunk to the UI
+          const newMessage: ChatData = {
+            from: 'Alex',
+            from_img: active_chat_img,
+            sendtype: 'got',
+            messages: [chunk],
+          };
+          addMessage(newMessage);
+
+          // persist this incoming chunk
+          try {
             await fetch(backend_api_messages, {
               method: 'POST',
               headers: {
@@ -239,18 +266,19 @@ const Chat: React.FC = () => {
               body: JSON.stringify({
                 chatId,
                 isOutgoing: false,
-                messageText: text,
+                messageText: chunk,
               }),
             });
+          } catch (err) {
+            console.error('Error saving incoming message chunk:', err);
           }
-          // update last-message preview on the **right** chat
-          const last = messageChunks[messageChunks.length - 1];
-          setChatUsers((prev) =>
-            prev.map((c) => (c.id === chatId ? { ...c, message: last } : c))
-          );
-        } catch (err) {
-          console.error('Error saving incoming message:', err);
         }
+
+        // update last-message preview on the **right** chat
+        const last = messageChunks[messageChunks.length - 1];
+        setChatUsers(prev =>
+          prev.map(c => (c.id === chatId ? { ...c, message: last } : c))
+        );
       }
     } catch (err) {
       console.error('Error in fetchAIResponse:', err);
@@ -259,6 +287,7 @@ const Chat: React.FC = () => {
       setDisabledOptions(false);
     }
   };
+
 
   // Only run the “Hello” request once
   // const hasFetchedRef = useRef(false);
@@ -277,7 +306,7 @@ const Chat: React.FC = () => {
     };
 
     // 1) Optimistically update UI
-    setChatData((prev) => [...prev, userMessage]);
+    addMessage(userMessage);
 
     // 2) Persist to backend
     try {
