@@ -1,5 +1,5 @@
 import styles from './chat.module.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Character from '../components/character/Character.tsx';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext.tsx';
@@ -393,13 +393,21 @@ const Chat: React.FC = () => {
 
   const { userId } = useAuth();
   const now = new Date().toISOString();
+  // useEffect(() => {
+  //   if (userId) {
+  //     fetchOrCreateChat(); // or pass a dynamic name
+  //     // console.log('authToken', token);
+  //   }
+  //   // fetchAIResponse('Hello', 3, false)
+  // }, []);
+  const didCreate = useRef(false);
+
   useEffect(() => {
-    if (userId) {
-      fetchOrCreateChat(); // or pass a dynamic name
-      // console.log('authToken', token);
-    }
-    // fetchAIResponse('Hello', 3, false)
-  }, []);
+    if (!userId || didCreate.current) return;
+    didCreate.current = true;
+    fetchOrCreateChat();
+  }, [userId]);
+
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -639,8 +647,29 @@ const Chat: React.FC = () => {
 
       // no history → clear & start fresh
       if (!chatData.messages || chatData.messages.length === 0) {
+        // clear UI
         setChatData([]);
+
+        // 1) ask AI for the "Hello" greeting, which also pushes into chatData and saves chunks
         await fetchAIResponse('Hello', 0, chatData.isTrafficker);
+
+        // // 2) persist the greeting itself as a single message to /api/messages
+        // try {
+        //   await fetch(backend_api_messages, {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        //     },
+        //     body: JSON.stringify({
+        //       chatId: chatData.id,
+        //       isOutgoing: false,
+        //       messageText: 'Hello',
+        //     }),
+        //   });
+        // } catch (err) {
+        //   console.error('Error saving initial greeting:', err);
+        // }
       } else {
         // build one‐chunk‐per‐message array
         const formattedMessages: ChatData[] = chatData.messages.map(
@@ -684,8 +713,9 @@ const Chat: React.FC = () => {
       }
     } catch (err) {
       console.error('Error loading chat:', err);
+    }finally {
+        setDisabledOptions(false);
     }
-    setDisabledOptions(false);
   };
 
   useEffect(() => {
