@@ -1,0 +1,57 @@
+.notification {
+  width: 400px;
+  position: absolute;
+  left: 50%;
+  top: -400px;
+  transform: translateX(-50%);
+  height: 100px;
+  border-radius: 0 0 10px 10px;
+  color: #343434;
+  background-color: #efefef;
+  opacity: 0;
+  pointer-events: none;
+  font-family: 'SF Pro Text';
+  padding: 10px;
+  box-sizing: border-box;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+/* Trigger this class to show + auto-hide the notification */
+.notification_show {
+  animation: slideDownFade 10s ease-in-out forwards;
+}
+
+/* Keyframes: show, wait, hide */
+@keyframes slideDownFade {
+  0% {
+    top: -400px;
+    opacity: 0;
+  }
+  10% {
+    top: 0;
+    opacity: 1;
+  }
+  90% {
+    top: 0;
+    opacity: 1;
+  }
+  100% {
+    top: -400px;
+    opacity: 0;
+  }
+}
+
+.notification_small_text {
+  font-size: 12px;
+  color: #939393;
+}
+.notification_time {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 14px;
+}
+.notification_text {
+  width: 90%;
+  margin-top: 10px;
+}

@@ -40,15 +40,18 @@ const ChatWithMinigames: React.FC = () => {
   });
 
   useEffect(() => {
-    const id = setTimeout(() => {
-      setTransitionClass(transition.close);
-      playClick(9);
-      setTimeout(() => {
-        changeMusic(1);
-        setShowGame(true);
-        setTransitionClass('');
-      }, 600);
-    }, intervalMinutes * 60 * 1000);
+    const id = setTimeout(
+      () => {
+        setTransitionClass(transition.close);
+        playClick(9);
+        setTimeout(() => {
+          changeMusic(1);
+          setShowGame(true);
+          setTransitionClass('');
+        }, 600);
+      },
+      intervalMinutes * 60 * 1000
+    );
     return () => clearTimeout(id);
   }, [currentGame, intervalMinutes, playClick, changeMusic]);
 

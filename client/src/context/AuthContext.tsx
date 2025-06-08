@@ -36,7 +36,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return null;
   });
 
-
   const login = async (username: string, password: string) => {
     try {
       const response = await fetch(
@@ -85,7 +84,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, role, login, logout, userId }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, role, login, logout, userId }}
+    >
       {children}
     </AuthContext.Provider>
   );

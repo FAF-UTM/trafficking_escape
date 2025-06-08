@@ -26,6 +26,7 @@ import SafetyChecklistBuilderWrapper from './game/safety_checklist_builder/Safet
 import DangerWordHighlightWrapper from './game/danger_word_highlight/DangerWordHighlightWrapper.tsx';
 import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.tsx';
 import { AudioProvider, useAudio } from './context/AudioContext';
+import Ending from './pages/ending/Ending.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -89,7 +90,7 @@ function App() {
             <Route
               path="/chat"
               element={
-                <ProtectedRoute roles={[ 'ROLE_USER', 'ROLE_ADMIN' ]}>
+                <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
                   {/*<Chat />*/}
                   <ChatWithMinigames />
                 </ProtectedRoute>
@@ -98,14 +99,28 @@ function App() {
             <Route path="/click-play" element={<ClickPlayGame />} />
             <Route path="/city-run" element={<Platformer />} />
             <Route path="/timeline-puzzle" element={<TimelinePuzzle />} />
-            <Route path="/combination-lock" element={<CombinationLockWrapper />} />
+            <Route
+              path="/combination-lock"
+              element={<CombinationLockWrapper />}
+            />
             <Route path="/who-to-trust" element={<WhoToTrustGameWrapper />} />
-            <Route path="/true-false" element={<TrueFalseFlashCardsWrapper />} />
+            <Route
+              path="/true-false"
+              element={<TrueFalseFlashCardsWrapper />}
+            />
             <Route path="/word-choice" element={<WordChoiceWrapper />} />
             <Route path="/emoji-story" element={<EmojiStoryDecoderWrapper />} />
-            <Route path="/safety-checklist" element={<SafetyChecklistBuilderWrapper />} />
-            <Route path="/danger-highlight" element={<DangerWordHighlightWrapper />} />
-            <Route path="/word-scramble" element={<WordScrambleWrapper />} />
+            <Route
+              path="/safety-checklist"
+              element={<SafetyChecklistBuilderWrapper />}
+            />
+            <Route
+              path="/danger-highlight"
+              element={<DangerWordHighlightWrapper />}
+            />
+            <Route path="/ending" element={<Ending />} />
+            <Route path="/word-scramble" element={<Home />} />
+            <Route path="*" element={<WordScrambleWrapper />} />
           </Routes>
         </BrowserRouter>
       </AudioProvider>
