@@ -620,6 +620,8 @@ const Chat: React.FC = () => {
     name: string;
     message: string;
   }) => {
+
+    setDisabledOptions(true);
     const token = localStorage.getItem('authToken');
     try {
       const res = await fetch(`${backend_api_chats}/${chat.id}`, {
@@ -683,6 +685,7 @@ const Chat: React.FC = () => {
     } catch (err) {
       console.error('Error loading chat:', err);
     }
+    setDisabledOptions(false);
   };
 
   useEffect(() => {
@@ -854,7 +857,11 @@ const Chat: React.FC = () => {
               <div
                 key={index}
                 className={`${styles.chat_navigation_block} ${disabledOptions ? styles.disabled : ''}`}
-                onClick={() => handleChatSelect(chat)}
+                onClick={() => {
+                  if (!disabledOptions && activeChat?.id !== chat.id) {
+                    handleChatSelect(chat);
+                  }
+                }}
               >
                 <img
                   className={styles.chat_navigation_block_img}
