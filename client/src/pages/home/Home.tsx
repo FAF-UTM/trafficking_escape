@@ -6,10 +6,11 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/theme';
 import { useAudio } from '../../context/AudioContext';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Home: React.FC = () => {
   const { playClick } = useAudio();
-
+  const { t } = useTranslation();
   return (
     <div className={styles.home_container}>
       <ThemeProvider theme={theme}>
@@ -22,7 +23,7 @@ const Home: React.FC = () => {
               variant="contained"
               onClick={() => playClick(3)}
             >
-              Start Game
+              {t('home.start')}
             </Button>
             <Button
               component={Link}
@@ -31,7 +32,7 @@ const Home: React.FC = () => {
               variant="contained"
               onClick={() => playClick(3)}
             >
-              Mini Games
+              {t('home.games')}
             </Button>
             <Button
               component={Link}
@@ -40,7 +41,7 @@ const Home: React.FC = () => {
               variant="contained"
               onClick={() => playClick(3)}
             >
-              Settings
+              {t('home.settings')}
             </Button>
           </div>
         </div>

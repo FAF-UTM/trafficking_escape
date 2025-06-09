@@ -27,6 +27,7 @@ import DangerWordHighlightWrapper from './game/danger_word_highlight/DangerWordH
 import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.tsx';
 import { AudioProvider, useAudio } from './context/AudioContext';
 import Ending from './pages/ending/Ending.tsx';
+import Credentials from './pages/credentials/Credentials.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -76,11 +77,67 @@ function App() {
     return null;
   };
 
+  useEffect(() => {
+    const cbm = localStorage.getItem('colorBlindMode') || 'none';
+    document.documentElement.style.filter =
+      cbm === 'none' ? 'none' : `url(#${cbm})`;
+  }, []);
+
   return (
     <AuthProvider>
       <AudioProvider>
         <BrowserRouter>
           <BackgroundMusicStarter />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ position: 'absolute', width: 0, height: 0 }}
+            aria-hidden="true"
+          >
+            <filter id="deuteranopia" colorInterpolationFilters="linearRGB">
+              <feColorMatrix
+                type="matrix"
+                values="
+        0.367  0.861 -0.228  0.000  0.000
+        0.280  0.673  0.047  0.000  0.000
+       -0.012  0.043  0.969  0.000  0.000
+        0.000  0.000  0.000  1.000  0.000
+      "
+              />
+            </filter>
+            <filter id="protanopia" colorInterpolationFilters="linearRGB">
+              <feColorMatrix
+                type="matrix"
+                values="
+        0.567  0.433  0.000  0.000  0.000
+        0.558  0.442  0.000  0.000  0.000
+        0.000  0.242  0.758  0.000  0.000
+        0.000  0.000  0.000  1.000  0.000
+      "
+              />
+            </filter>
+            <filter id="tritanopia" colorInterpolationFilters="linearRGB">
+              <feColorMatrix
+                type="matrix"
+                values="
+        0.950  0.050  0.000  0.000  0.000
+        0.000  0.433  0.567  0.000  0.000
+        0.000  0.475  0.525  0.000  0.000
+        0.000  0.000  0.000  1.000  0.000
+      "
+              />
+            </filter>
+            <filter id="achromatopsia" colorInterpolationFilters="linearRGB">
+              <feColorMatrix
+                type="matrix"
+                values="
+        0.299 0.587 0.114 0 0
+        0.299 0.587 0.114 0 0
+        0.299 0.587 0.114 0 0
+        0     0     0     1 0
+      "
+              />
+            </filter>
+          </svg>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
@@ -120,6 +177,7 @@ function App() {
             />
             <Route path="/ending" element={<Ending />} />
             <Route path="/word-scramble" element={<Home />} />
+            <Route path="/credentials" element={<Credentials />} />
             <Route path="*" element={<WordScrambleWrapper />} />
           </Routes>
         </BrowserRouter>

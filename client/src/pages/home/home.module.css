@@ -8,7 +8,7 @@
 }
 .home_button_container {
   width: 90%;
-  max-width: 900px;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   justify-content: center;

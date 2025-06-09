@@ -44,7 +44,7 @@
 }
 .settings_inside {
   font-size: 1rem;
-  /*font-family: Montserrat, Arial, sans-serif;*/
+  font-family: Montserrat, Arial, sans-serif;
   font-weight: 400;
   line-height: 1.5;
   padding: 140px 0 0 30px;
@@ -84,14 +84,14 @@
   background: rgba(157, 174, 255, 0.64);
 }
 .settings_inside_lang_title {
-  width: 300px;
+  width: 200px;
 }
 .settings_inside_links {
   display: flex;
 }
 .settings_inside_links {
   display: flex;
-  gap: 32px;
+  gap: 15px;
   margin-top: 0;
 }
 .settings_inside_links_first_of_type {
@@ -111,7 +111,7 @@
 .settings_card {
   margin-top: 100px;
   height: 500px;
-  width: 800px;
+  width: 900px;
   color: #050505;
   background: rgba(255, 255, 255, 0.4);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);

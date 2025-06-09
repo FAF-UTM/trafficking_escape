@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 import styles from './settings.module.css';
 import { Link } from 'react-router-dom';
-import i18n from '../../i18n.tsx';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const SettingsPage: React.FC = () => {
   const [selectedLanguage, setselectedLanguage] = useState('');
-
-  const toggleLanguage = (lang: string | undefined) => {
+  const { t, i18n } = useTranslation();
+  const toggleLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
-    // setselectedLanguage(lang);
+    setselectedLanguage(lang);
   };
   const [mode, setMode] = useState('');
 
@@ -30,6 +29,21 @@ const SettingsPage: React.FC = () => {
     localStorage.setItem('minigameInterval', value.toString());
   };
 
+  // new color-blind state
+  const [colorBlindMode, setColorBlindMode] = useState<string>(() => {
+    return localStorage.getItem('colorBlindMode') || 'none';
+  });
+
+  // new handler: persist & apply
+  const toggleColorBlindMode = (mode?: string) => {
+    const mb = mode || 'none';
+    setColorBlindMode(mb);
+    localStorage.setItem('colorBlindMode', mb);
+    // apply the SVG filter or none
+    const filterValue = mb === 'none' ? 'none' : `url(#${mb})`;
+    document.documentElement.style.filter = filterValue;
+  };
+
   useEffect(() => {
     setselectedLanguage(i18n.language);
     const savedMode = localStorage.getItem('mode') || 'light';
@@ -38,6 +52,10 @@ const SettingsPage: React.FC = () => {
     if (savedInterval) {
       setMinigameInterval(parseInt(savedInterval, 10));
     }
+
+    // apply saved color-blind mode on load
+    const cbm = localStorage.getItem('colorBlindMode') || 'none';
+    toggleColorBlindMode(cbm);
   }, []);
 
   return (
@@ -114,8 +132,61 @@ const SettingsPage: React.FC = () => {
             </div>
             <div className={styles.settings_inside_lang}>
               <div className={styles.settings_inside_lang_title}>
-                Minigame Interval: {minigameInterval}m
+                {t('settings.adaptability')}:
               </div>
+              <div className={styles.settings_inside_lang_types}>
+                <div
+                  className={`${styles.settings_inside_lang_types_btn} ${
+                    colorBlindMode === 'none' &&
+                    styles.settings_inside_lang_types_btn_selected
+                  }`}
+                  onClick={() => toggleColorBlindMode('none')}
+                >
+                  None
+                </div>
+                <div
+                  className={`${styles.settings_inside_lang_types_btn} ${
+                    colorBlindMode === 'deuteranopia' &&
+                    styles.settings_inside_lang_types_btn_selected
+                  }`}
+                  onClick={() => toggleColorBlindMode('deuteranopia')}
+                >
+                  Deuteranopia
+                </div>
+                <div
+                  className={`${styles.settings_inside_lang_types_btn} ${
+                    colorBlindMode === 'protanopia' &&
+                    styles.settings_inside_lang_types_btn_selected
+                  }`}
+                  onClick={() => toggleColorBlindMode('protanopia')}
+                >
+                  Protanopia
+                </div>
+                <div
+                  className={`${styles.settings_inside_lang_types_btn} ${
+                    colorBlindMode === 'tritanopia' &&
+                    styles.settings_inside_lang_types_btn_selected
+                  }`}
+                  onClick={() => toggleColorBlindMode('tritanopia')}
+                >
+                  Tritanopia
+                </div>
+                <div
+                  className={`${styles.settings_inside_lang_types_btn} ${
+                    colorBlindMode === 'achromatopsia' &&
+                    styles.settings_inside_lang_types_btn_selected
+                  }`}
+                  onClick={() => toggleColorBlindMode('achromatopsia')}
+                >
+                  Achromatopsia
+                </div>
+              </div>
+            </div>
+            <div className={styles.settings_inside_lang}>
+              <div className={styles.settings_inside_lang_title}>
+                Minigame Interval:
+              </div>
+              <span>[{minigameInterval} min]</span>
               <input
                 type="range"
                 min="2"
@@ -127,33 +198,33 @@ const SettingsPage: React.FC = () => {
               />
             </div>
             <div
-              className={`${styles.settings_inside_links} ${styles.settings_inside_links_first_of_type} `}
+              className={`${styles.settings_inside_links} ${styles.settings_inside_links_first_of_type}`}
             >
-              <Link to={'/login'} className={styles.settings_inside_links_btn}>
-                Login
+              <Link to="/login" className={styles.settings_inside_links_btn}>
+                {t('settings.links.login')}
               </Link>
               <Link
-                to={'/credentials'}
+                to="/credentials"
                 className={styles.settings_inside_links_btn}
               >
-                Credentials
+                {t('settings.links.credentials')}
               </Link>
             </div>
             <div className={styles.settings_inside_links}>
-              <Link to={'/login'} className={styles.settings_inside_links_btn}>
-                Documentation
-              </Link>
               <Link
-                to={'/credentials'}
+                to="/documentation"
                 className={styles.settings_inside_links_btn}
               >
-                Development
+                {t('settings.links.documentation')}
               </Link>
               <Link
-                to={'/credentials'}
+                to="/development"
                 className={styles.settings_inside_links_btn}
               >
-                Legal
+                {t('settings.links.development')}
+              </Link>
+              <Link to="/legal" className={styles.settings_inside_links_btn}>
+                {t('settings.links.legal')}
               </Link>
             </div>
           </div>

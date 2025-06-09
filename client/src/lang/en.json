@@ -11,9 +11,23 @@
   "general": {
     "home": "Home"
   },
+  "home": {
+    "games": "Mini Games",
+    "start": "Start Game",
+    "settings": "Settings"
+  },
   "settings": {
     "settings": "Settings",
     "language": "Language",
-    "mode": "Mode"
+    "mode": "Mode",
+    "adaptability": "Adaptability",
+    "minigameInterval": "Minigame Interval",
+    "links": {
+      "login": "Login",
+      "credentials": "Credentials",
+      "documentation": "Documentation",
+      "development": "Development",
+      "legal": "Legal"
+    }
   }
 }

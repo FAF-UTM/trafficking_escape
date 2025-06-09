@@ -11,9 +11,23 @@
   "general": {
     "home": "Startpagina"
   },
+  "home": {
+    "games": "Mini-spellen",
+    "start": "Spel starten",
+    "settings": "Instellingen"
+  },
   "settings": {
     "settings": "Instellingen",
     "language": "Taal",
-    "mode": "Mode"
+    "mode": "Modus",
+    "adaptability": "Aanpassingsvermogen",
+    "minigameInterval": "Interval minigame",
+    "links": {
+      "login": "Inloggen",
+      "credentials": "Referenties",
+      "documentation": "Documentatie",
+      "development": "Ontwikkeling",
+      "legal": "Juridisch"
+    }
   }
 }
