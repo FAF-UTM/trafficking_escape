@@ -24,10 +24,12 @@ import WordChoiceWrapper from './game/word_choice_game/WordChoiceWrapper.tsx';
 import EmojiStoryDecoderWrapper from './game/emoji_story_decoder/EmojiStoryDecoderWrapper.tsx';
 import SafetyChecklistBuilderWrapper from './game/safety_checklist_builder/SafetyChecklistBuilderWrapper.tsx';
 import DangerWordHighlightWrapper from './game/danger_word_highlight/DangerWordHighlightWrapper.tsx';
-import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.tsx';
 import { AudioProvider, useAudio } from './context/AudioContext';
 import Ending from './pages/ending/Ending.tsx';
 import Credentials from './pages/credentials/Credentials.tsx';
+import Legal from './pages/legal/Legal.tsx';
+import NotFound from './pages/notfound/NotFound.tsx';
+import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -176,9 +178,10 @@ function App() {
               element={<DangerWordHighlightWrapper />}
             />
             <Route path="/ending" element={<Ending />} />
-            <Route path="/word-scramble" element={<Home />} />
+            <Route path="/word-scramble" element={<WordScrambleWrapper />} />
             <Route path="/credentials" element={<Credentials />} />
-            <Route path="*" element={<WordScrambleWrapper />} />
+            <Route path="/legal" element={<Legal />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </AudioProvider>

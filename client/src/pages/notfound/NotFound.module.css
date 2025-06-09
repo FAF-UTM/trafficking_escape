@@ -1,4 +1,4 @@
-.ending {
+.notfound {
   width: 100vw;
   height: 100vh;
   background-color: #000000;
@@ -10,7 +10,7 @@
   justify-content: center;
   text-align: center;
 }
-.ending_title {
+.notfound_title {
   font-size: 40px;
   font-family:
     'Press Start 2P',
@@ -19,10 +19,10 @@
   font-weight: 600;
   margin-bottom: 10px;
 }
-.ending_subtitle {
-  margin-top: 10px;
+.notfound_subtitle {
+  margin-top: 20px;
 }
-.ending_btn {
+.notfound_btn {
   border: 1px solid #fff;
   color: #fff;
   padding: 10px 20px;
