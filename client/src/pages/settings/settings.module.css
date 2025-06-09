@@ -59,7 +59,7 @@
 .back_home svg {
   transform: scale(1.2) rotate(180deg);
   margin-right: 10px;
-  margin-top: -2.5px;
+  margin-top: -2px;
 }
 
 .settings_inside {
