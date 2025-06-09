@@ -1,21 +1,23 @@
 import React from 'react';
 import styles from './ending.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Ending: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   return (
     <div className={styles.ending}>
-      <div className={styles.ending_title}>Game ended</div>
+      <div className={styles.ending_title}>{t('ending.title')}</div>
       <div className={styles.ending_subtitle}>
-        Thank you for playing. <br /> Hope you enjoyed. We hope this experience
-        was not only engaging but also enlightening. <br />
-        Together, awareness is the first step toward prevention. <br />
-        <b> Stay informed. Stay safe.</b>
+        {t('ending.subtitle_1')} <br />
+        {t('ending.subtitle_2')} <br />
+        {t('ending.subtitle_3')} <br />
+        <b>{t('ending.subtitle_4')}</b>
       </div>
-
       <button onClick={() => navigate('/')} className={styles.ending_btn}>
-        Go back Home
+        {t('ending.button')}
       </button>
     </div>
   );

@@ -29,5 +29,13 @@
       "development": "Ontwikkeling",
       "legal": "Juridisch"
     }
+  },
+  "ending": {
+    "title": "Spel beëindigd",
+    "subtitle_1": "Bedankt voor het spelen.",
+    "subtitle_2": "We hopen dat je ervan genoten hebt. We hopen dat deze ervaring niet alleen boeiend maar ook verhelderend was.",
+    "subtitle_3": "Samen is bewustwording de eerste stap naar preventie.",
+    "subtitle_4": "Blijf geïnformeerd. Blijf veilig.",
+    "button": "Terug naar Startpagina"
   }
 }
