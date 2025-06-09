@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './settings.module.css';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 const SettingsPage: React.FC = () => {
   const [selectedLanguage, setselectedLanguage] = useState('');

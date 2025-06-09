@@ -17,12 +17,30 @@
   left: 30px;
   font-size: 32px;
 }
+/*.back_home {*/
+/*  font-size: 1rem;*/
+/*  !*font-family: Montserrat, Arial, sans-serif;*!*/
+/*  font-weight: 400;*/
+/*  line-height: 1.5;*/
+/*  font-size: 24px;*/
+/*  opacity: 0.8;*/
+/*  width: 100%;*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: flex-start;*/
+/*  cursor: pointer;*/
+/*  position: fixed;*/
+/*  left: 30px;*/
+/*  top: 25px;*/
+/*  text-decoration: none;*/
+/*  color: #050505;*/
+/*}*/
 .back_home {
-  font-size: 1rem;
-  /*font-family: Montserrat, Arial, sans-serif;*/
+  color: rgb(26, 26, 26);
+  font-family: Montserrat, Arial, sans-serif;
   font-weight: 400;
   line-height: 1.5;
-  font-size: 24px;
+  font-size: 14px;
   opacity: 0.8;
   width: 100%;
   display: flex;
@@ -31,17 +49,19 @@
   cursor: pointer;
   position: fixed;
   left: 30px;
-  top: 25px;
+  top: 30px;
   text-decoration: none;
   color: #050505;
 }
 .back_home:hover {
-  text-decoration: underline;
+  /*text-decoration: underline;*/
 }
 .back_home svg {
-  transform: scale(2) rotate(180deg);
-  margin-right: 24px;
+  transform: scale(1.2) rotate(180deg);
+  margin-right: 10px;
+  margin-top: -2.5px;
 }
+
 .settings_inside {
   font-size: 1rem;
   font-family: Montserrat, Arial, sans-serif;
