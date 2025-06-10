@@ -19,6 +19,9 @@
   font-weight: 600;
   margin-bottom: 10px;
 }
+.ending_subtitle {
+  margin-top: 10px;
+}
 .ending_btn {
   border: 1px solid #fff;
   color: #fff;

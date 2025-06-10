@@ -45,7 +45,7 @@ const LoginPage: React.FC = () => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Traffiking Escape
+            Trafficking Escape
           </Typography>
 
           <Box
