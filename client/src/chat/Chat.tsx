@@ -1,13 +1,15 @@
 import styles from './chat.module.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Character from '../components/character/Character.tsx';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext.tsx';
+import Notification from '../components/notification/Notification.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const backend_api_generate =
   import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
 
-const active_chat_name = 'Alex Cara';
+// const active_chat_name = '';
 const active_chat_img =
   'https://scontent-otp1-1.xx.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=cp0_dst-png_s80x80&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_ohc=31SphODCOLIQ7kNvwE32Nje&_nc_oc=Adknk7GF9oSbP_1zw41Md8h9m3_bO-RibDYDBhgAJktRcrZKCaSY5oYg36ALnmUfzCk&_nc_zt=24&_nc_ht=scontent-otp1-1.xx&oh=00_AfL9IyOp7xUaqn4wdrdjCjlFZVYkT1k-rjnTU-3ad0oQlg&oe=6847F2BA';
 const backend_api_chats = import.meta.env.VITE_BACKEND + '/api/chats';
@@ -20,6 +22,15 @@ interface ChatData {
   from_img: string;
   sendtype: string;
   messages: string[];
+}
+
+interface UserDigest {
+  score: number;
+  totalChats: number;
+  totalMessages: number;
+  averageDanger: number;
+  worstDanger: number;
+  safestDanger: number;
 }
 
 // Define character configuration
@@ -98,8 +109,10 @@ const Chat: React.FC = () => {
   const [_dangerLevel3, setDangerLevel3] = useState<number>(0);
   const [updatedDangerLevel, setUpdatedDangerLevel] = useState<number>(0);
 
-  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [userDigest, setUserDigest] = useState<UserDigest | null>(null);
 
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const navigate = useNavigate();
   // Toggle function for Character
   const toggleCharacter = (id: string) => {
     setVisibleCharacter((prev) => (prev === id ? null : id));
@@ -118,6 +131,27 @@ const Chat: React.FC = () => {
   };
   const hidePopup = (id: string) => {
     setPopupVisibility((prev) => ({ ...prev, [id]: false }));
+  };
+
+  // helper to add a message block (and merge if same sender)
+  const addMessage = (newMsg: ChatData) => {
+    setChatData((prev) => {
+      const last = prev[prev.length - 1];
+      // if the last message is from the same side, merge into it
+      if (
+        last &&
+        last.sendtype === newMsg.sendtype
+        // if you only want to merge AI (“got”) blocks, add: && newMsg.sendtype === 'got'
+      ) {
+        return prev.map((m, i) =>
+          i === prev.length - 1
+            ? { ...m, messages: [...m.messages, ...newMsg.messages] }
+            : m
+        );
+      }
+      // otherwise start a brand new block
+      return [...prev, newMsg];
+    });
   };
 
   // only fetches the 3 options (no appending of chat bubbles)
@@ -157,42 +191,37 @@ const Chat: React.FC = () => {
   };
 
   const truncate = (str: string, max: number) =>
-    str.length > max ? str.slice(0, max) + "..." : str;
+    str.length > max ? str.slice(0, max) + '...' : str;
 
   // *** This function calls the message-generation endpoint ***
   const fetchAIResponse = async (
     lastMessage: string,
     currentDangerLevel: number,
-    isTrafficker: boolean
+    isTrafficker: boolean,
+    chatId: number
   ) => {
-    setIsTyping(true); // Show typing indicator
-    //for testing - console.log('start_typing');
+    setIsTyping(true);
     try {
       const response = await fetch(backend_api_generate, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // *** Attach token in the Authorization header ***
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           context: 'A child is chatting with someone online.',
-          lastMessage: lastMessage,
-          currentDangerLevel: currentDangerLevel,
-          isTrafficker: isTrafficker,
+          lastMessage,
+          currentDangerLevel,
+          isTrafficker,
         }),
       });
-
       if (!response.ok) {
-        console.error(
-          'Error fetching AI response:',
-          response.status,
-          response.statusText
-        );
+        console.error('Error fetching AI response:', response.statusText);
         return;
       }
-
       const data = await response.json();
+
+      // update the three suggestion buttons & danger levels
       setOption1(data.option1 || '');
       setOption2(data.option2 || '');
       setOption3(data.option3 || '');
@@ -201,68 +230,66 @@ const Chat: React.FC = () => {
       setDangerLevel3(data.dangerLevel3 || 0);
       setUpdatedDangerLevel(data.updatedDangerLevel || 0);
 
-      // *** Add the AI's chatResponse to the chat as a "got" message ***
       if (data.chatResponse) {
-        // const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '');
-        // const newMessage: ChatData = {
-        //   from: 'Alex',
-        //   from_img: active_chat_img,
-        //   sendtype: 'got',
-        //   messages: [cleanedResponse],
-        // };
-        const cleanedResponse = data.chatResponse.replace(/^"|"$/g, '').trim();
-
-        // Split by sentence-ending punctuation followed by space or end of string
-        const messageChunks = cleanedResponse
+        // clean and split into sentence‐chunks
+        const cleaned = String(data.chatResponse).replace(/^"|"$/g, '').trim(); // cleaned is now inferred as string
+        const messageChunks = cleaned
           .split(/(?<=[.!?;])\s+/)
-          .map((chunk: string) => chunk.trim())
-          .filter((chunk: string | any[]) => chunk.length > 0);
+          .map((c) => c.trim()) // c is now inferred as string
+          .filter((c) => c.length > 0);
 
-        const newMessage: ChatData = {
-          from: 'Alex',
-          from_img: active_chat_img,
-          sendtype: 'got',
-          messages: messageChunks,
-        };
+        // sequentially “type” each chunk, with a 1 s pause before each but the first
+        for (let i = 0; i < messageChunks.length; i++) {
+          const chunk = messageChunks[i];
 
-        setChatData((prevChatData) => [...prevChatData, newMessage]);
+          // pause 0.7 s before every chunk after the first
+          if (i > 0) {
+            await new Promise((res) => setTimeout(res, 700));
+          }
 
-        // Save each chunk to backend
-        if (activeChat?.id) {
+          // simulate typing delay (40 ms/char up to 2 s)
+          const typingDelay = Math.min(2000, chunk.length * 40);
+          await new Promise((res) => setTimeout(res, typingDelay));
+
+          // now append this chunk
+          const newMessage: ChatData = {
+            from: 'Alex',
+            from_img: active_chat_img,
+            sendtype: 'got',
+            messages: [chunk],
+          };
+          addMessage(newMessage);
+
+          // persist this incoming chunk
           try {
-            for (const text of messageChunks) {
-              await fetch(backend_api_messages, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
-                },
-                body: JSON.stringify({
-                  chatId: activeChat.id,
-                  isOutgoing: false,
-                  messageText: text,
-                }),
-              });
-            }
-
-            // Update preview with last message
-            const last = messageChunks[messageChunks.length - 1];
-            setChatUsers((prev) =>
-              prev.map((c) =>
-                c.id === activeChat.id ? { ...c, message: last } : c
-              )
-            );
+            await fetch(backend_api_messages, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              },
+              body: JSON.stringify({
+                chatId,
+                isOutgoing: false,
+                messageText: chunk,
+              }),
+            });
           } catch (err) {
-            console.error('Error saving incoming message:', err);
+            console.error('Error saving incoming message chunk:', err);
           }
         }
+
+        // update last-message preview on the **right** chat
+        const last = messageChunks[messageChunks.length - 1];
+        setChatUsers((prev) =>
+          prev.map((c) => (c.id === chatId ? { ...c, message: last } : c))
+        );
       }
-    } catch (error) {
-      console.error('Error in fetchAIResponse:', error);
+    } catch (err) {
+      console.error('Error in fetchAIResponse:', err);
     } finally {
-      setIsTyping(false); // Hide typing indicator
-      setDisabledOptions(false); // Re-enable the options after the response is generated
-      //for testing - console.log('stop_typing');
+      setIsTyping(false);
+      setDisabledOptions(false);
     }
   };
 
@@ -283,7 +310,7 @@ const Chat: React.FC = () => {
     };
 
     // 1) Optimistically update UI
-    setChatData((prev) => [...prev, userMessage]);
+    addMessage(userMessage);
 
     // 2) Persist to backend
     try {
@@ -310,15 +337,12 @@ const Chat: React.FC = () => {
       console.error('Error saving outgoing message:', err);
     }
 
-    // 4) Kick off AI reply with random delay
-    const delay =
-      Math.random() < 0.2
-        ? (2100 + Math.random() * 400) | 0
-        : (1000 + Math.random() * 400) | 0;
-
-    setTimeout(() => {
-      fetchAIResponse(cleaned, updatedDangerLevel, activeChat.isTrafficker);
-    }, delay);
+    fetchAIResponse(
+      cleaned,
+      updatedDangerLevel,
+      activeChat.isTrafficker,
+      activeChat.id
+    );
   };
 
   const [activeLeftBarOption, setActiveLeftBarOption] = useState<string>('');
@@ -380,13 +404,20 @@ const Chat: React.FC = () => {
 
   const { userId } = useAuth();
   const now = new Date().toISOString();
+  // useEffect(() => {
+  //   if (userId) {
+  //     fetchOrCreateChat(); // or pass a dynamic name
+  //     // console.log('authToken', token);
+  //   }
+  //   // fetchAIResponse('Hello', 3, false)
+  // }, []);
+  const didCreate = useRef(false);
+
   useEffect(() => {
-    if (userId) {
-      fetchOrCreateChat(); // or pass a dynamic name
-      // console.log('authToken', token);
-    }
-    // fetchAIResponse('Hello', 3, false)
-  }, []);
+    if (!userId || didCreate.current) return;
+    didCreate.current = true;
+    fetchOrCreateChat();
+  }, [userId]);
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -418,6 +449,30 @@ const Chat: React.FC = () => {
     };
 
     if (userId) fetchChats();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchDigest = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND}/api/v1/users/${userId}/digest`,
+          {
+            headers: {
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setUserDigest(data);
+        }
+      } catch (err) {
+        console.error('Error fetching user digest:', err);
+      }
+    };
+
+    if (userId) fetchDigest();
   }, [userId]);
 
   const fetchOrCreateChat = async () => {
@@ -583,6 +638,7 @@ const Chat: React.FC = () => {
     name: string;
     message: string;
   }) => {
+    setDisabledOptions(true);
     const token = localStorage.getItem('authToken');
     try {
       const res = await fetch(`${backend_api_chats}/${chat.id}`, {
@@ -600,16 +656,40 @@ const Chat: React.FC = () => {
 
       // no history → clear & start fresh
       if (!chatData.messages || chatData.messages.length === 0) {
+        // clear UI
         setChatData([]);
-        await fetchAIResponse('Hello', 0, chatData.isTrafficker);
+
+        // 1) ask AI for the "Hello" greeting, which also pushes into chatData and saves chunks
+        // await fetchAIResponse('Hello', 0, chatData.isTrafficker);
+        await fetchAIResponse('Hello', 0, chatData.isTrafficker, chatData.id);
+
+        // // 2) persist the greeting itself as a single message to /api/messages
+        // try {
+        //   await fetch(backend_api_messages, {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        //     },
+        //     body: JSON.stringify({
+        //       chatId: chatData.id,
+        //       isOutgoing: false,
+        //       messageText: 'Hello',
+        //     }),
+        //   });
+        // } catch (err) {
+        //   console.error('Error saving initial greeting:', err);
+        // }
       } else {
         // build one‐chunk‐per‐message array
-        const formattedMessages: ChatData[] = chatData.messages.map((m: any) => ({
-          from: m.isOutgoing ? 'You' : chatData.chatName,
-          from_img: m.isOutgoing ? '' : chatData.chatImageUrl,
-          sendtype: m.isOutgoing ? 'send' : 'got',
-          messages: [m.messageText],
-        }));
+        const formattedMessages: ChatData[] = chatData.messages.map(
+          (m: any) => ({
+            from: m.isOutgoing ? 'You' : chatData.chatName,
+            from_img: m.isOutgoing ? '' : chatData.chatImageUrl,
+            sendtype: m.isOutgoing ? 'send' : 'got',
+            messages: [m.messageText],
+          })
+        );
 
         // now collapse any back‐to‐back "got" entries
         const grouped: ChatData[] = [];
@@ -638,18 +718,15 @@ const Chat: React.FC = () => {
         const last = grouped[grouped.length - 1];
         if (last.sendtype === 'got') {
           const lastText = last.messages[last.messages.length - 1];
-          fetchSuggestions(
-            lastText,
-            updatedDangerLevel,
-            chatData.isTrafficker
-          );
+          fetchSuggestions(lastText, updatedDangerLevel, chatData.isTrafficker);
         }
       }
     } catch (err) {
       console.error('Error loading chat:', err);
+    } finally {
+      setDisabledOptions(false);
     }
   };
-
 
   useEffect(() => {
     if (chatUsers.length > 0 && activeChat === null) {
@@ -657,6 +734,20 @@ const Chat: React.FC = () => {
       handleChatSelect(last);
     }
   }, [chatUsers, activeChat]);
+
+  const [loadingDots, setLoadingDots] = useState('');
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLoadingDots((prev) => {
+        if (prev === '') return '.';
+        if (prev === '.') return '..';
+        if (prev === '..') return '...';
+        return '';
+      });
+    }, 500); // adjust speed if needed
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className={styles.chat_wrap}>
@@ -805,8 +896,12 @@ const Chat: React.FC = () => {
             {chatUsers.map((chat, index) => (
               <div
                 key={index}
-                className={styles.chat_navigation_block}
-                onClick={() => handleChatSelect(chat)}
+                className={`${styles.chat_navigation_block} ${disabledOptions ? styles.disabled : ''}`}
+                onClick={() => {
+                  if (!disabledOptions && activeChat?.id !== chat.id) {
+                    handleChatSelect(chat);
+                  }
+                }}
               >
                 <img
                   className={styles.chat_navigation_block_img}
@@ -1072,106 +1167,162 @@ const Chat: React.FC = () => {
             </svg>
           </div>
         </div>
+
         <div className={styles.chat_info}>
-          <button
-            onClick={toggleInfoVisibility}
-            className={styles.chat_info_btn}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.521 6.904 10.713 6.712C10.905 6.52 11.0007 6.28267 11 6C10.9993 5.71733 10.9033 5.48 10.712 5.288C10.5207 5.096 10.2833 5 10 5C9.71667 5 9.47933 5.096 9.288 5.288C9.09667 5.48 9.00067 5.71733 9 6C8.99933 6.28267 9.09533 6.52033 9.288 6.713C9.48067 6.90567 9.718 7.00133 10 7ZM10 20C8.61667 20 7.31667 19.7373 6.1 19.212C4.88334 18.6867 3.825 17.9743 2.925 17.075C2.025 16.1757 1.31267 15.1173 0.788001 13.9C0.263335 12.6827 0.000667932 11.3827 1.26582e-06 10C-0.000665401 8.61733 0.262001 7.31733 0.788001 6.1C1.314 4.88267 2.02633 3.82433 2.925 2.925C3.82367 2.02567 4.882 1.31333 6.1 0.788C7.318 0.262667 8.618 0 10 0C11.382 0 12.682 0.262667 13.9 0.788C15.118 1.31333 16.1763 2.02567 17.075 2.925C17.9737 3.82433 18.6863 4.88267 19.213 6.1C19.7397 7.31733 20.002 8.61733 20 10C19.998 11.3827 19.7353 12.6827 19.212 13.9C18.6887 15.1173 17.9763 16.1757 17.075 17.075C16.1737 17.9743 15.1153 18.687 13.9 19.213C12.6847 19.739 11.3847 20.0013 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18Z"
-                fill="black"
-              />
-            </svg>
-            {t('chat.chat_info')}
-          </button>
-          <button
-            className={`${styles.chat_info_btn} ${styles.chat_info_help}`}
-          >
-            {t('chat.help')}
-          </button>
-          <button
-            onClick={toggleSettingsVisibility}
-            className={styles.chat_info_btn}
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M10.325 4.317C10.751 2.561 13.249 2.561 13.675 4.317C13.7389 4.5808 13.8642 4.82578 14.0407 5.032C14.2172 5.23822 14.4399 5.39985 14.6907 5.50375C14.9414 5.60764 15.2132 5.65085 15.4838 5.62987C15.7544 5.60889 16.0162 5.5243 16.248 5.383C17.791 4.443 19.558 6.209 18.618 7.753C18.4769 7.98466 18.3924 8.24634 18.3715 8.51677C18.3506 8.78721 18.3938 9.05877 18.4975 9.30938C18.6013 9.55999 18.7627 9.78258 18.9687 9.95905C19.1747 10.1355 19.4194 10.2609 19.683 10.325C21.439 10.751 21.439 13.249 19.683 13.675C19.4192 13.7389 19.1742 13.8642 18.968 14.0407C18.7618 14.2172 18.6001 14.4399 18.4963 14.6907C18.3924 14.9414 18.3491 15.2132 18.3701 15.4838C18.3911 15.7544 18.4757 16.0162 18.617 16.248C19.557 17.791 17.791 19.558 16.247 18.618C16.0153 18.4769 15.7537 18.3924 15.4832 18.3715C15.2128 18.3506 14.9412 18.3938 14.6906 18.4975C14.44 18.6013 14.2174 18.7627 14.0409 18.9687C13.8645 19.1747 13.7391 19.4194 13.675 19.683C13.249 21.439 10.751 21.439 10.325 19.683C10.2611 19.4192 10.1358 19.1742 9.95929 18.968C9.7828 18.7618 9.56011 18.6001 9.30935 18.4963C9.05859 18.3924 8.78683 18.3491 8.51621 18.3701C8.24559 18.3911 7.98375 18.4757 7.752 18.617C6.209 19.557 4.442 17.791 5.382 16.247C5.5231 16.0153 5.60755 15.7537 5.62848 15.4832C5.64942 15.2128 5.60624 14.9412 5.50247 14.6906C5.3987 14.44 5.23726 14.2174 5.03127 14.0409C4.82529 13.8645 4.58056 13.7391 4.317 13.675C2.561 13.249 2.561 10.751 4.317 10.325C4.5808 10.2611 4.82578 10.1358 5.032 9.95929C5.23822 9.7828 5.39985 9.56011 5.50375 9.30935C5.60764 9.05859 5.65085 8.78683 5.62987 8.51621C5.60889 8.24559 5.5243 7.98375 5.383 7.752C4.443 6.209 6.209 4.442 7.753 5.382C8.753 5.99 10.049 5.452 10.325 4.317Z"
-                stroke="black"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M9 12C9 12.7956 9.31607 13.5587 9.87868 14.1213C10.4413 14.6839 11.2044 15 12 15C12.7956 15 13.5587 14.6839 14.1213 14.1213C14.6839 13.5587 15 12.7956 15 12C15 11.2044 14.6839 10.4413 14.1213 9.87868C13.5587 9.31607 12.7956 9 12 9C11.2044 9 10.4413 9.31607 9.87868 9.87868C9.31607 10.4413 9 11.2044 9 12Z"
-                stroke="black"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-
-            {t('chat.chat_settings')}
-          </button>
-          <button
-            className={`${styles.chat_info_btn} ${styles.chat_info_report} `}
-          >
-            {t('chat.report')}
-          </button>
-
-          <div className={styles.chat_info_test}>
-            {characters.map((character) => (
-              <button
-                key={character.id}
-                className={styles.chat_info_btn}
-                onClick={() => toggleCharacter(character.id)}
-              >
-                Toggle {character.name}
-              </button>
-            ))}
+          <img
+            src={activeChat?.img || '/assets/chat/img_default_avatar.png'}
+            alt="avatar"
+            className={styles.chat_info_avatar}
+          />
+          <div className={styles.chat_info_name}>
+            {activeChat?.name ?? 'No chat selected'}
+          </div>
+          <div className={styles.chat_info_btns}>
             <button
-              className={styles.chat_info_btn}
-              // onClick={() => generateNewChatUser('Hello, world!')}
-              // onClick={() => fetchAIResponse('Hello', 3, false)}
-              onClick={createNewChat}
+              onClick={toggleInfoVisibility}
+              className={styles.chat_info_name_btn}
             >
-              Add new chat
+              <div className={styles.chat_info_name_btn_circle}>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.521 6.904 10.713 6.712C10.905 6.52 11.0007 6.28267 11 6C10.9993 5.71733 10.9033 5.48 10.712 5.288C10.5207 5.096 10.2833 5 10 5C9.71667 5 9.47933 5.096 9.288 5.288C9.09667 5.48 9.00067 5.71733 9 6C8.99933 6.28267 9.09533 6.52033 9.288 6.713C9.48067 6.90567 9.718 7.00133 10 7ZM10 20C8.61667 20 7.31667 19.7373 6.1 19.212C4.88334 18.6867 3.825 17.9743 2.925 17.075C2.025 16.1757 1.31267 15.1173 0.788001 13.9C0.263335 12.6827 0.000667932 11.3827 1.26582e-06 10C-0.000665401 8.61733 0.262001 7.31733 0.788001 6.1C1.314 4.88267 2.02633 3.82433 2.925 2.925C3.82367 2.02567 4.882 1.31333 6.1 0.788C7.318 0.262667 8.618 0 10 0C11.382 0 12.682 0.262667 13.9 0.788C15.118 1.31333 16.1763 2.02567 17.075 2.925C17.9737 3.82433 18.6863 4.88267 19.213 6.1C19.7397 7.31733 20.002 8.61733 20 10C19.998 11.3827 19.7353 12.6827 19.212 13.9C18.6887 15.1173 17.9763 16.1757 17.075 17.075C16.1737 17.9743 15.1153 18.687 13.9 19.213C12.6847 19.739 11.3847 20.0013 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18Z"
+                    fill="black"
+                  />
+                </svg>
+              </div>
+              {t('chat.chat_info')}
             </button>
-            <div
-              className={`${styles.chat_info_btn} ${styles.chat_info_report}`}
-              style={{ cursor: 'none' }}
-            >
-              Danger level <br />
-              {updatedDangerLevel}
-            </div>
 
-            <button className={styles.chat_info_btn} onClick={toggleLanguage}>
-              Toggle language <br />
-              current: {i18n.language.toUpperCase()}
-            </button>
-            <div
-              className={`${styles.chat_info_btn} ${
-                activeChat?.isTrafficker
-                  ? styles.chat_info_report
-                  : styles.chat_info_green
-              }`}
-              style={{ cursor: 'none' }}
+            <button
+              onClick={toggleSettingsVisibility}
+              className={styles.chat_info_name_btn}
             >
-              Is traffickant
-              <br />
-              {activeChat?.isTrafficker ? 'true' : 'false'}
+              <div className={`${styles.chat_info_name_btn_circle}`}>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.325 4.317C10.751 2.561 13.249 2.561 13.675 4.317C13.7389 4.5808 13.8642 4.82578 14.0407 5.032C14.2172 5.23822 14.4399 5.39985 14.6907 5.50375C14.9414 5.60764 15.2132 5.65085 15.4838 5.62987C15.7544 5.60889 16.0162 5.5243 16.248 5.383C17.791 4.443 19.558 6.209 18.618 7.753C18.4769 7.98466 18.3924 8.24634 18.3715 8.51677C18.3506 8.78721 18.3938 9.05877 18.4975 9.30938C18.6013 9.55999 18.7627 9.78258 18.9687 9.95905C19.1747 10.1355 19.4194 10.2609 19.683 10.325C21.439 10.751 21.439 13.249 19.683 13.675C19.4192 13.7389 19.1742 13.8642 18.968 14.0407C18.7618 14.2172 18.6001 14.4399 18.4963 14.6907C18.3924 14.9414 18.3491 15.2132 18.3701 15.4838C18.3911 15.7544 18.4757 16.0162 18.617 16.248C19.557 17.791 17.791 19.558 16.247 18.618C16.0153 18.4769 15.7537 18.3924 15.4832 18.3715C15.2128 18.3506 14.9412 18.3938 14.6906 18.4975C14.44 18.6013 14.2174 18.7627 14.0409 18.9687C13.8645 19.1747 13.7391 19.4194 13.675 19.683C13.249 21.439 10.751 21.439 10.325 19.683C10.2611 19.4192 10.1358 19.1742 9.95929 18.968C9.7828 18.7618 9.56011 18.6001 9.30935 18.4963C9.05859 18.3924 8.78683 18.3491 8.51621 18.3701C8.24559 18.3911 7.98375 18.4757 7.752 18.617C6.209 19.557 4.442 17.791 5.382 16.247C5.5231 16.0153 5.60755 15.7537 5.62848 15.4832C5.64942 15.2128 5.60624 14.9412 5.50247 14.6906C5.3987 14.44 5.23726 14.2174 5.03127 14.0409C4.82529 13.8645 4.58056 13.7391 4.317 13.675C2.561 13.249 2.561 10.751 4.317 10.325C4.5808 10.2611 4.82578 10.1358 5.032 9.95929C5.23822 9.7828 5.39985 9.56011 5.50375 9.30935C5.60764 9.05859 5.65085 8.78683 5.62987 8.51621C5.60889 8.24559 5.5243 7.98375 5.383 7.752C4.443 6.209 6.209 4.442 7.753 5.382C8.753 5.99 10.049 5.452 10.325 4.317Z"
+                    stroke="black"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M9 12C9 12.7956 9.31607 13.5587 9.87868 14.1213C10.4413 14.6839 11.2044 15 12 15C12.7956 15 13.5587 14.6839 14.1213 14.1213C14.6839 13.5587 15 12.7956 15 12C15 11.2044 14.6839 10.4413 14.1213 9.87868C13.5587 9.31607 12.7956 9 12 9C11.2044 9 10.4413 9.31607 9.87868 9.87868C9.31607 10.4413 9 11.2044 9 12Z"
+                    stroke="black"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+
+              {t('chat.chat_settings')}
+            </button>
+            <button className={`${styles.chat_info_name_btn}`}>
+              <div
+                className={`${styles.chat_info_name_btn_circle} ${styles.chat_info_help}`}
+              ></div>
+              {t('chat.help')}
+            </button>
+            <button className={`${styles.chat_info_name_btn} `}>
+              <div
+                className={`${styles.chat_info_name_btn_circle} ${styles.chat_info_report}`}
+              ></div>
+              {t('chat.report')}
+            </button>
+          </div>
+
+          <div className={styles.chat_info_menu_option}>
+            <div className={styles.chat_info_menu_option_btn}>
+              <div className={styles.chat_info_menu_option_btn_left}>
+                <div className={styles.chat_info_menu_option_circle}>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M2 8H2.66667M8 2V2.66667M13.3333 8H14M3.73333 3.73333L4.2 4.2M12.2667 3.73333L11.8 4.2M6.46667 11.3333H9.53333M6 10.6667C5.44031 10.2469 5.02689 9.66168 4.81829 8.99389C4.60969 8.32611 4.61649 7.60961 4.83772 6.94591C5.05896 6.2822 5.48341 5.70493 6.05097 5.29586C6.61852 4.88679 7.30039 4.66667 8 4.66667C8.69961 4.66667 9.38148 4.88679 9.94903 5.29586C10.5166 5.70493 10.941 6.2822 11.1623 6.94591C11.3835 7.60961 11.3903 8.32611 11.1817 8.99389C10.9731 9.66168 10.5597 10.2469 10 10.6667C9.73971 10.9243 9.54373 11.2396 9.42791 11.5871C9.3121 11.9345 9.2797 12.3044 9.33333 12.6667C9.33333 13.0203 9.19286 13.3594 8.94281 13.6095C8.69276 13.8595 8.35362 14 8 14C7.64638 14 7.30724 13.8595 7.05719 13.6095C6.80714 13.3594 6.66667 13.0203 6.66667 12.6667C6.7203 12.3044 6.6879 11.9345 6.57209 11.5871C6.45627 11.2396 6.26029 10.9243 6 10.6667Z"
+                      stroke="black"
+                      stroke-width="1.33333"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                Get a hint
+              </div>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M5.41066 14.0885C5.33325 14.0112 5.27185 13.9193 5.22996 13.8182C5.18807 13.717 5.1665 13.6087 5.1665 13.4992C5.1665 13.3898 5.18807 13.2814 5.22996 13.1803C5.27185 13.0791 5.33325 12.9873 5.41066 12.9099L10.204 8.11654C10.2351 8.0853 10.2526 8.04299 10.2526 7.99887C10.2526 7.95476 10.2351 7.91245 10.204 7.88121L5.41066 3.08787C5.2589 2.93066 5.17497 2.72014 5.17693 2.50164C5.17889 2.28314 5.26659 2.07416 5.42114 1.91969C5.57569 1.76523 5.78473 1.67765 6.00322 1.67581C6.22172 1.67397 6.4322 1.75803 6.58933 1.90987L12.0893 7.40987C12.1667 7.48726 12.2281 7.57913 12.27 7.68025C12.3119 7.78137 12.3335 7.88975 12.3335 7.99921C12.3335 8.10866 12.3119 8.21704 12.27 8.31816C12.2281 8.41928 12.1667 8.51115 12.0893 8.58854L6.58933 14.0885C6.51194 14.1659 6.42007 14.2273 6.31895 14.2692C6.21783 14.3111 6.10945 14.3327 5.99999 14.3327C5.89054 14.3327 5.78216 14.3111 5.68104 14.2692C5.57992 14.2273 5.48804 14.1659 5.41066 14.0885Z"
+                  fill="black"
+                />
+              </svg>
+            </div>
+            <div
+              className={styles.chat_info_menu_option_btn}
+              onClick={() => navigate('/ending')}
+            >
+              <div className={styles.chat_info_menu_option_btn_left}>
+                <div className={styles.chat_info_menu_option_circle}>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g clip-path="url(#clip0_12221_996)">
+                      <path
+                        d="M3.91125 0.1925C4.0342 0.0693941 4.20101 0.000153171 4.375 0L9.625 0C9.79913 0 9.96537 0.069125 10.0887 0.1925L13.8075 3.91125C13.9309 4.03375 14 4.20087 14 4.375V9.625C13.9998 9.79899 13.9306 9.9658 13.8075 10.0887L10.0887 13.8075C9.9658 13.9306 9.79899 13.9998 9.625 14H4.375C4.20101 13.9998 4.0342 13.9306 3.91125 13.8075L0.1925 10.0887C0.0693941 9.9658 0.000153171 9.79899 0 9.625L0 4.375C0 4.20087 0.069125 4.03462 0.1925 3.91125L3.91125 0.1925ZM4.64625 1.3125L1.3125 4.64625V9.35375L4.64625 12.6875H9.35375L12.6875 9.35375V4.64625L9.35375 1.3125H4.64625ZM7 3.5C7.17405 3.5 7.34097 3.56914 7.46404 3.69221C7.58711 3.81528 7.65625 3.9822 7.65625 4.15625V7.21875C7.65625 7.3928 7.58711 7.55972 7.46404 7.68279C7.34097 7.80586 7.17405 7.875 7 7.875C6.82595 7.875 6.65903 7.80586 6.53596 7.68279C6.41289 7.55972 6.34375 7.3928 6.34375 7.21875V4.15625C6.34375 3.9822 6.41289 3.81528 6.53596 3.69221C6.65903 3.56914 6.82595 3.5 7 3.5ZM7 10.5C6.76794 10.5 6.54538 10.4078 6.38128 10.2437C6.21719 10.0796 6.125 9.85706 6.125 9.625C6.125 9.39294 6.21719 9.17038 6.38128 9.00628C6.54538 8.84219 6.76794 8.75 7 8.75C7.23206 8.75 7.45462 8.84219 7.61872 9.00628C7.78281 9.17038 7.875 9.39294 7.875 9.625C7.875 9.85706 7.78281 10.0796 7.61872 10.2437C7.45462 10.4078 7.23206 10.5 7 10.5Z"
+                        fill="black"
+                      />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_12221_996">
+                        <rect width="14" height="14" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </div>
+                Force end game
+              </div>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M5.41066 14.0885C5.33325 14.0112 5.27185 13.9193 5.22996 13.8182C5.18807 13.717 5.1665 13.6087 5.1665 13.4992C5.1665 13.3898 5.18807 13.2814 5.22996 13.1803C5.27185 13.0791 5.33325 12.9873 5.41066 12.9099L10.204 8.11654C10.2351 8.0853 10.2526 8.04299 10.2526 7.99887C10.2526 7.95476 10.2351 7.91245 10.204 7.88121L5.41066 3.08787C5.2589 2.93066 5.17497 2.72014 5.17693 2.50164C5.17889 2.28314 5.26659 2.07416 5.42114 1.91969C5.57569 1.76523 5.78473 1.67765 6.00322 1.67581C6.22172 1.67397 6.4322 1.75803 6.58933 1.90987L12.0893 7.40987C12.1667 7.48726 12.2281 7.57913 12.27 7.68025C12.3119 7.78137 12.3335 7.88975 12.3335 7.99921C12.3335 8.10866 12.3119 8.21704 12.27 8.31816C12.2281 8.41928 12.1667 8.51115 12.0893 8.58854L6.58933 14.0885C6.51194 14.1659 6.42007 14.2273 6.31895 14.2692C6.21783 14.3111 6.10945 14.3327 5.99999 14.3327C5.89054 14.3327 5.78216 14.3111 5.68104 14.2692C5.57992 14.2273 5.48804 14.1659 5.41066 14.0885Z"
+                  fill="black"
+                />
+              </svg>
             </div>
           </div>
         </div>
@@ -1250,7 +1401,10 @@ const Chat: React.FC = () => {
               />
             </svg>
             <div>
-              name: <b>{active_chat_name}</b>
+              name: <b>{activeChat?.name ?? 'No chat selected'}</b>
+            </div>
+            <div>
+              id: <b>{activeChat?.id ?? 'No chat selected'}</b>
             </div>
             <div>
               danger: <b>{updatedDangerLevel}</b>
@@ -1262,10 +1416,76 @@ const Chat: React.FC = () => {
               danger_level_2: <b>{_dangerLevel2}</b>
             </div>
             <div>
-              danger_level_2: <b>{_dangerLevel3}</b>
+              danger_level_3: <b>{_dangerLevel3}</b>
             </div>
             <div>
               savedOption: <b>{localStorage.getItem('activeLeftBarOption')}</b>
+            </div>
+            {userDigest && (
+              <>
+                <div>
+                  score: <b>{userDigest.score}</b>
+                </div>
+                <div>
+                  totalChats: <b>{userDigest.totalChats}</b>
+                </div>
+                <div>
+                  totalMessages: <b>{userDigest.totalMessages}</b>
+                </div>
+                <div>
+                  avgDanger: <b>{userDigest.averageDanger}</b>
+                </div>
+                <div>
+                  worstDanger: <b>{userDigest.worstDanger}</b>
+                </div>
+                <div>
+                  safestDanger: <b>{userDigest.safestDanger}</b>
+                </div>
+              </>
+            )}
+
+            <div className={styles.chat_info_test}>
+              {characters.map((character) => (
+                <button
+                  key={character.id}
+                  className={styles.chat_info_btn}
+                  onClick={() => toggleCharacter(character.id)}
+                >
+                  Toggle {character.name}
+                </button>
+              ))}
+              <button
+                className={styles.chat_info_btn}
+                // onClick={() => generateNewChatUser('Hello, world!')}
+                // onClick={() => fetchAIResponse('Hello', 3, false)}
+                onClick={createNewChat}
+              >
+                Add new chat
+              </button>
+              <div
+                className={`${styles.chat_info_btn} ${styles.chat_info_report}`}
+                style={{ cursor: 'none' }}
+              >
+                Danger level <br />
+                {updatedDangerLevel}
+              </div>
+
+              <button className={styles.chat_info_btn} onClick={toggleLanguage}>
+                Toggle language <br />
+                current: {i18n.language.toUpperCase()}
+              </button>
+              <div
+                className={`${styles.chat_info_btn} ${
+                  activeChat?.isTrafficker
+                    ? styles.chat_info_report
+                    : styles.chat_info_green
+                }`}
+                style={{ cursor: 'none' }}
+              >
+                Is traffickant
+                <br />
+                {activeChat?.isTrafficker ? 'true' : 'false'}
+              </div>
             </div>
           </div>
         )}
@@ -1301,7 +1521,7 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option1 || 'Option1 Loading...'}
+            {option1 || `[Option 1] Loading${loadingDots}`}
           </div>
 
           {/* Option2 */}
@@ -1313,7 +1533,7 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option2 || 'Option2 Loading...'}
+            {option2 || `[Option 2] Loading${loadingDots}`}
           </div>
 
           {/* Option3 */}
@@ -1325,10 +1545,15 @@ const Chat: React.FC = () => {
               }
             }}
           >
-            {option3 || 'Option3 Loading...'}
+            {option3 || `[Option 3] Loading${loadingDots}`}
           </div>
         </div>
       </div>
+      <Notification
+        isVisible={true}
+        from={'Mom'}
+        message={'Hey, Come downstairs, dinner is ready...'}
+      />
     </div>
   );
 };

@@ -11,9 +11,36 @@
   "general": {
     "home": "Startpagina"
   },
+  "home": {
+    "games": "Mini-spellen",
+    "start": "Spel starten",
+    "settings": "Instellingen"
+  },
   "settings": {
     "settings": "Instellingen",
     "language": "Taal",
-    "mode": "Mode"
+    "mode": "Modus",
+    "adaptability": "Aanpassingsvermogen",
+    "minigameInterval": "Interval minigame",
+    "links": {
+      "login": "Inloggen",
+      "credentials": "Referenties",
+      "documentation": "Documentatie",
+      "development": "Ontwikkeling",
+      "legal": "Juridisch"
+    }
+  },
+  "ending": {
+    "title": "Spel beëindigd",
+    "subtitle_1": "Bedankt voor het spelen.",
+    "subtitle_2": "We hopen dat je ervan genoten hebt. We hopen dat deze ervaring niet alleen boeiend maar ook verhelderend was.",
+    "subtitle_3": "Samen is bewustwording de eerste stap naar preventie.",
+    "subtitle_4": "Blijf geïnformeerd. Blijf veilig.",
+    "button": "Terug naar Startpagina"
+  },
+  "notfound": {
+    "button": "Ga terug naar Home",
+    "t1": "Oeps! De pagina die je probeert te bereiken bestaat niet of is mogelijk verplaatst.",
+    "t2": "Controleer de URL of ga terug naar de startpagina."
   }
 }

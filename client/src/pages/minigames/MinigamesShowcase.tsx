@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MinigamesShowcase.css';
-import {useAudio} from '../../context/AudioContext.tsx';
+import { useAudio } from '../../context/AudioContext.tsx';
 
 interface Minigame {
   name: string;
@@ -57,16 +57,16 @@ const minigames: Minigame[] = [
     route: '/danger-highlight',
     description: 'Spot red flag words in a fake job ad.',
   },
-    {
-        name: 'Word Scramble',
-        route: '/word-scramble',
-        description: 'Unscramble words to reveal safety-related terms.',
-    }
+  {
+    name: 'Word Scramble',
+    route: '/word-scramble',
+    description: 'Unscramble words to reveal safety-related terms.',
+  },
 ];
 
 const MinigamesShowcase: React.FC = () => {
   const navigate = useNavigate();
-  const {playClick} = useAudio();
+  const { playClick } = useAudio();
 
   return (
     <div className="minigames-container">
@@ -78,7 +78,10 @@ const MinigamesShowcase: React.FC = () => {
             <p className="minigame-description">{game.description}</p>
             <button
               className="play-button"
-              onClick={() => {playClick(3); navigate(game.route);}}
+              onClick={() => {
+                playClick(3);
+                navigate(game.route);
+              }}
             >
               Play
             </button>
