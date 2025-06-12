@@ -42,25 +42,21 @@ const IntroStory: React.FC = () => {
 
   const handleClick = () => {
     if (isTyping) {
-      // If still typing, finish text immediately
       if (typingIntervalRef.current) {
         clearTimeout(typingIntervalRef.current);
       }
       setDisplayedText(currentDialogue.DialogueText);
       setIsTyping(false);
     } else {
-      // If finished typing, move to next dialogue
       const nextIndex = currentIndex + 1;
       if (nextIndex < dialogues.length) {
         setCurrentIndex(nextIndex);
       } else {
-        // If it's the last dialogue, redirect to "/chat"
         navigate('/chat');
       }
     }
   };
 
-  // Determine character sprite opacities and visibility based on CharacterSettings
   let leftSpriteStyle: React.CSSProperties = {
     opacity: 0,
     visibility: 'hidden',
@@ -90,20 +86,16 @@ const IntroStory: React.FC = () => {
         nameBoxPosition = 'right';
         break;
       case 'LeftSpriteNotSpeaking':
-        // Only right sprite displayed
         rightSpriteStyle = { opacity: 1, visibility: 'visible' };
         break;
       case 'RightSpriteNotSpeaking':
-        // Only left sprite displayed
         leftSpriteStyle = { opacity: 1, visibility: 'visible' };
         break;
       case 'NoSpritesSpeaking':
-        // No sprites displayed
         break;
     }
   }
 
-  // Camera shake effect
   const containerClass =
     currentDialogue?.VisualFX === 'CamShakeEffect'
       ? 'intro-container shake'
@@ -115,6 +107,15 @@ const IntroStory: React.FC = () => {
       onClick={handleClick}
       style={{ backgroundImage: `url(${currentDialogue?.BgImage})` }}
     >
+      <div
+        className="skip-intro"
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate('/chat');
+        }}
+      >
+        Skip Intro
+      </div>
       <div className="sprites-container">
         {currentDialogue?.LeftSpriteImage && (
           <img

@@ -11,5 +11,6 @@ public class MessageDTO {
     private Long chatId;
     private Boolean isOutgoing;
     private String messageText;
+    private Integer dangerLevel;
     private Instant sentAt;
 }

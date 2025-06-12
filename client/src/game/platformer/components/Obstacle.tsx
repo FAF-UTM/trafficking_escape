@@ -7,15 +7,22 @@ interface ObstacleProps {
   y: number;
   width: number;
   height: number;
-  color: string;
+  element: string;
 }
 
-const Obstacle: React.FC<ObstacleProps> = ({ x, y, width, height, color }) => {
+const Obstacle: React.FC<ObstacleProps> = ({
+  x,
+  y,
+  width,
+  height,
+  element,
+}) => {
   return (
-    <div
+    <img
+      src={element}
       className={styles.obstacle}
-      style={{ left: x, top: y, width, height, backgroundColor: color }}
-    ></div>
+      style={{ left: x, top: y, width, height }}
+    />
   );
 };
 

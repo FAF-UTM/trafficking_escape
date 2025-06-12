@@ -32,6 +32,9 @@ public class Message {
     @Column(name = "message_text", nullable = false)
     private String messageText;
 
+    @Column(name = "danger_level")
+    private Integer dangerLevel;
+
     @Column(name = "sent_at", nullable = false)
     private Instant sentAt;
 

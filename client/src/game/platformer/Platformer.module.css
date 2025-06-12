@@ -18,9 +18,11 @@
 /* Player */
 .player {
   position: absolute;
-  background-color: red;
-  transition: height 0.1s;
+  /*background-color: red;*/
+  /*transition: height 0.1s;*/
   z-index: 2;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 /* Platforms */
@@ -48,7 +50,6 @@
 /* Collectibles */
 .collectible {
   position: absolute;
-  border-radius: 50%;
   z-index: 3;
   /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);*/
 }

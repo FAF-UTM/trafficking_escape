@@ -11,9 +11,36 @@
   "general": {
     "home": "Home"
   },
+  "home": {
+    "games": "Mini Games",
+    "start": "Start Game",
+    "settings": "Settings"
+  },
   "settings": {
     "settings": "Settings",
     "language": "Language",
-    "mode": "Mode"
+    "mode": "Mode",
+    "adaptability": "Adaptability",
+    "minigameInterval": "Minigame Interval",
+    "links": {
+      "login": "Login",
+      "credentials": "Credentials",
+      "documentation": "Documentation",
+      "development": "Development",
+      "legal": "Legal"
+    }
+  },
+  "ending": {
+    "title": "Game ended",
+    "subtitle_1": "Thank you for playing.",
+    "subtitle_2": "Hope you enjoyed. We hope this experience was not only engaging but also enlightening.",
+    "subtitle_3": "Together, awareness is the first step toward prevention.",
+    "subtitle_4": "Stay informed. Stay safe.",
+    "button": "Go back Home"
+  },
+  "notfound": {
+    "button": "Go back Home",
+    "t1": " Oops! The page you're trying to reach doesn't exist or may have been moved.",
+    "t2": "Please check the URL or return to the homepage."
   }
 }

@@ -26,12 +26,12 @@ body {
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .card {
-  width: 300px;
-  height: 200px;
+  width: 250px;
+  height: 110px;
   border-radius: 15px;
   border: 2px solid rgba(255, 255, 255, 0.5);
   cursor: grab;
@@ -83,8 +83,8 @@ body {
 }
 
 .dropzone {
-  width: 300px;
-  height: 200px;
+  width: 250px;
+  height: 110px;
   background-color: #333;
   border-radius: 15px;
   border: 2px dashed #777;
@@ -109,16 +109,12 @@ button {
   font-family: 'Press Start 2P', 'Courier New', monospace;
 }
 
-button:hover {
-  background: #222;
-}
-
 .action-buttons-container {
   width: 100%;
   display: flex;
   justify-content: center;
   gap: 40px;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .action-button {
@@ -127,17 +123,29 @@ button:hover {
   background-color: rgba(0, 0, 0, 0.7);
   color: #fff;
   border: 2px solid #aaa;
-  /*border-radius: 10px;*/
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Press Start 2P', 'Courier New', monospace;
   cursor: pointer;
   transition:
-    background-color 0.3s ease,
-    transform 0.3s ease;
+          background-color 0.3s ease,
+          transform 0.3s ease;
 }
+
 .action-button:hover {
   background-color: rgba(0, 0, 0, 0.9);
   transform: scale(1.05);
+}
+
+.touch-drag-ghost {
+  position: fixed;
+  width: 250px;
+  height: 110px;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1000;
+  border-radius: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
 }

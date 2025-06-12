@@ -25,7 +25,7 @@
   color: #050505;
 }
 .back_home:hover {
-  text-decoration: underline;
+  /*text-decoration: underline;*/
 }
 .back_home svg {
   transform: scale(0.9) rotate(180deg);
