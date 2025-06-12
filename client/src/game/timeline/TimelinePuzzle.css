@@ -132,7 +132,20 @@ button {
     background-color 0.3s ease,
     transform 0.3s ease;
 }
+
 .action-button:hover {
   background-color: rgba(0, 0, 0, 0.9);
   transform: scale(1.05);
+}
+
+.touch-drag-ghost {
+  position: fixed;
+  width: 250px;
+  height: 110px;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1000;
+  border-radius: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
 }

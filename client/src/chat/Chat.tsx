@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext.tsx';
 import Notification from '../components/notification/Notification.tsx';
 import { useNavigate } from 'react-router-dom';
+import { useAudio } from '../context/AudioContext.tsx';
 
 const backend_api_generate =
   import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
@@ -80,6 +81,8 @@ const Chat: React.FC = () => {
   const toggleInfoVisibility = () => {
     setInfoVisibility(!infoVisibility);
   };
+
+  const { changeMusic, playMusic } = useAudio();
 
   const hideInfo = () => {
     setInfoVisibility(false);
@@ -356,6 +359,8 @@ const Chat: React.FC = () => {
 
   // On initial load, check localStorage for 'activeLeftBarOption'
   useEffect(() => {
+    changeMusic(5);
+    playMusic();
     const savedOption = localStorage.getItem('activeLeftBarOption');
     if (savedOption) {
       // If it exists, use that

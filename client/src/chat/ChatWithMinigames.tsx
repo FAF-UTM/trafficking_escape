@@ -13,9 +13,11 @@ import styles from './chat.module.css';
 import transition from './ScreenTransition.module.css';
 import { useAudio } from '../context/AudioContext';
 import '../index.css';
+import ClickPlayGame from '../game/click-play/ClickPlayGame.tsx';
 
 const games = [
   TimelinePuzzle,
+  ClickPlayGame,
   CombinationLock,
   DangerWordHighlight,
   EmojiStoryDecoder,
