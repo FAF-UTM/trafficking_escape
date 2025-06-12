@@ -14,7 +14,6 @@ import bg2 from '../components/sounds/bg2.mp3';
 import bg3 from '../components/sounds/bg3.mp3';
 import bg4 from '../components/sounds/bg4.mp3';
 import bg5 from '../components/sounds/bg5.mp3';
-import bg6 from '../components/sounds/bg6.mp3';
 
 const bgmMap: Record<number, string> = {
   1: bg1,
@@ -22,7 +21,6 @@ const bgmMap: Record<number, string> = {
   3: bg3,
   4: bg4,
   5: bg5,
-  6: bg6,
 };
 
 const defaultBgm = bgmMap[4];

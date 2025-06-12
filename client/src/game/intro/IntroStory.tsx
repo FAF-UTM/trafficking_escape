@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { dialogues } from './dialogues';
 import './IntroStory.css';
-import {useAudio} from '../../context/AudioContext.tsx';
+import { useAudio } from '../../context/AudioContext.tsx';
 
 const IntroStory: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -32,10 +32,9 @@ const IntroStory: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    changeMusic(6);
+    changeMusic(5);
     playMusic();
   }, []);
-
 
   useEffect(() => {
     if (currentDialogue) {

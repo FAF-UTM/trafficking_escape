@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext.tsx';
 import Notification from '../components/notification/Notification.tsx';
 import { useNavigate } from 'react-router-dom';
-import {useAudio} from '../context/AudioContext.tsx';
+import { useAudio } from '../context/AudioContext.tsx';
 
 const backend_api_generate =
   import.meta.env.VITE_BACKEND + '/api/v1/message-generation/generate';
