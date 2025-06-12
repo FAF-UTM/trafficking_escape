@@ -11,7 +11,8 @@
     "ending": "Force end game"
   },
   "general": {
-    "home": "Go back"
+    "home": "Go back",
+    "disclaimer": "Your device’s display resolution does not meet the minimum requirements to run the game."
   },
   "home": {
     "games": "Mini Games",

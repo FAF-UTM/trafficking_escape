@@ -11,7 +11,8 @@
     "ending": "Forceer beëindiging van het spel"
   },
   "general": {
-    "home": "Ga terug"
+    "home": "Ga terug",
+    "disclaimer": "De schermresolutie van uw apparaat voldoet niet aan de minimumeisen om het spel te kunnen draaien."
   },
   "home": {
     "games": "Mini-spellen",

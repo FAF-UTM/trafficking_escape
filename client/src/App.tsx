@@ -30,6 +30,7 @@ import Credentials from './pages/credentials/Credentials.tsx';
 import Legal from './pages/legal/Legal.tsx';
 import NotFound from './pages/notfound/NotFound.tsx';
 import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.tsx';
+import { useTranslation } from 'react-i18next';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -85,11 +86,19 @@ function App() {
       cbm === 'none' ? 'none' : `url(#${cbm})`;
   }, []);
 
+  const { t } = useTranslation();
+
   return (
     <AuthProvider>
       <AudioProvider>
         <BrowserRouter>
           <BackgroundMusicStarter />
+
+          <div className="screen_width_min">
+            <div className="screen_width_min_inside">
+              {t('general.disclaimer')}
+            </div>
+          </div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             style={{ position: 'absolute', width: 0, height: 0 }}

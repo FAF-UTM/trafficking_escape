@@ -682,6 +682,14 @@
   align-items: center;
 }
 
+@media screen and (max-width: 1400px) {
+  .chat_navigation {
+    width: 320px;
+  }
+  .chat_conversation {
+    width: calc(100vw - 810px);
+  }
+}
 /* For screens up to ~1200px wide (desktop/laptop) */
 @media screen and (max-width: 1200px) {
   .chat {
