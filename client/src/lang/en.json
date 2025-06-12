@@ -6,7 +6,9 @@
     "chat_info": "Chat info",
     "help": "Help",
     "report": "Report",
-    "chat_settings": "Settings"
+    "chat_settings": "Settings",
+    "hint": "Get a hint",
+    "ending": "Force end game"
   },
   "general": {
     "home": "Go back"

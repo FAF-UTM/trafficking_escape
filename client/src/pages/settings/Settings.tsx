@@ -15,7 +15,7 @@ const SettingsPage: React.FC = () => {
 
   const [minigameInterval, setMinigameInterval] = useState<number>(() => {
     const stored = localStorage.getItem('minigameInterval');
-    return stored ? parseInt(stored, 10) : 5;
+    return stored ? parseInt(stored, 10) : 1;
   });
 
   const toggleMode = (mode: string | undefined) => {
@@ -189,7 +189,7 @@ const SettingsPage: React.FC = () => {
               <span>[{minigameInterval} min]</span>
               <input
                 type="range"
-                min="2"
+                min="1"
                 max="15"
                 value={minigameInterval}
                 onChange={(e) =>

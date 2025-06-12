@@ -177,6 +177,7 @@ const Chat: React.FC = () => {
           lastMessage,
           currentDangerLevel,
           isTrafficker,
+          language: i18n.language,
         }),
       });
       if (!res.ok) return;
@@ -216,6 +217,7 @@ const Chat: React.FC = () => {
           lastMessage,
           currentDangerLevel,
           isTrafficker,
+          language: i18n.language,
         }),
       });
       if (!response.ok) {
@@ -666,6 +668,7 @@ const Chat: React.FC = () => {
 
         // 1) ask AI for the "Hello" greeting, which also pushes into chatData and saves chunks
         // await fetchAIResponse('Hello', 0, chatData.isTrafficker);
+        // let the_message =
         await fetchAIResponse('Hello', 0, chatData.isTrafficker, chatData.id);
 
         // // 2) persist the greeting itself as a single message to /api/messages
@@ -1269,7 +1272,7 @@ const Chat: React.FC = () => {
                     />
                   </svg>
                 </div>
-                Get a hint
+                {t('chat.hint')}
               </div>
               <svg
                 width="16"
@@ -1312,7 +1315,7 @@ const Chat: React.FC = () => {
                     </defs>
                   </svg>
                 </div>
-                Force end game
+                {t('chat.ending')}
               </div>
               <svg
                 width="16"

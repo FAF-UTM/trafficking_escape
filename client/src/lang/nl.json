@@ -6,7 +6,9 @@
     "chat_info": "Chatinformatie",
     "help": "Hulp",
     "report": "Melden",
-    "chat_settings": "Settings"
+    "chat_settings": "Settings",
+    "hint": "Vraag een hint",
+    "ending": "Forceer beëindiging van het spel"
   },
   "general": {
     "home": "Ga terug"
