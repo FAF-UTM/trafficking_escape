@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { dialogues } from './dialogues';
 import './IntroStory.css';
+import {useAudio} from '../../context/AudioContext.tsx';
 
 const IntroStory: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -9,6 +10,7 @@ const IntroStory: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const typingIntervalRef = useRef<number | null>(null);
   const navigate = useNavigate();
+  const { changeMusic, playMusic } = useAudio();
 
   const currentDialogue = dialogues[currentIndex];
 
@@ -28,6 +30,12 @@ const IntroStory: React.FC = () => {
     };
     step();
   }, []);
+
+  useEffect(() => {
+    changeMusic(6);
+    playMusic();
+  }, []);
+
 
   useEffect(() => {
     if (currentDialogue) {
