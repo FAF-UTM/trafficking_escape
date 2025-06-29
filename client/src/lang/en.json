@@ -45,5 +45,94 @@
     "button": "Go back Home",
     "t1": " Oops! The page you're trying to reach doesn't exist or may have been moved.",
     "t2": "Please check the URL or return to the homepage."
+  },
+  "dialogues": {
+    "1": {
+      "CharacterName": "",
+      "DialogueText": "*Mary sits at her desk, slumped in her seat, anxiously watching the teacher hand back the recent test. The classroom buzzes with students talking as they glance at their grades. Mary catches a glimpse of her score: 43%. Her heart sinks.*"
+    },
+    "2": {
+      "CharacterName": "Teacher",
+      "DialogueText": "Mary, we’ll need to talk about this after class. That’s the fourth low score this semester. You’re capable of more."
+    },
+    "3": {
+      "CharacterName": "Mary",
+      "DialogueText": "Yeah… I know. I tried studying…?"
+    },
+    "4": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Whoa, that bad? Don’t sweat it, though. It was a hard test."
+    },
+    "5": {
+      "CharacterName": "Mary",
+      "DialogueText": "You don’t get it. Mom’s gonna freak. I was so close this time…"
+    },
+    "6": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Yeah, but, like, a 43? Close to what, exactly?"
+    },
+    "7": {
+      "CharacterName": "Mary",
+      "DialogueText": "Okay, okay. Just...I can't go through another lecture."
+    },
+    "8": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Look, maybe she’ll go easy on you this time…? Anyway, are you still coming to Emma’s party tonight?"
+    },
+    "9": {
+      "CharacterName": "Mary",
+      "DialogueText": "I dunno. Probably not. Mom’s already mad about my grades."
+    },
+    "10": {
+      "CharacterName": "",
+      "DialogueText": "*Mary drags herself into the house, tossing her backpack by the door. Her mom is in the kitchen, prepping dinner. She looks up with a smile that quickly fades when she sees Mary’s face.*"
+    },
+    "11": {
+      "CharacterName": "Mother",
+      "DialogueText": "Hey, Mary! How was school? How’d you do on that exam?"
+    },
+    "12": {
+      "CharacterName": "Mary",
+      "DialogueText": "…Not great."
+    },
+    "13": {
+      "CharacterName": "Mother",
+      "DialogueText": "Not great? Mary, that’s the fourth bad grade this semester. What’s going on?"
+    },
+    "14": {
+      "CharacterName": "Mary",
+      "DialogueText": "I dunno, Mom, it was hard! I studied for it."
+    },
+    "15": {
+      "CharacterName": "Mother",
+      "DialogueText": "Studied? Mary, if you’d been studying properly, this wouldn’t keep happening. You can’t just slide by with last-minute cramming."
+    },
+    "16": {
+      "CharacterName": "Mary",
+      "DialogueText": "Okay, fine, I get it. Can we please not do this again?"
+    },
+    "17": {
+      "CharacterName": "Mother",
+      "DialogueText": "We have to, Mary! I’m not letting you go out tonight, that’s for sure. No party until your grades improve."
+    },
+    "18": {
+      "CharacterName": "Mary",
+      "DialogueText": "Are you kidding me? I really wanted to go…"
+    },
+    "19": {
+      "CharacterName": "Mother",
+      "DialogueText": "Then maybe you should’ve put in more effort on that test. You’re staying in. End of discussion."
+    },
+    "20": {
+      "CharacterName": "Mary",
+      "DialogueText": "*turns away, heading to her room* Whatever…"
+    },
+    "21": {
+      "CharacterName": "",
+      "DialogueText": "*Mary slams her bedroom door, flopping onto her bed, staring at the ceiling. She feels trapped and frustrated, her mind buzzing with thoughts. She finally reaches for her laptop, opens it, and begins typing.*"
+    }
+  },
+  "intro": {
+    "skip": "Skip Intro"
   }
 }
