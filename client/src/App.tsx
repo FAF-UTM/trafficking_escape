@@ -26,6 +26,7 @@ import SafetyChecklistBuilderWrapper from './game/safety_checklist_builder/Safet
 import DangerWordHighlightWrapper from './game/danger_word_highlight/DangerWordHighlightWrapper.tsx';
 import { AudioProvider, useAudio } from './context/AudioContext';
 import Ending from './pages/ending/Ending.tsx';
+import Feedback from './pages/feedback/Feedback.tsx';
 import Credentials from './pages/credentials/Credentials.tsx';
 import Legal from './pages/legal/Legal.tsx';
 import NotFound from './pages/notfound/NotFound.tsx';
@@ -93,7 +94,6 @@ function App() {
       <AudioProvider>
         <BrowserRouter>
           <BackgroundMusicStarter />
-
           <div className="screen_width_min">
             <div className="screen_width_min_inside">
               {t('general.disclaimer')}
@@ -158,10 +158,10 @@ function App() {
             <Route
               path="/chat"
               element={
-                <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                  {/*<Chat />*/}
-                  <ChatWithMinigames />
-                </ProtectedRoute>
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                //<Chat />
+                <ChatWithMinigames />
+                // </ProtectedRoute>
               }
             />
             <Route path="/click-play" element={<ClickPlayGame />} />
@@ -187,6 +187,7 @@ function App() {
               element={<DangerWordHighlightWrapper />}
             />
             <Route path="/ending" element={<Ending />} />
+            <Route path="/feedback" element={<Feedback />} />
             <Route path="/word-scramble" element={<WordScrambleWrapper />} />
             <Route path="/credentials" element={<Credentials />} />
             <Route path="/legal" element={<Legal />} />

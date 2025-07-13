@@ -39,7 +39,18 @@
     "subtitle_2": "We hopen dat je ervan genoten hebt. We hopen dat deze ervaring niet alleen boeiend maar ook verhelderend was.",
     "subtitle_3": "Samen is bewustwording de eerste stap naar preventie.",
     "subtitle_4": "Blijf geïnformeerd. Blijf veilig.",
-    "button": "Terug naar Startpagina"
+    "button": "Terug naar Startpagina",
+    "feedback_button": "Laat feedback achter"
+  },
+  "feedback": {
+    "title": "We waarderen je feedback",
+    "submit": "Verstuur",
+    "q_experience": "Hoe goed was je algemene ervaring?",
+    "q_difficulty": "Hoe moeilijk was het spel?",
+    "q_awareness": "In hoeverre heeft dit je bewustzijn over mensenhandel vergroot?",
+    "q_minigames": "Hoe boeiend waren de minigames?",
+    "q_recommend": "Hoe waarschijnlijk is het dat je dit spel aanbeveelt aan anderen?",
+    "q_navigation": "Hoe makkelijk was het om in het spel te navigeren?"
   },
   "notfound": {
     "button": "Ga terug naar Home",

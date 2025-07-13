@@ -39,7 +39,18 @@
     "subtitle_2": "Hope you enjoyed. We hope this experience was not only engaging but also enlightening.",
     "subtitle_3": "Together, awareness is the first step toward prevention.",
     "subtitle_4": "Stay informed. Stay safe.",
-    "button": "Go back Home"
+    "button": "Go back Home",
+    "feedback_button": "Leave Feedback"
+  },
+  "feedback": {
+    "title": "We value your feedback",
+    "submit": "Submit",
+    "q_experience": "How good was your overall experience?",
+    "q_difficulty": "How hard was the game?",
+    "q_awareness": "How much did this raise your awareness of human trafficking?",
+    "q_minigames": "How engaging were the mini-games?",
+    "q_recommend": "How likely are you to recommend this game to others?",
+    "q_navigation": "How easy was it to navigate the game?"
   },
   "notfound": {
     "button": "Go back Home",
