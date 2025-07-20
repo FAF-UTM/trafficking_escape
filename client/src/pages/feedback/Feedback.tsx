@@ -14,26 +14,26 @@ const Feedback: React.FC = () => {
   const [minigames, setMinigames] = useState<number | null>(0);
   const [recommend, setRecommend] = useState<number | null>(0);
   const [navigation, setNavigation] = useState<number | null>(0);
-  // const backend_api_feedback =
-  //   import.meta.env.VITE_BACKEND + '/api/feedback';
+  const backend_api_feedback = import.meta.env.VITE_BACKEND + '/api/feedback';
+
   const handleSubmit = async () => {
     try {
-      // const token = localStorage.getItem('authToken');
-      // await fetch(backend_api_feedback, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      //   },
-      //   body: JSON.stringify({
-      //     experience,
-      //     difficulty,
-      //     awareness,
-      //     minigames,
-      //     recommend,
-      //     navigation,
-      //   }),
-      // });
+      const token = localStorage.getItem('authToken');
+      await fetch(backend_api_feedback, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          experience,
+          difficulty,
+          awareness,
+          minigames,
+          recommend,
+          navigation,
+        }),
+      });
     } catch (err) {
       console.error('Error saving feedback:', err);
     } finally {
