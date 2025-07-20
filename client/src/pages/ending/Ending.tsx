@@ -16,9 +16,17 @@ const Ending: React.FC = () => {
         {t('ending.subtitle_3')} <br />
         <b>{t('ending.subtitle_4')}</b>
       </div>
-      <button onClick={() => navigate('/')} className={styles.ending_btn}>
-        {t('ending.button')}
-      </button>
+      <div className={styles.button_row}>
+        <button onClick={() => navigate('/')} className={styles.ending_btn}>
+          {t('ending.button')}
+        </button>
+        <button
+          onClick={() => navigate('/feedback')}
+          className={styles.ending_btn}
+        >
+          {t('ending.feedback_button')}
+        </button>
+      </div>
     </div>
   );
 };

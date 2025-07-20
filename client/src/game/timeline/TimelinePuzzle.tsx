@@ -12,7 +12,10 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
   const { playClick } = useAudio();
 
   const [touchDragCard, setTouchDragCard] = useState<PuzzleCard | null>(null);
-  const [touchPosition, setTouchPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [touchPosition, setTouchPosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
   const [isTouchDragging, setIsTouchDragging] = useState(false);
 
   useEffect(() => {
@@ -24,7 +27,9 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
         e.preventDefault();
       }
     };
-    document.addEventListener('touchmove', preventTouchMove, { passive: false });
+    document.addEventListener('touchmove', preventTouchMove, {
+      passive: false,
+    });
 
     return () => {
       document.body.style.overflow = '';
@@ -57,15 +62,21 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
     const dropzone = elem?.closest('.dropzone') as HTMLElement | null;
 
     if (dropzone) {
-      const idx = Array.from(dropzone.parentElement!.children).indexOf(dropzone);
+      const idx = Array.from(dropzone.parentElement!.children).indexOf(
+        dropzone
+      );
       handleDropOnDropzone(
-        { preventDefault: () => {}, dataTransfer: { getData: () => JSON.stringify(touchDragCard) } } as any,
+        {
+          preventDefault: () => {},
+          dataTransfer: { getData: () => JSON.stringify(touchDragCard) },
+        } as any,
         idx
       );
     } else {
-      handleDropOnCardsArea(
-        { preventDefault: () => {}, dataTransfer: { getData: () => JSON.stringify(touchDragCard) } } as any
-      );
+      handleDropOnCardsArea({
+        preventDefault: () => {},
+        dataTransfer: { getData: () => JSON.stringify(touchDragCard) },
+      } as any);
     }
 
     setIsTouchDragging(false);
@@ -86,7 +97,7 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
     const card: PuzzleCard = JSON.parse(data);
     playClick(7);
     if (dropzones[dropIndex] !== null) return;
-    setCardPositions(prev => prev.filter(c => c.id !== card.id));
+    setCardPositions((prev) => prev.filter((c) => c.id !== card.id));
     const newDropzones = [...dropzones];
     newDropzones[dropIndex] = card;
     setDropzones(newDropzones);
@@ -96,12 +107,17 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
     e.preventDefault();
     const data = e.dataTransfer.getData('application/my-card');
     const card: PuzzleCard = JSON.parse(data);
-    setDropzones(prev => prev.map(dz => (dz && dz.id === card.id ? null : dz)));
-    setCardPositions(prev => prev.some(c => c.id === card.id) ? prev : [...prev, card]);
+    setDropzones((prev) =>
+      prev.map((dz) => (dz && dz.id === card.id ? null : dz))
+    );
+    setCardPositions((prev) =>
+      prev.some((c) => c.id === card.id) ? prev : [...prev, card]
+    );
   };
 
   function shuffleArray(arr: PuzzleCard[]): PuzzleCard[] {
-    return arr.map(item => ({ item, sort: Math.random() }))
+    return arr
+      .map((item) => ({ item, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map(({ item }) => item);
   }
@@ -114,9 +130,10 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
   );
 
   const checkSolution = () => {
-    if (dropzones.some(dz => dz === null)) return resetPuzzle(false);
+    if (dropzones.some((dz) => dz === null)) return resetPuzzle(false);
     for (let i = 0; i < dropzones.length; i++) {
-      if (!dropzones[i] || dropzones[i]!.correctIndex !== i) return resetPuzzle(false);
+      if (!dropzones[i] || dropzones[i]!.correctIndex !== i)
+        return resetPuzzle(false);
     }
     nextLevel();
   };
@@ -144,18 +161,24 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
       onTouchEnd={handleTouchEnd}
     >
       <div className="puzzle-header">
-        <h2>Timeline Puzzle (Level {puzzleLevels[currentLevel].levelNumber})</h2>
+        <h2>
+          Timeline Puzzle (Level {puzzleLevels[currentLevel].levelNumber})
+        </h2>
         <p>{puzzleLevels[currentLevel].levelDescription}</p>
       </div>
 
-      <div className="cards-container" onDragOver={handleDragOver} onDrop={handleDropOnCardsArea}>
-        {cardPositions.map(card => (
+      <div
+        className="cards-container"
+        onDragOver={handleDragOver}
+        onDrop={handleDropOnCardsArea}
+      >
+        {cardPositions.map((card) => (
           <div
             key={card.id}
             className="card"
             draggable
-            onDragStart={e => handleDragStart(e, card)}
-            onTouchStart={e => handleTouchStart(e, card)}
+            onDragStart={(e) => handleDragStart(e, card)}
+            onTouchStart={(e) => handleTouchStart(e, card)}
             style={{ background: `url(${card.image}) center/cover no-repeat` }}
           >
             <div className="card-text-overlay">{card.text}</div>
@@ -169,10 +192,15 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
             key={idx}
             className={`dropzone ${dz ? 'filled' : ''}`}
             onDragOver={handleDragOver}
-            onDrop={e => handleDropOnDropzone(e, idx)}
+            onDrop={(e) => handleDropOnDropzone(e, idx)}
           >
             {dz && (
-              <div className="card" style={{ background: `url(${dz.image}) center/cover no-repeat` }}>
+              <div
+                className="card"
+                style={{
+                  background: `url(${dz.image}) center/cover no-repeat`,
+                }}
+              >
                 <div className="card-text-overlay">{dz.text}</div>
               </div>
             )}
@@ -181,20 +209,35 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
       </div>
 
       <div className="action-buttons-container">
-        <div className="action-button" onClick={() => { playClick(3); resetPuzzle(true); }}>
+        <div
+          className="action-button"
+          onClick={() => {
+            playClick(3);
+            resetPuzzle(true);
+          }}
+        >
           Reset
         </div>
-        <div className="action-button" onClick={() => { playClick(3); checkSolution(); }}>
+        <div
+          className="action-button"
+          onClick={() => {
+            playClick(3);
+            checkSolution();
+          }}
+        >
           Check
         </div>
       </div>
 
       {isTouchDragging && touchDragCard && (
-        <div className="card touch-drag-ghost" style={{
-          background: `url(${touchDragCard.image}) center/cover no-repeat`,
-          left: touchPosition.x - 125,
-          top: touchPosition.y - 55
-        }}>
+        <div
+          className="card touch-drag-ghost"
+          style={{
+            background: `url(${touchDragCard.image}) center/cover no-repeat`,
+            left: touchPosition.x - 125,
+            top: touchPosition.y - 55,
+          }}
+        >
           <div className="card-text-overlay">{touchDragCard.text}</div>
         </div>
       )}
