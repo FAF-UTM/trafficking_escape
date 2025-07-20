@@ -158,10 +158,9 @@ function App() {
             <Route
               path="/chat"
               element={
-                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                //<Chat />
-                <ChatWithMinigames />
-                // </ProtectedRoute>
+                <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                  <ChatWithMinigames />
+                </ProtectedRoute>
               }
             />
             <Route path="/click-play" element={<ClickPlayGame />} />
