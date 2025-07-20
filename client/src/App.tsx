@@ -26,10 +26,12 @@ import SafetyChecklistBuilderWrapper from './game/safety_checklist_builder/Safet
 import DangerWordHighlightWrapper from './game/danger_word_highlight/DangerWordHighlightWrapper.tsx';
 import { AudioProvider, useAudio } from './context/AudioContext';
 import Ending from './pages/ending/Ending.tsx';
+import Feedback from './pages/feedback/Feedback.tsx';
 import Credentials from './pages/credentials/Credentials.tsx';
 import Legal from './pages/legal/Legal.tsx';
 import NotFound from './pages/notfound/NotFound.tsx';
 import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.tsx';
+import { useTranslation } from 'react-i18next';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -85,11 +87,18 @@ function App() {
       cbm === 'none' ? 'none' : `url(#${cbm})`;
   }, []);
 
+  const { t } = useTranslation();
+
   return (
     <AuthProvider>
       <AudioProvider>
         <BrowserRouter>
           <BackgroundMusicStarter />
+          <div className="screen_width_min">
+            <div className="screen_width_min_inside">
+              {t('general.disclaimer')}
+            </div>
+          </div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             style={{ position: 'absolute', width: 0, height: 0 }}
@@ -149,10 +158,10 @@ function App() {
             <Route
               path="/chat"
               element={
-                <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                  {/*<Chat />*/}
-                  <ChatWithMinigames />
-                </ProtectedRoute>
+                // <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
+                //<Chat />
+                <ChatWithMinigames />
+                // </ProtectedRoute>
               }
             />
             <Route path="/click-play" element={<ClickPlayGame />} />
@@ -178,6 +187,7 @@ function App() {
               element={<DangerWordHighlightWrapper />}
             />
             <Route path="/ending" element={<Ending />} />
+            <Route path="/feedback" element={<Feedback />} />
             <Route path="/word-scramble" element={<WordScrambleWrapper />} />
             <Route path="/credentials" element={<Credentials />} />
             <Route path="/legal" element={<Legal />} />
