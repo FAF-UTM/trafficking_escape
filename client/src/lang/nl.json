@@ -145,5 +145,43 @@
   },
   "intro": {
     "skip": "Intro overslaan"
+  },
+  "timelinePuzzle": {
+    "introTitle": "Speluitleg",
+    "introText": "Tijdlijnpuzzel! Elke kaart laat iets zien dat Mary of Sophia meemaakt. Sleep de kaarten in de lege vakken zodat het verhaal van EERST naar LAATST loopt. Als alle vakken gevuld zijn, druk op Controleer. Heb je alles goed, dan ga je naar het volgende level—veel succes!",
+    "correct": "Correct! Door naar het volgende level...",
+    "incorrect": "Onjuiste volgorde. Probeer het opnieuw!",
+    "title": "Tijdlijnpuzzel (Level {{level}})",
+    "tapStart": "(Klik buiten om te starten)",
+    "tapContinue": "(Klik buiten om door te gaan)",
+    "reset": "Reset",
+    "check": "Controleer",
+
+    "level1": {
+      "description": "Zet de drie plaatjes op volgorde zodat Mary wegblijft van een gevaarlijk feestje.",
+      "step1": "Mary krijgt online een uitnodiging voor een geheim feest van onbekenden.",
+      "step2": "Ze laat de uitnodiging aan haar vriendin zien en vraagt of ze samen zullen gaan.",
+      "step3": "Mary’s moeder legt uit dat een feest van onbekenden riskant is, dus ze besluiten niet te gaan."
+    },
+
+    "level2": {
+      "description": "Rangschik vijf stappen die laten zien hoe Mary een online vreemdeling blokkeert.",
+      "step1": "Een vreemdeling stuurt Mary een bericht met een ‘modelcontract’.",
+      "step2": "Hij vraagt om persoonlijke gegevens vóór een contract.",
+      "step3": "Mary staat op het punt haar adres te geven zonder te verifiëren wie hij is.",
+      "step4": "Haar moeder ziet de chat en waarschuwt haar om te stoppen.",
+      "step5": "Mary blokkeert de vreemdeling en meldt het bij de politie."
+    },
+
+    "level3": {
+      "description": "Zet deze zeven stappen op volgorde om de nep‑vacature te stoppen.",
+      "step1": "Sophia ziet een vreemd banenbriefje op het schoolbord.",
+      "step2": "Sophia leest het briefje hardop en fronst.",
+      "step3": "Sophia laat het briefje aan Mary zien voor een tweede mening.",
+      "step4": "Samen brengen ze het briefje naar hun leraar.",
+      "step5": "De leraar belt de hulplijn om het te controleren.",
+      "step6": "De hulplijn zegt dat het briefje oplichting is.",
+      "step7": "De leraar haalt het briefje weg en hangt een waarschuwingsposter op."
+    }
   }
 }

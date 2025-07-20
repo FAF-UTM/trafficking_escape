@@ -145,5 +145,45 @@
   },
   "intro": {
     "skip": "Skip Intro"
+  },
+  "timelinePuzzle": {
+    "introTitle": "How to play",
+    "introText": "Timeline Puzzle time! Each card shows something that happens to Mary or Sophia. Drag the cards into the empty slots so the story goes from the FIRST event to the LAST. When every slot is full, press Check. If the order is correct you move to the next level—good luck!",
+    "correct": "Correct! Moving to next level...",
+    "incorrect": "Incorrect order. Try again!",
+    "title": "Timeline Puzzle (Level {{level}})",
+    "tapStart": "(Click outside to start)",
+    "tapContinue": "(Click outside to continue)",
+    "reset": "Reset",
+    "check": "Check",
+
+    "level1": {
+      "description": "Put the three pictures in order so Mary stays away from a dangerous party.",
+      "step1": "Mary receives an online invite to a secret party from people she doesn’t know.",
+      "step2": "She shows the invite to her friend and asks if they should go.",
+      "step3": "Mary’s mom explains that parties hosted by strangers are risky, so they decide not to go."
+    },
+
+    "level2": {
+      "description": "Arrange five steps showing how Mary blocks an online stranger.",
+      "step1": "A stranger messages Mary with a “modeling contract.”",
+      "step2": "They ask for personal details before any contract is signed.",
+      "step3": "Mary almost gives her address without checking who they are.",
+      "step4": "Her mother sees the chat and warns her to stop.",
+      "step5": "Mary blocks the stranger and reports it to the police."
+    },
+
+    "level3": {
+      "description": "Put these seven steps in order to stop the fake job flyer.",
+      "step1": "Sophia spots a strange job flyer on the school board.",
+      "step2": "Sophia reads the flyer aloud and frowns.",
+      "step3": "Sophia shows the flyer to Mary for a second opinion.",
+      "step4": "Together they bring the flyer to their teacher.",
+      "step5": "The teacher calls the safety hotline to check it.",
+      "step6": "The hotline says the flyer is a scam.",
+      "step7": "The teacher removes the flyer and posts a warning notice."
+    }
   }
 }
+
+
