@@ -20,7 +20,8 @@ interface EmojiQuestion {
 const allQuestions: EmojiQuestion[] = [
   {
     id: 1,
-    emojiStory: '“You’re stunning ✨ low-key model vibes. Let’s link up tonight, no 🧢.”',
+    emojiStory:
+      '“You’re stunning ✨ low-key model vibes. Let’s link up tonight, no 🧢.”',
     context:
       "Mary receives a late-night DM from someone she doesn't know who floods her with compliments and pushes to meet.",
     prompt: 'What does this mean, and what should Mary do?',
@@ -101,7 +102,8 @@ const allQuestions: EmojiQuestion[] = [
   },
   {
     id: 4,
-    emojiStory: '“Secret party 🎉 tonight, no parents 🚫. I’ll pick you up 🚗. Keep it 🤫.”',
+    emojiStory:
+      '“Secret party 🎉 tonight, no parents 🚫. I’ll pick you up 🚗. Keep it 🤫.”',
     context:
       'The account invites Mary to a secret party and insists she keeps it a secret from adults.',
     prompt: 'What does this mean, and what should Mary do?',
@@ -211,8 +213,7 @@ const allQuestions: EmojiQuestion[] = [
   {
     id: 8,
     emojiStory: '“Free gift 🎁📱 if you meet now”',
-    context:
-      'They offer gifts in exchange for meeting quickly.',
+    context: 'They offer gifts in exchange for meeting quickly.',
     prompt: 'What does this mean, and what should Mary do?',
     options: [
       {
@@ -224,8 +225,7 @@ const allQuestions: EmojiQuestion[] = [
       {
         text: 'It’s generous; Mary should meet in a busy place.',
         isCorrect: false,
-        feedback:
-          'Unsafe. Do not meet strangers for gifts in any setting.',
+        feedback: 'Unsafe. Do not meet strangers for gifts in any setting.',
       },
       {
         text: 'Mary should ask for delivery instead.',
@@ -241,11 +241,17 @@ interface EmojiStoryDecoderProps {
   onComplete: () => void;
 }
 
-const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({ onComplete }) => {
+const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({
+  onComplete,
+}) => {
   const { t } = useTranslation();
-  const [stage, setStage] = useState<'intro' | 'question' | 'feedback' | 'end'>('intro');
+  const [stage, setStage] = useState<'intro' | 'question' | 'feedback' | 'end'>(
+    'intro'
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<EmojiOption | null>(null);
+  const [selectedOption, setSelectedOption] = useState<EmojiOption | null>(
+    null
+  );
   const [questions, setQuestions] = useState<EmojiQuestion[]>([]);
 
   // Randomly select 4 questions and shuffle answer options on mount
@@ -284,7 +290,10 @@ const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({ onComplete }) => 
     <div className="emoji-decoder-container">
       {stage === 'intro' && (
         <div className="modal-overlay" onClick={handleStart}>
-          <div className="modal-content intro" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="modal-content intro"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="intro-title">{t('emojiDecoder.introTitle')}</h2>
             <p className="intro-text">{t('emojiDecoder.introText')}</p>
             <p className="intro-text">{t('emojiDecoder.howToPlay')}</p>
@@ -303,7 +312,11 @@ const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({ onComplete }) => 
           <p className="prompt-text">{currentQuestion.prompt}</p>
           <div className="options-container">
             {currentQuestion.options.map((option, index) => (
-              <button key={index} className="option-button" onClick={() => handleOptionClick(option)}>
+              <button
+                key={index}
+                className="option-button"
+                onClick={() => handleOptionClick(option)}
+              >
                 {option.text}
               </button>
             ))}
@@ -314,11 +327,15 @@ const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({ onComplete }) => 
       {stage === 'feedback' && selectedOption && (
         <div className="feedback-screen fade-in">
           <h3 className="feedback-title">
-            {selectedOption.isCorrect ? t('emojiDecoder.correct') : t('emojiDecoder.incorrect')}
+            {selectedOption.isCorrect
+              ? t('emojiDecoder.correct')
+              : t('emojiDecoder.incorrect')}
           </h3>
           <p className="feedback-text">{selectedOption.feedback}</p>
           <button className="next-button" onClick={handleNext}>
-            {currentIndex === questions.length - 1 ? t('emojiDecoder.finish') : t('emojiDecoder.next')}
+            {currentIndex === questions.length - 1
+              ? t('emojiDecoder.finish')
+              : t('emojiDecoder.next')}
           </button>
         </div>
       )}
@@ -337,4 +354,3 @@ const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({ onComplete }) => 
 };
 
 export default EmojiStoryDecoder;
-

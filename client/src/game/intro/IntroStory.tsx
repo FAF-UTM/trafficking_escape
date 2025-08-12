@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { dialogues as rawDialogues, RawDialogue } from './dialogues';
@@ -82,8 +88,14 @@ const IntroStory: React.FC = () => {
     }
   };
 
-  let leftSpriteStyle: React.CSSProperties = { opacity: 0, visibility: 'hidden' };
-  let rightSpriteStyle: React.CSSProperties = { opacity: 0, visibility: 'hidden' };
+  let leftSpriteStyle: React.CSSProperties = {
+    opacity: 0,
+    visibility: 'hidden',
+  };
+  let rightSpriteStyle: React.CSSProperties = {
+    opacity: 0,
+    visibility: 'hidden',
+  };
   let showNameBox = false;
   let nameBoxPosition: 'left' | 'right' = 'left';
 

@@ -1,55 +1,76 @@
 .admin {
-    width: 100vw;
-    height: 100vh;
-    background: #fff;
-    color: #2c3e50;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  color: #2c3e50;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 /* Sections */
 .section {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 1rem;
-    background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+  background: #fafafa;
 }
 
 /* Form rows */
 .formRow {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-top: 2rem;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+.button {
+  color: #fff;
+  background: #2c3e50;
+  font-family: 'SF Pro Text';
+  border: none;
+  border-radius: 100px;
+  height: 46px;
+  margin: 0;
+}
+.input {
+  background: #fff;
+  border: 1px solid #2c3e50;
+  font-family: 'SF Pro Text';
+  color: #222;
+  border-radius: 100px;
+  height: 46px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.title_1 {
 }
 
+/* Tables */
 
-    /* Tables */
+.table {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+  font-family: 'SF Pro Text';
+}
 
-    .table {
-        width: 100%;
-        margin-top: 1rem;
-        border-collapse: collapse;
-    }
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+}
 
-    .table th,
-    .table td {
-        border: 1px solid #ccc;
-        padding: 0.5rem;
-    }
+/* Copy button */
 
-    /* Copy button */
+.copyButton {
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.5rem;
+}
 
-    .copyButton {
-        margin-left: 0.5rem;
-        padding: 0.2rem 0.5rem;
-    }
-
-    .copied {
-        margin-left: 0.5rem;
-        color: #0a0;
-        font-size: 0.8rem;
-    }
+.copied {
+  margin-left: 0.5rem;
+  color: #0a0;
+  font-size: 0.8rem;
+}

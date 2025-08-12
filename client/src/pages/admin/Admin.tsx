@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import styles from './admin.module.css'
+import styles from './admin.module.css';
 interface Session {
   id: number;
   name: string;
@@ -22,11 +22,14 @@ const Admin: React.FC = () => {
 
   const fetchSessions = useCallback(async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND}/api/v1/sessions`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND}/api/v1/sessions`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (res.ok) {
         const data = await res.json();
         setSessions(data);
@@ -50,17 +53,19 @@ const Admin: React.FC = () => {
     }
   };
 
-
   const createSession = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND}/api/v1/sessions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ name: sessionName }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND}/api/v1/sessions`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ name: sessionName }),
+        }
+      );
       if (res.ok) {
         setSessionName('');
         fetchSessions();
@@ -90,46 +95,49 @@ const Admin: React.FC = () => {
     }
   };
 
-
-
   return (
     <div className={styles.admin}>
       <h2>Admin Panel</h2>
 
       <section className={styles.section}>
-        <h3>Sessions</h3>
+        <h3 className={styles.title_1}>Sessions</h3>
         <div className={styles.formRow}>
           <input
+            className={styles.input}
             type="text"
             value={sessionName}
             placeholder="Session name"
             onChange={(e) => setSessionName(e.target.value)}
           />
-          <button onClick={createSession}>Create Session</button>
+          <button className={styles.button} onClick={createSession}>
+            Create Session
+          </button>
         </div>
         <table className={styles.table}>
           <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-          </tr>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+            </tr>
           </thead>
           <tbody>
-          {sessions.map((s) => (
-            <tr key={s.id}>
-              <td>
-                {s.id}
-                <button
-                  className={styles.copyButton}
-                  onClick={() => handleCopy(String(s.id), `session-${s.id}`)}
-                >
-                  Copy
-                </button>
-                {copiedKey === `session-${s.id}` && <span className={styles.copied}>Copied!</span>}
-              </td>
-              <td>{s.name}</td>
-            </tr>
-          ))}
+            {sessions.map((s) => (
+              <tr key={s.id}>
+                <td>
+                  {s.id}
+                  <button
+                    className={styles.copyButton}
+                    onClick={() => handleCopy(String(s.id), `session-${s.id}`)}
+                  >
+                    Copy
+                  </button>
+                  {copiedKey === `session-${s.id}` && (
+                    <span className={styles.copied}>Copied!</span>
+                  )}
+                </td>
+                <td>{s.name}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </section>
@@ -139,52 +147,58 @@ const Admin: React.FC = () => {
         <div className={styles.formRow}>
           <label>Validity (min):</label>
           <input
+            className={styles.input}
+            style={{ maxWidth: '120px' }}
             type="number"
             min={1}
             value={validityMinutes}
             onChange={(e) => setValidityMinutes(parseInt(e.target.value))}
           />
-          <button onClick={createEphemeralUser}>Create</button>
+          <button className={styles.button} onClick={createEphemeralUser}>
+            Create
+          </button>
         </div>
         {createdUsers.length > 0 && (
           <table className={styles.table}>
             <thead>
-            <tr>
-              <th>Username</th>
-              <th>Access Code</th>
-              <th>Expires</th>
-            </tr>
+              <tr>
+                <th>Username</th>
+                <th>Access Code</th>
+                <th>Expires</th>
+              </tr>
             </thead>
             <tbody>
-            {createdUsers.map((u, idx) => (
-              <tr key={u.username}>
-                <td>
-                  {u.username}
-                  <button
-                    className={styles.copyButton}
-                    onClick={() => handleCopy(u.username, `user-${idx}-name`)}
-                  >
-                    Copy
-                  </button>
-                  {copiedKey === `user-${idx}-name` && (
-                    <span className={styles.copied}>Copied!</span>
-                  )}
-                </td>
-                <td>
-                  {u.accessCode}
-                  <button
-                    className={styles.copyButton}
-                    onClick={() => handleCopy(u.accessCode, `user-${idx}-code`)}
-                  >
-                    Copy
-                  </button>
-                  {copiedKey === `user-${idx}-code` && (
-                    <span className={styles.copied}>Copied!</span>
-                  )}
-                </td>
-                <td>{new Date(u.expirationDate).toLocaleString()}</td>
-              </tr>
-            ))}
+              {createdUsers.map((u, idx) => (
+                <tr key={u.username}>
+                  <td>
+                    {u.username}
+                    <button
+                      className={styles.copyButton}
+                      onClick={() => handleCopy(u.username, `user-${idx}-name`)}
+                    >
+                      Copy
+                    </button>
+                    {copiedKey === `user-${idx}-name` && (
+                      <span className={styles.copied}>Copied!</span>
+                    )}
+                  </td>
+                  <td>
+                    {u.accessCode}
+                    <button
+                      className={styles.copyButton}
+                      onClick={() =>
+                        handleCopy(u.accessCode, `user-${idx}-code`)
+                      }
+                    >
+                      Copy
+                    </button>
+                    {copiedKey === `user-${idx}-code` && (
+                      <span className={styles.copied}>Copied!</span>
+                    )}
+                  </td>
+                  <td>{new Date(u.expirationDate).toLocaleString()}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         )}

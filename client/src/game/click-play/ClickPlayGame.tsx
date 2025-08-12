@@ -19,8 +19,22 @@ const ClickPlayGame: React.FC = () => {
   return (
     <div className="click-play-container">
       {showIntro && (
-        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000 }} onClick={closeIntro}>
-          <div className="modal-content intro" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="modal-overlay"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 1000,
+          }}
+          onClick={closeIntro}
+        >
+          <div
+            className="modal-content intro"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="pixel-text">{t('clickPuzzle.introTitle')}</div>
             <div className="pixel-text">{t('clickPuzzle.introText')}</div>
             <div className="pixel-text">{t('clickPuzzle.howToPlay')}</div>

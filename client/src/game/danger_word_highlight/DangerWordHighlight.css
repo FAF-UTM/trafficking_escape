@@ -32,13 +32,28 @@
 }
 
 /* Clickable words */
-.word { cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease; }
-.word:hover { box-shadow: inset 0 -8px 0 rgba(255,255,0,0.3); }
-.word.selected { background-color: rgba(255, 0, 0, 0.6); }
+.word {
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.word:hover {
+  box-shadow: inset 0 -8px 0 rgba(255, 255, 0, 0.3);
+}
+.word.selected {
+  background-color: rgba(255, 0, 0, 0.6);
+}
 
 /* Advice (yellow) instead of red incorrect */
-.advice h3, .advice-words, .advice-note { color: #ffff66; }
-.advice-words { font-weight: bold; }
+.advice h3,
+.advice-words,
+.advice-note {
+  color: #ffff66;
+}
+.advice-words {
+  font-weight: bold;
+}
 
 .submit-button,
 .finish-button {

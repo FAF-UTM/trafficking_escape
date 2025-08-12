@@ -23,7 +23,7 @@ const allScenarios: TrustScenario[] = [
     id: 1,
     scenarioTitle: 'DM: Compliments + Urgency',
     scenarioText:
-      "Mary gets a late-night DM: “You’re amazing ✨ let’s meet tonight, no parents.” They insist it’s safe and urgent.",
+      'Mary gets a late-night DM: “You’re amazing ✨ let’s meet tonight, no parents.” They insist it’s safe and urgent.',
     options: [
       {
         id: 1,
@@ -109,8 +109,7 @@ const allScenarios: TrustScenario[] = [
         id: 3,
         name: 'Meet during the day with a friend',
         description: 'Daytime seems safer.',
-        feedback:
-          'Unsafe. Do not meet strangers for rides in any setting.',
+        feedback: 'Unsafe. Do not meet strangers for rides in any setting.',
         isSafe: false,
       },
     ],
@@ -205,8 +204,7 @@ const allScenarios: TrustScenario[] = [
         id: 3,
         name: 'Meet in public to collect the gift',
         description: 'It’s free, right?',
-        feedback:
-          'Unsafe. Do not meet strangers for money or gifts.',
+        feedback: 'Unsafe. Do not meet strangers for money or gifts.',
         isSafe: false,
       },
     ],
@@ -229,8 +227,7 @@ const allScenarios: TrustScenario[] = [
         id: 2,
         name: 'Agree to keep it private',
         description: 'It’s not a big deal.',
-        feedback:
-          'Unsafe. Secrecy allows harm to grow. Do not agree.',
+        feedback: 'Unsafe. Secrecy allows harm to grow. Do not agree.',
         isSafe: false,
       },
       {
@@ -286,7 +283,9 @@ interface WhoToTrustGameProps {
  */
 const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
   // Stage can be "intro", "scenario", "feedback", "end"
-  const [stage, setStage] = useState<'intro' | 'scenario' | 'feedback' | 'end'>('intro');
+  const [stage, setStage] = useState<'intro' | 'scenario' | 'feedback' | 'end'>(
+    'intro'
+  );
   // Selected (random) scenarios
   const [scenarios, setScenarios] = useState<TrustScenario[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -335,15 +334,18 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
       {/* Intro modal */}
       {stage === 'intro' && (
         <div className="modal-overlay" onClick={handleStart}>
-          <div className="modal-content intro" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="modal-content intro"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="intro-title">How to play</h2>
             <p className="intro-text">
-              Mary is chatting online. Each scenario shows a choice. Pick the safest
-              option that protects Mary and avoids manipulation.
+              Mary is chatting online. Each scenario shows a choice. Pick the
+              safest option that protects Mary and avoids manipulation.
             </p>
             <p className="intro-text">
-              Look for red flags: secrecy, urgency, gifts, location requests, rides,
-              and moving to private apps. (Click outside to start)
+              Look for red flags: secrecy, urgency, gifts, location requests,
+              rides, and moving to private apps. (Click outside to start)
             </p>
           </div>
         </div>
@@ -356,7 +358,11 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
           <p className="scenario-text">{currentScenario.scenarioText}</p>
           <div className="options-container">
             {currentScenario.options.map((opt) => (
-              <div key={opt.id} className="option-card" onClick={() => handleOptionSelect(opt)}>
+              <div
+                key={opt.id}
+                className="option-card"
+                onClick={() => handleOptionSelect(opt)}
+              >
                 <h3 className="option-name">{opt.name}</h3>
                 <p className="option-description">{opt.description}</p>
               </div>
@@ -368,9 +374,13 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
       {/* Feedback stage */}
       {stage === 'feedback' && chosenOption && (
         <div className="feedback-screen fade-in">
-          <h2 className="feedback-title">{chosenOption.isSafe ? 'Safer Choice' : 'Risky Move?'}</h2>
+          <h2 className="feedback-title">
+            {chosenOption.isSafe ? 'Safer Choice' : 'Risky Move?'}
+          </h2>
           <p className="feedback-text">{chosenOption.feedback}</p>
-          <button className="next-button" onClick={handleNextScenario}>Continue</button>
+          <button className="next-button" onClick={handleNextScenario}>
+            Continue
+          </button>
         </div>
       )}
 
@@ -379,10 +389,13 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
         <div className="end-screen fade-in">
           <h2 className="end-title">Reflection</h2>
           <p className="end-text">
-            You’ve practiced weighing trust. If something feels off, protect your
-            privacy, stop, and tell a trusted adult. Awareness keeps you safer.
+            You’ve practiced weighing trust. If something feels off, protect
+            your privacy, stop, and tell a trusted adult. Awareness keeps you
+            safer.
           </p>
-          <button className="end-button" onClick={handleFinish}>Finish</button>
+          <button className="end-button" onClick={handleFinish}>
+            Finish
+          </button>
         </div>
       )}
     </div>

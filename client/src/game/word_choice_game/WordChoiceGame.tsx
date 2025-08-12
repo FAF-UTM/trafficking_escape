@@ -89,21 +89,19 @@ const allQuestions: WordChoiceQuestion[] = [
   {
     id: 6,
     sentence:
-      'Asking for Mary\'s home address to “send a gift” is a ___________ request.',
+      "Asking for Mary's home address to “send a gift” is a ___________ request.",
     options: [
       { word: 'dangerous', isCorrect: true },
       { word: 'helpful', isCorrect: false },
       { word: 'polite', isCorrect: false },
     ],
     feedbackCorrect:
-      'Correct! Never share addresses with strangers. It\'s dangerous.',
-    feedbackIncorrect:
-      'Incorrect. That\'s dangerous, not helpful or polite.',
+      "Correct! Never share addresses with strangers. It's dangerous.",
+    feedbackIncorrect: "Incorrect. That's dangerous, not helpful or polite.",
   },
   {
     id: 7,
-    sentence:
-      '“Keep this just between us” is a ___________ red flag.',
+    sentence: '“Keep this just between us” is a ___________ red flag.',
     options: [
       { word: 'manipulation', isCorrect: true },
       { word: 'celebration', isCorrect: false },
@@ -112,7 +110,7 @@ const allQuestions: WordChoiceQuestion[] = [
     feedbackCorrect:
       'Correct! Secrecy requests are manipulation to avoid adult oversight.',
     feedbackIncorrect:
-      'Not quite. That\'s manipulation meant to hide behavior from adults.',
+      "Not quite. That's manipulation meant to hide behavior from adults.",
   },
   {
     id: 8,
@@ -125,8 +123,7 @@ const allQuestions: WordChoiceQuestion[] = [
     ],
     feedbackCorrect:
       'Correct! Pushing “trust me fr 💯” after a boundary is coercive pressure.',
-    feedbackIncorrect:
-      'Incorrect. That\'s coercive pressure, not harmless.',
+    feedbackIncorrect: "Incorrect. That's coercive pressure, not harmless.",
   },
 ];
 
@@ -191,15 +188,18 @@ const WordChoiceGame: React.FC<WordChoiceGameProps> = ({ onComplete }) => {
       {/* Intro Modal */}
       {stage === 'intro' && (
         <div className="modal-overlay" onClick={handleStart}>
-          <div className="modal-content intro" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="modal-content intro"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="intro-title">How to play</h2>
             <p className="intro-text">
-              Mary is chatting online. Each sentence has a missing word. Choose the
-              safest, most accurate word to complete it.
+              Mary is chatting online. Each sentence has a missing word. Choose
+              the safest, most accurate word to complete it.
             </p>
             <p className="intro-text">
-              These scenarios reflect real grooming and trafficking tactics. Think
-              about what protects Mary and what raises risk.
+              These scenarios reflect real grooming and trafficking tactics.
+              Think about what protects Mary and what raises risk.
             </p>
             <p className="intro-text">(Click outside to start)</p>
           </div>

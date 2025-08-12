@@ -73,7 +73,9 @@ function shuffleString(value: string): string {
   }
   const jumbled = arr.join('');
   // Avoid unchanged shuffle
-  return jumbled.toUpperCase() === value.toUpperCase() ? shuffleString(value) : jumbled;
+  return jumbled.toUpperCase() === value.toUpperCase()
+    ? shuffleString(value)
+    : jumbled;
 }
 
 const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
@@ -84,11 +86,17 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
 
   // Pick 4 puzzles randomly and precompute their jumbled forms per run
   const puzzles = useMemo(() => {
-    const selected = [...allPuzzles].sort(() => Math.random() - 0.5).slice(0, 4);
-    return selected.map((p) => ({ ...p, jumbled: shuffleString(p.answer) } as any));
+    const selected = [...allPuzzles]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 4);
+    return selected.map(
+      (p) => ({ ...p, jumbled: shuffleString(p.answer) }) as any
+    );
   }, []);
 
-  const currentPuzzle = puzzles[currentIndex] as unknown as Puzzle & { jumbled: string };
+  const currentPuzzle = puzzles[currentIndex] as unknown as Puzzle & {
+    jumbled: string;
+  };
 
   const handleStart = () => setStage('puzzle');
 
@@ -114,15 +122,19 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
       {/* How to play modal */}
       {stage === 'intro' && (
         <div className="modal-overlay" onClick={handleStart}>
-          <div className="modal-content intro" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="modal-content intro"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="intro-title">How to play</h2>
             <p className="intro-text">
-              Mary is chatting online. Each round shows a scrambled safety word and a short
-              scenario. Unscramble the word to reveal the safest idea.
+              Mary is chatting online. Each round shows a scrambled safety word
+              and a short scenario. Unscramble the word to reveal the safest
+              idea.
             </p>
             <p className="intro-text">
-              These words highlight red flags (secrecy, lures, grooming) and actions
-              (block, report, exit). (Click outside to start)
+              These words highlight red flags (secrecy, lures, grooming) and
+              actions (block, report, exit). (Click outside to start)
             </p>
           </div>
         </div>
@@ -171,9 +183,12 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
         <div className="end-screen fade-in">
           <h2 className="end-title">Challenge Complete!</h2>
           <p className="end-text">
-            Great job! Recognizing red flags and acting fast (block, report, exit) keeps Mary safer.
+            Great job! Recognizing red flags and acting fast (block, report,
+            exit) keeps Mary safer.
           </p>
-          <button className="end-button" onClick={onComplete}>Finish</button>
+          <button className="end-button" onClick={onComplete}>
+            Finish
+          </button>
         </div>
       )}
     </div>

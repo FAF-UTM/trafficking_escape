@@ -1,11 +1,16 @@
 export interface RawDialogue {
-  DialogueNumber: number
-  CharacterName: string
-  BgImage: string
-  LeftSpriteImage: string
-  RightSpriteImage: string
-  CharacterSettings: 'NoSpritesSpeaking' | 'LeftSpriteSpeaking' | 'RightSpriteSpeaking' | 'LeftSpriteNotSpeaking' | 'RightSpriteNotSpeaking'
-  VisualFX: 'NoFX' | 'CamShakeEffect'
+  DialogueNumber: number;
+  CharacterName: string;
+  BgImage: string;
+  LeftSpriteImage: string;
+  RightSpriteImage: string;
+  CharacterSettings:
+    | 'NoSpritesSpeaking'
+    | 'LeftSpriteSpeaking'
+    | 'RightSpriteSpeaking'
+    | 'LeftSpriteNotSpeaking'
+    | 'RightSpriteNotSpeaking';
+  VisualFX: 'NoFX' | 'CamShakeEffect';
 }
 
 export const dialogues: RawDialogue[] = [
@@ -198,4 +203,4 @@ export const dialogues: RawDialogue[] = [
     CharacterSettings: 'NoSpritesSpeaking',
     VisualFX: 'NoFX',
   },
-]
+];

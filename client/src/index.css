@@ -194,7 +194,7 @@ body {
   max-width: 500px;
   text-align: center;
 }
-@media (max-width: 1300px) {
+@media (max-width: 350px) {
   .screen_width_min {
     display: flex;
   }
