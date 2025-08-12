@@ -190,6 +190,21 @@
     "howToPlay": "Click objects to interact. Collect items and use them together from your inventory.",
     "objective": "Help Mary escape by finding tools and solving each level's puzzle!",
     "tapStart": "(Click outside to start the escape mission)"
+  },
+  "emojiDecoder": {
+    "introTitle": "Emoji Danger Decoder",
+    "introText": "Mary needs your help to decode dangerous online messages. Learn to spot red flags in emoji slang and protect yourself from traffickers.",
+    "howToPlay": "Read the situation, decode the emoji sequence, and choose the safest response. Think about what Mary should do!",
+    "objective": "Learn to recognize dangerous online behavior and protect yourself from manipulation!",
+    "start": "Start Decoding",
+    "tapStart": "(Click outside to start)",
+    "correct": "Correct!",
+    "incorrect": "Incorrect!",
+    "next": "Next",
+    "finish": "Finish",
+    "completed": "Well Done!",
+    "completionMessage": "You've learned to spot dangerous online behavior and protect yourself from traffickers. Stay safe and trust your instincts!",
+    "continue": "Continue"
   }
 }
 

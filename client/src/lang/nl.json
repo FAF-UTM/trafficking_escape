@@ -190,5 +190,20 @@
     "howToPlay": "Klik op objecten om ermee te interacteren. Verzamel items en gebruik ze samen vanuit je inventaris.",
     "objective": "Help Mary ontsnappen door gereedschap te vinden en de puzzel van elk level op te lossen!",
     "tapStart": "(Klik buiten om de ontsnappingsmissie te starten)"
+  },
+  "emojiDecoder": {
+    "introTitle": "Emoji Gevaar Decoder",
+    "introText": "Mary heeft jouw hulp nodig om gevaarlijke online berichten te decoderen. Leer rode vlaggen in emoji slang te herkennen en jezelf te beschermen tegen mensenhandelaars.",
+    "howToPlay": "Lees de situatie, decodeer de emoji reeks en kies de veiligste reactie. Denk na over wat Mary zou moeten doen!",
+    "objective": "Leer gevaarlijk online gedrag te herkennen en jezelf te beschermen tegen manipulatie!",
+    "start": "Start Decoderen",
+    "tapStart": "(Klik buiten om te starten)",
+    "correct": "Correct!",
+    "incorrect": "Incorrect!",
+    "next": "Volgende",
+    "finish": "Voltooien",
+    "completed": "Goed Gedaan!",
+    "completionMessage": "Je hebt geleerd gevaarlijk online gedrag te herkennen en jezelf te beschermen tegen mensenhandelaars. Blijf veilig en vertrouw op je instincten!",
+    "continue": "Doorgaan"
   }
 }
