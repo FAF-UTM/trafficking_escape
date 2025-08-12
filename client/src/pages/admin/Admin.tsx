@@ -1,94 +1,74 @@
-import React, { useState } from 'react';
-import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  FormControlLabel,
-  Checkbox,
-} from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../../theme/theme';
-import styles from './admin.module.css';
+import React, { useCallback, useEffect, useState } from 'react';
 
-const AdminPage: React.FC = () => {
-  const [chatName, setChatName] = useState('');
-  const [chatImageUrl, setChatImageUrl] = useState('');
-  const [isTrafficker, setIsTrafficker] = useState(false);
-  const [message, setMessage] = useState('');
+interface Session {
+  id: number;
+  name: string;
+}
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setMessage('');
+const Admin: React.FC = () => {
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [sessionName, setSessionName] = useState('');
+
+  const token = localStorage.getItem('authToken');
+
+  const fetchSessions = useCallback(async () => {
     try {
-      const token = localStorage.getItem('authToken');
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND}/api/chats`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            chatName,
-            chatImageUrl,
-            isTrafficker,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        setMessage('Session created successfully');
-        setChatName('');
-        setChatImageUrl('');
-        setIsTrafficker(false);
-      } else {
-        setMessage('Failed to create session');
+      const res = await fetch(`${import.meta.env.VITE_BACKEND}/api/v1/sessions`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSessions(data);
       }
     } catch (err) {
-      setMessage('Failed to create session');
+      console.error('Failed to load sessions', err);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    fetchSessions();
+  }, [fetchSessions]);
+
+  const createSession = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND}/api/v1/sessions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name: sessionName }),
+      });
+      if (res.ok) {
+        setSessionName('');
+        fetchSessions();
+      }
+    } catch (err) {
+      console.error('Failed to create session', err);
     }
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="sm" className={styles.admin}>
-        <Typography component="h1" variant="h5" sx={{ mt: 4 }}>
-          Admin Panel
-        </Typography>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <TextField
-            label="Chat Name"
-            fullWidth
-            margin="normal"
-            value={chatName}
-            onChange={(e) => setChatName(e.target.value)}
-          />
-          <TextField
-            label="Image URL"
-            fullWidth
-            margin="normal"
-            value={chatImageUrl}
-            onChange={(e) => setChatImageUrl(e.target.value)}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={isTrafficker}
-                onChange={(e) => setIsTrafficker(e.target.checked)}
-              />
-            }
-            label="Is Trafficker"
-          />
-          {message && <Typography sx={{ mt: 2 }}>{message}</Typography>}
-          <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-            Create Session
-          </Button>
-        </form>
-      </Container>
-    </ThemeProvider>
+    <div style={{ padding: '20px' }}>
+      <h2>Admin</h2>
+      <div>
+        <input
+          type="text"
+          value={sessionName}
+          placeholder="Session name"
+          onChange={(e) => setSessionName(e.target.value)}
+        />
+        <button onClick={createSession}>Create Session</button>
+      </div>
+      <ul>
+        {sessions.map((s) => (
+          <li key={s.id}>{s.name}</li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
-export default AdminPage;
+export default Admin;
