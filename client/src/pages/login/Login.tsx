@@ -13,6 +13,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './login.module.css';
 import { t } from 'i18next';
+import { jwtDecode } from 'jwt-decode';
 
 const LoginPage: React.FC = () => {
   const { login } = useAuth();
@@ -25,7 +26,17 @@ const LoginPage: React.FC = () => {
     event.preventDefault();
     try {
       await login(username, password);
-      navigate('/chat');
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        const decoded: any = jwtDecode(token);
+        if (decoded.role === 'ROLE_ADMIN') {
+          navigate('/admin');
+        } else {
+          navigate('/chat');
+        }
+      } else {
+        navigate('/chat');
+      }
     } catch (err) {
       setError('Invalid username or password');
     }
