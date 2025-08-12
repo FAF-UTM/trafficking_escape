@@ -31,14 +31,14 @@
   text-align: left;
 }
 
-.word {
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+/* Clickable words */
+.word { cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease; }
+.word:hover { box-shadow: inset 0 -8px 0 rgba(255,255,0,0.3); }
+.word.selected { background-color: rgba(255, 0, 0, 0.6); }
 
-.word.selected {
-  background-color: rgba(255, 0, 0, 0.6);
-}
+/* Advice (yellow) instead of red incorrect */
+.advice h3, .advice-words, .advice-note { color: #ffff66; }
+.advice-words { font-weight: bold; }
 
 .submit-button,
 .finish-button {
@@ -74,4 +74,40 @@
 
 .incorrect {
   color: red;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content.intro {
+  max-width: 600px;
+  background-color: #1a1a1a;
+  border: 3px solid #fff;
+  padding: 30px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.modal-content.intro .intro-title {
+  color: #ffff00;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.modal-content.intro .intro-text:last-child {
+  color: #ffff00;
+  font-weight: bold;
+  margin-top: 10px;
 }

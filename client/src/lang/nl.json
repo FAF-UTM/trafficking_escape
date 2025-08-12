@@ -39,11 +39,171 @@
     "subtitle_2": "We hopen dat je ervan genoten hebt. We hopen dat deze ervaring niet alleen boeiend maar ook verhelderend was.",
     "subtitle_3": "Samen is bewustwording de eerste stap naar preventie.",
     "subtitle_4": "Blijf geïnformeerd. Blijf veilig.",
-    "button": "Terug naar Startpagina"
+    "button": "Terug naar Startpagina",
+    "feedback_button": "Laat feedback achter"
+  },
+  "feedback": {
+    "title": "We waarderen je feedback",
+    "submit": "Verstuur",
+    "q_experience": "Hoe goed was je algemene ervaring?",
+    "q_difficulty": "Hoe moeilijk was het spel?",
+    "q_awareness": "In hoeverre heeft dit je bewustzijn over mensenhandel vergroot?",
+    "q_minigames": "Hoe boeiend waren de minigames?",
+    "q_recommend": "Hoe waarschijnlijk is het dat je dit spel aanbeveelt aan anderen?",
+    "q_navigation": "Hoe makkelijk was het om in het spel te navigeren?"
   },
   "notfound": {
     "button": "Ga terug naar Home",
     "t1": "Oeps! De pagina die je probeert te bereiken bestaat niet of is mogelijk verplaatst.",
     "t2": "Controleer de URL of ga terug naar de startpagina."
+  },
+  "dialogues": {
+    "1": {
+      "CharacterName": "",
+      "DialogueText": "*Mary gaat voorovergezakt op haar stoel zitten en kijkt nerveus toe hoe de leraar de toets teruggeeft. Het klaslokaal gonst van de gesprekken terwijl leerlingen naar hun cijfers kijken. Mary ziet haar score: 43%. Haar hart zinkt in haar schoenen.*"
+    },
+    "2": {
+      "CharacterName": "Leraar",
+      "DialogueText": "Mary, we moeten hier na de les even over praten. Dit is je vierde lage cijfer dit semester. Je kunt beter."
+    },
+    "3": {
+      "CharacterName": "Mary",
+      "DialogueText": "Ja… ik weet het. Ik heb gestudeerd…?"
+    },
+    "4": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Whoa, dat zo slecht? Wees er niet bang voor. Het was een moeilijke toets."
+    },
+    "5": {
+      "CharacterName": "Mary",
+      "DialogueText": "Je begrijpt het niet. Mam gaat flippen. Ik was deze keer zo dichtbij…"
+    },
+    "6": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Ja, maar hoe dichtbij is 43 dan precies?"
+    },
+    "7": {
+      "CharacterName": "Mary",
+      "DialogueText": "Oké, oké. Gewoon... ik kan geen lezing meer aan."
+    },
+    "8": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Kijk, misschien is ze deze keer milder…? Ga je trouwens vanavond nog naar Emma’s feestje?"
+    },
+    "9": {
+      "CharacterName": "Mary",
+      "DialogueText": "Ik weet het niet. Waarschijnlijk niet. Mam is al kwaad over mijn cijfers."
+    },
+    "10": {
+      "CharacterName": "",
+      "DialogueText": "*Mary sleept zich naar binnen, gooit haar rugzak bij de deur. Haar moeder staat in de keuken en kijkt op met een glimlach die snel vervaagt als ze Mary ziet.*"
+    },
+    "11": {
+      "CharacterName": "Moeder",
+      "DialogueText": "Hey Mary! Hoe was school? Hoe ging het met dat examen?"
+    },
+    "12": {
+      "CharacterName": "Mary",
+      "DialogueText": "…Niet geweldig."
+    },
+    "13": {
+      "CharacterName": "Moeder",
+      "DialogueText": "Niet geweldig? Mary, dit is je vierde slechte cijfer dit semester. Wat is er aan de hand?"
+    },
+    "14": {
+      "CharacterName": "Mary",
+      "DialogueText": "Ik weet het niet, mam, het was moeilijk! Ik heb ervoor gestudeerd."
+    },
+    "15": {
+      "CharacterName": "Moeder",
+      "DialogueText": "Gestudeerd? Mary, als je echt had gestudeerd, zou dit niet steeds gebeuren. Je kunt niet op het laatste moment blokken en hopen op het beste."
+    },
+    "16": {
+      "CharacterName": "Mary",
+      "DialogueText": "Oké, prima, ik snap het. Kunnen we dit alsjeblieft niet nog eens doen?"
+    },
+    "17": {
+      "CharacterName": "Moeder",
+      "DialogueText": "We moeten wel, Mary! Je gaat vanavond niet uit. Geen feestje totdat je cijfers verbeteren."
+    },
+    "18": {
+      "CharacterName": "Mary",
+      "DialogueText": "Maak je een grapje? Ik wilde echt gaan…"
+    },
+    "19": {
+      "CharacterName": "Moeder",
+      "DialogueText": "Misschien had je dan meer moeite aan die toets moeten besteden. Je blijft thuis. Einde discussie."
+    },
+    "20": {
+      "CharacterName": "Mary",
+      "DialogueText": "*draait zich om en loopt naar haar kamer* Wat dan ook…"
+    },
+    "21": {
+      "CharacterName": "",
+      "DialogueText": "*Mary smijt de deur van haar slaapkamer dicht, ploft op haar bed en staart naar het plafond. Ze voelt zich gevangen en gefrustreerd, haar hoofd zit vol gedachten. Uiteindelijk pakt ze haar laptop, opent hem en begint te typen.*"
+    }
+  },
+  "intro": {
+    "skip": "Intro overslaan"
+  },
+  "timelinePuzzle": {
+    "introTitle": "Speluitleg",
+    "introText": "Tijdlijnpuzzel! Elke kaart laat iets zien dat Mary of Sophia meemaakt. Sleep de kaarten in de lege vakken zodat het verhaal van EERST naar LAATST loopt. Als alle vakken gevuld zijn, druk op Controleer. Heb je alles goed, dan ga je naar het volgende level—veel succes!",
+    "correct": "Correct! Door naar het volgende level...",
+    "incorrect": "Onjuiste volgorde. Probeer het opnieuw!",
+    "title": "Tijdlijnpuzzel (Level {{level}})",
+    "tapStart": "(Klik buiten om te starten)",
+    "tapContinue": "(Klik buiten om door te gaan)",
+    "reset": "Reset",
+    "check": "Controleer",
+
+    "level1": {
+      "description": "Zet de drie plaatjes op volgorde zodat Mary wegblijft van een gevaarlijk feestje.",
+      "step1": "Mary krijgt online een uitnodiging voor een geheim feest van onbekenden.",
+      "step2": "Ze laat de uitnodiging aan haar vriendin zien en vraagt of ze samen zullen gaan.",
+      "step3": "Mary’s moeder legt uit dat een feest van onbekenden riskant is, dus ze besluiten niet te gaan."
+    },
+
+    "level2": {
+      "description": "Rangschik vijf stappen die laten zien hoe Mary een online vreemdeling blokkeert.",
+      "step1": "Een vreemdeling stuurt Mary een bericht met een ‘modelcontract’.",
+      "step2": "Hij vraagt om persoonlijke gegevens vóór een contract.",
+      "step3": "Mary staat op het punt haar adres te geven zonder te verifiëren wie hij is.",
+      "step4": "Haar moeder ziet de chat en waarschuwt haar om te stoppen.",
+      "step5": "Mary blokkeert de vreemdeling en meldt het bij de politie."
+    },
+
+    "level3": {
+      "description": "Zet deze zeven stappen op volgorde om de nep‑vacature te stoppen.",
+      "step1": "Sophia ziet een vreemd banenbriefje op het schoolbord.",
+      "step2": "Sophia leest het briefje hardop en fronst.",
+      "step3": "Sophia laat het briefje aan Mary zien voor een tweede mening.",
+      "step4": "Samen brengen ze het briefje naar hun leraar.",
+      "step5": "De leraar belt de hulplijn om het te controleren.",
+      "step6": "De hulplijn zegt dat het briefje oplichting is.",
+      "step7": "De leraar haalt het briefje weg en hangt een waarschuwingsposter op."
+    }
+  },
+  "clickPuzzle": {
+    "introTitle": "Ontsnappingsmissie",
+    "introText": "Mary heeft jouw hulp nodig om uit een gevaarlijke situatie te ontsnappen. Begeleid haar door drie locaties door gereedschap te vinden en puzzels op te lossen.",
+    "howToPlay": "Klik op objecten om ermee te interacteren. Verzamel items en gebruik ze samen vanuit je inventaris.",
+    "objective": "Help Mary ontsnappen door gereedschap te vinden en de puzzel van elk level op te lossen!",
+    "tapStart": "(Klik buiten om de ontsnappingsmissie te starten)"
+  },
+  "emojiDecoder": {
+    "introTitle": "Emoji Gevaar Decoder",
+    "introText": "Mary heeft jouw hulp nodig om gevaarlijke online berichten te decoderen. Leer rode vlaggen in emoji slang te herkennen en jezelf te beschermen tegen mensenhandelaars.",
+    "howToPlay": "Lees de situatie, decodeer de emoji reeks en kies de veiligste reactie. Denk na over wat Mary zou moeten doen!",
+    "objective": "Leer gevaarlijk online gedrag te herkennen en jezelf te beschermen tegen manipulatie!",
+    "start": "Start Decoderen",
+    "tapStart": "(Klik buiten om te starten)",
+    "correct": "Correct!",
+    "incorrect": "Incorrect!",
+    "next": "Volgende",
+    "finish": "Voltooien",
+    "completed": "Goed Gedaan!",
+    "completionMessage": "Je hebt geleerd gevaarlijk online gedrag te herkennen en jezelf te beschermen tegen mensenhandelaars. Blijf veilig en vertrouw op je instincten!",
+    "continue": "Doorgaan"
   }
 }

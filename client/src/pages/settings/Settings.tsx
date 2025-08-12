@@ -184,7 +184,7 @@ const SettingsPage: React.FC = () => {
             </div>
             <div className={styles.settings_inside_lang}>
               <div className={styles.settings_inside_lang_title}>
-                Minigame Interval:
+                {t('settings.minigameInterval')}
               </div>
               <span>[{minigameInterval} min]</span>
               <input

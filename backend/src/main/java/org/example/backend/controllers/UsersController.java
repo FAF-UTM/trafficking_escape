@@ -6,14 +6,15 @@ import org.example.backend.converters.UserConverter;
 import org.example.backend.dto.UserDTO;
 import org.example.backend.model.User;
 import org.example.backend.repos.UserRepository;
+import org.example.backend.security.JwtUtil;
 import org.example.backend.services.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.example.backend.security.JwtUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -31,42 +32,99 @@ public class UsersController {
 
     private static final Logger LOGGER = Logger.getLogger(UsersController.class.getName());
 
+    /* ---------------- Existing Endpoints ---------------- */
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public UserDTO getUserById(@PathVariable Long id) {
-        LOGGER.info("Entering getUserById with id: " + id);
+        LOGGER.info("getUserById id=" + id);
         return converter.toDTO(service.findById(id));
     }
 
     @GetMapping("/name/{name}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public UserDTO getUserByName(@PathVariable String name) {
-        LOGGER.info("Entering getUserByName with name: " + name);
+        LOGGER.info("getUserByName name=" + name);
         return converter.toDTO(service.findByUsername(name));
     }
 
     @PostMapping("/register")
     public UserDTO registerUser(@RequestBody UserDTO userDTO) {
-        LOGGER.info("Entering registerUser with userDTO: " + userDTO);
+        LOGGER.info("registerUser username=" + userDTO.getUsername());
         return converter.toDTO(service.create(converter.toEntity(userDTO)));
     }
 
     @PostMapping("/token")
     public ResponseEntity<?> generateToken(@RequestBody Map<String, String> loginData) {
-        LOGGER.info("Attempting to generate token for user: " + loginData.get("username"));
         String username = loginData.get("username");
         String password = loginData.get("password");
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            Map<String, Object> claims = new    HashMap<>();
+            Map<String, Object> claims = new HashMap<>();
             claims.put("id", user.getId());
             claims.put("username", user.getUsername());
             claims.put("role", user.getRole());
             String token = JwtUtil.generateToken(claims);
-            LOGGER.info("Token generated successfully for user: " + username);
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok(Map.of("token", token));
         }
-        LOGGER.warning("Invalid login attempt for user: " + username);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid username or password");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Invalid username or password"));
+    }
+
+    /* ---------------- New Endpoints ---------------- */
+
+    /**
+     * Create a random ephemeral user.
+     * Optional query param validityMinutes (default 60).
+     * Returns username, raw access code (ONE TIME), and expiration.
+     */
+    @PostMapping("/random")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> createRandomEphemeralUser(
+            @RequestParam(name = "validityMinutes", required = false, defaultValue = "60") long validityMinutes
+    ) {
+        if (validityMinutes <= 0) {
+            return ResponseEntity.badRequest().body(Map.of("error", "validityMinutes must be > 0"));
+        }
+        UsersService.CreatedUser created = service.createRandomUser(Duration.ofMinutes(validityMinutes));
+        return ResponseEntity.ok(Map.of(
+                "username", created.getUsername(),
+                "accessCode", created.getAccessCode(),
+                "expirationDate", created.getExpirationDate()
+        ));
+    }
+
+    /**
+     * Validate an access code and, if valid, issue a JWT. Optionally one-time use.
+     * GET /api/v1/users/access-code/{code}
+     * Response: { token, username, expiresAt }
+     */
+    @GetMapping("/access-code/{code}")
+//    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<?> exchangeAccessCodeForToken(@PathVariable String code,
+                                                        @RequestParam(name = "oneTime", required = false, defaultValue = "false")
+                                                        boolean oneTime) {
+        User user = service.findActiveUserByAccessCode(code);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Invalid or expired code"));
+        }
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getId());
+        claims.put("username", user.getUsername());
+        claims.put("role", user.getRole());
+
+        String token = JwtUtil.generateToken(claims);
+
+        if (oneTime) {
+            service.invalidateAccessCode(user);
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "username", user.getUsername(),
+                "expiresAt", user.getExpirationDate(),
+                "oneTimeConsumed", oneTime
+        ));
     }
 }

@@ -39,11 +39,173 @@
     "subtitle_2": "Hope you enjoyed. We hope this experience was not only engaging but also enlightening.",
     "subtitle_3": "Together, awareness is the first step toward prevention.",
     "subtitle_4": "Stay informed. Stay safe.",
-    "button": "Go back Home"
+    "button": "Go back Home",
+    "feedback_button": "Leave Feedback"
+  },
+  "feedback": {
+    "title": "We value your feedback",
+    "submit": "Submit",
+    "q_experience": "How good was your overall experience?",
+    "q_difficulty": "How hard was the game?",
+    "q_awareness": "How much did this raise your awareness of human trafficking?",
+    "q_minigames": "How engaging were the mini-games?",
+    "q_recommend": "How likely are you to recommend this game to others?",
+    "q_navigation": "How easy was it to navigate the game?"
   },
   "notfound": {
     "button": "Go back Home",
     "t1": " Oops! The page you're trying to reach doesn't exist or may have been moved.",
     "t2": "Please check the URL or return to the homepage."
+  },
+  "dialogues": {
+    "1": {
+      "CharacterName": "",
+      "DialogueText": "*Mary sits at her desk, slumped in her seat, anxiously watching the teacher hand back the recent test. The classroom buzzes with students talking as they glance at their grades. Mary catches a glimpse of her score: 43%. Her heart sinks.*"
+    },
+    "2": {
+      "CharacterName": "Teacher",
+      "DialogueText": "Mary, we’ll need to talk about this after class. That’s the fourth low score this semester. You’re capable of more."
+    },
+    "3": {
+      "CharacterName": "Mary",
+      "DialogueText": "Yeah… I know. I tried studying…?"
+    },
+    "4": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Whoa, that bad? Don’t sweat it, though. It was a hard test."
+    },
+    "5": {
+      "CharacterName": "Mary",
+      "DialogueText": "You don’t get it. Mom’s gonna freak. I was so close this time…"
+    },
+    "6": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Yeah, but, like, a 43? Close to what, exactly?"
+    },
+    "7": {
+      "CharacterName": "Mary",
+      "DialogueText": "Okay, okay. Just...I can't go through another lecture."
+    },
+    "8": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Look, maybe she’ll go easy on you this time…? Anyway, are you still coming to Emma’s party tonight?"
+    },
+    "9": {
+      "CharacterName": "Mary",
+      "DialogueText": "I dunno. Probably not. Mom’s already mad about my grades."
+    },
+    "10": {
+      "CharacterName": "",
+      "DialogueText": "*Mary drags herself into the house, tossing her backpack by the door. Her mom is in the kitchen, prepping dinner. She looks up with a smile that quickly fades when she sees Mary’s face.*"
+    },
+    "11": {
+      "CharacterName": "Mother",
+      "DialogueText": "Hey, Mary! How was school? How’d you do on that exam?"
+    },
+    "12": {
+      "CharacterName": "Mary",
+      "DialogueText": "…Not great."
+    },
+    "13": {
+      "CharacterName": "Mother",
+      "DialogueText": "Not great? Mary, that’s the fourth bad grade this semester. What’s going on?"
+    },
+    "14": {
+      "CharacterName": "Mary",
+      "DialogueText": "I dunno, Mom, it was hard! I studied for it."
+    },
+    "15": {
+      "CharacterName": "Mother",
+      "DialogueText": "Studied? Mary, if you’d been studying properly, this wouldn’t keep happening. You can’t just slide by with last-minute cramming."
+    },
+    "16": {
+      "CharacterName": "Mary",
+      "DialogueText": "Okay, fine, I get it. Can we please not do this again?"
+    },
+    "17": {
+      "CharacterName": "Mother",
+      "DialogueText": "We have to, Mary! I’m not letting you go out tonight, that’s for sure. No party until your grades improve."
+    },
+    "18": {
+      "CharacterName": "Mary",
+      "DialogueText": "Are you kidding me? I really wanted to go…"
+    },
+    "19": {
+      "CharacterName": "Mother",
+      "DialogueText": "Then maybe you should’ve put in more effort on that test. You’re staying in. End of discussion."
+    },
+    "20": {
+      "CharacterName": "Mary",
+      "DialogueText": "*turns away, heading to her room* Whatever…"
+    },
+    "21": {
+      "CharacterName": "",
+      "DialogueText": "*Mary slams her bedroom door, flopping onto her bed, staring at the ceiling. She feels trapped and frustrated, her mind buzzing with thoughts. She finally reaches for her laptop, opens it, and begins typing.*"
+    }
+  },
+  "intro": {
+    "skip": "Skip Intro"
+  },
+  "timelinePuzzle": {
+    "introTitle": "How to play",
+    "introText": "Timeline Puzzle time! Each card shows something that happens to Mary or Sophia. Drag the cards into the empty slots so the story goes from the FIRST event to the LAST. When every slot is full, press Check. If the order is correct you move to the next level—good luck!",
+    "correct": "Correct! Moving to next level...",
+    "incorrect": "Incorrect order. Try again!",
+    "title": "Timeline Puzzle (Level {{level}})",
+    "tapStart": "(Click outside to start)",
+    "tapContinue": "(Click outside to continue)",
+    "reset": "Reset",
+    "check": "Check",
+
+    "level1": {
+      "description": "Put the three pictures in order so Mary stays away from a dangerous party.",
+      "step1": "Mary receives an online invite to a secret party from people she doesn’t know.",
+      "step2": "She shows the invite to her friend and asks if they should go.",
+      "step3": "Mary’s mom explains that parties hosted by strangers are risky, so they decide not to go."
+    },
+
+    "level2": {
+      "description": "Arrange five steps showing how Mary blocks an online stranger.",
+      "step1": "A stranger messages Mary with a “modeling contract.”",
+      "step2": "They ask for personal details before any contract is signed.",
+      "step3": "Mary almost gives her address without checking who they are.",
+      "step4": "Her mother sees the chat and warns her to stop.",
+      "step5": "Mary blocks the stranger and reports it to the police."
+    },
+
+    "level3": {
+      "description": "Put these seven steps in order to stop the fake job flyer.",
+      "step1": "Sophia spots a strange job flyer on the school board.",
+      "step2": "Sophia reads the flyer aloud and frowns.",
+      "step3": "Sophia shows the flyer to Mary for a second opinion.",
+      "step4": "Together they bring the flyer to their teacher.",
+      "step5": "The teacher calls the safety hotline to check it.",
+      "step6": "The hotline says the flyer is a scam.",
+      "step7": "The teacher removes the flyer and posts a warning notice."
+    }
+  },
+  "clickPuzzle": {
+    "introTitle": "Escape Mission",
+    "introText": "Mary needs your help to escape a dangerous situation. Guide her through three locations by finding tools and solving puzzles.",
+    "howToPlay": "Click objects to interact. Collect items and use them together from your inventory.",
+    "objective": "Help Mary escape by finding tools and solving each level's puzzle!",
+    "tapStart": "(Click outside to start the escape mission)"
+  },
+  "emojiDecoder": {
+    "introTitle": "Emoji Danger Decoder",
+    "introText": "Mary needs your help to decode dangerous online messages. Learn to spot red flags in emoji slang and protect yourself from traffickers.",
+    "howToPlay": "Read the situation, decode the emoji sequence, and choose the safest response. Think about what Mary should do!",
+    "objective": "Learn to recognize dangerous online behavior and protect yourself from manipulation!",
+    "start": "Start Decoding",
+    "tapStart": "(Click outside to start)",
+    "correct": "Correct!",
+    "incorrect": "Incorrect!",
+    "next": "Next",
+    "finish": "Finish",
+    "completed": "Well Done!",
+    "completionMessage": "You've learned to spot dangerous online behavior and protect yourself from traffickers. Stay safe and trust your instincts!",
+    "continue": "Continue"
   }
 }
+
+

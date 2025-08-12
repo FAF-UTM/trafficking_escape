@@ -1,44 +1,79 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './WordScrambleGame.css';
 
 interface Puzzle {
   id: number;
-  jumbled: string;
   answer: string;
   fact: string;
+  context: string;
 }
-
-const puzzles: Puzzle[] = [
-  {
-    id: 1,
-    jumbled: 'PLEH', // Unscrambles to "HELP"
-    answer: 'HELP',
-    fact: 'Recognizing when you need help is the first step to safety.',
-  },
-  {
-    id: 2,
-    jumbled: 'AESF', // Unscrambles to "SAFE"
-    answer: 'SAFE',
-    fact: 'Being safe means planning and staying aware of your surroundings.',
-  },
-  {
-    id: 3,
-    jumbled: 'TXEI', // Unscrambles to "EXIT"
-    answer: 'EXIT',
-    fact: 'Knowing your exit strategy can make all the difference in an emergency.',
-  },
-  {
-    id: 4,
-    jumbled: 'TARP', // Unscrambles to "TRAP"
-    answer: 'TRAP',
-    fact: 'Identifying red flags helps you avoid dangerous traps.',
-  },
-];
 
 type Stage = 'intro' | 'puzzle' | 'feedback' | 'end';
 
 interface WordScrambleGameProps {
   onComplete: () => void;
+}
+
+const allPuzzles: Puzzle[] = [
+  {
+    id: 1,
+    answer: 'SECRETS',
+    context: 'A new chat says: “Keep this just between us.”',
+    fact: 'Secrecy protects predators. Mary should avoid secrets with strangers and tell a trusted adult.',
+  },
+  {
+    id: 2,
+    answer: 'GROOM',
+    context: 'They move to a private app and ask for a “quick pic.”',
+    fact: 'That pattern is grooming. Refuse, block, and tell a trusted adult immediately.',
+  },
+  {
+    id: 3,
+    answer: 'SCOUT',
+    context: '“I’m a model scout, no cap. Meet tonight.”',
+    fact: 'Real opportunities don’t pressure minors over DMs. Verify with adults and report.',
+  },
+  {
+    id: 4,
+    answer: 'BLOCK',
+    context: 'They ignore Mary’s boundary and keep pushing.',
+    fact: 'Trust your instincts. Block persistent pressure and protect yourself.',
+  },
+  {
+    id: 5,
+    answer: 'REPORT',
+    context: 'The account asks for location and offers a ride.',
+    fact: 'Requests for live location + rides are isolation tactics. Report and involve adults.',
+  },
+  {
+    id: 6,
+    answer: 'LURES',
+    context: '“Free gifts if you meet now.”',
+    fact: 'Gifts + urgency are classic lures. Refuse and tell a trusted adult.',
+  },
+  {
+    id: 7,
+    answer: 'SAFETY',
+    context: 'Mary feels uncomfortable as the chat escalates.',
+    fact: 'Safety first. Stop the chat, block, and tell a parent/teacher right away.',
+  },
+  {
+    id: 8,
+    answer: 'EXIT',
+    context: 'Mary needs to leave a risky situation fast.',
+    fact: 'Having an exit plan and support network keeps Mary safer.',
+  },
+];
+
+function shuffleString(value: string): string {
+  const arr = value.split('');
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  const jumbled = arr.join('');
+  // Avoid unchanged shuffle
+  return jumbled.toUpperCase() === value.toUpperCase() ? shuffleString(value) : jumbled;
 }
 
 const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
@@ -47,18 +82,19 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
   const [userGuess, setUserGuess] = useState('');
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  const currentPuzzle = puzzles[currentIndex];
+  // Pick 4 puzzles randomly and precompute their jumbled forms per run
+  const puzzles = useMemo(() => {
+    const selected = [...allPuzzles].sort(() => Math.random() - 0.5).slice(0, 4);
+    return selected.map((p) => ({ ...p, jumbled: shuffleString(p.answer) } as any));
+  }, []);
 
-  const handleStart = () => {
-    setStage('puzzle');
-  };
+  const currentPuzzle = puzzles[currentIndex] as unknown as Puzzle & { jumbled: string };
+
+  const handleStart = () => setStage('puzzle');
 
   const handleSubmit = () => {
-    if (userGuess.trim().toUpperCase() === currentPuzzle.answer) {
-      setIsCorrect(true);
-    } else {
-      setIsCorrect(false);
-    }
+    const normalized = userGuess.trim().toUpperCase();
+    setIsCorrect(normalized === currentPuzzle.answer.toUpperCase());
     setStage('feedback');
   };
 
@@ -66,7 +102,7 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
     if (currentIndex === puzzles.length - 1) {
       setStage('end');
     } else {
-      setCurrentIndex(currentIndex + 1);
+      setCurrentIndex((i) => i + 1);
       setUserGuess('');
       setIsCorrect(null);
       setStage('puzzle');
@@ -75,17 +111,20 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
 
   return (
     <div className="word-scramble-container">
-      {/* Intro Stage */}
+      {/* How to play modal */}
       {stage === 'intro' && (
-        <div className="intro-screen fade-in">
-          <h2 className="intro-title">Word Scramble Challenge</h2>
-          <p className="intro-text">
-            In the midst of chaos, your sharp mind is your best tool. Unscramble
-            the hidden words to uncover safety tips and stay alert.
-          </p>
-          <button className="intro-button" onClick={handleStart}>
-            Begin Challenge
-          </button>
+        <div className="modal-overlay" onClick={handleStart}>
+          <div className="modal-content intro" onClick={(e) => e.stopPropagation()}>
+            <h2 className="intro-title">How to play</h2>
+            <p className="intro-text">
+              Mary is chatting online. Each round shows a scrambled safety word and a short
+              scenario. Unscramble the word to reveal the safest idea.
+            </p>
+            <p className="intro-text">
+              These words highlight red flags (secrecy, lures, grooming) and actions
+              (block, report, exit). (Click outside to start)
+            </p>
+          </div>
         </div>
       )}
 
@@ -93,6 +132,7 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
       {stage === 'puzzle' && (
         <div className="puzzle-screen fade-in">
           <h2 className="puzzle-title">Unscramble the Word</h2>
+          <div className="context-text">{currentPuzzle.context}</div>
           <div className="jumbled-word">{currentPuzzle.jumbled}</div>
           <input
             type="text"
@@ -121,7 +161,7 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
               : `The correct answer was "${currentPuzzle.answer}". Remember: ${currentPuzzle.fact}`}
           </p>
           <button className="next-button" onClick={handleNext}>
-            {currentIndex === puzzles.length - 1 ? 'Finish' : 'Next'}
+            {currentIndex === 3 ? 'Finish' : 'Next'}
           </button>
         </div>
       )}
@@ -131,12 +171,9 @@ const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
         <div className="end-screen fade-in">
           <h2 className="end-title">Challenge Complete!</h2>
           <p className="end-text">
-            Great job! Your ability to decipher clues is a vital skill in
-            staying safe. Keep your mind sharp and always be prepared.
+            Great job! Recognizing red flags and acting fast (block, report, exit) keeps Mary safer.
           </p>
-          <button className="end-button" onClick={onComplete}>
-            Finish
-          </button>
+          <button className="end-button" onClick={onComplete}>Finish</button>
         </div>
       )}
     </div>

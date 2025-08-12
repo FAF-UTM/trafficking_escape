@@ -1,0 +1,60 @@
+.feedback {
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    color: white;
+    display: flex;
+    font-family: 'Courier New', Courier, monospace;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+.feedback_title {
+    font-size: 40px;
+    font-family:
+            'Press Start 2P',
+            Courier New,
+            monospace !important;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+.feedback_form {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2vw;
+    width: 100%;
+    max-width: 70vw;
+    justify-items: center;
+}
+
+.feedback_question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family:
+            'Press Start 2P',
+            Courier New,
+            monospace !important;
+    font-size: 16px;
+}
+.feedback_question :global(.MuiRating-iconEmpty) {
+    color: #555;
+}
+.feedback_question :global(.MuiRating-iconFilled) {
+    color: #ffb400;
+}
+.feedback_button {
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: transparent;
+    font-family:
+            'Press Start 2P',
+            Courier New,
+            monospace !important;
+    grid-column: span 2;
+}

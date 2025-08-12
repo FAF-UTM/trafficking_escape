@@ -1,10 +1,17 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { dialogues } from './dialogues';
+import { useTranslation } from 'react-i18next';
+import { dialogues as rawDialogues, RawDialogue } from './dialogues';
 import './IntroStory.css';
-import { useAudio } from '../../context/AudioContext.tsx';
+import { useAudio } from '../../context/AudioContext';
+
+type Dialogue = Omit<RawDialogue, 'CharacterName'> & {
+  CharacterName: string;
+  DialogueText: string;
+};
 
 const IntroStory: React.FC = () => {
+  const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -12,15 +19,26 @@ const IntroStory: React.FC = () => {
   const navigate = useNavigate();
   const { changeMusic, playMusic } = useAudio();
 
+  const dialogues: Dialogue[] = useMemo(
+    () =>
+      rawDialogues.map((d) => ({
+        ...d,
+        CharacterName: d.CharacterName
+          ? t(`dialogues.${d.DialogueNumber}.CharacterName`)
+          : '',
+        DialogueText: t(`dialogues.${d.DialogueNumber}.DialogueText`),
+      })),
+    [t]
+  );
+
   const currentDialogue = dialogues[currentIndex];
 
   const startTyping = useCallback((fullText: string) => {
     setDisplayedText('');
     setIsTyping(true);
-    let charIndex = -1;
-
+    let charIndex = 0;
     const step = () => {
-      if (charIndex < fullText.length - 1) {
+      if (charIndex < fullText.length) {
         setDisplayedText((prev) => prev + fullText[charIndex]);
         charIndex++;
         typingIntervalRef.current = window.setTimeout(step, 30);
@@ -34,7 +52,7 @@ const IntroStory: React.FC = () => {
   useEffect(() => {
     changeMusic(5);
     playMusic();
-  }, []);
+  }, [changeMusic, playMusic]);
 
   useEffect(() => {
     if (currentDialogue) {
@@ -55,31 +73,22 @@ const IntroStory: React.FC = () => {
       setDisplayedText(currentDialogue.DialogueText);
       setIsTyping(false);
     } else {
-      const nextIndex = currentIndex + 1;
-      if (nextIndex < dialogues.length) {
-        setCurrentIndex(nextIndex);
+      const next = currentIndex + 1;
+      if (next < dialogues.length) {
+        setCurrentIndex(next);
       } else {
         navigate('/chat');
       }
     }
   };
 
-  let leftSpriteStyle: React.CSSProperties = {
-    opacity: 0,
-    visibility: 'hidden',
-  };
-  let rightSpriteStyle: React.CSSProperties = {
-    opacity: 0,
-    visibility: 'hidden',
-  };
-
+  let leftSpriteStyle: React.CSSProperties = { opacity: 0, visibility: 'hidden' };
+  let rightSpriteStyle: React.CSSProperties = { opacity: 0, visibility: 'hidden' };
   let showNameBox = false;
   let nameBoxPosition: 'left' | 'right' = 'left';
 
   if (currentDialogue) {
-    const cs = currentDialogue.CharacterSettings;
-
-    switch (cs) {
+    switch (currentDialogue.CharacterSettings) {
       case 'LeftSpriteSpeaking':
         leftSpriteStyle = { opacity: 1, visibility: 'visible' };
         rightSpriteStyle = { opacity: 0.8, visibility: 'visible' };
@@ -99,12 +108,13 @@ const IntroStory: React.FC = () => {
         leftSpriteStyle = { opacity: 1, visibility: 'visible' };
         break;
       case 'NoSpritesSpeaking':
+      default:
         break;
     }
   }
 
   const containerClass =
-    currentDialogue?.VisualFX === 'CamShakeEffect'
+    currentDialogue.VisualFX === 'CamShakeEffect'
       ? 'intro-container shake'
       : 'intro-container';
 
@@ -112,7 +122,7 @@ const IntroStory: React.FC = () => {
     <div
       className={containerClass}
       onClick={handleClick}
-      style={{ backgroundImage: `url(${currentDialogue?.BgImage})` }}
+      style={{ backgroundImage: `url(${currentDialogue.BgImage})` }}
     >
       <div
         className="skip-intro"
@@ -121,10 +131,11 @@ const IntroStory: React.FC = () => {
           navigate('/chat');
         }}
       >
-        Skip Intro
+        {t('intro.skip')}
       </div>
+
       <div className="sprites-container">
-        {currentDialogue?.LeftSpriteImage && (
+        {currentDialogue.LeftSpriteImage && (
           <img
             src={currentDialogue.LeftSpriteImage}
             alt="Left Character"
@@ -132,7 +143,7 @@ const IntroStory: React.FC = () => {
             style={leftSpriteStyle}
           />
         )}
-        {currentDialogue?.RightSpriteImage && (
+        {currentDialogue.RightSpriteImage && (
           <img
             src={currentDialogue.RightSpriteImage}
             alt="Right Character"
@@ -143,9 +154,9 @@ const IntroStory: React.FC = () => {
       </div>
 
       <div className="dialogue-container">
-        {showNameBox && (
+        {showNameBox && currentDialogue.CharacterName && (
           <div className={`name-box ${nameBoxPosition}`}>
-            {currentDialogue?.CharacterName}
+            {currentDialogue.CharacterName}
           </div>
         )}
         <div className="dialogue-box">{displayedText}</div>
