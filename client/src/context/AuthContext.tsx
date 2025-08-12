@@ -6,6 +6,7 @@ interface AuthContextProps {
   isAuthenticated: boolean;
   role: string | null;
   login: (username: string, password: string) => Promise<void>;
+  loginWithAccessCode: (code: string, oneTime?: boolean) => Promise<void>;
   logout: () => void;
   userId: string | null;
 }
@@ -77,6 +78,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const loginWithAccessCode = async (code: string, oneTime = false) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND}/api/v1/users/access-code/${code}?oneTime=${oneTime}`,
+        {
+          method: 'GET',
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.token;
+        const decoded: any = jwtDecode(token);
+
+        localStorage.setItem('authToken', token);
+        setIsAuthenticated(true);
+        setRole(decoded.role);
+        setUserId(decoded.id);
+      } else {
+        console.error('Access code login failed');
+        throw new Error('Invalid access code');
+      }
+    } catch (error) {
+      console.error('Error during access code login:', error);
+      throw error;
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('authToken');
     setIsAuthenticated(false);
@@ -85,7 +114,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, role, login, logout, userId }}
+      value={{ isAuthenticated, role, login, loginWithAccessCode, logout, userId }}
     >
       {children}
     </AuthContext.Provider>
