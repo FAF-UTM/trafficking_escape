@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './WhoToTrustGame.css';
 
 /** Data structures for scenarios */
@@ -17,88 +17,260 @@ interface TrustScenario {
   options: TrustOption[];
 }
 
-/** Define a set of scenarios for the game */
-const scenarios: TrustScenario[] = [
+/** Define a set of scenarios for the game (8 total) */
+const allScenarios: TrustScenario[] = [
   {
     id: 1,
-    scenarioTitle: 'Stranger at the Cafe',
-    scenarioText: `You’re waiting for a friend at a quiet cafe. A friendly stranger offers to buy you a drink 
-      and starts asking personal questions about where you live and who you’re with. 
-      Meanwhile, the barista also notices you seem uncomfortable and casually checks if everything is okay.`,
+    scenarioTitle: 'DM: Compliments + Urgency',
+    scenarioText:
+      "Mary gets a late-night DM: “You’re amazing ✨ let’s meet tonight, no parents.” They insist it’s safe and urgent.",
     options: [
       {
         id: 1,
-        name: 'Agree to chat with the stranger',
-        description: 'They might just be being friendly, right?',
-        feedback: `Though the stranger might be harmless, sharing personal details 
-          too quickly can be risky. Traffickers often use charm to gather info. 
-          It’s safer to stay polite but guarded.`,
-        isSafe: false,
+        name: 'Say no, block, and tell a trusted adult',
+        description: 'Stop contact and get help now.',
+        feedback:
+          'Correct. Compliment-bombing + urgency + “no parents” are recruitment red flags. Refuse, block, and tell a trusted adult.',
+        isSafe: true,
       },
       {
         id: 2,
-        name: 'Politely decline and ask the barista for help',
-        description: 'The barista might be more trustworthy.',
-        feedback: `Seeking assistance from a staff member in a public place is generally a safer option. 
-          You protect your privacy while also having someone watch out for you.`,
-        isSafe: true,
+        name: 'Agree but meet in a public place',
+        description: 'Crowds make it safer, right?',
+        feedback:
+          'Unsafe. Traffickers exploit any meeting. Do not agree to meet at all.',
+        isSafe: false,
+      },
+      {
+        id: 3,
+        name: 'Ask for their ID and keep chatting',
+        description: 'Verify first.',
+        feedback:
+          'Risky. Continuing the chat increases manipulation risk. Stop and involve adults.',
+        isSafe: false,
       },
     ],
   },
   {
     id: 2,
-    scenarioTitle: 'Online Modeling Offer',
-    scenarioText: `You receive an unexpected message from someone claiming to be a “talent scout.” 
-      They promise big opportunities if you share more photos and personal info. 
-      Meanwhile, your friend who had a similar experience warns you to be cautious.`,
+    scenarioTitle: 'Move to Private + “Quick Pic”',
+    scenarioText:
+      'They ask Mary to move to a private app and send a quick selfie “to prove trust.” They promise to keep it secret.',
     options: [
       {
         id: 1,
-        name: 'Trust the scout and send personal details',
-        description: 'Maybe it’s a legit big break?',
-        feedback: `Legitimate agencies rarely cold-message minors or ask for personal info without formal processes. 
-          This could be a red flag for trafficking or exploitation.`,
-        isSafe: false,
+        name: 'Refuse, block, and tell a parent/teacher',
+        description: 'No private apps, no pictures.',
+        feedback:
+          'Correct. Moving private + photo requests are grooming tactics used to gain leverage or blackmail.',
+        isSafe: true,
       },
       {
         id: 2,
-        name: 'Ask your friend for advice and verify the agency',
-        description: 'Double-check the legitimacy before responding.',
-        feedback: `Consulting someone you trust and verifying the agency’s credentials is the safer choice. 
-          If they’re legit, they’ll understand your caution.`,
-        isSafe: true,
+        name: 'Send a harmless selfie',
+        description: 'It’s just a face pic.',
+        feedback:
+          'Unsafe. Any image can be misused. Do not send images to strangers.',
+        isSafe: false,
       },
       {
         id: 3,
-        name: 'Ignore all messages and block the scout',
-        description: 'Better safe than sorry.',
-        feedback: `Blocking suspicious contacts can protect you from scams. 
-          However, verifying info and reporting suspicious behavior can also help others avoid the same scam.`,
-        isSafe: true,
+        name: 'Ask them for a selfie first',
+        description: 'Make it fair.',
+        feedback:
+          'Unsafe. “Trading” images still fuels manipulation. End the conversation.',
+        isSafe: false,
       },
     ],
   },
   {
     id: 3,
-    scenarioTitle: 'Unexpected Family Friend',
-    scenarioText: `A distant relative of a family friend appears at your doorstep, claiming they can offer you 
-      a “great job abroad” with minimal paperwork. They seem to know your parents, but you’ve never met them. 
-      Your neighbor, an older teacher, advises you to check official channels before leaving.`,
+    scenarioTitle: 'Share Location + Ride Offer',
+    scenarioText:
+      'They ask for Mary’s live location 📍 and offer to pick her up 🚗 “for a quick trip.”',
     options: [
       {
         id: 1,
-        name: 'Trust the family friend’s contact',
-        description: 'They’re family, sort of—why doubt them?',
-        feedback: `Traffickers can exploit family or friend connections to gain trust. 
-          Always verify with official resources or a recognized agency before committing.`,
-        isSafe: false,
+        name: 'Refuse, block, and tell a trusted adult',
+        description: 'Protect your location.',
+        feedback:
+          'Correct. Requests for live location and rides are isolation tactics. Never share your pin or accept rides.',
+        isSafe: true,
       },
       {
         id: 2,
-        name: 'Speak to your neighbor and research official job listings',
-        description: 'Listen to the teacher’s advice.',
-        feedback: `Double-checking with official channels can prevent dangerous situations. 
-          Even if they’re genuine, it’s smart to confirm details thoroughly.`,
+        name: 'Share a nearby landmark instead',
+        description: 'Close, not exact.',
+        feedback:
+          'Unsafe. Any location sharing can expose where Mary is. Decline and report.',
+        isSafe: false,
+      },
+      {
+        id: 3,
+        name: 'Meet during the day with a friend',
+        description: 'Daytime seems safer.',
+        feedback:
+          'Unsafe. Do not meet strangers for rides in any setting.',
+        isSafe: false,
+      },
+    ],
+  },
+  {
+    id: 4,
+    scenarioTitle: '“Scout” With a Link',
+    scenarioText:
+      'A “model scout” sends Mary a link to fill out with personal details, saying “no cap” it’s legit and urgent.',
+    options: [
+      {
+        id: 1,
+        name: 'Verify with a parent/teacher and report the message',
+        description: 'Check safely and report.',
+        feedback:
+          'Correct. Real opportunities do not pressure minors over DMs. Verification and reporting protect you and others.',
+        isSafe: true,
+      },
+      {
+        id: 2,
+        name: 'Click and complete the form quickly',
+        description: 'Don’t miss the chance!',
+        feedback:
+          'Unsafe. Links can steal data and pressure tactics indicate a scam/recruitment attempt.',
+        isSafe: false,
+      },
+      {
+        id: 3,
+        name: 'Ignore silently and keep it to yourself',
+        description: 'Avoid drama.',
+        feedback:
+          'Safer than engaging, but still tell a trusted adult so they can help keep you safe.',
+        isSafe: true,
+      },
+    ],
+  },
+  {
+    id: 5,
+    scenarioTitle: 'Secret Party + Free Gifts',
+    scenarioText:
+      'A group invites Mary to a “secret party” 🎉 at night 🌙 with free gifts 🎁 and insists “no parents.”',
+    options: [
+      {
+        id: 1,
+        name: 'Refuse and tell a trusted adult immediately',
+        description: 'Major red flags.',
+        feedback:
+          'Correct. Secrecy + gifts + night parties are classic lures. Refuse and inform adults.',
+        isSafe: true,
+      },
+      {
+        id: 2,
+        name: 'Go but share live location with a friend',
+        description: 'Try to be careful.',
+        feedback:
+          'Unsafe. Do not attend secret events from strangers. Live location does not remove the risk.',
+        isSafe: false,
+      },
+      {
+        id: 3,
+        name: 'Ask for more details first',
+        description: 'Gather info.',
+        feedback:
+          'Unsafe. Engaging further increases manipulation risk. End contact and tell adults.',
+        isSafe: false,
+      },
+    ],
+  },
+  {
+    id: 6,
+    scenarioTitle: '“We Can Help Your Family”',
+    scenarioText:
+      'Someone says they can “help with money” if Mary shares bank details 💳 or meets to pick up cash now.',
+    options: [
+      {
+        id: 1,
+        name: 'Refuse, report, and tell a parent/teacher',
+        description: 'Protect personal info.',
+        feedback:
+          'Correct. Financial “help” tied to personal data or urgent meetings is exploitation/scam risk. Report it.',
+        isSafe: true,
+      },
+      {
+        id: 2,
+        name: 'Share a little info to test them',
+        description: 'Just a bit.',
+        feedback:
+          'Unsafe. Any sharing can be abused or used for identity theft.',
+        isSafe: false,
+      },
+      {
+        id: 3,
+        name: 'Meet in public to collect the gift',
+        description: 'It’s free, right?',
+        feedback:
+          'Unsafe. Do not meet strangers for money or gifts.',
+        isSafe: false,
+      },
+    ],
+  },
+  {
+    id: 7,
+    scenarioTitle: '“Just Between Us”',
+    scenarioText:
+      'They insist Mary keep everything secret 🤫 and delete chats to “avoid drama.”',
+    options: [
+      {
+        id: 1,
+        name: 'Refuse secrecy and tell a trusted adult',
+        description: 'No secrets from safety adults.',
+        feedback:
+          'Correct. Secrecy protects predators. Trusted adults help keep you safe.',
+        isSafe: true,
+      },
+      {
+        id: 2,
+        name: 'Agree to keep it private',
+        description: 'It’s not a big deal.',
+        feedback:
+          'Unsafe. Secrecy allows harm to grow. Do not agree.',
+        isSafe: false,
+      },
+      {
+        id: 3,
+        name: 'Ask why it must be secret and continue chatting',
+        description: 'Understand first.',
+        feedback:
+          'Unsafe. Continued chatting increases risk. Stop and involve adults.',
+        isSafe: false,
+      },
+    ],
+  },
+  {
+    id: 8,
+    scenarioTitle: 'Impersonation Risk',
+    scenarioText:
+      'An account claims to be a classmate and asks for personal details “to add you to a group.” Something feels off.',
+    options: [
+      {
+        id: 1,
+        name: 'Verify via known channels and tell a teacher/parent',
+        description: 'Confirm identity safely.',
+        feedback:
+          'Correct. Impersonation is common. Verify through known contacts and inform adults.',
+        isSafe: true,
+      },
+      {
+        id: 2,
+        name: 'Share your details to be friendly',
+        description: 'It’s just a group.',
+        feedback:
+          'Unsafe. Do not share personal info with unverified accounts.',
+        isSafe: false,
+      },
+      {
+        id: 3,
+        name: 'Ignore and keep it to yourself',
+        description: 'Avoid drama.',
+        feedback:
+          'Safer than engaging, but still inform adults, especially if impersonation is suspected.',
         isSafe: true,
       },
     ],
@@ -110,23 +282,25 @@ interface WhoToTrustGameProps {
 }
 
 /**
- * A short decision-making game that presents multiple scenarios
- * about whom to trust. After each choice, the user sees feedback
- * and eventually completes all scenarios.
+ * A short decision-making game with randomized scenarios.
  */
 const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
-  // Index of the current scenario
+  // Stage can be "intro", "scenario", "feedback", "end"
+  const [stage, setStage] = useState<'intro' | 'scenario' | 'feedback' | 'end'>('intro');
+  // Selected (random) scenarios
+  const [scenarios, setScenarios] = useState<TrustScenario[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Track whether the user has chosen an option in the current scenario
   const [chosenOption, setChosenOption] = useState<TrustOption | null>(null);
 
-  // Stage can be "intro", "scenario", "feedback", "end"
-  const [stage, setStage] = useState<'intro' | 'scenario' | 'feedback' | 'end'>(
-    'intro'
-  );
+  useEffect(() => {
+    const shuffled = [...allScenarios].sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, 4).map((s) => ({
+      ...s,
+      options: [...s.options].sort(() => Math.random() - 0.5),
+    }));
+    setScenarios(selected);
+  }, []);
 
-  // Retrieve the current scenario data
   const currentScenario = scenarios[currentIndex];
 
   /** Move to the scenario stage from intro */
@@ -142,13 +316,11 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
 
   /** Move to next scenario or end if done */
   const handleNextScenario = () => {
-    // If there's another scenario
     if (currentIndex < scenarios.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+      setCurrentIndex((i) => i + 1);
       setChosenOption(null);
       setStage('scenario');
     } else {
-      // No more scenarios left
       setStage('end');
     }
   };
@@ -160,18 +332,20 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
 
   return (
     <div className="who-to-trust-container">
-      {/* Intro stage */}
+      {/* Intro modal */}
       {stage === 'intro' && (
-        <div className="intro-screen fade-in">
-          <h2 className="intro-title">Who to Trust?</h2>
-          <p className="intro-text">
-            In a world where manipulation can lurk behind friendly faces,
-            deciding who to trust can be critical. You’ll face a series of
-            scenarios that test your instincts. Choose carefully!
-          </p>
-          <button className="intro-button" onClick={handleStart}>
-            Start
-          </button>
+        <div className="modal-overlay" onClick={handleStart}>
+          <div className="modal-content intro" onClick={(e) => e.stopPropagation()}>
+            <h2 className="intro-title">How to play</h2>
+            <p className="intro-text">
+              Mary is chatting online. Each scenario shows a choice. Pick the safest
+              option that protects Mary and avoids manipulation.
+            </p>
+            <p className="intro-text">
+              Look for red flags: secrecy, urgency, gifts, location requests, rides,
+              and moving to private apps. (Click outside to start)
+            </p>
+          </div>
         </div>
       )}
 
@@ -182,11 +356,7 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
           <p className="scenario-text">{currentScenario.scenarioText}</p>
           <div className="options-container">
             {currentScenario.options.map((opt) => (
-              <div
-                key={opt.id}
-                className="option-card"
-                onClick={() => handleOptionSelect(opt)}
-              >
+              <div key={opt.id} className="option-card" onClick={() => handleOptionSelect(opt)}>
                 <h3 className="option-name">{opt.name}</h3>
                 <p className="option-description">{opt.description}</p>
               </div>
@@ -198,13 +368,9 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
       {/* Feedback stage */}
       {stage === 'feedback' && chosenOption && (
         <div className="feedback-screen fade-in">
-          <h2 className="feedback-title">
-            {chosenOption.isSafe ? 'Safer Choice' : 'Risky Move?'}
-          </h2>
+          <h2 className="feedback-title">{chosenOption.isSafe ? 'Safer Choice' : 'Risky Move?'}</h2>
           <p className="feedback-text">{chosenOption.feedback}</p>
-          <button className="next-button" onClick={handleNextScenario}>
-            Continue
-          </button>
+          <button className="next-button" onClick={handleNextScenario}>Continue</button>
         </div>
       )}
 
@@ -213,14 +379,10 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
         <div className="end-screen fade-in">
           <h2 className="end-title">Reflection</h2>
           <p className="end-text">
-            You’ve navigated through different trust scenarios. Sometimes a
-            friendly face can hide a dangerous motive. At other times, a
-            cautious approach can reveal genuine allies. Always weigh your
-            instincts and confirm facts—awareness can be your strongest shield.
+            You’ve practiced weighing trust. If something feels off, protect your
+            privacy, stop, and tell a trusted adult. Awareness keeps you safer.
           </p>
-          <button className="end-button" onClick={handleFinish}>
-            Finish
-          </button>
+          <button className="end-button" onClick={handleFinish}>Finish</button>
         </div>
       )}
     </div>
