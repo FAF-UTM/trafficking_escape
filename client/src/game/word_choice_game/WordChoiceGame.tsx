@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './WordChoiceGame.css';
 
 interface WordChoice {
@@ -14,47 +14,119 @@ interface WordChoiceQuestion {
   feedbackIncorrect: string;
 }
 
-const questions: WordChoiceQuestion[] = [
+// All 8 levels. We will pick 4 at random each session.
+const allQuestions: WordChoiceQuestion[] = [
   {
     id: 1,
-    sentence: 'Traffickers often use ___________ to manipulate victims.',
+    sentence:
+      "Mary gets: 'Let's hang out tonight, no parents.' Traffickers use ___________ to separate teens from safe adults.",
     options: [
-      { word: 'kindness', isCorrect: false },
-      { word: 'violence', isCorrect: true },
-      { word: 'money', isCorrect: false },
+      { word: 'secrecy', isCorrect: true },
+      { word: 'humor', isCorrect: false },
+      { word: 'games', isCorrect: false },
     ],
     feedbackCorrect:
-      'Correct! Violence is a common method used by traffickers to instill fear and control.',
+      'Correct! Secrecy like “no parents” is used to isolate kids from protection and oversight.',
     feedbackIncorrect:
-      'Not quite. While kindness or money may be used in other contexts, violence is often used to manipulate and control victims.',
+      'Not quite. “No parents” is about secrecy, which isolates and increases risk.',
   },
   {
     id: 2,
     sentence:
-      'Online platforms can be used to spread ___________ and misinformation.',
+      "A stranger moves the chat to a private app and asks Mary for a 'quick pic' to 'prove trust.' This is ___________.",
     options: [
-      { word: 'knowledge', isCorrect: false },
-      { word: 'propaganda', isCorrect: true },
-      { word: 'entertainment', isCorrect: false },
+      { word: 'grooming', isCorrect: true },
+      { word: 'flirting', isCorrect: false },
+      { word: 'networking', isCorrect: false },
     ],
     feedbackCorrect:
-      'Correct! Propaganda can be a tool to mislead and exploit vulnerable individuals.',
+      'Correct! Moving private + asking for pics are grooming behaviors used to gain leverage.',
     feedbackIncorrect:
-      'That’s not right. In this context, propaganda is used to mislead people rather than share knowledge or provide entertainment.',
+      'Incorrect. That pattern is grooming, not harmless flirting or “networking.”',
   },
   {
     id: 3,
     sentence:
-      'Raising awareness helps communities to identify ___________ signals in risky interactions.',
+      'Someone asks for live location and offers a ride. This is an ___________ tactic.',
     options: [
-      { word: 'subtle', isCorrect: true },
-      { word: 'loud', isCorrect: false },
-      { word: 'random', isCorrect: false },
+      { word: 'isolation', isCorrect: true },
+      { word: 'academic', isCorrect: false },
+      { word: 'charity', isCorrect: false },
     ],
     feedbackCorrect:
-      'Correct! Being alert to subtle signals can be key in recognizing potential trafficking risks.',
+      'Correct! Location + rides are used to isolate and control movement.',
     feedbackIncorrect:
-      'Incorrect. In the realm of trafficking, subtle signals are often the warning signs, not loud or random cues.',
+      'Not quite. That combo is about isolation, not academics or charity.',
+  },
+  {
+    id: 4,
+    sentence:
+      "An online 'scout' says 'no cap' and pressures Mary to meet tonight. The safest response is to ___________.",
+    options: [
+      { word: 'refuse', isCorrect: true },
+      { word: 'negotiate', isCorrect: false },
+      { word: 'delay', isCorrect: false },
+    ],
+    feedbackCorrect:
+      'Correct! Refuse and tell a trusted adult. “No cap” doesn’t make it safe or real.',
+    feedbackIncorrect:
+      'Incorrect. Do not negotiate or “delay”—refuse and tell a trusted adult.',
+  },
+  {
+    id: 5,
+    sentence:
+      'A secret party invite with free gifts is a classic ___________ lure.',
+    options: [
+      { word: 'recruitment', isCorrect: true },
+      { word: 'homework', isCorrect: false },
+      { word: 'sport', isCorrect: false },
+    ],
+    feedbackCorrect:
+      'Correct! Gifts + secrecy are common recruitment lures used by traffickers.',
+    feedbackIncorrect:
+      'Not quite. The pattern describes a recruitment lure, not homework or sports.',
+  },
+  {
+    id: 6,
+    sentence:
+      'Asking for Mary\'s home address to “send a gift” is a ___________ request.',
+    options: [
+      { word: 'dangerous', isCorrect: true },
+      { word: 'helpful', isCorrect: false },
+      { word: 'polite', isCorrect: false },
+    ],
+    feedbackCorrect:
+      'Correct! Never share addresses with strangers. It\'s dangerous.',
+    feedbackIncorrect:
+      'Incorrect. That\'s dangerous, not helpful or polite.',
+  },
+  {
+    id: 7,
+    sentence:
+      '“Keep this just between us” is a ___________ red flag.',
+    options: [
+      { word: 'manipulation', isCorrect: true },
+      { word: 'celebration', isCorrect: false },
+      { word: 'tradition', isCorrect: false },
+    ],
+    feedbackCorrect:
+      'Correct! Secrecy requests are manipulation to avoid adult oversight.',
+    feedbackIncorrect:
+      'Not quite. That\'s manipulation meant to hide behavior from adults.',
+  },
+  {
+    id: 8,
+    sentence:
+      '“Trust me fr 💯” after Mary sets a boundary is ___________ pressure.',
+    options: [
+      { word: 'coercive', isCorrect: true },
+      { word: 'academic', isCorrect: false },
+      { word: 'harmless', isCorrect: false },
+    ],
+    feedbackCorrect:
+      'Correct! Pushing “trust me fr 💯” after a boundary is coercive pressure.',
+    feedbackIncorrect:
+      'Incorrect. That\'s coercive pressure, not harmless.',
   },
 ];
 
@@ -70,6 +142,18 @@ const WordChoiceGame: React.FC<WordChoiceGameProps> = ({ onComplete }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [, setSelectedOption] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+
+  const [questions, setQuestions] = useState<WordChoiceQuestion[]>([]);
+
+  // Pick 4 random questions and shuffle options
+  useEffect(() => {
+    const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, 4).map((q) => ({
+      ...q,
+      options: [...q.options].sort(() => Math.random() - 0.5),
+    }));
+    setQuestions(selected);
+  }, []);
 
   const currentQuestion = questions[currentIndex];
 
@@ -98,27 +182,32 @@ const WordChoiceGame: React.FC<WordChoiceGameProps> = ({ onComplete }) => {
     onComplete();
   };
 
+  if (questions.length === 0) {
+    return <div className="word-choice-container" />;
+  }
+
   return (
     <div className="word-choice-container">
-      {/* Intro Stage */}
+      {/* Intro Modal */}
       {stage === 'intro' && (
-        <div className="intro-screen fade-in">
-          <h2 className="intro-title">
-            Fill in the Blank: Trafficking Awareness
-          </h2>
-          <p className="intro-text">
-            In this quiz, complete each sentence by choosing the most
-            appropriate word. Your choices will reveal important facts about how
-            traffickers manipulate and control.
-          </p>
-          <button className="intro-button" onClick={handleStart}>
-            Start Quiz
-          </button>
+        <div className="modal-overlay" onClick={handleStart}>
+          <div className="modal-content intro" onClick={(e) => e.stopPropagation()}>
+            <h2 className="intro-title">How to play</h2>
+            <p className="intro-text">
+              Mary is chatting online. Each sentence has a missing word. Choose the
+              safest, most accurate word to complete it.
+            </p>
+            <p className="intro-text">
+              These scenarios reflect real grooming and trafficking tactics. Think
+              about what protects Mary and what raises risk.
+            </p>
+            <p className="intro-text">(Click outside to start)</p>
+          </div>
         </div>
       )}
 
       {/* Question Stage */}
-      {stage === 'question' && (
+      {stage === 'question' && currentQuestion && (
         <div className="question-screen fade-in">
           <h2 className="question-title">Question {currentIndex + 1}</h2>
           <p className="question-sentence">{currentQuestion.sentence}</p>
@@ -137,7 +226,7 @@ const WordChoiceGame: React.FC<WordChoiceGameProps> = ({ onComplete }) => {
       )}
 
       {/* Feedback Stage */}
-      {stage === 'feedback' && (
+      {stage === 'feedback' && currentQuestion && (
         <div className="feedback-screen fade-in">
           {isCorrect ? (
             <h3 className="feedback-title correct">Correct!</h3>
@@ -160,9 +249,8 @@ const WordChoiceGame: React.FC<WordChoiceGameProps> = ({ onComplete }) => {
         <div className="end-screen fade-in">
           <h2 className="end-title">Well Done!</h2>
           <p className="end-text">
-            You’ve completed the quiz and learned key facts about trafficking
-            manipulation. Stay informed and share your knowledge to help protect
-            others.
+            You’ve practiced spotting manipulation and trafficking red flags.
+            Stay alert and tell a trusted adult if something feels wrong.
           </p>
           <button className="end-button" onClick={handleFinish}>
             Finish
