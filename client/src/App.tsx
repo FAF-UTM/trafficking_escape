@@ -33,6 +33,7 @@ import NotFound from './pages/notfound/NotFound.tsx';
 import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.tsx';
 import { useTranslation } from 'react-i18next';
 import AdminPage from './pages/admin/Admin.tsx';
+import TraffickerSelection from './pages/final/TraffickerSelection.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -175,28 +176,17 @@ function App() {
             <Route path="/click-play" element={<ClickPlayGame />} />
             <Route path="/city-run" element={<Platformer />} />
             <Route path="/timeline-puzzle" element={<TimelinePuzzle />} />
-            <Route
-              path="/combination-lock"
-              element={<CombinationLockWrapper />}
-            />
+            <Route path="/combination-lock" element={<CombinationLockWrapper />} />
             <Route path="/who-to-trust" element={<WhoToTrustGameWrapper />} />
-            <Route
-              path="/true-false"
-              element={<TrueFalseFlashCardsWrapper />}
-            />
+            <Route path="/true-false" element={<TrueFalseFlashCardsWrapper />} />
             <Route path="/word-choice" element={<WordChoiceWrapper />} />
             <Route path="/emoji-story" element={<EmojiStoryDecoderWrapper />} />
-            <Route
-              path="/safety-checklist"
-              element={<SafetyChecklistBuilderWrapper />}
-            />
-            <Route
-              path="/danger-highlight"
-              element={<DangerWordHighlightWrapper />}
-            />
+            <Route path="/safety-checklist" element={<SafetyChecklistBuilderWrapper />} />
+            <Route path="/danger-highlight" element={<DangerWordHighlightWrapper />} />
+            <Route path="/word-scramble" element={<WordScrambleWrapper />} />
+            <Route path="/final-select" element={<TraffickerSelection />} />
             <Route path="/ending" element={<Ending />} />
             <Route path="/feedback" element={<Feedback />} />
-            <Route path="/word-scramble" element={<WordScrambleWrapper />} />
             <Route path="/credentials" element={<Credentials />} />
             <Route path="/legal" element={<Legal />} />
             <Route path="*" element={<NotFound />} />

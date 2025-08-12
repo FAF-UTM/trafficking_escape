@@ -1,0 +1,19 @@
+/* Container */
+.final-select-container { position: relative; width: 100vw; min-height: 100vh; background: rgba(0,0,0,0.85); color:#fff; font-family: 'Press Start 2P','Courier New',monospace; padding:40px; box-sizing:border-box; text-align:center; }
+.title { font-size: 28px; margin-bottom: 16px; }
+.instruction { font-size: 16px; margin-bottom: 20px; }
+
+.names-block { background: rgba(0,0,0,0.7); border:2px solid #fff; display:inline-block; text-align:left; padding:16px; line-height:1.8; max-width: 900px; }
+.name-chip { display:inline-block; margin:4px 8px; padding:6px 10px; border:2px solid #fff; cursor:pointer; transition: background-color .2s ease, border-color .2s ease; }
+.name-chip:hover { border-color: #ffff66; }
+.name-chip.selected { background: rgba(0,255,0,0.15); border-color:#00c853; }
+
+.submit-button { margin-top: 20px; padding:10px 20px; font-size:16px; background:#222; color:#fff; border:2px solid #fff; cursor:pointer; }
+.submit-button:hover { background:#444; }
+
+/* Modal */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center; z-index:1000; }
+.modal-content { width:min(720px, 96vw); background:#1a1a1a; border:3px solid #fff; padding:24px; text-align:center; color:#fff; box-shadow:0 0 20px rgba(255,255,255,0.3); }
+.result-title { font-size: 22px; margin-bottom:10px; }
+.result-text { font-size: 14px; margin-bottom:8px; }
+.result-text.yellow { color:#ffff66; font-weight:bold; }
