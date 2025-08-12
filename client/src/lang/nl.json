@@ -183,5 +183,12 @@
       "step6": "De hulplijn zegt dat het briefje oplichting is.",
       "step7": "De leraar haalt het briefje weg en hangt een waarschuwingsposter op."
     }
+  },
+  "clickPuzzle": {
+    "introTitle": "Ontsnappingsmissie",
+    "introText": "Mary heeft jouw hulp nodig om uit een gevaarlijke situatie te ontsnappen. Begeleid haar door drie locaties door gereedschap te vinden en puzzels op te lossen.",
+    "howToPlay": "Klik op objecten om ermee te interacteren. Verzamel items en gebruik ze samen vanuit je inventaris.",
+    "objective": "Help Mary ontsnappen door gereedschap te vinden en de puzzel van elk level op te lossen!",
+    "tapStart": "(Klik buiten om de ontsnappingsmissie te starten)"
   }
 }

@@ -183,6 +183,13 @@
       "step6": "The hotline says the flyer is a scam.",
       "step7": "The teacher removes the flyer and posts a warning notice."
     }
+  },
+  "clickPuzzle": {
+    "introTitle": "Escape Mission",
+    "introText": "Mary needs your help to escape a dangerous situation. Guide her through three locations by finding tools and solving puzzles.",
+    "howToPlay": "Click objects to interact. Collect items and use them together from your inventory.",
+    "objective": "Help Mary escape by finding tools and solving each level's puzzle!",
+    "tapStart": "(Click outside to start the escape mission)"
   }
 }
 
