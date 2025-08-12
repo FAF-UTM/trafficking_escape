@@ -164,3 +164,52 @@
 .end-button:hover {
   background-color: #444;
 }
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content.intro {
+  max-width: 600px;
+  background-color: #1a1a1a;
+  border: 3px solid #fff;
+  padding: 30px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.modal-content.intro .intro-title {
+  color: #ffff00;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.modal-content.intro .intro-text:last-child {
+  color: #ffff00;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Red context card like other games */
+.context-text {
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 2px solid #ff4444;
+  padding: 12px;
+  margin: 0 auto 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #fff;
+  max-width: 800px;
+}
