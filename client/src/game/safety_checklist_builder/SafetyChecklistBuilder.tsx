@@ -16,21 +16,78 @@ interface SafetyChecklistBuilderProps {
 
 const allItems: SafetyItem[] = [
   { id: 1, name: 'ID', image: '/assets/id.png', isEssential: true },
-  { id: 2, name: 'Emergency Contact', image: '/assets/emergency_contact.png', isEssential: true },
-  { id: 3, name: 'Charged Phone', image: '/assets/smartphone.png', isEssential: true },
-  { id: 4, name: 'Emergency Numbers', image: '/assets/file.png', isEssential: true },
-  { id: 5, name: 'Screenshots of Chat', image: '/assets/note.png', isEssential: true },
-  { id: 6, name: 'Safe Meeting Plan', image: '/assets/contract.png', isEssential: true },
+  {
+    id: 2,
+    name: 'Emergency Contact',
+    image: '/assets/emergency_contact.png',
+    isEssential: true,
+  },
+  {
+    id: 3,
+    name: 'Charged Phone',
+    image: '/assets/smartphone.png',
+    isEssential: true,
+  },
+  {
+    id: 4,
+    name: 'Emergency Numbers',
+    image: '/assets/file.png',
+    isEssential: true,
+  },
+  {
+    id: 5,
+    name: 'Screenshots of Chat',
+    image: '/assets/note.png',
+    isEssential: true,
+  },
+  {
+    id: 6,
+    name: 'Safe Meeting Plan',
+    image: '/assets/contract.png',
+    isEssential: true,
+  },
   // Decoys / not recommended
-  { id: 7, name: 'Secret Party Flyer', image: '/assets/file.png', isEssential: false },
-  { id: 8, name: 'Unknown Ride Offer', image: '/assets/wirecutter.png', isEssential: false },
-  { id: 9, name: 'Random Gift Card', image: '/assets/money.png', isEssential: false },
-  { id: 10, name: 'Private App Invite', image: '/assets/file.png', isEssential: false },
-  { id: 11, name: 'Blindfold', image: '/assets/blindfold.png', isEssential: false },
-  { id: 12, name: 'Cash Stash Only', image: '/assets/money.png', isEssential: false },
+  {
+    id: 7,
+    name: 'Secret Party Flyer',
+    image: '/assets/file.png',
+    isEssential: false,
+  },
+  {
+    id: 8,
+    name: 'Unknown Ride Offer',
+    image: '/assets/wirecutter.png',
+    isEssential: false,
+  },
+  {
+    id: 9,
+    name: 'Random Gift Card',
+    image: '/assets/money.png',
+    isEssential: false,
+  },
+  {
+    id: 10,
+    name: 'Private App Invite',
+    image: '/assets/file.png',
+    isEssential: false,
+  },
+  {
+    id: 11,
+    name: 'Blindfold',
+    image: '/assets/blindfold.png',
+    isEssential: false,
+  },
+  {
+    id: 12,
+    name: 'Cash Stash Only',
+    image: '/assets/money.png',
+    isEssential: false,
+  },
 ];
 
-const SafetyChecklistBuilder: React.FC<SafetyChecklistBuilderProps> = ({ onComplete }) => {
+const SafetyChecklistBuilder: React.FC<SafetyChecklistBuilderProps> = ({
+  onComplete,
+}) => {
   const [stage, setStage] = useState<Stage>('intro');
   const [selectedItems, setSelectedItems] = useState<SafetyItem[]>([]);
 
@@ -51,7 +108,9 @@ const SafetyChecklistBuilder: React.FC<SafetyChecklistBuilderProps> = ({ onCompl
   const handleSubmit = () => setStage('feedback');
 
   const essentialItems = availableItems.filter((item) => item.isEssential);
-  const missingEssentials = essentialItems.filter((item) => !selectedItems.find((si) => si.id === item.id));
+  const missingEssentials = essentialItems.filter(
+    (item) => !selectedItems.find((si) => si.id === item.id)
+  );
   const wrongSelections = selectedItems.filter((item) => !item.isEssential);
 
   return (
@@ -59,13 +118,20 @@ const SafetyChecklistBuilder: React.FC<SafetyChecklistBuilderProps> = ({ onCompl
       {/* How to play modal */}
       {stage === 'intro' && (
         <div className="modal-overlay" onClick={() => setStage('selection')}>
-          <div className="modal-content intro" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="modal-content intro"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="intro-title">How to play</h2>
             <p className="intro-text">
-              Build Mary’s safety checklist. Choose items that actually protect her (ID, contacts, plans) and avoid traps
-              (secret parties, unknown rides, private app invites).
+              Build Mary’s safety checklist. Choose items that actually protect
+              her (ID, contacts, plans) and avoid traps (secret parties, unknown
+              rides, private app invites).
             </p>
-            <p className="intro-text">Pick what helps in a risky chat or meeting situation. (Click outside to start)</p>
+            <p className="intro-text">
+              Pick what helps in a risky chat or meeting situation. (Click
+              outside to start)
+            </p>
           </div>
         </div>
       )}
@@ -88,7 +154,9 @@ const SafetyChecklistBuilder: React.FC<SafetyChecklistBuilderProps> = ({ onCompl
               );
             })}
           </div>
-          <button className="submit-button" onClick={handleSubmit}>Submit Checklist</button>
+          <button className="submit-button" onClick={handleSubmit}>
+            Submit Checklist
+          </button>
         </div>
       )}
 
@@ -98,19 +166,29 @@ const SafetyChecklistBuilder: React.FC<SafetyChecklistBuilderProps> = ({ onCompl
           <h2 className="feedback-title">Your Safety Pack Evaluation</h2>
           <div className="feedback-details">
             {missingEssentials.length === 0 && wrongSelections.length === 0 ? (
-              <p className="feedback-text">Excellent! You picked the essentials and avoided the traps.</p>
+              <p className="feedback-text">
+                Excellent! You picked the essentials and avoided the traps.
+              </p>
             ) : (
               <>
                 {missingEssentials.length > 0 && (
-                  <p className="feedback-text advice">Consider adding: {missingEssentials.map((i) => i.name).join(', ')}.</p>
+                  <p className="feedback-text advice">
+                    Consider adding:{' '}
+                    {missingEssentials.map((i) => i.name).join(', ')}.
+                  </p>
                 )}
                 {wrongSelections.length > 0 && (
-                  <p className="feedback-text advice-note">Not recommended: {wrongSelections.map((i) => i.name).join(', ')}.</p>
+                  <p className="feedback-text advice-note">
+                    Not recommended:{' '}
+                    {wrongSelections.map((i) => i.name).join(', ')}.
+                  </p>
                 )}
               </>
             )}
           </div>
-          <button className="next-button" onClick={() => setStage('end')}>Continue</button>
+          <button className="next-button" onClick={() => setStage('end')}>
+            Continue
+          </button>
         </div>
       )}
 
@@ -118,8 +196,13 @@ const SafetyChecklistBuilder: React.FC<SafetyChecklistBuilderProps> = ({ onCompl
       {stage === 'end' && (
         <div className="end-screen fade-in">
           <h2 className="end-title">Checklist Complete</h2>
-          <p className="end-text">Preparation matters. Keep IDs and contacts ready, save screenshots, and make a safety plan.</p>
-          <button className="end-button" onClick={onComplete}>Finish</button>
+          <p className="end-text">
+            Preparation matters. Keep IDs and contacts ready, save screenshots,
+            and make a safety plan.
+          </p>
+          <button className="end-button" onClick={onComplete}>
+            Finish
+          </button>
         </div>
       )}
     </div>

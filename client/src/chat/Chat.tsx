@@ -96,6 +96,8 @@ const Chat: React.FC = () => {
   const hideSettings = () => {
     setSettingsVisibility(false);
   };
+  const [sideMenu, setSideMenu] = useState(false);
+  const [rightMenu, setRightMenu] = useState(false);
 
   const [chatData, setChatData] = useState<ChatData[]>(initialChatData);
 
@@ -759,6 +761,27 @@ const Chat: React.FC = () => {
 
   return (
     <div className={styles.chat_wrap}>
+      <svg
+        className={styles.side_svg}
+        onClick={() => setRightMenu(true)}
+        width="35"
+        height="50"
+        viewBox="0 0 35 50"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M0 10C0 4.47715 4.47715 0 10 0H35V50H10C4.47715 50 0 45.5228 0 40V10Z"
+          fill="#F4F4F4"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M20.5898 18.9115C20.6672 18.9888 20.7286 19.0807 20.7705 19.1818C20.8124 19.283 20.834 19.3913 20.834 19.5008C20.834 19.6102 20.8124 19.7186 20.7705 19.8197C20.7286 19.9209 20.6672 20.0127 20.5898 20.0901L15.7965 24.8835C15.7654 24.9147 15.7479 24.957 15.7479 25.0011C15.7479 25.0452 15.7654 25.0875 15.7965 25.1188L20.5898 29.9121C20.7416 30.0693 20.8255 30.2799 20.8236 30.4984C20.8216 30.7169 20.7339 30.9258 20.5793 31.0803C20.4248 31.2348 20.2158 31.3223 19.9973 31.3242C19.7788 31.326 19.5683 31.242 19.4112 31.0901L13.9112 25.5901C13.8338 25.5127 13.7724 25.4209 13.7305 25.3197C13.6886 25.2186 13.667 25.1102 13.667 25.0008C13.667 24.8913 13.6886 24.783 13.7305 24.6818C13.7724 24.5807 13.8338 24.4888 13.9112 24.4115L19.4112 18.9115C19.4885 18.8341 19.5804 18.7727 19.6815 18.7308C19.7827 18.6889 19.891 18.6673 20.0005 18.6673C20.1099 18.6673 20.2183 18.6889 20.3194 18.7308C20.4206 18.7727 20.5124 18.8341 20.5898 18.9115Z"
+          fill="black"
+        />
+      </svg>
+
       <div className={styles.chat}>
         <div className={styles.chat_leftbar}>
           <div
@@ -859,7 +882,9 @@ const Chat: React.FC = () => {
             </svg>
           </div>
         </div>
-        <div className={styles.chat_navigation}>
+        <div
+          className={`${styles.chat_navigation} ${sideMenu && styles.chat_navigation_mobile}`}
+        >
           <div className={styles.chat_navigation_title}>
             {t('chat.conversations')}
             <div className={styles.chat_navigation_new}>
@@ -900,12 +925,13 @@ const Chat: React.FC = () => {
 
             <input type="text" placeholder={t('chat.serach_in_mess')} />
           </div>
-          <div className={styles.chat_navigation_blocks}>
+          <div className={`${styles.chat_navigation_blocks}`}>
             {chatUsers.map((chat, index) => (
               <div
                 key={index}
                 className={`${styles.chat_navigation_block} ${disabledOptions ? styles.disabled : ''}`}
                 onClick={() => {
+                  setSideMenu(false);
                   if (!disabledOptions && activeChat?.id !== chat.id) {
                     handleChatSelect(chat);
                   }
@@ -931,6 +957,22 @@ const Chat: React.FC = () => {
         <div className={styles.chat_conversation}>
           <div className={styles.chat_conversation_top}>
             <div className={styles.chat_conversation_top_left}>
+              <svg
+                onClick={() => setSideMenu(true)}
+                className={styles.back_svg}
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M5.41066 14.0885C5.33325 14.0112 5.27185 13.9193 5.22996 13.8182C5.18807 13.717 5.1665 13.6087 5.1665 13.4992C5.1665 13.3898 5.18807 13.2814 5.22996 13.1803C5.27185 13.0791 5.33325 12.9873 5.41066 12.9099L10.204 8.11654C10.2351 8.0853 10.2526 8.04299 10.2526 7.99887C10.2526 7.95476 10.2351 7.91245 10.204 7.88121L5.41066 3.08787C5.2589 2.93066 5.17497 2.72014 5.17693 2.50164C5.17889 2.28314 5.26659 2.07416 5.42114 1.91969C5.57569 1.76523 5.78473 1.67765 6.00322 1.67581C6.22172 1.67397 6.4322 1.75803 6.58933 1.90987L12.0893 7.40987C12.1667 7.48726 12.2281 7.57913 12.27 7.68025C12.3119 7.78137 12.3335 7.88975 12.3335 7.99921C12.3335 8.10866 12.3119 8.21704 12.27 8.31816C12.2281 8.41928 12.1667 8.51115 12.0893 8.58854L6.58933 14.0885C6.51194 14.1659 6.42007 14.2273 6.31895 14.2692C6.21783 14.3111 6.10945 14.3327 5.99999 14.3327C5.89054 14.3327 5.78216 14.3111 5.68104 14.2692C5.57992 14.2273 5.48804 14.1659 5.41066 14.0885Z"
+                  fill="black"
+                ></path>
+              </svg>
               <img
                 className={styles.chat_conversation_top_picture}
                 src={activeChat?.img || '/default.png'}
@@ -1175,8 +1217,24 @@ const Chat: React.FC = () => {
             </svg>
           </div>
         </div>
-
-        <div className={styles.chat_info}>
+        <div
+          className={`${styles.chat_info_back_svg} ${rightMenu && styles.chat_info_back_svg_active}`}
+          onClick={() => setRightMenu(false)}
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16.596 18.1732C17.0315 18.6088 17.7377 18.6088 18.1732 18.1732C18.6088 17.7377 18.6088 17.0315 18.1732 16.596L13.3272 11.75L18.1733 6.90389C18.6089 6.46834 18.6089 5.7622 18.1733 5.32666C17.7378 4.89112 17.0317 4.89111 16.5961 5.32666L11.75 10.1728L6.90388 5.32666C6.46834 4.89111 5.7622 4.89112 5.32666 5.32666C4.89112 5.7622 4.89111 6.46834 5.32666 6.90389L10.1728 11.75L5.32677 16.596C4.89123 17.0315 4.89123 17.7377 5.32677 18.1732C5.76231 18.6088 6.46846 18.6088 6.904 18.1732L11.75 13.3272L16.596 18.1732Z"
+              fill="black"
+            />
+          </svg>
+        </div>
+        <div className={`${styles.chat_info} ${rightMenu && styles.rightMenu}`}>
           <img
             src={activeChat?.img || '/assets/chat/img_default_avatar.png'}
             alt="avatar"

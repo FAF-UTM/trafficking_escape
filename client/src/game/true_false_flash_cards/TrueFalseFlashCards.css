@@ -216,8 +216,14 @@
   font-size: clamp(16px, 2.2vw, 26px);
 }
 /* Slightly smaller feedback and buttons */
-.feedback-text { font-size: clamp(14px, 1.8vw, 18px); }
-.choice-button, .next-button, .end-button { font-size: clamp(14px, 1.6vw, 18px); }
+.feedback-text {
+  font-size: clamp(14px, 1.8vw, 18px);
+}
+.choice-button,
+.next-button,
+.end-button {
+  font-size: clamp(14px, 1.6vw, 18px);
+}
 
 /* Ensure container centers wide cards nicely */
 .flashcard-screen {

@@ -32,6 +32,7 @@ import Legal from './pages/legal/Legal.tsx';
 import NotFound from './pages/notfound/NotFound.tsx';
 import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.tsx';
 import { useTranslation } from 'react-i18next';
+import AdminPage from './pages/admin/Admin.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -155,6 +156,14 @@ function App() {
             <Route path="/intro" element={<IntroStory />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/mini-games" element={<MinigamesShowcase />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute roles={['ROLE_ADMIN']}>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/chat"
               element={
