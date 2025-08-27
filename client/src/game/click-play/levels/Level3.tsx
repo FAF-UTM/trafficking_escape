@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAudio } from '../../../context/AudioContext';
 
-const Level3: React.FC = () => {
-  const navigate = useNavigate();
+interface Level3Props {
+  onComplete: () => void;
+}
+
+const Level3: React.FC<Level3Props> = ({ onComplete }) => {
 
   // Puzzle states
   const [shovelFound, setShovelFound] = useState(false);
@@ -37,11 +39,10 @@ const Level3: React.FC = () => {
 
   // Check puzzle completion
   useEffect(() => {
-    // If the gate is unlocked AND the modal just closed, go to Home
     if (!modalVisible && gateUnlocked) {
-      navigate('/');
+      onComplete();
     }
-  }, [modalVisible, gateUnlocked, navigate]);
+  }, [modalVisible, gateUnlocked, onComplete]);
 
   // The rest is the same puzzle logic
   const handleShedClick = () => {

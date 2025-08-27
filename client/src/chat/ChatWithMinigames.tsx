@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Chat from './Chat.tsx';
 import TimelinePuzzle from '../game/timeline/TimelinePuzzle.tsx';
 import CombinationLock from '../game/combination_lock/CombinationLock.tsx';
@@ -35,6 +35,7 @@ const ChatWithMinigames: React.FC = () => {
   const [currentGame, setCurrentGame] = useState(0);
   const [showGame, setShowGame] = useState(false);
   const [transitionClass, setTransitionClass] = useState<string>('');
+  const gameStartRef = useRef<number | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [intervalMinutes] = useState(() => {
     const stored = localStorage.getItem('minigameInterval');
@@ -50,6 +51,7 @@ const ChatWithMinigames: React.FC = () => {
           changeMusic(1);
           setShowGame(true);
           setTransitionClass('');
+          gameStartRef.current = Date.now();
         }, 600);
       },
       intervalMinutes * 60 * 1000
@@ -57,11 +59,46 @@ const ChatWithMinigames: React.FC = () => {
     return () => clearTimeout(id);
   }, [currentGame, intervalMinutes, playClick, changeMusic]);
 
+  const postSession = (name: string, seconds: number) => {
+    const base =
+      import.meta.env.VITE_BACKEND ||
+      `${window.location.protocol}//${window.location.hostname}:8080`;
+    const url = `${base}/api/v1/gameplay`;
+    const payload = { gameName: name, totalSeconds: Math.max(0, Math.round(seconds)) };
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true,
+      }).catch(() => {});
+    }
+  };
+
+  const gameNames = [
+    'TimelinePuzzle',
+    'ClickPuzzle',
+    'CombinationLock',
+    'DangerWordHighlight',
+    'EmojiStoryDecoder',
+    'SafetyChecklistBuilder',
+    'TrueFalseFlashCards',
+    'WhoToTrust',
+    'WordChoice',
+    'WordScramble',
+  ];
+
   const handleComplete = () => {
     playClick(9);
     setTransitionClass(transition.close);
     setTimeout(() => {
       changeMusic(2);
+      if (gameStartRef.current) {
+        const seconds = (Date.now() - gameStartRef.current) / 1000;
+        postSession(gameNames[currentGame], seconds);
+        gameStartRef.current = null;
+      }
       setShowGame(false);
       setCurrentGame((prev) => (prev + 1) % games.length);
       setTransitionClass(transition.open);

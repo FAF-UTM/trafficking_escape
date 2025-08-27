@@ -40,16 +40,20 @@ const IntroStory: React.FC = () => {
   const currentDialogue = dialogues[currentIndex];
 
   const startTyping = useCallback((fullText: string) => {
+    if (typingIntervalRef.current) {
+      clearTimeout(typingIntervalRef.current);
+    }
     setDisplayedText('');
     setIsTyping(true);
-    let charIndex = 0;
+    let charIndex = 1;
     const step = () => {
-      if (charIndex < fullText.length) {
-        setDisplayedText((prev) => prev + fullText[charIndex]);
+      if (charIndex <= fullText.length) {
+        setDisplayedText(fullText.slice(0, charIndex));
         charIndex++;
         typingIntervalRef.current = window.setTimeout(step, 30);
       } else {
         setIsTyping(false);
+        typingIntervalRef.current = null;
       }
     };
     step();

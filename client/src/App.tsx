@@ -13,8 +13,8 @@ import LoginPage from './pages/login/Login.tsx';
 import { AuthProvider, ProtectedRoute } from './context/AuthContext';
 import IntroStory from './game/intro/IntroStory.tsx';
 import './i18n';
-import ClickPlayGame from './game/click-play/ClickPlayGame.tsx';
-import TimelinePuzzle from './game/timeline/TimelinePuzzle.tsx';
+import ClickPlayGameWrapper from './game/click-play/ClickPlayGameWrapper.tsx';
+import TimelinePuzzleWrapper from './game/timeline/TimelinePuzzleWrapper.tsx';
 import Settings from './pages/settings/Settings.tsx';
 import CombinationLockWrapper from './game/combination_lock/CombinationLockWrapper.tsx';
 import WhoToTrustGameWrapper from './game/who_to_trust_game/WhoToTrustGameWrapper.tsx';
@@ -173,9 +173,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/click-play" element={<ClickPlayGame />} />
+            <Route path="/click-play" element={<ClickPlayGameWrapper />} />
             <Route path="/city-run" element={<Platformer />} />
-            <Route path="/timeline-puzzle" element={<TimelinePuzzle />} />
+            <Route path="/timeline-puzzle" element={<TimelinePuzzleWrapper />} />
             <Route path="/combination-lock" element={<CombinationLockWrapper />} />
             <Route path="/who-to-trust" element={<WhoToTrustGameWrapper />} />
             <Route path="/true-false" element={<TrueFalseFlashCardsWrapper />} />
