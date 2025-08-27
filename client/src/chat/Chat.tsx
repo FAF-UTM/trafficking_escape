@@ -1349,7 +1349,7 @@ const Chat: React.FC = () => {
             </div>
             <div
               className={styles.chat_info_menu_option_btn}
-              onClick={() => navigate('/ending')}
+              onClick={() => navigate('/final-select')}
             >
               <div className={styles.chat_info_menu_option_btn_left}>
                 <div className={styles.chat_info_menu_option_circle}>

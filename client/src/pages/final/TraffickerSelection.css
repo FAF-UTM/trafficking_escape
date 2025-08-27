@@ -3,12 +3,12 @@
 .title { font-size: 28px; margin-bottom: 16px; }
 .instruction { font-size: 16px; margin-bottom: 20px; }
 
-.names-block { background: rgba(0,0,0,0.7); border:2px solid #fff; display:inline-block; text-align:left; padding:16px; line-height:1.8; max-width: 900px; }
+.names-block { background: rgba(0,0,0,0.7); border:2px solid #fff; display:block; text-align:left; padding:16px; line-height:1.8; max-width: 900px; margin: 0 auto; }
 .name-chip { display:inline-block; margin:4px 8px; padding:6px 10px; border:2px solid #fff; cursor:pointer; transition: background-color .2s ease, border-color .2s ease; }
 .name-chip:hover { border-color: #ffff66; }
 .name-chip.selected { background: rgba(0,255,0,0.15); border-color:#00c853; }
 
-.submit-button { margin-top: 20px; padding:10px 20px; font-size:16px; background:#222; color:#fff; border:2px solid #fff; cursor:pointer; }
+.submit-button { display:block; margin: 20px auto 0; padding:10px 20px; font-size:16px; background:#222; color:#fff; border:2px solid #fff; cursor:pointer; }
 .submit-button:hover { background:#444; }
 
 /* Modal */
@@ -17,3 +17,22 @@
 .result-title { font-size: 22px; margin-bottom:10px; }
 .result-text { font-size: 14px; margin-bottom:8px; }
 .result-text.yellow { color:#ffff66; font-weight:bold; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .final-select-container { padding:20px; }
+  .title { font-size: 22px; }
+  .instruction { font-size: 14px; }
+  .names-block { max-width: 100%; padding:12px; }
+  .name-chip { margin:4px 6px; padding:6px 8px; font-size: 12px; }
+  .submit-button { width: 100%; font-size:14px; padding:10px; }
+  .modal-content { width: 94vw; padding:16px; }
+  .result-title { font-size: 18px; }
+  .result-text { font-size: 12px; }
+}
+
+@media (max-width: 420px) {
+  .title { font-size: 18px; }
+  .instruction { font-size: 12px; }
+  .name-chip { margin:3px 4px; padding:5px 7px; font-size: 11px; }
+}

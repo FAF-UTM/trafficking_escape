@@ -10,6 +10,19 @@
     "hint": "Get a hint",
     "ending": "Force end game"
   },
+  "finalSelect": {
+    "title": "Thank you for playing!",
+    "instruction": "Last step: click the names you think were traffickers, then press Submit.",
+    "submit": "Submit",
+    "great": "Great job!",
+    "allIdentified": "You identified all the traffickers. Stay alert and trust your instincts.",
+    "continue": "(Click anywhere to continue)",
+    "almost": "Almost there",
+    "correctPicks": "Correct picks:",
+    "selectedNotTraffickers": "Persons you selected who are not traffickers:",
+    "missedTraffickers": "Traffickers you missed:",
+    "thanks": "Thanks for playing — let’s keep practicing safety."
+  },
   "general": {
     "home": "Go back",
     "disclaimer": "Your device’s display resolution does not meet the minimum requirements to run the game."

@@ -10,6 +10,19 @@
     "hint": "Vraag een hint",
     "ending": "Forceer beëindiging van het spel"
   },
+  "finalSelect": {
+    "title": "Bedankt voor het spelen!",
+    "instruction": "Laatste stap: klik op de namen waarvan je denkt dat het mensenhandelaren waren en druk op Verzenden.",
+    "submit": "Verzenden",
+    "great": "Goed gedaan!",
+    "allIdentified": "Je hebt alle mensenhandelaren geïdentificeerd. Blijf alert en vertrouw op je instinct.",
+    "continue": "(Klik ergens om door te gaan)",
+    "almost": "Bijna goed",
+    "correctPicks": "Juiste keuzes:",
+    "selectedNotTraffickers": "Personen die je selecteerde maar geen mensenhandelaren zijn:",
+    "missedTraffickers": "Mensenhandelaren die je miste:",
+    "thanks": "Bedankt voor het spelen — blijf veiligheid oefenen."
+  },
   "general": {
     "home": "Ga terug",
     "disclaimer": "De schermresolutie van uw apparaat voldoet niet aan de minimumeisen om het spel te kunnen draaien."
