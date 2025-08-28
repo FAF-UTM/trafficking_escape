@@ -10,6 +10,19 @@
     "hint": "Get a hint",
     "ending": "Force end game"
   },
+  "finalSelect": {
+    "title": "Thank you for playing!",
+    "instruction": "Last step: click the names you think were traffickers, then press Submit.",
+    "submit": "Submit",
+    "great": "Great job!",
+    "allIdentified": "You identified all the traffickers. Stay alert and trust your instincts.",
+    "continue": "(Click anywhere to continue)",
+    "almost": "Almost there",
+    "correctPicks": "Correct picks:",
+    "selectedNotTraffickers": "Persons you selected who are not traffickers:",
+    "missedTraffickers": "Traffickers you missed:",
+    "thanks": "Thanks for playing — let’s keep practicing safety."
+  },
   "general": {
     "home": "Go back",
     "disclaimer": "Your device’s display resolution does not meet the minimum requirements to run the game."
@@ -36,16 +49,16 @@
   "ending": {
     "title": "Game ended",
     "subtitle_1": "Thank you for playing.",
-    "subtitle_2": "Hope you enjoyed. We hope this experience was not only engaging but also enlightening.",
+    "subtitle_2": "We hope you enjoyed it. We hope this experience was not only engaging but also enlightening.",
     "subtitle_3": "Together, awareness is the first step toward prevention.",
     "subtitle_4": "Stay informed. Stay safe.",
-    "button": "Go back Home",
+    "button": "Go back home",
     "feedback_button": "Leave Feedback"
   },
   "feedback": {
     "title": "We value your feedback",
     "submit": "Submit",
-    "q_experience": "How good was your overall experience?",
+    "q_experience": "How was your overall experience?",
     "q_difficulty": "How hard was the game?",
     "q_awareness": "How much did this raise your awareness of human trafficking?",
     "q_minigames": "How engaging were the mini-games?",
@@ -53,8 +66,8 @@
     "q_navigation": "How easy was it to navigate the game?"
   },
   "notfound": {
-    "button": "Go back Home",
-    "t1": " Oops! The page you're trying to reach doesn't exist or may have been moved.",
+    "button": "Go back home",
+    "t1": "Oops! The page you're trying to reach doesn't exist or may have been moved.",
     "t2": "Please check the URL or return to the homepage."
   },
   "dialogues": {
@@ -84,7 +97,7 @@
     },
     "7": {
       "CharacterName": "Mary",
-      "DialogueText": "Okay, okay. Just...I can't go through another lecture."
+      "DialogueText": "Okay, okay. Just... I can't go through another lecture."
     },
     "8": {
       "CharacterName": "Sophia",
@@ -148,8 +161,8 @@
   },
   "timelinePuzzle": {
     "introTitle": "How to play",
-    "introText": "Timeline Puzzle time! Each card shows something that happens to Mary or Sophia. Drag the cards into the empty slots so the story goes from the FIRST event to the LAST. When every slot is full, press Check. If the order is correct you move to the next level—good luck!",
-    "correct": "Correct! Moving to next level...",
+    "introText": "Timeline Puzzle time! Each card shows something that happens to Mary or Sophia. Drag the cards into the empty slots so the story goes from the FIRST event to the LAST. When every slot is full, press Check. If the order is correct, you move to the next level—good luck!",
+    "correct": "Correct! Moving to the next level...",
     "incorrect": "Incorrect order. Try again!",
     "title": "Timeline Puzzle (Level {{level}})",
     "tapStart": "(Click outside to start)",

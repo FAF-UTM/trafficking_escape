@@ -5,7 +5,11 @@ import Level3 from './levels/Level3';
 import './ClickPlayGame.css';
 import { useTranslation } from 'react-i18next';
 
-const ClickPlayGame: React.FC = () => {
+interface ClickPlayGameProps {
+  onComplete: () => void;
+}
+
+const ClickPlayGame: React.FC<ClickPlayGameProps> = ({ onComplete }) => {
   const [currentLevel, setCurrentLevel] = useState(1);
   const [showIntro, setShowIntro] = useState(true);
   const { t } = useTranslation();
@@ -46,7 +50,7 @@ const ClickPlayGame: React.FC = () => {
 
       {currentLevel === 1 && <Level1 onComplete={handleLevelComplete} />}
       {currentLevel === 2 && <Level2 onComplete={handleLevelComplete} />}
-      {currentLevel === 3 && <Level3 />}
+      {currentLevel === 3 && <Level3 onComplete={onComplete} />}
     </div>
   );
 };

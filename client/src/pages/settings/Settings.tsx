@@ -15,7 +15,7 @@ const SettingsPage: React.FC = () => {
 
   const [minigameInterval, setMinigameInterval] = useState<number>(() => {
     const stored = localStorage.getItem('minigameInterval');
-    return stored ? parseInt(stored, 10) : 1;
+    return stored ? parseFloat(stored) : 1;
   });
 
   const toggleMode = (mode: string | undefined) => {
@@ -50,7 +50,7 @@ const SettingsPage: React.FC = () => {
     setMode(savedMode);
     const savedInterval = localStorage.getItem('minigameInterval');
     if (savedInterval) {
-      setMinigameInterval(parseInt(savedInterval, 10));
+      setMinigameInterval(parseFloat(savedInterval));
     }
 
     // apply saved color-blind mode on load
@@ -189,11 +189,12 @@ const SettingsPage: React.FC = () => {
               <span>[{minigameInterval} min]</span>
               <input
                 type="range"
-                min="1"
+                min="0.5"
                 max="15"
+                step="0.5"
                 value={minigameInterval}
                 onChange={(e) =>
-                  handleIntervalChange(parseInt(e.target.value, 10))
+                  handleIntervalChange(parseFloat(e.target.value))
                 }
               />
             </div>

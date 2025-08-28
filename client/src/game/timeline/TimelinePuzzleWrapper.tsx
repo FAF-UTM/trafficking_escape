@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
+import TimelinePuzzle from './TimelinePuzzle.tsx';
 import { useNavigate } from 'react-router-dom';
-import WhoToTrustGame from './WhoToTrustGame.tsx';
 
-const WhoToTrustGameWrapper: React.FC = () => {
+const TimelinePuzzleWrapper: React.FC = () => {
   const navigate = useNavigate();
   const startRef = useRef<number>(Date.now());
 
@@ -11,7 +11,7 @@ const WhoToTrustGameWrapper: React.FC = () => {
       import.meta.env.VITE_BACKEND ||
       `${window.location.protocol}//${window.location.hostname}:8080`;
     const url = `${base}/api/v1/gameplay`;
-    const payload = { gameName: 'WhoToTrust', totalSeconds };
+    const payload = { gameName: 'TimelinePuzzle', totalSeconds };
     const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
     if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {
       fetch(url, {
@@ -43,7 +43,9 @@ const WhoToTrustGameWrapper: React.FC = () => {
     navigate(-1);
   };
 
-  return <WhoToTrustGame onComplete={handleComplete} />;
+  return <TimelinePuzzle onComplete={handleComplete} />;
 };
 
-export default WhoToTrustGameWrapper;
+export default TimelinePuzzleWrapper;
+
+

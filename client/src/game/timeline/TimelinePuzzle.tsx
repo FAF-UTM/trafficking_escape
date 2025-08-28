@@ -135,11 +135,42 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
   );
 
   const checkSolution = () => {
-    if (dropzones.some((dz) => dz === null)) return resetPuzzle(false);
-    for (let i = 0; i < dropzones.length; i++)
-      if (!dropzones[i] || dropzones[i]!.correctIndex !== i)
-        return resetPuzzle(false);
-    nextLevel();
+    let allFilled = true;
+    let allCorrect = true;
+
+    for (let i = 0; i < dropzones.length; i++) {
+      const dz = dropzones[i];
+      if (!dz) {
+        allFilled = false;
+        allCorrect = false;
+      } else if (dz.correctIndex !== i) {
+        allCorrect = false;
+      }
+    }
+
+    if (allFilled && allCorrect) {
+      nextLevel();
+      return;
+    }
+
+    // Partially reset: keep correctly placed cards, return only incorrect ones to the pool
+    openModal(t('timelinePuzzle.incorrect'));
+
+    const incorrectCards: PuzzleCard[] = [];
+    const newDropzones = dropzones.map((dz, idx) => {
+      if (dz && dz.correctIndex !== idx) {
+        incorrectCards.push(dz);
+        return null;
+      }
+      return dz;
+    });
+
+    setDropzones(newDropzones);
+    setCardPositions((prev) => {
+      const existing = new Set(prev.map((c) => c.id));
+      const toAdd = incorrectCards.filter((c) => !existing.has(c.id));
+      return [...prev, ...toAdd];
+    });
   };
   const resetPuzzle = (manual = false) => {
     if (!manual) openModal(t('timelinePuzzle.incorrect'));
