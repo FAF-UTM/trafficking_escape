@@ -102,10 +102,12 @@ public class UsersController {
         String adminUsername = authentication.getName();
         List<User> users = service.findUsersCreatedBy(adminUsername);
         List<Map<String, Object>> data = users.stream()
-                .map(u -> Map.of(
-                        "username", u.getUsername(),
-                        "expirationDate", u.getExpirationDate()
-                ))
+                .map(u -> {
+                    Map<String, Object> m = new HashMap<>();
+                    m.put("username", u.getUsername());
+                    m.put("expirationDate", u.getExpirationDate());
+                    return m;
+                })
                 .toList();
         return ResponseEntity.ok(data);
     }
