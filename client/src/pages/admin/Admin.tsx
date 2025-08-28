@@ -188,7 +188,12 @@ const Admin: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {createdUsers.map((u, idx) => (
+            {[...createdUsers]
+              .sort(
+                (a, b) =>
+                  new Date(b.expirationDate).getTime() - new Date(a.expirationDate).getTime()
+              )
+              .map((u, idx) => (
                 <tr key={u.username}>
                   <td>
                     {u.username}
@@ -220,7 +225,19 @@ const Admin: React.FC = () => {
                       </>
                     )}
                   </td>
-                  <td>{new Date(u.expirationDate).toLocaleString()}</td>
+                  <td>
+  <span
+    className={
+      new Date(u.expirationDate) > new Date()
+        ? styles.date_next
+        : styles.date_old
+    }
+  >
+    {new Date(u.expirationDate).toLocaleString()}
+  </span>
+                  </td>
+
+                  {/*<td><span>{new Date(u.expirationDate).toLocaleString()}</span></td>*/}
                 </tr>
               ))}
             </tbody>
