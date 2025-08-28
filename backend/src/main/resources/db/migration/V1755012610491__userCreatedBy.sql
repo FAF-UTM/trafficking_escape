@@ -1,0 +1,1 @@
+ALTER TABLE app_user ADD COLUMN created_by VARCHAR(120);

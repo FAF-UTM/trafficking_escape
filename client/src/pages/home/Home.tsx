@@ -34,15 +34,29 @@ const Home: React.FC = () => {
             >
               {t('home.games')}
             </Button>
-            <Button
-              component={Link}
-              to="/settings"
-              className={styles.home_button}
-              variant="contained"
-              onClick={() => playClick(3)}
-            >
-              {t('home.settings')}
-            </Button>
+            <div className={styles.home_button_row}>
+              <Button
+                component={Link}
+                to="/settings"
+                className={styles.home_button}
+                variant="contained"
+                onClick={() => playClick(3)}
+              >
+                {t('home.settings')}
+              </Button>
+              <Button
+                component={Link}
+                to="/login"
+                className={`${styles.home_button} ${styles.login_btn}`}
+                variant="contained"
+                onClick={() => playClick(3)}
+              >
+                Quik
+                {/*Fast */} Login
+              </Button>
+              {/*<a className={styles.login_btn} href="/login">*/}
+              {/*  Login</a>*/}
+            </div>
           </div>
         </div>
       </ThemeProvider>
