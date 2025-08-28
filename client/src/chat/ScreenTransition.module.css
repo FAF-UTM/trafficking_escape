@@ -88,11 +88,19 @@
 }
 
 @keyframes blur-in {
-  from { backdrop-filter: blur(0px); }
-  to { backdrop-filter: blur(6px); }
+  from {
+    backdrop-filter: blur(0px);
+  }
+  to {
+    backdrop-filter: blur(6px);
+  }
 }
 
 @keyframes blur-out {
-  from { backdrop-filter: blur(6px); }
-  to { backdrop-filter: blur(0px); }
+  from {
+    backdrop-filter: blur(6px);
+  }
+  to {
+    backdrop-filter: blur(0px);
+  }
 }

@@ -6,7 +6,6 @@ interface Level3Props {
 }
 
 const Level3: React.FC<Level3Props> = ({ onComplete }) => {
-
   // Puzzle states
   const [shovelFound, setShovelFound] = useState(false);
   const [handleFound, setHandleFound] = useState(false);

@@ -10,7 +10,9 @@ const ClickPlayGameWrapper: React.FC = () => {
       const totalSeconds = Math.max(0, Math.round((Date.now() - start) / 1000));
       const url = `${import.meta.env.VITE_BACKEND}/api/v1/gameplay`;
       const payload = { gameName: 'ClickPuzzle', totalSeconds };
-      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(payload)], {
+        type: 'application/json',
+      });
       if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {
         fetch(url, {
           method: 'POST',
@@ -29,5 +31,3 @@ const ClickPlayGameWrapper: React.FC = () => {
 };
 
 export default ClickPlayGameWrapper;
-
-

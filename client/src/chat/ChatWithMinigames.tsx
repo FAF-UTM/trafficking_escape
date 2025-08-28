@@ -64,8 +64,13 @@ const ChatWithMinigames: React.FC = () => {
       import.meta.env.VITE_BACKEND ||
       `${window.location.protocol}//${window.location.hostname}:8080`;
     const url = `${base}/api/v1/gameplay`;
-    const payload = { gameName: name, totalSeconds: Math.max(0, Math.round(seconds)) };
-    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    const payload = {
+      gameName: name,
+      totalSeconds: Math.max(0, Math.round(seconds)),
+    };
+    const blob = new Blob([JSON.stringify(payload)], {
+      type: 'application/json',
+    });
     if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {
       fetch(url, {
         method: 'POST',

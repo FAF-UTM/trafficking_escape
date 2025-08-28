@@ -16,8 +16,10 @@ import { t } from 'i18next';
 import { jwtDecode } from 'jwt-decode';
 
 const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+  const { login, loginWithAccessCode } = useAuth();
+  const [accessCode, setAccessCode] = useState('');
   const navigate = useNavigate();
+  const [showLogin, setShowLogin] = useState('1');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -42,6 +44,28 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const handleAccessCodeSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    try {
+      await loginWithAccessCode(accessCode, true);
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        const decoded: any = jwtDecode(token);
+        if (decoded.role === 'ROLE_ADMIN') {
+          navigate('/admin');
+        } else {
+          navigate('/chat');
+        }
+      } else {
+        navigate('/chat');
+      }
+    } catch (err) {
+      setError('Invalid access code');
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container className={styles.login} component="main" maxWidth="xs">
@@ -58,50 +82,92 @@ const LoginPage: React.FC = () => {
           <Typography component="h1" variant="h5">
             Trafficking Escape
           </Typography>
-
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ mt: 1 }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              variant="outlined"
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {error && <Typography color="error">{error}</Typography>}
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              sx={{ mt: 3, mb: 2 }}
+          {showLogin === '1' && (
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}
+              noValidate
+              autoComplete="off"
             >
-              Sign In
-            </Button>
-          </Box>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                variant="outlined"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign In
+              </Button>
+            </Box>
+          )}
+          {showLogin === '2' && (
+            <Box
+              component="form"
+              onSubmit={handleAccessCodeSubmit}
+              sx={{ mt: 2 }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="accessCode"
+                label="Access Code"
+                value={accessCode}
+                onChange={(e) => setAccessCode(e.target.value)}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Use Access Code
+              </Button>
+            </Box>
+          )}
+          {error && <Typography color="error">{error}</Typography>}
+          <div className={styles.or_ter}>or</div>
+          {showLogin === '1' && (
+            <div className={styles.code_btn} onClick={() => setShowLogin('2')}>
+              Login with access code
+            </div>
+          )}
+          {showLogin === '2' && (
+            <div className={styles.code_btn} onClick={() => setShowLogin('1')}>
+              Login with credentials
+            </div>
+          )}
         </Box>
       </Container>
       <div className={styles.login_image}></div>

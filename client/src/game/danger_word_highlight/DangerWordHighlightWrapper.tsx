@@ -12,7 +12,9 @@ const DangerWordHighlightWrapper: React.FC = () => {
       `${window.location.protocol}//${window.location.hostname}:8080`;
     const url = `${base}/api/v1/gameplay`;
     const payload = { gameName: 'DangerWordHighlight', totalSeconds };
-    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(payload)], {
+      type: 'application/json',
+    });
     if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {
       fetch(url, {
         method: 'POST',

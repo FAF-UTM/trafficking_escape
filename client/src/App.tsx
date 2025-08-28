@@ -175,14 +175,29 @@ function App() {
             />
             <Route path="/click-play" element={<ClickPlayGameWrapper />} />
             <Route path="/city-run" element={<Platformer />} />
-            <Route path="/timeline-puzzle" element={<TimelinePuzzleWrapper />} />
-            <Route path="/combination-lock" element={<CombinationLockWrapper />} />
+            <Route
+              path="/timeline-puzzle"
+              element={<TimelinePuzzleWrapper />}
+            />
+            <Route
+              path="/combination-lock"
+              element={<CombinationLockWrapper />}
+            />
             <Route path="/who-to-trust" element={<WhoToTrustGameWrapper />} />
-            <Route path="/true-false" element={<TrueFalseFlashCardsWrapper />} />
+            <Route
+              path="/true-false"
+              element={<TrueFalseFlashCardsWrapper />}
+            />
             <Route path="/word-choice" element={<WordChoiceWrapper />} />
             <Route path="/emoji-story" element={<EmojiStoryDecoderWrapper />} />
-            <Route path="/safety-checklist" element={<SafetyChecklistBuilderWrapper />} />
-            <Route path="/danger-highlight" element={<DangerWordHighlightWrapper />} />
+            <Route
+              path="/safety-checklist"
+              element={<SafetyChecklistBuilderWrapper />}
+            />
+            <Route
+              path="/danger-highlight"
+              element={<DangerWordHighlightWrapper />}
+            />
             <Route path="/word-scramble" element={<WordScrambleWrapper />} />
             <Route path="/final-select" element={<TraffickerSelection />} />
             <Route path="/ending" element={<Ending />} />

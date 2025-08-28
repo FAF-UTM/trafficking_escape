@@ -22,12 +22,19 @@ const TraffickerSelection: React.FC = () => {
     const fetchChats = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const res = await fetch(`${import.meta.env.VITE_BACKEND}/api/chats/user/${userId}`, {
-          headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND}/api/chats/user/${userId}`,
+          {
+            headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+          }
+        );
         if (!res.ok) return;
         const data = await res.json();
-        const list: ChatSummary[] = data.map((c: any) => ({ id: c.id, name: c.chatName, isTrafficker: !!c.isTrafficker }));
+        const list: ChatSummary[] = data.map((c: any) => ({
+          id: c.id,
+          name: c.chatName,
+          isTrafficker: !!c.isTrafficker,
+        }));
         setChats(list);
       } catch (e) {
         console.error('Failed to load chats for final selection', e);
@@ -46,10 +53,31 @@ const TraffickerSelection: React.FC = () => {
     });
   };
 
-  const trueIds = useMemo(() => new Set(chats.filter((c) => c.isTrafficker).map((c) => c.id)), [chats]);
-  const missed = useMemo(() => chats.filter((c) => c.isTrafficker && !selectedIds.has(c.id)).map((c) => c.name), [chats, selectedIds]);
-  const correct = useMemo(() => chats.filter((c) => c.isTrafficker && selectedIds.has(c.id)).map((c) => c.name), [chats, selectedIds]);
-  const falsePositives = useMemo(() => chats.filter((c) => !c.isTrafficker && selectedIds.has(c.id)).map((c) => c.name), [chats, selectedIds]);
+  const trueIds = useMemo(
+    () => new Set(chats.filter((c) => c.isTrafficker).map((c) => c.id)),
+    [chats]
+  );
+  const missed = useMemo(
+    () =>
+      chats
+        .filter((c) => c.isTrafficker && !selectedIds.has(c.id))
+        .map((c) => c.name),
+    [chats, selectedIds]
+  );
+  const correct = useMemo(
+    () =>
+      chats
+        .filter((c) => c.isTrafficker && selectedIds.has(c.id))
+        .map((c) => c.name),
+    [chats, selectedIds]
+  );
+  const falsePositives = useMemo(
+    () =>
+      chats
+        .filter((c) => !c.isTrafficker && selectedIds.has(c.id))
+        .map((c) => c.name),
+    [chats, selectedIds]
+  );
 
   const handleSubmit = () => setSubmitted(true);
   const handleCloseModal = () => navigate('/ending');
@@ -71,7 +99,11 @@ const TraffickerSelection: React.FC = () => {
         ))}
       </div>
 
-      <button className="submit-button" onClick={handleSubmit} disabled={submitted}>
+      <button
+        className="submit-button"
+        onClick={handleSubmit}
+        disabled={submitted}
+      >
         {t('finalSelect.submit')}
       </button>
 
@@ -82,31 +114,43 @@ const TraffickerSelection: React.FC = () => {
               <>
                 <h3 className="result-title">{t('finalSelect.great')}</h3>
                 <p className="result-text">{t('finalSelect.allIdentified')}</p>
-                <p className="result-text yellow">{t('finalSelect.continue')}</p>
+                <p className="result-text yellow">
+                  {t('finalSelect.continue')}
+                </p>
               </>
             ) : (
               <>
                 <h3 className="result-title">{t('finalSelect.almost')}</h3>
                 {correct.length > 0 && (
                   <>
-                    <p className="result-text">{t('finalSelect.correctPicks')}</p>
+                    <p className="result-text">
+                      {t('finalSelect.correctPicks')}
+                    </p>
                     <p className="result-text yellow">{correct.join(', ')}</p>
                   </>
                 )}
                 {falsePositives.length > 0 && (
                   <>
-                    <p className="result-text">{t('finalSelect.selectedNotTraffickers')}</p>
-                    <p className="result-text yellow">{falsePositives.join(', ')}</p>
+                    <p className="result-text">
+                      {t('finalSelect.selectedNotTraffickers')}
+                    </p>
+                    <p className="result-text yellow">
+                      {falsePositives.join(', ')}
+                    </p>
                   </>
                 )}
                 {missed.length > 0 && (
                   <>
-                    <p className="result-text">{t('finalSelect.missedTraffickers')}</p>
+                    <p className="result-text">
+                      {t('finalSelect.missedTraffickers')}
+                    </p>
                     <p className="result-text yellow">{missed.join(', ')}</p>
                   </>
                 )}
                 <p className="result-text">{t('finalSelect.thanks')}</p>
-                <p className="result-text yellow">{t('finalSelect.continue')}</p>
+                <p className="result-text yellow">
+                  {t('finalSelect.continue')}
+                </p>
               </>
             )}
           </div>
