@@ -289,7 +289,9 @@ const Chat: React.FC = () => {
         // update last-message preview on the **right** chat
         const last = messageChunks[messageChunks.length - 1];
         setChatUsers((prev) =>
-          prev.map((c) => (c.id === chatId ? { ...c, message: last } : c))
+          prev.map((c) =>
+            c.id === chatId ? { ...c, message: last, loading: false } : c
+          )
         );
       }
     } catch (err) {
@@ -383,7 +385,14 @@ const Chat: React.FC = () => {
   };
 
   const [chatUsers, setChatUsers] = useState<
-    { id: number; imgSrc: string; name: string; message: string }[]
+    {
+      id: number;
+      imgSrc: string;
+      name: string;
+      message: string;
+      isTrafficker: boolean;
+      loading: boolean;
+    }[]
   >([]);
 
   const getRandomChatUser = async (): Promise<{
@@ -408,6 +417,59 @@ const Chat: React.FC = () => {
     } catch (err) {
       console.error('Error fetching random chat user:', err);
       return null;
+    }
+  };
+
+  const preloadChat = async (chatId: number, isTrafficker: boolean) => {
+    const token = localStorage.getItem('authToken');
+    try {
+      const res = await fetch(backend_api_generate, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          context: 'A child is chatting with someone online.',
+          lastMessage: 'Hello',
+          currentDangerLevel: 0,
+          isTrafficker,
+          language: i18n.language,
+        }),
+      });
+      if (!res.ok) throw new Error('Failed to preload chat');
+      const data = await res.json();
+      if (data.chatResponse) {
+        const cleaned = String(data.chatResponse)
+          .replace(/^"|"$/g, '')
+          .trim();
+        await fetch(backend_api_messages, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({
+            chatId,
+            isOutgoing: false,
+            messageText: cleaned,
+          }),
+        });
+        setChatUsers((prev) =>
+          prev.map((c) =>
+            c.id === chatId ? { ...c, message: cleaned, loading: false } : c
+          )
+        );
+      } else {
+        setChatUsers((prev) =>
+          prev.map((c) => (c.id === chatId ? { ...c, loading: false } : c))
+        );
+      }
+    } catch (err) {
+      console.error('Error preloading chat:', err);
+      setChatUsers((prev) =>
+        prev.map((c) => (c.id === chatId ? { ...c, loading: false } : c))
+      );
     }
   };
 
@@ -441,7 +503,6 @@ const Chat: React.FC = () => {
         if (!res.ok) throw new Error('Failed to fetch chats');
         const chats = await res.json();
 
-        // Format the chat list
         const formatted = chats.map((chat: any) => ({
           id: chat.id,
           imgSrc: chat.chatImageUrl || '/assets/chat/img_default_avatar.png',
@@ -449,6 +510,8 @@ const Chat: React.FC = () => {
           message:
             chat.messages?.[chat.messages.length - 1]?.messageText ||
             'No messages yet',
+          isTrafficker: chat.isTrafficker,
+          loading: false,
         }));
 
         setChatUsers(formatted);
@@ -457,8 +520,8 @@ const Chat: React.FC = () => {
       }
     };
 
-    if (userId) fetchChats();
-  }, [userId]);
+    if (userId && chatUsers.length === 0) fetchChats();
+  }, [userId, chatUsers.length]);
 
   useEffect(() => {
     const fetchDigest = async () => {
@@ -486,40 +549,15 @@ const Chat: React.FC = () => {
 
   const fetchOrCreateChat = async () => {
     const token = localStorage.getItem('authToken');
-
-    let randomUser = await getRandomChatUser();
-
-    // Try up to 4 more times if name already exists
-    let attempts = 0;
-    while (
-      randomUser &&
-      isNameAlreadyUsed(randomUser.fullName) &&
-      attempts < 4
-    ) {
-      console.warn(
-        `Duplicate name "${randomUser.fullName}" detected. Retrying...`
-      );
-      randomUser = await getRandomChatUser();
-      attempts++;
-    }
-
-    if (!randomUser || isNameAlreadyUsed(randomUser.fullName)) {
-      console.warn(
-        'Still duplicate after 5 attempts or failed to fetch user. Aborting.'
-      );
-      return;
-    }
-
     try {
       if (!userId) {
         console.error('No userId available in context.');
-        return;
+        return [];
       }
       const res = await fetch(`${backend_api_chats}/user/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          // *** Attach token in the Authorization header ***
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       });
@@ -531,47 +569,60 @@ const Chat: React.FC = () => {
         console.log('User already has chats:', chats);
         return chats;
       } else {
-        // No chats found, create one
-        const createRes = await fetch(backend_api_chats, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-          body: JSON.stringify({
-            chatImageUrl: randomUser.image,
-            chatName: randomUser.fullName,
-            isTrafficker: Math.random() < 0.2, // 20% chance to be true
-            createdAt: now,
-            updatedAt: now,
-            // messages: [
-            //   {
-            //     id: 1,
-            //     chatId: 0,
-            //     isOutgoing: true,
-            //     messageText: 'Hello!',
-            //     sentAt: now,
-            //   },
-            // ],
-          }),
-        });
+        const created: any[] = [];
+        for (let i = 0; i < 4; i++) {
+          let randomUser = await getRandomChatUser();
+          let attempts = 0;
+          while (
+            randomUser &&
+            isNameAlreadyUsed(randomUser.fullName) &&
+            attempts < 4
+          ) {
+            console.warn(
+              `Duplicate name "${randomUser.fullName}" detected. Retrying...`
+            );
+            randomUser = await getRandomChatUser();
+            attempts++;
+          }
 
-        console.log(now);
+          if (!randomUser || isNameAlreadyUsed(randomUser.fullName)) {
+            console.warn(
+              'Still duplicate after 5 attempts or failed to fetch user. Aborting.'
+            );
+            continue;
+          }
 
-        if (!createRes.ok) throw new Error('Failed to create chat');
+          const createRes = await fetch(backend_api_chats, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({
+              chatImageUrl: randomUser.image,
+              chatName: randomUser.fullName,
+              isTrafficker: Math.random() < 0.2,
+              createdAt: now,
+              updatedAt: now,
+            }),
+          });
 
-        const newChat = await createRes.json();
-        setChatUsers((prev) => [
-          ...prev,
-          {
-            id: newChat.id,
-            imgSrc: newChat.chatImageUrl,
-            name: newChat.chatName,
-            message: 'No messages yet',
-          },
-        ]);
-        console.log('Created new chat:', newChat);
-        return [newChat];
+          if (!createRes.ok) throw new Error('Failed to create chat');
+          const newChat = await createRes.json();
+          created.push(newChat);
+        }
+
+        const formatted = created.map((c) => ({
+          id: c.id,
+          imgSrc: c.chatImageUrl,
+          name: c.chatName,
+          message: 'Loading...',
+          isTrafficker: c.isTrafficker,
+          loading: true,
+        }));
+        setChatUsers(formatted);
+        formatted.slice(0, -1).forEach((c) => preloadChat(c.id, c.isTrafficker));
+        return created;
       }
     } catch (error) {
       console.error('Error in fetchOrCreateChat:', error);
@@ -631,6 +682,8 @@ const Chat: React.FC = () => {
           imgSrc: newChat.chatImageUrl,
           name: newChat.chatName,
           message: 'No messages yet',
+          isTrafficker: newChat.isTrafficker,
+          loading: false,
         },
       ]);
     } else {
@@ -646,8 +699,13 @@ const Chat: React.FC = () => {
     imgSrc: string;
     name: string;
     message: string;
+    isTrafficker: boolean;
+    loading: boolean;
   }) => {
     setDisabledOptions(true);
+    setChatUsers((prev) =>
+      prev.map((c) => (c.id === chat.id ? { ...c, loading: true } : c))
+    );
     const token = localStorage.getItem('authToken');
     try {
       const res = await fetch(`${backend_api_chats}/${chat.id}`, {
@@ -735,6 +793,9 @@ const Chat: React.FC = () => {
       console.error('Error loading chat:', err);
     } finally {
       setDisabledOptions(false);
+      setChatUsers((prev) =>
+        prev.map((c) => (c.id === chat.id ? { ...c, loading: false } : c))
+      );
     }
   };
 
@@ -929,10 +990,16 @@ const Chat: React.FC = () => {
             {chatUsers.map((chat, index) => (
               <div
                 key={index}
-                className={`${styles.chat_navigation_block} ${disabledOptions ? styles.disabled : ''}`}
+                className={`${styles.chat_navigation_block} ${
+                  disabledOptions || chat.loading ? styles.disabled : ''
+                }`}
                 onClick={() => {
                   setSideMenu(false);
-                  if (!disabledOptions && activeChat?.id !== chat.id) {
+                  if (
+                    !disabledOptions &&
+                    !chat.loading &&
+                    activeChat?.id !== chat.id
+                  ) {
                     handleChatSelect(chat);
                   }
                 }}
