@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -47,21 +48,25 @@ public class UsersService {
         userRepository.deleteById(id);
     }
 
+    public List<User> findUsersCreatedBy(String createdBy) {
+        return userRepository.findAllByCreatedBy(createdBy);
+    }
+
     /* ---------------- Random / Ephemeral Users ---------------- */
 
     private static final String ACCESS_CODE_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final int ACCESS_CODE_LENGTH = 6;
     private static final SecureRandom RNG = new SecureRandom();
 
-    public CreatedUser createRandomUser(Duration validity) {
+    public CreatedUser createRandomUser(Duration validity, String createdBy) {
         Objects.requireNonNull(validity, "validity");
         if (validity.isZero() || validity.isNegative()) {
             throw new IllegalArgumentException("validity must be positive");
         }
-        return createRandomUser(Instant.now().plus(validity));
+        return createRandomUser(Instant.now().plus(validity), createdBy);
     }
 
-    public CreatedUser createRandomUser(Instant expirationDate) {
+    public CreatedUser createRandomUser(Instant expirationDate, String createdBy) {
         Objects.requireNonNull(expirationDate, "expirationDate");
         if (expirationDate.isBefore(Instant.now())) {
             throw new IllegalArgumentException("expirationDate must be in the future");
@@ -77,6 +82,7 @@ public class UsersService {
         u.setAccessCodeSha256(sha256Hex(accessCode));                // Deterministic index
         u.setRole("ROLE_USER");
         u.setExpirationDate(expirationDate);
+        u.setCreatedBy(createdBy);
         // email must be set if not nullable; if ephemeral, generate a placeholder:
         u.setEmail(username + "@temp.local");
 

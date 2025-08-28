@@ -17,4 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u from User u where (u.expirationDate is null or u.expirationDate > :now)")
     List<User> findAllActive(@Param("now") Instant now);
+
+    List<User> findAllByCreatedBy(String createdBy);
 }

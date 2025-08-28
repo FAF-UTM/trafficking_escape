@@ -27,6 +27,9 @@ public class User {
     @Column(name = "role", nullable = false, length = 40)
     private String role; // e.g. ROLE_ADMIN / ROLE_USER
 
+    @Column(name = "created_by", length = 120)
+    private String createdBy; // admin username that created this user
+
     /* Ephemeral access code support */
     @Column(name = "expiration_date")
     private Instant expirationDate;
