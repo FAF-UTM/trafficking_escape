@@ -74,13 +74,13 @@
   color: #0a0;
   font-size: 0.8rem;
 }
-.date_next{
+.date_next {
   background: #a1ff82;
   padding: 3px 10px;
   box-sizing: border-box;
   border-radius: 100px;
 }
-.date_old{
+.date_old {
   background: #ff8282;
   padding: 3px 10px;
   box-sizing: border-box;
