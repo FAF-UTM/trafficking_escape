@@ -52,8 +52,7 @@ const TraffickerSelection: React.FC = () => {
       return next;
     });
   };
-
-  const trueIds = useMemo(
+  useMemo(
     () => new Set(chats.filter((c) => c.isTrafficker).map((c) => c.id)),
     [chats]
   );
