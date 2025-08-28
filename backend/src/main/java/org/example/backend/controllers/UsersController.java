@@ -11,11 +11,13 @@ import org.example.backend.services.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -80,17 +82,32 @@ public class UsersController {
     @PostMapping("/random")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> createRandomEphemeralUser(
-            @RequestParam(name = "validityMinutes", required = false, defaultValue = "60") long validityMinutes
+            @RequestParam(name = "validityMinutes", required = false, defaultValue = "60") long validityMinutes,
+            Authentication authentication
     ) {
         if (validityMinutes <= 0) {
             return ResponseEntity.badRequest().body(Map.of("error", "validityMinutes must be > 0"));
         }
-        UsersService.CreatedUser created = service.createRandomUser(Duration.ofMinutes(validityMinutes));
+        UsersService.CreatedUser created = service.createRandomUser(Duration.ofMinutes(validityMinutes), authentication.getName());
         return ResponseEntity.ok(Map.of(
                 "username", created.getUsername(),
                 "accessCode", created.getAccessCode(),
                 "expirationDate", created.getExpirationDate()
         ));
+    }
+
+    @GetMapping("/created")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> getUsersCreatedByMe(Authentication authentication) {
+        String adminUsername = authentication.getName();
+        List<User> users = service.findUsersCreatedBy(adminUsername);
+        List<Map<String, Object>> data = users.stream()
+                .map(u -> Map.of(
+                        "username", u.getUsername(),
+                        "expirationDate", u.getExpirationDate()
+                ))
+                .toList();
+        return ResponseEntity.ok(data);
     }
 
     /**

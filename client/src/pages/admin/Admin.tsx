@@ -7,7 +7,7 @@ interface Session {
 
 interface CreatedUser {
   username: string;
-  accessCode: string;
+  accessCode?: string;
   expirationDate: string;
 }
 
@@ -39,9 +39,29 @@ const Admin: React.FC = () => {
     }
   }, [token]);
 
+  const fetchCreatedUsers = useCallback(async () => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND}/api/v1/users/created`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setCreatedUsers(data);
+      }
+    } catch (err) {
+      console.error('Failed to load created users', err);
+    }
+  }, [token]);
+
   useEffect(() => {
     fetchSessions();
-  }, [fetchSessions]);
+    fetchCreatedUsers();
+  }, [fetchSessions, fetchCreatedUsers]);
 
   const handleCopy = async (value: string, key: string) => {
     try {
@@ -183,17 +203,21 @@ const Admin: React.FC = () => {
                     )}
                   </td>
                   <td>
-                    {u.accessCode}
-                    <button
-                      className={styles.copyButton}
-                      onClick={() =>
-                        handleCopy(u.accessCode, `user-${idx}-code`)
-                      }
-                    >
-                      Copy
-                    </button>
-                    {copiedKey === `user-${idx}-code` && (
-                      <span className={styles.copied}>Copied!</span>
+                    {u.accessCode ?? 'N/A'}
+                    {u.accessCode && (
+                      <>
+                        <button
+                          className={styles.copyButton}
+                          onClick={() =>
+                            handleCopy(u.accessCode!, `user-${idx}-code`)
+                          }
+                        >
+                          Copy
+                        </button>
+                        {copiedKey === `user-${idx}-code` && (
+                          <span className={styles.copied}>Copied!</span>
+                        )}
+                      </>
                     )}
                   </td>
                   <td>{new Date(u.expirationDate).toLocaleString()}</td>
