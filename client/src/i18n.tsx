@@ -5,6 +5,8 @@ import backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import translationEnglish from './lang/en.json';
 import translationNetherland from './lang/nl.json';
+import translationRomamian from './lang/ro.json';
+import translationRussian from './lang/ru.json';
 
 const resources = {
   en: {
@@ -12,6 +14,12 @@ const resources = {
   },
   nl: {
     translation: translationNetherland,
+  },
+  ro: {
+    translation: translationRomamian,
+  },
+  ru: {
+    translation: translationRussian,
   },
 };
 

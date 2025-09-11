@@ -87,16 +87,28 @@ const SettingsPage: React.FC = () => {
               </div>
               <div className={styles.settings_inside_lang_types}>
                 <div
+                  className={`${styles.settings_inside_lang_types_btn} ${selectedLanguage == 'en' && styles.settings_inside_lang_types_btn_selected}`}
+                  onClick={() => toggleLanguage('en')}
+                >
+                  EN
+                </div>
+                <div
                   className={`${styles.settings_inside_lang_types_btn} ${selectedLanguage == 'nl' && styles.settings_inside_lang_types_btn_selected}`}
                   onClick={() => toggleLanguage('nl')}
                 >
                   NL
                 </div>
                 <div
-                  className={`${styles.settings_inside_lang_types_btn} ${selectedLanguage == 'en' && styles.settings_inside_lang_types_btn_selected}`}
-                  onClick={() => toggleLanguage('en')}
+                  className={`${styles.settings_inside_lang_types_btn} ${selectedLanguage == 'ro' && styles.settings_inside_lang_types_btn_selected}`}
+                  onClick={() => toggleLanguage('ro')}
                 >
-                  EN
+                  RO
+                </div>
+                <div
+                  className={`${styles.settings_inside_lang_types_btn} ${selectedLanguage == 'ru' && styles.settings_inside_lang_types_btn_selected}`}
+                  onClick={() => toggleLanguage('ru')}
+                >
+                  RU
                 </div>
               </div>
             </div>

@@ -1,0 +1,219 @@
+{
+  "lang": "ro",
+  "chat": {
+    "conversations": "Conversații",
+    "serach_in_mess": "Caută în Messenger",
+    "chat_info": "Informații despre chat",
+    "help": "Ajutor",
+    "report": "Raportează",
+    "chat_settings": "Setări",
+    "hint": "Primește un indiciu",
+    "ending": "Încheie forțat jocul"
+  },
+  "finalSelect": {
+    "title": "Mulțumim că ai jucat!",
+    "instruction": "Ultimul pas: apasă pe numele pe care le consideri traficanți, apoi apasă Trimite.",
+    "submit": "Trimite",
+    "great": "Foarte bine!",
+    "allIdentified": "I-ai identificat pe toți traficanții. Fii vigilent(ă) și ai încredere în instinctele tale.",
+    "continue": "(Clic oriunde pentru a continua)",
+    "almost": "Mai ai puțin",
+    "correctPicks": "Alegeri corecte:",
+    "selectedNotTraffickers": "Persoane pe care le-ai selectat, dar nu sunt traficanți:",
+    "missedTraffickers": "Traficanți pe care i-ai omis:",
+    "thanks": "Mulțumim pentru joc — să continuăm să exersăm siguranța."
+  },
+  "general": {
+    "home": "Înapoi",
+    "disclaimer": "Rezoluția afișajului dispozitivului tău nu îndeplinește cerințele minime pentru a rula jocul."
+  },
+  "home": {
+    "games": "Minijocuri",
+    "start": "Începe jocul",
+    "settings": "Setări"
+  },
+  "settings": {
+    "settings": "Setări",
+    "language": "Limbă",
+    "mode": "Mod",
+    "adaptability": "Adaptabilitate",
+    "minigameInterval": "Interval minijoc",
+    "links": {
+      "login": "Autentificare",
+      "credentials": "Credențiale",
+      "documentation": "Documentație",
+      "development": "Dezvoltare",
+      "legal": "Legal"
+    }
+  },
+  "ending": {
+    "title": "Joc încheiat",
+    "subtitle_1": "Mulțumim că ai jucat.",
+    "subtitle_2": "Sperăm că ți-a plăcut. Ne dorim ca această experiență să fi fost nu doar captivantă, ci și educativă.",
+    "subtitle_3": "Împreună, conștientizarea este primul pas către prevenție.",
+    "subtitle_4": "Rămâi informat(ă). Rămâi în siguranță.",
+    "button": "Înapoi la pagina principală",
+    "feedback_button": "Lasă feedback"
+  },
+  "feedback": {
+    "title": "Apreciem feedbackul tău",
+    "submit": "Trimite",
+    "q_experience": "Cum a fost experiența ta per ansamblu?",
+    "q_difficulty": "Cât de dificil a fost jocul?",
+    "q_awareness": "Cât de mult ți-a crescut conștientizarea privind traficul de persoane?",
+    "q_minigames": "Cât de captivante au fost minijocurile?",
+    "q_recommend": "Cât de probabil e să recomanzi acest joc altora?",
+    "q_navigation": "Cât de ușor a fost să navighezi în joc?"
+  },
+  "notfound": {
+    "button": "Înapoi la pagina principală",
+    "t1": "Ups! Pagina pe care încerci să o accesezi nu există sau a fost mutată.",
+    "t2": "Te rugăm să verifici URL-ul sau să revii la pagina principală."
+  },
+  "dialogues": {
+    "1": {
+      "CharacterName": "",
+      "DialogueText": "Mary stă la birou, lăsată pe scaun, privind cu neliniște cum profesorul returnează testele recente. Clasa freamătă de discuțiile elevilor care își aruncă privirea peste note. Mary zărește nota ei: 43%. Inima i se strânge."
+    },
+    "2": {
+      "CharacterName": "Profesorul",
+      "DialogueText": "Mary, va trebui să vorbim după oră. Este al patrulea scor mic semestrul acesta. Ești capabilă de mai mult."
+    },
+    "3": {
+      "CharacterName": "Mary",
+      "DialogueText": "Da… știu. Am încercat să învăț…?"
+    },
+    "4": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Uau, atât de rău? Nu te stresa, totuși. A fost un test greu."
+    },
+    "5": {
+      "CharacterName": "Mary",
+      "DialogueText": "Nu înțelegi. Mama o să se supere. Eram atât de aproape de data asta…"
+    },
+    "6": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Da, dar, adică, 43? Aproape de ce, mai exact?"
+    },
+    "7": {
+      "CharacterName": "Mary",
+      "DialogueText": "Bine, bine. Doar… nu mai suport încă o lecție."
+    },
+    "8": {
+      "CharacterName": "Sophia",
+      "DialogueText": "Uite, poate de data asta va fi mai indulgentă…? Oricum, mai vii la petrecerea Emmei diseară?"
+    },
+    "9": {
+      "CharacterName": "Mary",
+      "DialogueText": "Nu știu. Probabil nu. Mama e deja supărată din cauza notelor mele."
+    },
+    "10": {
+      "CharacterName": "",
+      "DialogueText": "Mary intră încet în casă, aruncându-și rucsacul lângă ușă. Mama e în bucătărie, pregătind cina. Zâmbește, dar zâmbetul i se stinge când vede fața lui Mary."
+    },
+    "11": {
+      "CharacterName": "Mama",
+      "DialogueText": "Hei, Mary! Cum a fost la școală? Cum ți-a ieșit examenul?"
+    },
+    "12": {
+      "CharacterName": "Mary",
+      "DialogueText": "…Nu prea bine."
+    },
+    "13": {
+      "CharacterName": "Mama",
+      "DialogueText": "Nu prea bine? Mary, este a patra notă proastă semestrul acesta. Ce se întâmplă?"
+    },
+    "14": {
+      "CharacterName": "Mary",
+      "DialogueText": "Nu știu, mamă! A fost greu! Am învățat pentru el."
+    },
+    "15": {
+      "CharacterName": "Mama",
+      "DialogueText": "Ai învățat? Mary, dacă ai fi învățat cum trebuie, asta nu s-ar tot întâmpla. Nu poți trece cu improvizații de ultim moment."
+    },
+    "16": {
+      "CharacterName": "Mary",
+      "DialogueText": "Ok, bine, am înțeles. Putem, te rog, să nu mai repetăm asta?"
+    },
+    "17": {
+      "CharacterName": "Mama",
+      "DialogueText": "Trebuie, Mary! În seara asta nu ieși, asta sigur. Nicio petrecere până nu-ți îmbunătățești notele."
+    },
+    "18": {
+      "CharacterName": "Mary",
+      "DialogueText": "Glumești? Îmi doream foarte mult să merg…"
+    },
+    "19": {
+      "CharacterName": "Mama",
+      "DialogueText": "Atunci poate ar fi trebuit să depui mai mult efort la test. Rămâi acasă. Discuția s-a încheiat."
+    },
+    "20": {
+      "CharacterName": "Mary",
+      "DialogueText": "se întoarce, mergând spre cameră Orice…"
+    },
+    "21": {
+      "CharacterName": "",
+      "DialogueText": "Mary trântește ușa dormitorului, se aruncă pe pat și privește tavanul. Se simte prinsă și frustrată, mintea îi vâjâie de gânduri. În cele din urmă își ia laptopul, îl deschide și începe să tasteze."
+    }
+  },
+  "intro": {
+    "skip": "Sari peste introducere"
+  },
+  "timelinePuzzle": {
+    "introTitle": "Cum se joacă",
+    "introText": "Puzzle Cronologic! Fiecare carte arată ceva ce i se întâmplă lui Mary sau Sophiei. Trage cărțile în spațiile goale astfel încât povestea să meargă de la PRIMUL eveniment la ULTIMUL. Când toate sloturile sunt pline, apasă Verifică. Dacă ordinea este corectă, treci la nivelul următor — mult succes!",
+    "correct": "Corect! Trecem la nivelul următor...",
+    "incorrect": "Ordine incorectă. Încearcă din nou!",
+    "title": "Puzzle Cronologic (Nivelul {{level}})",
+    "tapStart": "(Clic în afara ecranului pentru a începe)",
+    "tapContinue": "(Clic în afara ecranului pentru a continua)",
+    "reset": "Resetare",
+    "check": "Verifică",
+    "level1": {
+      "description": "Pune cele trei imagini în ordine ca Mary să evite o petrecere periculoasă.",
+      "step1": "Mary primește online o invitație la o petrecere secretă de la persoane pe care nu le cunoaște.",
+      "step2": "Ea îi arată invitația prietenei și o întreabă dacă ar trebui să meargă.",
+      "step3": "Mama lui Mary explică faptul că petrecerile organizate de străini sunt riscante, așa că decid să nu meargă."
+    },
+    "level2": {
+      "description": "Aranjează cinci pași care arată cum Mary blochează un străin online.",
+      "step1": "Un străin îi scrie lui Mary despre un „contract de modelling”.",
+      "step2": "Îi cer date personale înainte de a semna orice contract.",
+      "step3": "Mary este pe cale să-și dea adresa fără să verifice cine sunt.",
+      "step4": "Mama ei vede conversația și o avertizează să se oprească.",
+      "step5": "Mary îl blochează pe străin și îl raportează la poliție."
+    },
+    "level3": {
+      "description": "Pune în ordine acești șapte pași pentru a opri afișul fals cu job.",
+      "step1": "Sophia observă un afiș ciudat cu joburi pe panoul școlii.",
+      "step2": "Sophia citește afișul cu voce tare și se încruntă.",
+      "step3": "Sophia îi arată afișul lui Mary pentru o a doua opinie.",
+      "step4": "Împreună duc afișul la profesorul lor.",
+      "step5": "Profesorul sună la linia de siguranță pentru verificare.",
+      "step6": "Linia de siguranță confirmă că afișul este o păcăleală.",
+      "step7": "Profesorul dă jos afișul și postează un anunț de avertizare."
+    }
+  },
+  "clickPuzzle": {
+    "introTitle": "Misiune de evadare",
+    "introText": "Mary are nevoie de ajutorul tău pentru a ieși dintr-o situație periculoasă. Ghideaz-o prin trei locații găsind instrumente și rezolvând puzzle-uri.",
+    "howToPlay": "Fă clic pe obiecte pentru a interacționa. Colectează obiecte și combină-le din inventar.",
+    "objective": "Ajut-o pe Mary să evadeze găsind instrumente și rezolvând puzzle-ul fiecărui nivel!",
+    "tapStart": "(Clic în afara ecranului pentru a începe misiunea de evadare)"
+  },
+  "emojiDecoder": {
+    "introTitle": "Decoder de Pericole cu Emoji",
+    "introText": "Mary are nevoie de ajutorul tău pentru a descifra mesaje online periculoase. Învață să recunoști semnalele de alarmă din argoul cu emoji și să te protejezi de traficanți.",
+    "howToPlay": "Citește situația, descifrează secvența de emoji și alege cel mai sigur răspuns. Gândește-te ce ar trebui să facă Mary!",
+    "objective": "Învață să recunoști comportamentul online periculos și să te protejezi de manipulare!",
+    "start": "Începe decodarea",
+    "tapStart": "(Clic în afara ecranului pentru a începe)",
+    "correct": "Corect!",
+    "incorrect": "Incorect!",
+    "next": "Înainte",
+    "finish": "Finalizează",
+    "completed": "Bine jucat!",
+    "completionMessage": "Ai învățat să recunoști comportamentul online periculos și să te protejezi de traficanți. Rămâi în siguranță și ai încredere în instinctele tale!",
+    "continue": "Continuă"
+  }
+}

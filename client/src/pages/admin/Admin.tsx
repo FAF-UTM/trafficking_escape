@@ -1,252 +1,26 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import styles from './admin.module.css';
-interface Session {
-  id: number;
-  name: string;
-}
-
-interface CreatedUser {
-  username: string;
-  accessCode?: string;
-  expirationDate: string;
-}
+import { useNavigate } from 'react-router-dom';
 
 const Admin: React.FC = () => {
-  const [sessions, setSessions] = useState<Session[]>([]);
-  const [sessionName, setSessionName] = useState('');
-  const [validityMinutes, setValidityMinutes] = useState(60);
-  const [createdUsers, setCreatedUsers] = useState<CreatedUser[]>([]);
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
-
-  const token = localStorage.getItem('authToken');
-
-  const fetchSessions = useCallback(async () => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND}/api/v1/sessions`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setSessions(data);
-      }
-    } catch (err) {
-      console.error('Failed to load sessions', err);
-    }
-  }, [token]);
-
-  const fetchCreatedUsers = useCallback(async () => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND}/api/v1/users/created`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setCreatedUsers(data);
-      }
-    } catch (err) {
-      console.error('Failed to load created users', err);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    fetchSessions();
-    fetchCreatedUsers();
-  }, [fetchSessions, fetchCreatedUsers]);
-
-  const handleCopy = async (value: string, key: string) => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 1500);
-    } catch (err) {
-      console.error('Copy failed', err);
-    }
-  };
-
-  const createSession = async () => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND}/api/v1/sessions`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ name: sessionName }),
-        }
-      );
-      if (res.ok) {
-        setSessionName('');
-        fetchSessions();
-      }
-    } catch (err) {
-      console.error('Failed to create session', err);
-    }
-  };
-
-  const createEphemeralUser = async () => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND}/api/v1/users/random?validityMinutes=${validityMinutes}`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setCreatedUsers((prev) => [...prev, data]);
-      }
-    } catch (err) {
-      console.error('Failed to create user', err);
-    }
-  };
-
+  const navigate = useNavigate();
   return (
     <div className={styles.admin}>
       <h2>Admin Panel</h2>
-
-      <section className={styles.section}>
-        <h3 className={styles.title_1}>Sessions</h3>
-        <div className={styles.formRow}>
-          <input
-            className={styles.input}
-            type="text"
-            value={sessionName}
-            placeholder="Session name"
-            onChange={(e) => setSessionName(e.target.value)}
-          />
-          <button className={styles.button} onClick={createSession}>
-            Create Session
-          </button>
+      <div className={styles.admin_btns}>
+        <div
+          className={styles.admin_btn}
+          onClick={() => navigate('/admin/sessions')}
+        >
+          Sesions
         </div>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sessions.map((s) => (
-              <tr key={s.id}>
-                <td>
-                  {s.id}
-                  <button
-                    className={styles.copyButton}
-                    onClick={() => handleCopy(String(s.id), `session-${s.id}`)}
-                  >
-                    Copy
-                  </button>
-                  {copiedKey === `session-${s.id}` && (
-                    <span className={styles.copied}>Copied!</span>
-                  )}
-                </td>
-                <td>{s.name}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-
-      <section className={styles.section}>
-        <h3>Create Player Account</h3>
-        <div className={styles.formRow}>
-          <label>Validity (min):</label>
-          <input
-            className={styles.input}
-            style={{ maxWidth: '120px' }}
-            type="number"
-            min={1}
-            value={validityMinutes}
-            onChange={(e) => setValidityMinutes(parseInt(e.target.value))}
-          />
-          <button className={styles.button} onClick={createEphemeralUser}>
-            Create
-          </button>
+        <div
+          className={styles.admin_btn}
+          onClick={() => navigate('/admin/languages')}
+        >
+          Languages
         </div>
-        {createdUsers.length > 0 && (
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Access Code</th>
-                <th>Expires</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[...createdUsers]
-                .sort(
-                  (a, b) =>
-                    new Date(b.expirationDate).getTime() -
-                    new Date(a.expirationDate).getTime()
-                )
-                .map((u, idx) => (
-                  <tr key={u.username}>
-                    <td>
-                      {u.username}
-                      <button
-                        className={styles.copyButton}
-                        onClick={() =>
-                          handleCopy(u.username, `user-${idx}-name`)
-                        }
-                      >
-                        Copy
-                      </button>
-                      {copiedKey === `user-${idx}-name` && (
-                        <span className={styles.copied}>Copied!</span>
-                      )}
-                    </td>
-                    <td>
-                      {u.accessCode ?? 'N/A'}
-                      {u.accessCode && (
-                        <>
-                          <button
-                            className={styles.copyButton}
-                            onClick={() =>
-                              handleCopy(u.accessCode!, `user-${idx}-code`)
-                            }
-                          >
-                            Copy
-                          </button>
-                          {copiedKey === `user-${idx}-code` && (
-                            <span className={styles.copied}>Copied!</span>
-                          )}
-                        </>
-                      )}
-                    </td>
-                    <td>
-                      <span
-                        className={
-                          new Date(u.expirationDate) > new Date()
-                            ? styles.date_next
-                            : styles.date_old
-                        }
-                      >
-                        {new Date(u.expirationDate).toLocaleString()}
-                      </span>
-                    </td>
-
-                    {/*<td><span>{new Date(u.expirationDate).toLocaleString()}</span></td>*/}
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        )}
-      </section>
+      </div>
     </div>
   );
 };

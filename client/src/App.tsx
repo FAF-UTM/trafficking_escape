@@ -34,6 +34,7 @@ import WordScrambleWrapper from './game/word_scramble_game/WordScrambleWrapper.t
 import { useTranslation } from 'react-i18next';
 import AdminPage from './pages/admin/Admin.tsx';
 import TraffickerSelection from './pages/final/TraffickerSelection.tsx';
+import AdminSesions from './pages/admin/AdminSesions.tsx';
 
 const imagesArray = [
   '/images/charaters/daughter.png',
@@ -162,6 +163,14 @@ function App() {
               element={
                 <ProtectedRoute roles={['ROLE_ADMIN']}>
                   <AdminPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/sessions"
+              element={
+                <ProtectedRoute roles={['ROLE_ADMIN']}>
+                  <AdminSesions />
                 </ProtectedRoute>
               }
             />
