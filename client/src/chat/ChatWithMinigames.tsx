@@ -2,10 +2,8 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { sendBeaconJson } from '../lib/api';
 import Chat from './Chat.tsx';
 import TimelinePuzzle from '../game/timeline/TimelinePuzzle.tsx';
-import CombinationLock from '../game/combination_lock/CombinationLock.tsx';
 import DangerWordHighlight from '../game/danger_word_highlight/DangerWordHighlight.tsx';
 import EmojiStoryDecoder from '../game/emoji_story_decoder/EmojiStoryDecoder.tsx';
-import SafetyChecklistBuilder from '../game/safety_checklist_builder/SafetyChecklistBuilder.tsx';
 import TrueFalseFlashCards from '../game/true_false_flash_cards/TrueFalseFlashCards.tsx';
 import WhoToTrustGame from '../game/who_to_trust_game/WhoToTrustGame.tsx';
 import WordChoiceGame from '../game/word_choice_game/WordChoiceGame.tsx';
@@ -19,10 +17,8 @@ import ClickPlayGame from '../game/click-play/ClickPlayGame.tsx';
 const games = [
   TimelinePuzzle,
   ClickPlayGame,
-  CombinationLock,
   DangerWordHighlight,
   EmojiStoryDecoder,
-  SafetyChecklistBuilder,
   TrueFalseFlashCards,
   WhoToTrustGame,
   WordChoiceGame,
@@ -37,7 +33,6 @@ const ChatWithMinigames: React.FC = () => {
   const [showGame, setShowGame] = useState(false);
   const [transitionClass, setTransitionClass] = useState<string>('');
   const gameStartRef = useRef<number | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [intervalMinutes] = useState(() => {
     const stored = localStorage.getItem('minigameInterval');
     return stored ? parseFloat(stored) : DEFAULT_INTERVAL;
@@ -71,10 +66,8 @@ const ChatWithMinigames: React.FC = () => {
   const gameNames = [
     'TimelinePuzzle',
     'ClickPuzzle',
-    'CombinationLock',
     'DangerWordHighlight',
     'EmojiStoryDecoder',
-    'SafetyChecklistBuilder',
     'TrueFalseFlashCards',
     'WhoToTrust',
     'WordChoice',

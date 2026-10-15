@@ -22,11 +22,6 @@ const minigames: Minigame[] = [
       'Arrange key events in the correct sequence to progress the story.',
   },
   {
-    name: 'Combination Lock',
-    route: '/combination-lock',
-    description: 'Decode hidden clues to unlock the door and escape.',
-  },
-  {
     name: 'Who to Trust',
     route: '/who-to-trust',
     description:
@@ -46,11 +41,6 @@ const minigames: Minigame[] = [
     name: 'Emoji Story',
     route: '/emoji-story',
     description: 'Decode emoji stories and pick the right meaning.',
-  },
-  {
-    name: 'Checklist Builder',
-    route: '/safety-checklist',
-    description: 'Select smart items to prepare your safety pack.',
   },
   {
     name: 'Danger Words',
