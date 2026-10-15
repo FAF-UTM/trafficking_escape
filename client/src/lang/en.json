@@ -34,6 +34,44 @@
     "home": "Go back",
     "disclaimer": "Your device’s display resolution does not meet the minimum requirements to run the game."
   },
+  "showcase": {
+    "title": "Mini-games",
+    "play": "Play",
+    "games": {
+      "click": {
+        "name": "Click Puzzle",
+        "description": "Hunt the room, use inventory items, and crack the scene."
+      },
+      "timeline": {
+        "name": "Timeline Puzzle",
+        "description": "Line up what happened in the right order before the story moves on."
+      },
+      "emoji": {
+        "name": "Emoji Story",
+        "description": "Decode emoji DMs and call the real meaning — traps included."
+      },
+      "trust": {
+        "name": "Who to Trust",
+        "description": "Compare contact cards and pick who Mary should turn to."
+      },
+      "danger": {
+        "name": "Danger Words",
+        "description": "Flag the risky phrases in a DM without false alarms."
+      },
+      "choice": {
+        "name": "Word Choice",
+        "description": "Finish the line with the word that keeps Mary safer."
+      },
+      "scramble": {
+        "name": "Word Scramble",
+        "description": "Build the safety word, dodge decoys, then choose Mary’s move."
+      },
+      "flash": {
+        "name": "Flash Cards",
+        "description": "Judge messy teen edge cases — myths that sound like strategy."
+      }
+    }
+  },
   "home": {
     "games": "Mini-games",
     "start": "Start the story",

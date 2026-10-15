@@ -34,6 +34,44 @@
     "home": "Ga terug",
     "disclaimer": "De schermresolutie van uw apparaat voldoet niet aan de minimumeisen om het spel te kunnen draaien."
   },
+  "showcase": {
+    "title": "Minigames",
+    "play": "Speel",
+    "games": {
+      "click": {
+        "name": "Klikpuzzel",
+        "description": "Doorzoek de kamer, gebruik spullen en kraak de scène."
+      },
+      "timeline": {
+        "name": "Tijdbalkpuzzel",
+        "description": "Zet gebeurtenissen in de juiste volgorde vóór het verhaal verder gaat."
+      },
+      "emoji": {
+        "name": "Emoji-verhaal",
+        "description": "Ontcijfer emoji-DM’s en benoem de echte betekenis — met vallen."
+      },
+      "trust": {
+        "name": "Wie te Vertrouwen",
+        "description": "Vergelijk contactkaarten en kies naar wie Mary moet gaan."
+      },
+      "danger": {
+        "name": "Gevaarlijke Woorden",
+        "description": "Markeer riskante zinnen in een DM zonder vals alarm."
+      },
+      "choice": {
+        "name": "Woordkeuze",
+        "description": "Maak de zin af met het woord dat Mary veiliger houdt."
+      },
+      "scramble": {
+        "name": "Woordhussel",
+        "description": "Bouw het veiligheidswoord, vermijd lokletters, kies Mary's zet."
+      },
+      "flash": {
+        "name": "Flashcards",
+        "description": "Beoordeel lastige tiener-grenzgevallen — mythes die als strategie klinken."
+      }
+    }
+  },
   "home": {
     "games": "Minigames",
     "start": "Start het verhaal",
