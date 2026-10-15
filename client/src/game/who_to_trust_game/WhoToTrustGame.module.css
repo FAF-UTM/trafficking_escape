@@ -521,18 +521,52 @@
 }
 
 .debriefText {
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-4);
   max-width: 70ch;
   font-size: var(--step-0);
   line-height: 1.55;
 }
 
-.debriefLesson {
+.concept {
   margin: 0 0 var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  border: 2px solid var(--dusk-600);
+  border-radius: var(--radius-m);
+  background: rgb(18 26 48 / 0.75);
+}
+
+.conceptLabel {
+  margin: 0 0 var(--space-2);
+  color: var(--lamp);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.conceptName {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--paper);
+}
+
+.conceptExplain {
+  margin: 0 0 var(--space-3);
   max-width: 70ch;
-  padding: var(--space-3) var(--space-4);
-  border-left: 3px solid var(--lamp);
   color: var(--shell-text-muted);
+  font-size: var(--step-0);
+  line-height: 1.55;
+}
+
+.debriefLesson {
+  margin: 0;
+  max-width: 70ch;
+  padding-top: var(--space-3);
+  border-top: 2px solid var(--dusk-600);
+  color: var(--paper-dim);
   font-size: var(--step--1);
   line-height: 1.5;
 }
@@ -620,6 +654,17 @@
   font-family: var(--font-display);
   font-size: var(--step-0);
   font-weight: 600;
+}
+
+.lessonCase {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--lamp);
+  font-size: var(--step--1);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .lessonNum {

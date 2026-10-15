@@ -227,8 +227,9 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
               <li key={c.id} style={{ '--i': i } as React.CSSProperties}>
                 <span className={styles.lessonNum}>{i + 1}</span>
                 <span>
-                  <strong>{c.title}</strong>
-                  {c.lesson}
+                  <strong>{c.concept}</strong>
+                  <em className={styles.lessonCase}>{c.title}</em>
+                  {c.conceptExplain}
                 </span>
               </li>
             ))}
@@ -360,7 +361,17 @@ const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
               })}
             </p>
             <p className={styles.debriefText}>{picked.feedback}</p>
-            <p className={styles.debriefLesson}>{current.lesson}</p>
+            <aside
+              className={styles.concept}
+              aria-label={t('whoToTrust.conceptLabel')}
+            >
+              <p className={styles.conceptLabel}>
+                {t('whoToTrust.conceptLabel')}
+              </p>
+              <p className={styles.conceptName}>{current.concept}</p>
+              <p className={styles.conceptExplain}>{current.conceptExplain}</p>
+              <p className={styles.debriefLesson}>{current.lesson}</p>
+            </aside>
             <button type="button" className="shell-button" onClick={next}>
               {index >= run.length - 1
                 ? t('whoToTrust.seeResults')
