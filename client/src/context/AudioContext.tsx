@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useMemo, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  ReactNode,
+} from 'react';
 
 import s1 from '../components/sounds/1.wav';
 import s2 from '../components/sounds/2.wav';
@@ -37,7 +43,17 @@ const soundMap: Record<number, string> = {
   9: s9,
 };
 
+const readMuted = () => {
+  try {
+    return localStorage.getItem('audioMuted') === '1';
+  } catch {
+    return false;
+  }
+};
+
 interface AudioAPI {
+  muted: boolean;
+  setMuted: (muted: boolean) => void;
   playClick: (n?: number) => void;
   playMusic: () => void;
   stopMusic: () => void;
@@ -49,6 +65,7 @@ const AudioCtx = createContext<AudioAPI | null>(null);
 export const AudioProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const [muted, setMutedState] = useState(readMuted);
   const clickAudio = useMemo(() => new Audio(), []);
   const bgmAudio = useMemo(() => {
     const a = new Audio(defaultBgm);
@@ -57,12 +74,26 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({
     return a;
   }, []);
 
+  const setMuted = (next: boolean) => {
+    setMutedState(next);
+    try {
+      localStorage.setItem('audioMuted', next ? '1' : '0');
+    } catch {
+      /* ignore */
+    }
+    if (next) {
+      bgmAudio.pause();
+    }
+  };
+
   const playClick = (n: number = 7) => {
+    if (muted) return;
     clickAudio.src = soundMap[n] || soundMap[7];
     clickAudio.play().catch(() => {});
   };
 
   const playMusic = () => {
+    if (muted) return;
     bgmAudio.play().catch(() => {});
   };
 
@@ -76,11 +107,15 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({
     bgmAudio.pause();
     bgmAudio.src = newSrc;
     bgmAudio.load();
-    bgmAudio.play().catch(() => {});
+    if (!muted) {
+      bgmAudio.play().catch(() => {});
+    }
   };
 
   return (
-    <AudioCtx.Provider value={{ playClick, playMusic, stopMusic, changeMusic }}>
+    <AudioCtx.Provider
+      value={{ muted, setMuted, playClick, playMusic, stopMusic, changeMusic }}
+    >
       {children}
     </AudioCtx.Provider>
   );

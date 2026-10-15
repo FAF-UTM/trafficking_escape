@@ -34,6 +34,15 @@
     "home": "Ga terug",
     "disclaimer": "De schermresolutie van uw apparaat voldoet niet aan de minimumeisen om het spel te kunnen draaien."
   },
+  "minigameChrome": {
+    "exit": "Stoppen",
+    "settings": "Instellingen",
+    "sound": "Geluid",
+    "soundOn": "Geluid aan",
+    "soundOff": "Geluid uit",
+    "language": "Taal",
+    "home": "Home"
+  },
   "showcase": {
     "title": "Minigames",
     "play": "Speel",

@@ -34,6 +34,15 @@
     "home": "Go back",
     "disclaimer": "Your device’s display resolution does not meet the minimum requirements to run the game."
   },
+  "minigameChrome": {
+    "exit": "Exit",
+    "settings": "Settings",
+    "sound": "Sound",
+    "soundOn": "Sound on",
+    "soundOff": "Sound muted",
+    "language": "Language",
+    "home": "Home"
+  },
   "showcase": {
     "title": "Mini-games",
     "play": "Play",

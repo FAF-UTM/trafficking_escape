@@ -13,6 +13,7 @@ import transition from './ScreenTransition.module.css';
 import { useAudio } from '../context/AudioContext';
 import '../index.css';
 import ClickPlayGame from '../game/click-play/ClickPlayGame.tsx';
+import MinigameChrome from '../components/shell/MinigameChrome';
 
 const games = [
   TimelinePuzzle,
@@ -74,7 +75,7 @@ const ChatWithMinigames: React.FC = () => {
     'WordScramble',
   ];
 
-  const handleComplete = () => {
+  const leaveGame = (advance: boolean) => {
     playClick(9);
     setTransitionClass(transition.close);
     setTimeout(() => {
@@ -85,11 +86,16 @@ const ChatWithMinigames: React.FC = () => {
         gameStartRef.current = null;
       }
       setShowGame(false);
-      setCurrentGame((prev) => (prev + 1) % games.length);
+      if (advance) {
+        setCurrentGame((prev) => (prev + 1) % games.length);
+      }
       setTransitionClass(transition.open);
       setTimeout(() => setTransitionClass(''), 600);
     }, 600);
   };
+
+  const handleComplete = () => leaveGame(true);
+  const handleExit = () => leaveGame(false);
 
   const GameComponent = useMemo(() => games[currentGame], [currentGame]);
 
@@ -99,7 +105,11 @@ const ChatWithMinigames: React.FC = () => {
         <div className={`${transition.screen} ${transitionClass}`}></div>
       )}
       {!showGame && <Chat />}
-      {showGame && <GameComponent onComplete={handleComplete} />}
+      {showGame && (
+        <MinigameChrome onExit={handleExit}>
+          <GameComponent onComplete={handleComplete} />
+        </MinigameChrome>
+      )}
     </div>
   );
 };
