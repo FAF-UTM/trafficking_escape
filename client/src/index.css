@@ -149,7 +149,7 @@
   overflow: hidden;
 }
 :root {
-  font-family: Roboto, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
 
@@ -165,6 +165,7 @@
 
 body {
   margin: 0;
+  background-color: var(--dusk-900);
   display: flex;
   place-items: center;
   min-width: 320px;

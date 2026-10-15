@@ -1,0 +1,163 @@
+/*
+ * Design tokens for the game shell (home, login, settings, teacher pages, reply tray).
+ * Colours are sampled from the pixel-art backgrounds: dusk navy walls, the desk lamp's
+ * amber glow, the coral of the shirt and wall, and the cyan of the monitor sky.
+ * The messenger itself keeps its own neutral look so it feels like a real app.
+ */
+:root {
+  /* Palette */
+  --dusk-900: #121a30;
+  --dusk-800: #1b2440;
+  --dusk-700: #26325a;
+  --dusk-600: #36457a;
+  --dusk-300: #8f9cc8;
+  --lamp: #ffb547;
+  --lamp-strong: #ffc76f;
+  --coral: #f2705b;
+  --coral-soft: #ffd9cf;
+  --screen: #5ec4e8;
+  --leaf: #4fb286;
+  --paper: #fff4e8;
+  --paper-dim: #d9cfc6;
+
+  /* Semantic roles */
+  --shell-bg: var(--dusk-800);
+  --shell-panel: rgb(18 26 48 / 0.86);
+  --shell-panel-solid: var(--dusk-900);
+  --shell-line: rgb(143 156 200 / 0.35);
+  --shell-text: var(--paper);
+  --shell-text-muted: #b9bfd8;
+  --action: var(--lamp);
+  --action-hover: var(--lamp-strong);
+  --action-text: var(--dusk-900);
+  --risk: var(--coral);
+  --safe: var(--leaf);
+  --focus: var(--screen);
+
+  /* Type: Pixelify Sans carries the game's voice; Atkinson Hyperlegible keeps text readable. */
+  --font-display: 'Pixelify Sans', 'Press Start 2P', system-ui, sans-serif;
+  --font-body:
+    'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-pixel-legacy: 'Press Start 2P', 'Courier New', monospace;
+
+  /* Scale: 1.25 ratio from an 18px base (larger than usual for young readers). */
+  --step--1: 0.9rem;
+  --step-0: 1.125rem;
+  --step-1: 1.406rem;
+  --step-2: 1.758rem;
+  --step-3: 2.197rem;
+  --step-4: 2.747rem;
+  --step-5: clamp(2.6rem, 6vw, 4.3rem);
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* Pixel-art corners: small radius, stepped "pixel" shadow instead of a soft blur. */
+  --radius-s: 4px;
+  --radius-m: 8px;
+  --pixel-shadow: 4px 4px 0 0 var(--dusk-900);
+  --pixel-shadow-pressed: 1px 1px 0 0 var(--dusk-900);
+}
+
+/* Shared shell primitives, used by pages through plain class names. */
+.shell-button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 52px;
+  margin: 0;
+  padding: 0 var(--space-5);
+  border: 2px solid var(--dusk-900);
+  border-radius: var(--radius-s);
+  background: var(--action);
+  color: var(--action-text);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: var(--pixel-shadow);
+  transition:
+    transform 80ms ease-out,
+    box-shadow 80ms ease-out,
+    background-color 120ms;
+}
+.shell-button:hover {
+  background: var(--action-hover);
+}
+.shell-button:active {
+  transform: translate(3px, 3px);
+  box-shadow: var(--pixel-shadow-pressed);
+}
+.shell-button:disabled,
+.shell-button[aria-disabled='true'] {
+  background: var(--dusk-700);
+  color: var(--shell-text-muted);
+  border-color: var(--dusk-900);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--pixel-shadow);
+}
+.shell-button--quiet {
+  background: transparent;
+  color: var(--shell-text);
+  border-color: var(--shell-line);
+  box-shadow: none;
+}
+.shell-button--quiet:hover {
+  background: rgb(255 244 232 / 0.08);
+}
+.shell-button--quiet:active {
+  transform: none;
+  box-shadow: none;
+}
+
+.shell-link {
+  color: var(--shell-text);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  text-decoration: underline;
+  text-decoration-color: var(--shell-line);
+  text-underline-offset: 4px;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.shell-link:hover {
+  text-decoration-color: currentColor;
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

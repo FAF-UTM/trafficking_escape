@@ -1,87 +1,70 @@
 package org.example.backend.services;
 
-import org.example.backend.dto.MessageDTO;
-import org.example.backend.model.Chat;
+import lombok.RequiredArgsConstructor;
+import org.example.backend.dto.MessageRequest;
+import org.example.backend.dto.MessageResponse;
+import org.example.backend.dto.MessageUpdateRequest;
+import org.example.backend.exceptions.NotFoundException;
 import org.example.backend.model.Message;
-import org.example.backend.converters.MessageConverter;
-import org.example.backend.repos.ChatRepository;
 import org.example.backend.repos.MessageRepository;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MessageService {
 
     private final MessageRepository messageRepository;
-    private final MessageConverter messageConverter;
-    private final ChatRepository chatRepository;
+    private final ChatService chatService;
 
-    public MessageService(MessageRepository messageRepository,
-                          MessageConverter messageConverter,
-                          ChatRepository chatRepository) {
-        this.messageRepository = messageRepository;
-        this.messageConverter = messageConverter;
-        this.chatRepository = chatRepository;
+    @Transactional
+    public MessageResponse createMessage(MessageRequest request, Long currentUserId) {
+        chatService.getOwnedChat(request.chatId(), currentUserId);
+
+        Message message = new Message();
+        message.setChatId(request.chatId());
+        message.setIsOutgoing(request.isOutgoing());
+        message.setMessageText(request.messageText());
+        message.setDangerLevel(request.dangerLevel());
+        return MessageResponse.from(messageRepository.save(message));
     }
 
-    public MessageDTO createMessage(MessageDTO messageDTO, Long currentUserId) {
-        Message message = messageConverter.toEntity(messageDTO);
-        // Retrieve the Chat entity based on chatId
-        Chat chat = chatRepository.findById(message.getChatId())
-                .orElseThrow(() -> new RuntimeException("Chat not found"));
-        if (!chat.getUserId().equals(currentUserId)) {
-            throw new AccessDeniedException("You do not own the chat for this message.");
-        }
-        message = messageRepository.save(message);
-        return messageConverter.toDTO(message);
+    @Transactional
+    public MessageResponse updateMessage(Long id, MessageUpdateRequest request, Long currentUserId) {
+        Message message = getOwnedMessage(id, currentUserId);
+        message.setIsOutgoing(request.isOutgoing());
+        message.setMessageText(request.messageText());
+        return MessageResponse.from(message);
     }
 
-    public MessageDTO updateMessage(Long id, MessageDTO messageDTO, Long currentUserId) {
-        Message existingMessage = messageRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Message not found"));
-        Chat chat = chatRepository.findById(existingMessage.getChatId())
-                .orElseThrow(() -> new RuntimeException("Chat not found"));
-        if (!chat.getUserId().equals(currentUserId)) {
-            throw new AccessDeniedException("You do not own this message.");
-        }
-        // Update allowed fields.
-        existingMessage.setIsOutgoing(messageDTO.getIsOutgoing());
-        existingMessage.setMessageText(messageDTO.getMessageText());
-        messageRepository.save(existingMessage);
-        return messageConverter.toDTO(existingMessage);
+    @Transactional(readOnly = true)
+    public MessageResponse getMessage(Long id, Long currentUserId) {
+        return MessageResponse.from(getOwnedMessage(id, currentUserId));
     }
 
-    public MessageDTO getMessageById(Long id, Long currentUserId) {
-        Message message = messageRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Message not found"));
-        Chat chat = chatRepository.findById(message.getChatId())
-                .orElseThrow(() -> new RuntimeException("Chat not found"));
-        if (!chat.getUserId().equals(currentUserId)) {
-            throw new AccessDeniedException("You do not own this message.");
-        }
-        return messageConverter.toDTO(message);
+    @Transactional(readOnly = true)
+    public List<MessageResponse> getMessagesByChatId(Long chatId, Long currentUserId) {
+        chatService.getOwnedChat(chatId, currentUserId);
+        return messageRepository.findByChatIdOrderBySentAtAscIdAsc(chatId).stream()
+                .map(MessageResponse::from)
+                .toList();
     }
 
-    public List<MessageDTO> getMessagesByChatId(Long chatId, Long currentUserId) {
-        Chat chat = chatRepository.findById(chatId)
-                .orElseThrow(() -> new RuntimeException("Chat not found"));
-        if (!chat.getUserId().equals(currentUserId)) {
-            throw new AccessDeniedException("You do not own these messages.");
-        }
-        List<Message> messages = messageRepository.findByChatId(chatId);
-        return messages.stream().map(messageConverter::toDTO).collect(Collectors.toList());
-    }
-
+    @Transactional
     public void deleteMessage(Long id, Long currentUserId) {
+        messageRepository.delete(getOwnedMessage(id, currentUserId));
+    }
+
+    private Message getOwnedMessage(Long id, Long currentUserId) {
         Message message = messageRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Message not found"));
-        Chat chat = chatRepository.findById(message.getChatId())
-                .orElseThrow(() -> new RuntimeException("Chat not found"));
-        if (!chat.getUserId().equals(currentUserId)) {
-            throw new AccessDeniedException("You do not own this message.");
+                .orElseThrow(() -> new NotFoundException("Message not found"));
+        try {
+            chatService.getOwnedChat(message.getChatId(), currentUserId);
+        } catch (NotFoundException e) {
+            throw new NotFoundException("Message not found");
         }
-        messageRepository.deleteById(id);
+        return message;
     }
 }

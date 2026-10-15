@@ -15,7 +15,6 @@ public class GamePlaySession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // userId removed per requirements (no per-user tracking)
 
     @Column(name = "game_name", nullable = false, length = 100)
     private String gameName;
@@ -27,7 +26,7 @@ public class GamePlaySession {
     private Instant playedAt;
 
     @PrePersist
-    public void prePersist() {
+    void prePersist() {
         if (playedAt == null) playedAt = Instant.now();
     }
 }

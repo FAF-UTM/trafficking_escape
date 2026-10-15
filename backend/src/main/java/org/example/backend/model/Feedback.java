@@ -37,7 +37,7 @@ public class Feedback {
     private Instant createdAt;
 
     @PrePersist
-    public void prePersist() {
+    void prePersist() {
         createdAt = Instant.now();
     }
 }

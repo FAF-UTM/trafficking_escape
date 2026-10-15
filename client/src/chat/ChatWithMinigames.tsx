@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { sendBeaconJson } from '../lib/api';
 import Chat from './Chat.tsx';
 import TimelinePuzzle from '../game/timeline/TimelinePuzzle.tsx';
 import CombinationLock from '../game/combination_lock/CombinationLock.tsx';
@@ -60,25 +61,11 @@ const ChatWithMinigames: React.FC = () => {
   }, [currentGame, intervalMinutes, playClick, changeMusic]);
 
   const postSession = (name: string, seconds: number) => {
-    const base =
-      import.meta.env.VITE_BACKEND ||
-      `${window.location.protocol}//${window.location.hostname}:8080`;
-    const url = `${base}/api/v1/gameplay`;
     const payload = {
       gameName: name,
       totalSeconds: Math.max(0, Math.round(seconds)),
     };
-    const blob = new Blob([JSON.stringify(payload)], {
-      type: 'application/json',
-    });
-    if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        keepalive: true,
-      }).catch(() => {});
-    }
+    sendBeaconJson('/api/v1/gameplay', payload);
   };
 
   const gameNames = [

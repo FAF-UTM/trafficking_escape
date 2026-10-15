@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.util.List;
 
 @Entity
 @Getter
@@ -17,23 +16,17 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Each chat is owned by a user.
+    /** Owner of the chat. Messages are removed by the ON DELETE CASCADE foreign key. */
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
-
-    // URL or path to the chat image.
     @Column(name = "chat_image_url")
     private String chatImageUrl;
 
-    // Name or title of the chat.
     @Column(name = "chat_name", nullable = false)
     private String chatName;
 
-    // Flag indicating if the chat is associated with trafficking.
+    /** Whether the simulated contact in this chat is a trafficker. */
     @Column(name = "is_trafficker", nullable = false)
     private Boolean isTrafficker = false;
 
@@ -43,16 +36,13 @@ public class Chat {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    // A chat can contain many messages.
-//    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Message> messages;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "chat_id", referencedColumnName = "id")
-    private List<Message> messages;
-
     @PrePersist
-    public void prePersist() {
+    void prePersist() {
         createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    void preUpdate() {
+        updatedAt = Instant.now();
     }
 }

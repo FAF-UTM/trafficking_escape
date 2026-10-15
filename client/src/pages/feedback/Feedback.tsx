@@ -3,6 +3,7 @@ import styles from './feedback.module.css';
 import { useNavigate } from 'react-router-dom';
 import { Rating } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { api } from '../../lib/api';
 
 const Feedback: React.FC = () => {
   const navigate = useNavigate();
@@ -14,25 +15,19 @@ const Feedback: React.FC = () => {
   const [minigames, setMinigames] = useState<number | null>(0);
   const [recommend, setRecommend] = useState<number | null>(0);
   const [navigation, setNavigation] = useState<number | null>(0);
-  const backend_api_feedback = import.meta.env.VITE_BACKEND + '/api/feedback';
 
   const handleSubmit = async () => {
     try {
-      const token = localStorage.getItem('authToken');
-      await fetch(backend_api_feedback, {
+      await api('/api/feedback', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({
+        body: {
           experience,
           difficulty,
           awareness,
           minigames,
           recommend,
           navigation,
-        }),
+        },
       });
     } catch (err) {
       console.error('Error saving feedback:', err);

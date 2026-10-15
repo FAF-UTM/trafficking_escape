@@ -1,0 +1,26 @@
+.switch {
+  display: inline-flex;
+  border: 2px solid var(--shell-line);
+  border-radius: var(--radius-s);
+  background: var(--shell-panel);
+  padding: 2px;
+}
+
+.option {
+  min-width: 44px;
+  min-height: 40px;
+  margin: 0;
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--shell-text-muted);
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  cursor: pointer;
+}
+
+.option[aria-pressed='true'] {
+  background: var(--paper);
+  color: var(--dusk-900);
+}

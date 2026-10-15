@@ -16,19 +16,13 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Each message belongs to a chat.
     @Column(name = "chat_id", nullable = false)
     private Long chatId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "chat_id", nullable = false)
-//    private Chat chat;
-
-    // Indicates if the message is outgoing (sent by the logged-in user).
+    /** True when the player sent the message, false when it came from the simulated contact. */
     @Column(name = "is_outgoing", nullable = false)
     private Boolean isOutgoing;
 
-    // The text content of the message.
     @Column(name = "message_text", nullable = false)
     private String messageText;
 
@@ -39,7 +33,7 @@ public class Message {
     private Instant sentAt;
 
     @PrePersist
-    public void prePersist() {
-        sentAt = Instant.now();
+    void prePersist() {
+        if (sentAt == null) sentAt = Instant.now();
     }
 }

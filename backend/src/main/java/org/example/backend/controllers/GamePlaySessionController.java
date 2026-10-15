@@ -1,31 +1,28 @@
 package org.example.backend.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.model.GamePlaySession;
-import org.example.backend.repos.GamePlaySessionRepository;
+import org.example.backend.dto.GamePlaySessionRequest;
+import org.example.backend.dto.GamePlaySessionResponse;
+import org.example.backend.security.RateLimiter;
+import org.example.backend.services.GamePlaySessionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-
+/** Anonymous play-time statistics; public because the mini-games report without a token. */
 @RestController
 @RequestMapping("/api/v1/gameplay")
 @RequiredArgsConstructor
 public class GamePlaySessionController {
 
-    private final GamePlaySessionRepository repository;
-
-    public record GamePlaySessionRequest(String gameName, Integer totalSeconds, Instant playedAt) { }
+    private final GamePlaySessionService service;
+    private final RateLimiter rateLimiter;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GamePlaySession create(@RequestBody GamePlaySessionRequest body) {
-        GamePlaySession s = new GamePlaySession();
-        s.setGameName(body.gameName());
-        s.setTotalSeconds(body.totalSeconds());
-        s.setPlayedAt(body.playedAt() != null ? body.playedAt() : Instant.now());
-        return repository.save(s);
+    public GamePlaySessionResponse create(@Valid @RequestBody GamePlaySessionRequest request, HttpServletRequest http) {
+        rateLimiter.check(RateLimiter.Limit.GAMEPLAY, http.getRemoteAddr());
+        return service.record(request);
     }
 }
-
-

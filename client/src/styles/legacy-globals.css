@@ -1,0 +1,19 @@
+/*
+ * Global look the mini-games were built against. These rules used to live, unscoped,
+ * in TimelinePuzzle.css and applied to the whole app. They are kept here so untouched
+ * games keep their appearance; :where() gives them zero specificity, so any component
+ * that styles its own buttons (all the shell pages) wins automatically.
+ */
+body {
+  font-family: var(--font-pixel-legacy);
+}
+
+:where(button) {
+  margin: 10px;
+  padding: 12px 20px;
+  cursor: pointer;
+  background: #444;
+  color: #fff;
+  border: 2px solid #aaa;
+  font-family: var(--font-pixel-legacy);
+}

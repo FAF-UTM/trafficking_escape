@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './TraffickerSelection.css';
 import { useTranslation } from 'react-i18next';
+import { api } from '../../lib/api';
 
 interface ChatSummary {
   id: number;
@@ -21,16 +22,10 @@ const TraffickerSelection: React.FC = () => {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const token = localStorage.getItem('authToken');
-        const res = await fetch(
-          `${import.meta.env.VITE_BACKEND}/api/chats/user/${userId}`,
-          {
-            headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-          }
-        );
-        if (!res.ok) return;
-        const data = await res.json();
-        const list: ChatSummary[] = data.map((c: any) => ({
+        const data = await api<
+          { id: number; chatName: string; isTrafficker: boolean }[]
+        >(`/api/chats/user/${userId}`);
+        const list: ChatSummary[] = data.map((c) => ({
           id: c.id,
           name: c.chatName,
           isTrafficker: !!c.isTrafficker,

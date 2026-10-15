@@ -1,53 +1,29 @@
 package org.example.backend.security;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Collection;
+import lombok.Getter;
+import org.example.backend.model.Role;
+import org.springframework.security.core.AuthenticatedPrincipal;
 
-public class PlatformUserDetails implements UserDetails {
+/** The authenticated user, built from the claims of a verified JWT. */
+@Getter
+public class PlatformUserDetails implements AuthenticatedPrincipal {
 
     private final Long id;
     private final String username;
-    private final String password;
-    private final Collection<? extends GrantedAuthority> authorities;
+    private final Role role;
 
-    public PlatformUserDetails(Long id, String username, String password,
-                               Collection<? extends GrantedAuthority> authorities) {
+    public PlatformUserDetails(Long id, String username, Role role) {
         this.id = id;
         this.username = username;
-        this.password = password;
-        this.authorities = authorities;
+        this.role = role;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+    public boolean isAdmin() {
+        return role == Role.ROLE_ADMIN;
     }
 
     @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
+    public String getName() {
         return username;
     }
-
-    // For simplicity, all accounts are assumed active.
-    @Override
-    public boolean isAccountNonExpired() { return true; }
-
-    @Override
-    public boolean isAccountNonLocked() { return true; }
-
-    @Override
-    public boolean isCredentialsNonExpired() { return true; }
-
-    @Override
-    public boolean isEnabled() { return true; }
 }

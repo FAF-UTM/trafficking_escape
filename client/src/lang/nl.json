@@ -1,14 +1,21 @@
 {
   "lang": "nl",
   "chat": {
-    "conversations": "Gesprekken",
-    "serach_in_mess": "Zoeken in Messenger",
-    "chat_info": "Chatinformatie",
-    "help": "Hulp",
-    "report": "Melden",
-    "chat_settings": "Settings",
-    "hint": "Vraag een hint",
-    "ending": "Forceer beëindiging van het spel"
+    "title": "Berichten",
+    "finish": "Klaar met chatten",
+    "menu": "Menu",
+    "contacts": "Chats",
+    "loading": "Chats laden…",
+    "noMessages": "Nog geen berichten",
+    "newRequest": "Wil met je chatten",
+    "unread": "Nieuw bericht",
+    "arrived": "{{name}} heeft je een bericht gestuurd",
+    "open": "Chat openen",
+    "dismiss": "Sluiten",
+    "neverMet": "Je hebt {{name}} nog nooit in het echt ontmoet. Alles wat je over deze persoon weet, komt uit deze chat.",
+    "empty": "Kies een chat om te beginnen.",
+    "back": "Terug naar chats",
+    "typing": "{{name}} is aan het typen"
   },
   "finalSelect": {
     "title": "Bedankt voor het spelen!",
@@ -28,9 +35,16 @@
     "disclaimer": "De schermresolutie van uw apparaat voldoet niet aan de minimumeisen om het spel te kunnen draaien."
   },
   "home": {
-    "games": "Mini-spellen",
-    "start": "Spel starten",
-    "settings": "Instellingen"
+    "games": "Minigames",
+    "start": "Start het verhaal",
+    "settings": "Instellingen",
+    "continue": "Verder chatten",
+    "signIn": "Ik heb een code",
+    "tagline": "Een chatgame over herkennen wie je online kunt vertrouwen.",
+    "signedInAs": "Ingelogd als {{name}}",
+    "signOut": "Uitloggen",
+    "teacher": "Docentenpagina",
+    "language": "Taal"
   },
   "settings": {
     "settings": "Instellingen",
@@ -44,7 +58,17 @@
       "documentation": "Documentatie",
       "development": "Ontwikkeling",
       "legal": "Juridisch"
-    }
+    },
+    "colourVision": "Kleurenzien",
+    "colourHelp": "Past de kleuren van de game aan als je sommige kleuren moeilijk uit elkaar houdt.",
+    "cvNone": "Standaardkleuren",
+    "cvDeuteranopia": "Rood-groen (deuteranopie)",
+    "cvProtanopia": "Rood-groen (protanopie)",
+    "cvTritanopia": "Blauw-geel (tritanopie)",
+    "cvAchromatopsia": "Geen kleur (achromatopsie)",
+    "breaks": "Minigame-pauzes",
+    "breaksHelp": "Na {{value}} minuten chatten verschijnt er een minigame.",
+    "more": "Meer"
   },
   "ending": {
     "title": "Spel beëindigd",
@@ -169,14 +193,12 @@
     "tapContinue": "(Klik buiten om door te gaan)",
     "reset": "Reset",
     "check": "Controleer",
-
     "level1": {
       "description": "Zet de drie plaatjes op volgorde zodat Mary wegblijft van een gevaarlijk feestje.",
       "step1": "Mary krijgt online een uitnodiging voor een geheim feest van onbekenden.",
       "step2": "Ze laat de uitnodiging aan haar vriendin zien en vraagt of ze samen zullen gaan.",
       "step3": "Mary’s moeder legt uit dat een feest van onbekenden riskant is, dus ze besluiten niet te gaan."
     },
-
     "level2": {
       "description": "Rangschik vijf stappen die laten zien hoe Mary een online vreemdeling blokkeert.",
       "step1": "Een vreemdeling stuurt Mary een bericht met een ‘modelcontract’.",
@@ -185,7 +207,6 @@
       "step4": "Haar moeder ziet de chat en waarschuwt haar om te stoppen.",
       "step5": "Mary blokkeert de vreemdeling en meldt het bij de politie."
     },
-
     "level3": {
       "description": "Zet deze zeven stappen op volgorde om de nep‑vacature te stoppen.",
       "step1": "Sophia ziet een vreemd banenbriefje op het schoolbord.",
@@ -218,5 +239,67 @@
     "completed": "Goed Gedaan!",
     "completionMessage": "Je hebt geleerd gevaarlijk online gedrag te herkennen en jezelf te beschermen tegen mensenhandelaars. Blijf veilig en vertrouw op je instincten!",
     "continue": "Doorgaan"
+  },
+  "login": {
+    "title": "Vul je code in",
+    "codeHelp": "Je docent heeft je een code gegeven met 6 letters en cijfers.",
+    "codeLabel": "Teken {{n}} van 6",
+    "submitCode": "Begin met spelen",
+    "checking": "Controleren…",
+    "teacherLink": "Docent? Log in met een wachtwoord",
+    "playerLink": "Speler? Gebruik je code",
+    "teacherTitle": "Inloggen voor docenten",
+    "username": "Gebruikersnaam",
+    "password": "Wachtwoord",
+    "submitPassword": "Inloggen",
+    "codeInvalid": "Deze code werkt niet. Controleer elk teken, of vraag je docent om een nieuwe code.",
+    "credentialsInvalid": "Verkeerde gebruikersnaam of wachtwoord.",
+    "tooMany": "Te veel pogingen. Wacht {{seconds}} seconden en probeer het opnieuw.",
+    "network": "De gameserver is niet bereikbaar. Controleer je internetverbinding en probeer het opnieuw.",
+    "generic": "Er ging iets mis. Probeer het opnieuw.",
+    "signedOut": "Je sessie is afgelopen. Log opnieuw in om verder te spelen."
+  },
+  "chatReply": {
+    "title": "Wat stuur je terug?",
+    "hint": "Kies een antwoord, of druk op 1, 2 of 3.",
+    "loading": "Antwoorden bedenken…",
+    "error": "De antwoorden zijn niet geladen.",
+    "retry": "Opnieuw proberen",
+    "unavailable": "De chat neemt even pauze. Probeer het zo opnieuw.",
+    "busy": "Even rustig aan. Probeer het over {{seconds}} seconden opnieuw.",
+    "typing": "{{name}} is aan het typen",
+    "draft": "Antwoord {{n}}",
+    "hintTouch": "Tik op een antwoord om het te versturen."
+  },
+  "admin": {
+    "title": "Klascodes",
+    "intro": "Maak voor elke leerling een code. Leerlingen typen die op de inlogpagina. Een code werkt één keer en stopt na de tijd die je kiest.",
+    "howMany": "Aantal leerlingen",
+    "validFor": "Codes werken",
+    "preset45": "45 minuten",
+    "preset60": "1 uur",
+    "preset120": "2 uur",
+    "preset1440": "1 dag",
+    "create_one": "Maak 1 code",
+    "create_other": "Maak {{count}} codes",
+    "creating": "Codes maken…",
+    "newCodes": "Nieuwe codes",
+    "newCodesHelp": "Codes worden maar één keer getoond. Kopieer of print ze nu.",
+    "copyAll": "Alles kopiëren",
+    "copied": "Gekopieerd",
+    "print": "Printen",
+    "copy": "Kopiëren",
+    "code": "Code",
+    "player": "Speler",
+    "expires": "Eindigt",
+    "status": "Status",
+    "yourPlayers": "Spelers die jij hebt gemaakt",
+    "empty": "Nog geen spelers. Maak hierboven codes om je klas te laten beginnen.",
+    "active": "Actief",
+    "expired": "Afgelopen",
+    "createFailed": "Er zijn maar {{created}} van de {{total}} codes gemaakt. Probeer het opnieuw voor de rest.",
+    "loadFailed": "Je spelers konden niet worden geladen. Herlaad de pagina om het opnieuw te proberen.",
+    "signOut": "Uitloggen",
+    "home": "Home"
   }
 }

@@ -1,194 +1,161 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Container,
-  CssBaseline,
-} from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../../theme/theme'; // Import the updated theme
-import { useAuth } from '../../context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useId, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import styles from './login.module.css';
-import { t } from 'i18next';
-import { jwtDecode } from 'jwt-decode';
+import { useAuth } from '../../context/AuthContext';
+import { describeError } from '../../lib/errors';
+import CodeInput from './CodeInput';
+import LanguageSwitch from '../../components/shell/LanguageSwitch';
+
+type Mode = 'code' | 'password';
 
 const LoginPage: React.FC = () => {
+  const { t } = useTranslation();
   const { login, loginWithAccessCode } = useAuth();
-  const [accessCode, setAccessCode] = useState('');
   const navigate = useNavigate();
-  const [showLogin, setShowLogin] = useState('1');
+  const location = useLocation();
+  const from = (location.state as { from?: string } | null)?.from;
+
+  const [mode, setMode] = useState<Mode>('code');
+  const [code, setCode] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const errorId = useId();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const goAfterLogin = (role: string) => {
+    if (role === 'ROLE_ADMIN') navigate('/admin', { replace: true });
+    else
+      navigate(from && from !== '/admin' ? from : '/chat', { replace: true });
+  };
+
+  const submitCode = async (value: string) => {
+    if (busy || value.length !== 6) return;
+    setBusy(true);
+    setError('');
     try {
-      await login(username, password);
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        const decoded: any = jwtDecode(token);
-        if (decoded.role === 'ROLE_ADMIN') {
-          navigate('/admin');
-        } else {
-          navigate('/chat');
-        }
-      } else {
-        navigate('/chat');
-      }
-    } catch (err) {
-      setError('Invalid username or password');
+      const session = await loginWithAccessCode(value, true);
+      goAfterLogin(session.role);
+    } catch (e) {
+      setError(describeError(e, t, 'login.codeInvalid'));
+      setBusy(false);
     }
   };
 
-  const handleAccessCodeSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
-    event.preventDefault();
+  const submitPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (busy) return;
+    setBusy(true);
+    setError('');
     try {
-      await loginWithAccessCode(accessCode, true);
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        const decoded: any = jwtDecode(token);
-        if (decoded.role === 'ROLE_ADMIN') {
-          navigate('/admin');
-        } else {
-          navigate('/chat');
-        }
-      } else {
-        navigate('/chat');
-      }
+      const session = await login(username.trim(), password);
+      goAfterLogin(session.role);
     } catch (err) {
-      setError('Invalid access code');
+      setError(describeError(err, t, 'login.credentialsInvalid'));
+      setBusy(false);
     }
+  };
+
+  const switchMode = (next: Mode) => {
+    setMode(next);
+    setError('');
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container className={styles.login} component="main" maxWidth="xs">
-        <CssBaseline />
+    <main className={styles.login}>
+      <section className={styles.panel}>
+        <div className={styles.topbar}>
+          <Link to="/" className="shell-link">
+            {t('general.home')}
+          </Link>
+          <LanguageSwitch />
+        </div>
 
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            Trafficking Escape
-          </Typography>
-          {showLogin === '1' && (
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
+        <div className={styles.content}>
+          {mode === 'code' ? (
+            <form
+              className={styles.form}
+              onSubmit={(e) => {
+                e.preventDefault();
+                submitCode(code);
+              }}
               noValidate
-              autoComplete="off"
             >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                variant="outlined"
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                autoFocus
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+              <h1 className={styles.title}>{t('login.title')}</h1>
+              <p className={styles.help}>{t('login.codeHelp')}</p>
+              <CodeInput
+                value={code}
+                onChange={(v) => {
+                  setCode(v);
+                  if (error) setError('');
+                }}
+                onComplete={submitCode}
+                disabled={busy}
+                invalid={!!error}
+                describedBy={error ? errorId : undefined}
               />
-
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-
-              <Button
+              <button
                 type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{ mt: 3, mb: 2 }}
+                className="shell-button"
+                disabled={busy || code.length !== 6}
               >
-                Sign In
-              </Button>
-            </Box>
-          )}
-          {showLogin === '2' && (
-            <Box
-              component="form"
-              onSubmit={handleAccessCodeSubmit}
-              sx={{ mt: 2 }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="accessCode"
-                label="Access Code"
-                value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value)}
-              />
-              <Button
+                {busy ? t('login.checking') : t('login.submitCode')}
+              </button>
+            </form>
+          ) : (
+            <form className={styles.form} onSubmit={submitPassword} noValidate>
+              <h1 className={styles.title}>{t('login.teacherTitle')}</h1>
+              <label className={styles.field}>
+                <span>{t('login.username')}</span>
+                <input
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  autoComplete="username"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  required
+                  aria-invalid={!!error || undefined}
+                  aria-describedby={error ? errorId : undefined}
+                />
+              </label>
+              <label className={styles.field}>
+                <span>{t('login.password')}</span>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  required
+                  aria-invalid={!!error || undefined}
+                  aria-describedby={error ? errorId : undefined}
+                />
+              </label>
+              <button
                 type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{ mt: 3, mb: 2 }}
+                className="shell-button"
+                disabled={busy || !username || !password}
               >
-                Use Access Code
-              </Button>
-            </Box>
+                {busy ? t('login.checking') : t('login.submitPassword')}
+              </button>
+            </form>
           )}
-          {error && <Typography color="error">{error}</Typography>}
-          <div className={styles.or_ter}>or</div>
-          {showLogin === '1' && (
-            <div className={styles.code_btn} onClick={() => setShowLogin('2')}>
-              Login with access code
-            </div>
-          )}
-          {showLogin === '2' && (
-            <div className={styles.code_btn} onClick={() => setShowLogin('1')}>
-              Login with credentials
-            </div>
-          )}
-        </Box>
-      </Container>
-      <div className={styles.login_image}></div>
-      <Link to={'/'} className={styles.back_home}>
-        <svg
-          fill="none"
-          height="10"
-          viewBox="0 0 14 10"
-          width="14"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            d="M0.25066 4.99997C0.25066 4.80106 0.329678 4.61029 0.47033 4.46964C0.610983 4.32899 0.801748 4.24997 1.00066 4.24997L11.1907 4.24997L8.47066 1.52997C8.33818 1.38779 8.26606 1.19975 8.26948 1.00545C8.27291 0.811145 8.35162 0.62576 8.48904 0.488347C8.62645 0.350934 8.81184 0.272222 9.00614 0.268794C9.20044 0.265365 9.38849 0.337489 9.53066 0.469969L13.5307 4.46997C13.6711 4.61059 13.75 4.80122 13.75 4.99997C13.75 5.19872 13.6711 5.38934 13.5307 5.52997L9.53066 9.52997C9.38849 9.66245 9.20044 9.73457 9.00614 9.73114C8.81184 9.72772 8.62645 9.649 8.48904 9.51159C8.35162 9.37418 8.27291 9.18879 8.26948 8.99449C8.26606 8.80019 8.33818 8.61214 8.47066 8.46997L11.1907 5.74997L1.00066 5.74997C0.801748 5.74997 0.610983 5.67095 0.47033 5.5303C0.329678 5.38965 0.25066 5.19888 0.25066 4.99997Z"
-            fill="#212A55"
-            fill-rule="evenodd"
-          ></path>
-        </svg>
-        {t('general.home')}
-      </Link>
-    </ThemeProvider>
+
+          <p id={errorId} className={styles.error} role="alert">
+            {error}
+          </p>
+
+          <button
+            type="button"
+            className="shell-link"
+            onClick={() => switchMode(mode === 'code' ? 'password' : 'code')}
+          >
+            {mode === 'code' ? t('login.teacherLink') : t('login.playerLink')}
+          </button>
+        </div>
+      </section>
+      <div className={styles.art} aria-hidden="true" />
+    </main>
   );
 };
 

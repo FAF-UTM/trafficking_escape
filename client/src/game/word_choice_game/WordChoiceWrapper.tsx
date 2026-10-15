@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { sendBeaconJson } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
 import WordChoiceGame from './WordChoiceGame.tsx';
 
@@ -7,22 +8,8 @@ const WordChoiceWrapper: React.FC = () => {
   const startRef = useRef<number>(Date.now());
 
   const postSession = (totalSeconds: number) => {
-    const base =
-      import.meta.env.VITE_BACKEND ||
-      `${window.location.protocol}//${window.location.hostname}:8080`;
-    const url = `${base}/api/v1/gameplay`;
     const payload = { gameName: 'WordChoice', totalSeconds };
-    const blob = new Blob([JSON.stringify(payload)], {
-      type: 'application/json',
-    });
-    if (!navigator.sendBeacon || !navigator.sendBeacon(url, blob)) {
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        keepalive: true,
-      }).catch(() => {});
-    }
+    sendBeaconJson('/api/v1/gameplay', payload);
   };
 
   useEffect(() => {

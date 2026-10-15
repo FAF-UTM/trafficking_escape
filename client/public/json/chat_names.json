@@ -2,37 +2,121 @@
   {
     "name": "Emma",
     "surname": "Johnson",
-    "gender": "female",
-    "image": "/assets/chat/img_avatar_1.png"
+    "gender": "female"
   },
   {
     "name": "Liam",
     "surname": "Smith",
-    "gender": "male",
-    "image": "/assets/chat/img_avatar_2.png"
+    "gender": "male"
   },
   {
     "name": "Olivia",
     "surname": "Brown",
-    "gender": "female",
-    "image": "/assets/chat/img_avatar_3.png"
+    "gender": "female"
   },
   {
     "name": "Noah",
     "surname": "Davis",
-    "gender": "male",
-    "image": "/assets/chat/img_avatar_4.png"
+    "gender": "male"
   },
   {
     "name": "Ava",
     "surname": "Wilson",
-    "gender": "female",
-    "image": "/assets/chat/img_avatar_5.png"
+    "gender": "female"
   },
   {
-    "name": "Mason",
-    "surname": "Taylor",
-    "gender": "male",
-    "image": "/assets/chat/img_avatar_6.png"
+    "name": "Lucas",
+    "surname": "Miller",
+    "gender": "male"
+  },
+  {
+    "name": "Sophie",
+    "surname": "de Vries",
+    "gender": "female"
+  },
+  {
+    "name": "Daan",
+    "surname": "Jansen",
+    "gender": "male"
+  },
+  {
+    "name": "Mila",
+    "surname": "Bakker",
+    "gender": "female"
+  },
+  {
+    "name": "Sem",
+    "surname": "Visser",
+    "gender": "male"
+  },
+  {
+    "name": "Julia",
+    "surname": "Smit",
+    "gender": "female"
+  },
+  {
+    "name": "Finn",
+    "surname": "Meijer",
+    "gender": "male"
+  },
+  {
+    "name": "Zoë",
+    "surname": "Mulder",
+    "gender": "female"
+  },
+  {
+    "name": "Levi",
+    "surname": "Bos",
+    "gender": "male"
+  },
+  {
+    "name": "Nora",
+    "surname": "Peters",
+    "gender": "female"
+  },
+  {
+    "name": "Milan",
+    "surname": "Hendriks",
+    "gender": "male"
+  },
+  {
+    "name": "Lotte",
+    "surname": "van Dijk",
+    "gender": "female"
+  },
+  {
+    "name": "Jesse",
+    "surname": "Dekker",
+    "gender": "male"
+  },
+  {
+    "name": "Isa",
+    "surname": "Vos",
+    "gender": "female"
+  },
+  {
+    "name": "Thijs",
+    "surname": "Kok",
+    "gender": "male"
+  },
+  {
+    "name": "Yara",
+    "surname": "Willems",
+    "gender": "female"
+  },
+  {
+    "name": "Ryan",
+    "surname": "Brouwer",
+    "gender": "male"
+  },
+  {
+    "name": "Sara",
+    "surname": "Lambert",
+    "gender": "female"
+  },
+  {
+    "name": "Adam",
+    "surname": "Haddad",
+    "gender": "male"
   }
 ]

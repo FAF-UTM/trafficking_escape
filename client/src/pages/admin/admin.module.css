@@ -1,88 +1,334 @@
-.admin {
-  width: 100vw;
-  height: 100vh;
-  background: #fff;
-  color: #2c3e50;
-  margin: 0;
-  padding: 20px;
+.page {
   box-sizing: border-box;
+  width: 100vw;
+  min-height: 100vh;
+  background: var(--dusk-800);
+  color: var(--shell-text);
+  font-family: var(--font-body);
 }
 
-/* Sections */
-.section {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 1rem;
-  background: #fafafa;
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) clamp(var(--space-4), 4vw, var(--space-7));
+  border-bottom: 4px solid var(--dusk-900);
+  background: var(--dusk-900);
 }
 
-/* Form rows */
-.formRow {
+.brand {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+
+.headerNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.who {
+  color: var(--shell-text-muted);
+}
+
+.main {
+  max-width: 64rem;
+  padding: var(--space-6) clamp(var(--space-4), 4vw, var(--space-7))
+    var(--space-7);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step-4);
+  line-height: 1.05;
+}
+
+.intro {
+  max-width: 60ch;
+  margin: var(--space-3) 0 var(--space-6);
+  line-height: 1.55;
+  color: var(--shell-text-muted);
+}
+
+.creator {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  margin-top: 2rem;
-  gap: 5px;
-  margin-bottom: 1rem;
-}
-.button {
-  color: #fff;
-  background: #2c3e50;
-  font-family: 'SF Pro Text';
-  border: none;
-  border-radius: 100px;
-  height: 46px;
-  margin: 0;
-}
-.input {
-  background: #fff;
-  border: 1px solid #2c3e50;
-  font-family: 'SF Pro Text';
-  color: #222;
-  border-radius: 100px;
-  height: 46px;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-.title_1 {
+  align-items: flex-end;
+  gap: var(--space-5) var(--space-6);
+  padding: var(--space-5);
+  border: 2px solid var(--dusk-600);
+  border-radius: var(--radius-m);
+  background: var(--dusk-700);
 }
 
-/* Tables */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-weight: 700;
+}
+
+.field legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+}
+
+.field input[type='number'] {
+  box-sizing: border-box;
+  width: 7rem;
+  min-height: 48px;
+  padding: 0 var(--space-3);
+  border: 2px solid var(--dusk-600);
+  border-radius: var(--radius-s);
+  background: var(--dusk-900);
+  color: var(--paper);
+  font: inherit;
+  font-size: var(--step-1);
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.preset {
+  position: relative;
+}
+
+.preset input {
+  position: absolute;
+  opacity: 0;
+}
+
+.preset span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 2px solid var(--dusk-600);
+  border-radius: var(--radius-s);
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.preset input:checked + span {
+  background: var(--paper);
+  color: var(--dusk-900);
+  border-color: var(--paper);
+  font-weight: 700;
+}
+
+.preset input:focus-visible + span {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.creator > :global(.shell-button) {
+  /* Pixelify's 5 and S look alike; the count must read correctly. */
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+
+.message {
+  margin: var(--space-4) 0 0;
+  color: var(--coral-soft);
+  font-weight: 700;
+}
+
+.message:empty {
+  margin: 0;
+}
+
+.newCodes,
+.players {
+  margin-top: var(--space-7);
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.newCodes h2,
+.players h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step-2);
+}
+
+.sectionHead p {
+  margin: var(--space-2) 0 0;
+  color: var(--lamp);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.slips {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border: 2px dashed var(--dusk-300);
+  border-radius: var(--radius-s);
+  background: var(--dusk-900);
+}
+
+.slipGame,
+.slipUrl {
+  display: none;
+}
+
+.slipCode {
+  align-self: flex-start;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--step-3);
+  letter-spacing: 0.12em;
+  cursor: copy;
+}
+
+.slipMeta {
+  font-size: var(--step--1);
+  color: var(--shell-text-muted);
+}
+
+.empty {
+  color: var(--shell-text-muted);
+}
 
 .table {
   width: 100%;
-  margin-top: 1rem;
+  margin-top: var(--space-4);
   border-collapse: collapse;
-  font-family: 'SF Pro Text';
 }
 
-.table th,
+.table th {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 2px solid var(--dusk-600);
+  text-align: left;
+  font-size: var(--step--1);
+  color: var(--shell-text-muted);
+}
+
 .table td {
-  border: 1px solid #ccc;
-  padding: 0.5rem;
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--shell-line);
 }
 
-/* Copy button */
-
-.copyButton {
-  margin-left: 0.5rem;
-  padding: 0.2rem 0.5rem;
+.table tr[data-ended] td {
+  color: var(--shell-text-muted);
 }
 
-.copied {
-  margin-left: 0.5rem;
-  color: #0a0;
-  font-size: 0.8rem;
+.username {
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
 }
-.date_next {
-  background: #a1ff82;
-  padding: 3px 10px;
-  box-sizing: border-box;
-  border-radius: 100px;
+
+.status {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-s);
+  font-size: var(--step--1);
+  font-weight: 700;
+  background: var(--dusk-700);
+  color: var(--shell-text-muted);
 }
-.date_old {
-  background: #ff8282;
-  padding: 3px 10px;
-  box-sizing: border-box;
-  border-radius: 100px;
+
+.status[data-active='true'] {
+  background: rgb(79 178 134 / 0.2);
+  color: #9fe3c2;
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .creator > :global(.shell-button) {
+    width: 100%;
+  }
+}
+
+/* Printing gives the teacher slips to cut out and hand to students. */
+@media print {
+  .page {
+    background: #fff;
+    color: #000;
+    min-height: 0;
+  }
+
+  .header,
+  .title,
+  .intro,
+  .creator,
+  .message,
+  .sectionHead,
+  .players {
+    display: none !important;
+  }
+
+  .main,
+  .newCodes {
+    margin: 0;
+    padding: 0;
+  }
+
+  .slips {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .slip {
+    break-inside: avoid;
+    padding: 0.8cm 0.6cm;
+    border: 1px dashed #777;
+    border-radius: 0;
+    background: #fff;
+  }
+
+  .slipGame,
+  .slipUrl {
+    display: block;
+    color: #000;
+    font-size: 10pt;
+  }
+
+  .slipCode {
+    color: #000;
+    font-size: 22pt;
+  }
+
+  .slipMeta {
+    display: none;
+  }
 }

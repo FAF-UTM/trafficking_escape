@@ -1,64 +1,111 @@
-#home {
+/* Title screen: the bedroom artwork fills the screen and the menu sits in the
+   shadowed lower-left corner, so the glowing monitor stays visible. */
+.home {
   position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.home_button_container {
-  width: 90%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.72);
-  padding: 40px 60px;
   box-sizing: border-box;
-  border-radius: 30px;
-  box-shadow: 7px 11px 9px 0px rgba(0, 0, 0, 0.25);
-}
-.home_button_row {
-  display: flex;
-  width: 100%;
-  gap: 5px;
-}
-.home_button {
-  width: 100%;
-  font-family: 'Press Start 2P', 'Courier New', monospace !important;
-}
-.login_btn {
-  /*color: #222;*/
-  font-size: 10px;
-  /*width: 100%;*/
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /*width: fit-content!important;*/
-  /*margin: 10px auto -10px;*/
-  background-color: #fff !important;
-  color: #1d4783 !important;
-  /*padding: 6px 26px!important;*/
-  /*padding: 6px 40px!important;*/
-}
-.home_container {
-  background: url('/images/home_bg.png');
-  background-size: cover;
+  width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: var(--space-5) clamp(var(--space-4), 5vw, var(--space-7))
+    clamp(var(--space-5), 7vh, var(--space-7));
+  color: var(--shell-text);
+  font-family: var(--font-body);
+  background:
+    linear-gradient(
+      90deg,
+      rgb(18 26 48 / 0.92) 0%,
+      rgb(18 26 48 / 0.7) 32%,
+      rgb(18 26 48 / 0) 62%
+    ),
+    linear-gradient(0deg, rgb(18 26 48 / 0.75) 0%, rgb(18 26 48 / 0) 45%),
+    url('/images/home_bg.png') center / cover no-repeat,
+    var(--shell-bg);
+  image-rendering: pixelated;
 }
 
-@media (max-width: 550px) {
-  .home_button_row {
-    flex-direction: column;
-    align-items: center;
-  }
-  .login_btn {
-    width: fit-content !important;
-    padding: 6px 26px !important;
-  }
+.topbar {
+  display: flex;
+  justify-content: flex-end;
 }
-@media (max-width: 480px) {
-  .home_button_container {
-    padding: 40px 30px;
+
+.titleBlock {
+  align-self: end;
+  max-width: 34rem;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step-5);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  color: var(--paper);
+  text-shadow: 4px 4px 0 var(--dusk-900);
+}
+
+.tagline {
+  margin: var(--space-4) 0 var(--space-6);
+  max-width: 28ch;
+  font-size: var(--step-1);
+  line-height: 1.4;
+  color: var(--paper);
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.menu > :global(.shell-button) {
+  min-height: 60px;
+  padding: 0 var(--space-6);
+  font-size: var(--step-2);
+}
+
+.secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.secondary > :global(.shell-button) {
+  min-height: 44px;
+  font-size: var(--step-0);
+  background: rgb(18 26 48 / 0.6);
+}
+
+.session {
+  margin: var(--space-5) 0 0;
+  color: var(--shell-text-muted);
+  font-size: var(--step--1);
+}
+
+.session :global(.shell-link) {
+  font-size: inherit;
+  color: var(--paper);
+}
+
+@media (max-width: 640px) {
+  .home {
+    background:
+      linear-gradient(
+        0deg,
+        rgb(18 26 48 / 0.96) 0%,
+        rgb(18 26 48 / 0.85) 45%,
+        rgb(18 26 48 / 0.1) 75%
+      ),
+      url('/images/home_bg.png') 60% center / cover no-repeat,
+      var(--shell-bg);
+  }
+
+  .menu > :global(.shell-button) {
+    align-self: stretch;
   }
 }

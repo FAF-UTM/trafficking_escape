@@ -1,58 +1,53 @@
 package org.example.backend.controllers;
 
-import org.example.backend.dto.ChatDTO;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.example.backend.dto.ChatRequest;
+import org.example.backend.dto.ChatResponse;
 import org.example.backend.security.PlatformUserDetails;
 import org.example.backend.services.ChatService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/chats")
-@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+@RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 public class ChatController {
 
     private final ChatService chatService;
 
-    public ChatController(ChatService chatService) {
-        this.chatService = chatService;
-    }
-
     @PostMapping
-    public ResponseEntity<ChatDTO> createChat(@RequestBody ChatDTO chatDTO,
-                                              @AuthenticationPrincipal PlatformUserDetails principal) {
-        ChatDTO createdChat = chatService.createChat(chatDTO, principal.getId());
-        return ResponseEntity.ok(createdChat);
+    public ChatResponse createChat(@Valid @RequestBody ChatRequest request,
+                                   @AuthenticationPrincipal PlatformUserDetails principal) {
+        return chatService.createChat(request, principal.getId());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ChatDTO> getChat(@PathVariable Long id,
-                                           @AuthenticationPrincipal PlatformUserDetails principal) {
-        ChatDTO chatDTO = chatService.getChatById(id, principal.getId());
-        return ResponseEntity.ok(chatDTO);
+    public ChatResponse getChat(@PathVariable Long id, @AuthenticationPrincipal PlatformUserDetails principal) {
+        return chatService.getChat(id, principal.getId());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ChatDTO> updateChat(@PathVariable Long id,
-                                              @RequestBody ChatDTO chatDTO,
-                                              @AuthenticationPrincipal PlatformUserDetails principal) {
-        ChatDTO updatedChat = chatService.updateChat(id, chatDTO, principal.getId());
-        return ResponseEntity.ok(updatedChat);
+    public ChatResponse updateChat(@PathVariable Long id,
+                                   @Valid @RequestBody ChatRequest request,
+                                   @AuthenticationPrincipal PlatformUserDetails principal) {
+        return chatService.updateChat(id, request, principal.getId());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteChat(@PathVariable Long id,
-                                           @AuthenticationPrincipal PlatformUserDetails principal) {
+    public ResponseEntity<Void> deleteChat(@PathVariable Long id, @AuthenticationPrincipal PlatformUserDetails principal) {
         chatService.deleteChat(id, principal.getId());
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ChatDTO>> getChatsByUser(@PathVariable Long userId,
-                                                        @AuthenticationPrincipal PlatformUserDetails principal) {
-        List<ChatDTO> chats = chatService.getChatsByUserId(userId, principal.getId());
-        return ResponseEntity.ok(chats);
+    public List<ChatResponse> getChatsByUser(@PathVariable Long userId,
+                                             @AuthenticationPrincipal PlatformUserDetails principal) {
+        return chatService.getChatsByUserId(userId, principal.getId());
     }
 }

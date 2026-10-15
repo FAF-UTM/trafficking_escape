@@ -1,148 +1,154 @@
 package org.example.backend.services;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.example.backend.dto.CreatedUserResponse;
+import org.example.backend.dto.RegisterUserRequest;
+import org.example.backend.exceptions.ConflictException;
+import org.example.backend.exceptions.NotFoundException;
+import org.example.backend.model.Role;
 import org.example.backend.model.User;
 import org.example.backend.repos.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Base64;
+import java.util.HexFormat;
 import java.util.List;
-import java.util.Objects;
+import java.util.Locale;
+import java.util.Optional;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class UsersService {
-
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    /* ---------------- Basic CRUD ---------------- */
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    public User create(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
-
-    public void delete(User user) {
-        userRepository.delete(user);
-    }
-
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
-
-    public List<User> findUsersCreatedBy(String createdBy) {
-        return userRepository.findAllByCreatedBy(createdBy);
-    }
-
-    /* ---------------- Random / Ephemeral Users ---------------- */
 
     private static final String ACCESS_CODE_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final int ACCESS_CODE_LENGTH = 6;
-    private static final SecureRandom RNG = new SecureRandom();
+    private static final String USERNAME_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789";
+    private static final int MAX_CODE_ATTEMPTS = 5;
 
-    public CreatedUser createRandomUser(Duration validity, String createdBy) {
-        Objects.requireNonNull(validity, "validity");
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final Clock clock;
+    private final SecureRandom random = new SecureRandom();
+
+    public UsersService(UserRepository userRepository, PasswordEncoder passwordEncoder, Clock clock) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.clock = clock;
+    }
+
+    @Transactional(readOnly = true)
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+    }
+
+    @Transactional(readOnly = true)
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> findUsersCreatedBy(String createdBy) {
+        return userRepository.findAllByCreatedByOrderByExpirationDateDesc(createdBy);
+    }
+
+    @Transactional
+    public User register(RegisterUserRequest request, String createdBy) {
+        if (userRepository.existsByUsername(request.username())) {
+            throw new ConflictException("Username is already taken");
+        }
+        if (userRepository.existsByEmail(request.email())) {
+            throw new ConflictException("Email is already registered");
+        }
+
+        User user = new User();
+        user.setUsername(request.username());
+        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setEmail(request.email());
+        user.setRole(request.role() != null ? request.role() : Role.ROLE_USER);
+        user.setCreatedBy(createdBy);
+        User saved = userRepository.save(user);
+        log.info("User '{}' registered '{}' with role {}", createdBy, saved.getUsername(), saved.getRole());
+        return saved;
+    }
+
+    /** Creates a user who signs in with a short access code until {@code validity} has passed. */
+    @Transactional
+    public CreatedUserResponse createEphemeralUser(Duration validity, String createdBy) {
         if (validity.isZero() || validity.isNegative()) {
             throw new IllegalArgumentException("validity must be positive");
         }
-        return createRandomUser(Instant.now().plus(validity), createdBy);
-    }
+        Instant expirationDate = clock.instant().plus(validity);
+        String accessCode = generateUniqueAccessCode();
+        String username = "user_" + randomString(USERNAME_ALPHABET, 10);
 
-    public CreatedUser createRandomUser(Instant expirationDate, String createdBy) {
-        Objects.requireNonNull(expirationDate, "expirationDate");
-        if (expirationDate.isBefore(Instant.now())) {
-            throw new IllegalArgumentException("expirationDate must be in the future");
-        }
-
-        String accessCode = generateAccessCode();
-        String username = "user_" + System.currentTimeMillis() + "_" + accessCode;
-
-        User u = new User();
-        u.setUsername(username);
-        u.setPassword(passwordEncoder.encode(accessCode));           // Optionally: distinct password
-        u.setAccessCodeHash(passwordEncoder.encode(accessCode));     // BCrypt (for timing‑safe match)
-        u.setAccessCodeSha256(sha256Hex(accessCode));                // Deterministic index
-        u.setRole("ROLE_USER");
-        u.setExpirationDate(expirationDate);
-        u.setCreatedBy(createdBy);
-        // email must be set if not nullable; if ephemeral, generate a placeholder:
-        u.setEmail(username + "@temp.local");
-
-        userRepository.save(u);
-        log.info("Created ephemeral user username='{}' expires='{}'", username, expirationDate);
-
-        return new CreatedUser(username, accessCode, expirationDate);
-    }
-
-    /**
-     * Returns active (non-expired) user matching raw access code or null.
-     * Fast lookup via SHA256 column + BCrypt confirmation.
-     */
-    public User findActiveUserByAccessCode(String rawCode) {
-        if (rawCode == null || rawCode.length() != ACCESS_CODE_LENGTH) return null;
-        return userRepository.findByAccessCodeSha256(sha256Hex(rawCode))
-                .filter(u -> u.getExpirationDate() == null || u.getExpirationDate().isAfter(Instant.now()))
-                .filter(u -> u.getAccessCodeHash() != null && passwordEncoder.matches(rawCode, u.getAccessCodeHash()))
-                .orElse(null);
-    }
-
-    /**
-     * Invalidate (one-time use). Clears hashes so code cannot be reused.
-     */
-    public void invalidateAccessCode(User user) {
-        user.setAccessCodeHash(null);
-        user.setAccessCodeSha256(null);
+        User user = new User();
+        user.setUsername(username);
+        // These accounts never use password login; store an unguessable, unrecoverable password.
+        user.setPassword(passwordEncoder.encode(randomSecret()));
+        user.setAccessCodeHash(passwordEncoder.encode(accessCode));
+        user.setAccessCodeSha256(sha256Hex(accessCode));
+        user.setRole(Role.ROLE_USER);
+        user.setExpirationDate(expirationDate);
+        user.setCreatedBy(createdBy);
+        user.setEmail(username + "@temp.local");
         userRepository.save(user);
-        log.info("Invalidated access code for user id={}", user.getId());
+
+        log.info("Admin '{}' created ephemeral user '{}' expiring {}", createdBy, username, expirationDate);
+        return new CreatedUserResponse(username, accessCode, expirationDate);
     }
 
-    /* ---------------- Helpers ---------------- */
-
-    private String generateAccessCode() {
-        char[] buf = new char[ACCESS_CODE_LENGTH];
-        for (int i = 0; i < ACCESS_CODE_LENGTH; i++) {
-            buf[i] = ACCESS_CODE_ALPHABET.charAt(RNG.nextInt(ACCESS_CODE_ALPHABET.length()));
+    /** Looks the code up through its SHA-256 index, then confirms it against the BCrypt hash. */
+    @Transactional(readOnly = true)
+    public Optional<User> findActiveUserByAccessCode(String rawCode) {
+        if (rawCode == null || rawCode.length() != ACCESS_CODE_LENGTH) {
+            return Optional.empty();
         }
-        return new String(buf);
+        String code = rawCode.toUpperCase(Locale.ROOT);
+        Instant now = clock.instant();
+        return userRepository.findByAccessCodeSha256(sha256Hex(code))
+                .filter(u -> !u.isExpired(now))
+                .filter(u -> u.getAccessCodeHash() != null && passwordEncoder.matches(code, u.getAccessCodeHash()));
     }
 
-    private String sha256Hex(String raw) {
+    private String generateUniqueAccessCode() {
+        for (int attempt = 0; attempt < MAX_CODE_ATTEMPTS; attempt++) {
+            String code = randomString(ACCESS_CODE_ALPHABET, ACCESS_CODE_LENGTH);
+            if (!userRepository.existsByAccessCodeSha256(sha256Hex(code))) {
+                return code;
+            }
+        }
+        throw new IllegalStateException("Could not generate a unique access code");
+    }
+
+    private String randomString(String alphabet, int length) {
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(alphabet.charAt(random.nextInt(alphabet.length())));
+        }
+        return sb.toString();
+    }
+
+    private String randomSecret() {
+        byte[] bytes = new byte[32];
+        random.nextBytes(bytes);
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    private static String sha256Hex(String raw) {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] dig = md.digest(raw.getBytes(StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder(dig.length * 2);
-            for (byte b : dig) sb.append(String.format("%02x", b));
-            return sb.toString();
+            byte[] digest = MessageDigest.getInstance("SHA-256").digest(raw.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(digest);
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("SHA-256 not available", e);
         }
-    }
-
-    /* ---------------- DTO ---------------- */
-
-    @Getter
-    @AllArgsConstructor
-    public static class CreatedUser {
-        private final String username;
-        private final String accessCode;      // raw (return once)
-        private final Instant expirationDate;
     }
 }

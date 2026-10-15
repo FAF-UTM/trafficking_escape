@@ -1,237 +1,123 @@
-import React, { useEffect, useState } from 'react';
-
-import styles from './settings.module.css';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import styles from './settings.module.css';
+import LanguageSwitch from '../../components/shell/LanguageSwitch';
+
+const COLOUR_MODES = [
+  { id: 'none', key: 'cvNone' },
+  { id: 'deuteranopia', key: 'cvDeuteranopia' },
+  { id: 'protanopia', key: 'cvProtanopia' },
+  { id: 'tritanopia', key: 'cvTritanopia' },
+  { id: 'achromatopsia', key: 'cvAchromatopsia' },
+] as const;
+
+// Must match DEFAULT_INTERVAL in ChatWithMinigames.
+const DEFAULT_INTERVAL = 5;
+
+const readStored = (key: string) => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+
+const store = (key: string, value: string) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    /* settings just won't persist */
+  }
+};
 
 const SettingsPage: React.FC = () => {
-  const [selectedLanguage, setselectedLanguage] = useState('');
-  const { t, i18n } = useTranslation();
-  const toggleLanguage = (lang: string) => {
-    i18n.changeLanguage(lang);
-    setselectedLanguage(lang);
-  };
-  const [mode, setMode] = useState('');
+  const { t } = useTranslation();
 
-  const [minigameInterval, setMinigameInterval] = useState<number>(() => {
-    const stored = localStorage.getItem('minigameInterval');
-    return stored ? parseFloat(stored) : 1;
+  const [colourMode, setColourMode] = useState(
+    () => readStored('colorBlindMode') || 'none'
+  );
+  const [interval, setIntervalMinutes] = useState(() => {
+    const stored = parseFloat(readStored('minigameInterval') ?? '');
+    return Number.isFinite(stored) ? stored : DEFAULT_INTERVAL;
   });
 
-  const toggleMode = (mode: string | undefined) => {
-    if (!mode) return;
-    setMode(mode);
-    localStorage.setItem('mode', mode);
+  const chooseColourMode = (mode: string) => {
+    setColourMode(mode);
+    store('colorBlindMode', mode);
+    // The SVG filters are defined once in App.tsx.
+    document.documentElement.style.filter =
+      mode === 'none' ? 'none' : `url(#${mode})`;
   };
 
-  const handleIntervalChange = (value: number) => {
-    setMinigameInterval(value);
-    localStorage.setItem('minigameInterval', value.toString());
+  const chooseInterval = (value: number) => {
+    setIntervalMinutes(value);
+    store('minigameInterval', String(value));
   };
-
-  // new color-blind state
-  const [colorBlindMode, setColorBlindMode] = useState<string>(() => {
-    return localStorage.getItem('colorBlindMode') || 'none';
-  });
-
-  // new handler: persist & apply
-  const toggleColorBlindMode = (mode?: string) => {
-    const mb = mode || 'none';
-    setColorBlindMode(mb);
-    localStorage.setItem('colorBlindMode', mb);
-    // apply the SVG filter or none
-    const filterValue = mb === 'none' ? 'none' : `url(#${mb})`;
-    document.documentElement.style.filter = filterValue;
-  };
-
-  useEffect(() => {
-    setselectedLanguage(i18n.language);
-    const savedMode = localStorage.getItem('mode') || 'light';
-    setMode(savedMode);
-    const savedInterval = localStorage.getItem('minigameInterval');
-    if (savedInterval) {
-      setMinigameInterval(parseFloat(savedInterval));
-    }
-
-    // apply saved color-blind mode on load
-    const cbm = localStorage.getItem('colorBlindMode') || 'none';
-    toggleColorBlindMode(cbm);
-  }, []);
 
   return (
-    <div className={styles.settings}>
-      <div className={styles.settings_container}>
-        <Link to={'/'} className={styles.back_home}>
-          <svg
-            fill="none"
-            height="10"
-            viewBox="0 0 14 10"
-            width="14"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              clip-rule="evenodd"
-              d="M0.25066 4.99997C0.25066 4.80106 0.329678 4.61029 0.47033 4.46964C0.610983 4.32899 0.801748 4.24997 1.00066 4.24997L11.1907 4.24997L8.47066 1.52997C8.33818 1.38779 8.26606 1.19975 8.26948 1.00545C8.27291 0.811145 8.35162 0.62576 8.48904 0.488347C8.62645 0.350934 8.81184 0.272222 9.00614 0.268794C9.20044 0.265365 9.38849 0.337489 9.53066 0.469969L13.5307 4.46997C13.6711 4.61059 13.75 4.80122 13.75 4.99997C13.75 5.19872 13.6711 5.38934 13.5307 5.52997L9.53066 9.52997C9.38849 9.66245 9.20044 9.73457 9.00614 9.73114C8.81184 9.72772 8.62645 9.649 8.48904 9.51159C8.35162 9.37418 8.27291 9.18879 8.26948 8.99449C8.26606 8.80019 8.33818 8.61214 8.47066 8.46997L11.1907 5.74997L1.00066 5.74997C0.801748 5.74997 0.610983 5.67095 0.47033 5.5303C0.329678 5.38965 0.25066 5.19888 0.25066 4.99997Z"
-              fill="#212A55"
-              fill-rule="evenodd"
-            ></path>
-          </svg>
+    <main className={styles.settings}>
+      <div className={styles.panel}>
+        <Link to="/" className="shell-link">
           {t('general.home')}
         </Link>
-        <div className={styles.settings_card}>
-          <div className={styles.settings_title}>{t('settings.settings')}</div>
-          <div className={styles.settings_inside}>
-            <div className={styles.settings_inside_lang}>
-              <div className={styles.settings_inside_lang_title}>
-                {t('settings.language')}:
-              </div>
-              <div className={styles.settings_inside_lang_types}>
-                <div
-                  className={`${styles.settings_inside_lang_types_btn} ${selectedLanguage == 'nl' && styles.settings_inside_lang_types_btn_selected}`}
-                  onClick={() => toggleLanguage('nl')}
-                >
-                  NL
-                </div>
-                <div
-                  className={`${styles.settings_inside_lang_types_btn} ${selectedLanguage == 'en' && styles.settings_inside_lang_types_btn_selected}`}
-                  onClick={() => toggleLanguage('en')}
-                >
-                  EN
-                </div>
-              </div>
-            </div>
-            <div className={styles.settings_inside_lang}>
-              <div className={styles.settings_inside_lang_title}>
-                {t('settings.mode')}:
-              </div>
 
-              <div className={styles.settings_inside_lang_types}>
-                <div
-                  className={`${styles.settings_inside_lang_types_btn} ${mode === 'light' && styles.settings_inside_lang_types_btn_selected}`}
-                  onClick={() => toggleMode('light')}
-                >
-                  Light
-                </div>
-                <div
-                  className={`${styles.settings_inside_lang_types_btn} ${mode === 'dark' && styles.settings_inside_lang_types_btn_selected}`}
-                  onClick={() => toggleMode('dark')}
-                >
-                  Dark
-                </div>
-                <div
-                  className={`${styles.settings_inside_lang_types_btn} ${mode === 'contrast' && styles.settings_inside_lang_types_btn_selected}`}
-                  onClick={() => toggleMode('contrast')}
-                >
-                  Contrast
-                </div>
-                {/*</div>*/}
-              </div>
-              {/*<div*/}
-              {/*  className={`${styles.settings_inside_links} ${styles.settings_inside_links_first_of_type} `}*/}
-              {/*>*/}
-            </div>
-            <div className={styles.settings_inside_lang}>
-              <div className={styles.settings_inside_lang_title}>
-                {t('settings.adaptability')}:
-              </div>
-              <div className={styles.settings_inside_lang_types}>
-                <div
-                  className={`${styles.settings_inside_lang_types_btn} ${
-                    colorBlindMode === 'none' &&
-                    styles.settings_inside_lang_types_btn_selected
-                  }`}
-                  onClick={() => toggleColorBlindMode('none')}
-                >
-                  None
-                </div>
-                <div
-                  className={`${styles.settings_inside_lang_types_btn} ${
-                    colorBlindMode === 'deuteranopia' &&
-                    styles.settings_inside_lang_types_btn_selected
-                  }`}
-                  onClick={() => toggleColorBlindMode('deuteranopia')}
-                >
-                  Deuteranopia
-                </div>
-                <div
-                  className={`${styles.settings_inside_lang_types_btn} ${
-                    colorBlindMode === 'protanopia' &&
-                    styles.settings_inside_lang_types_btn_selected
-                  }`}
-                  onClick={() => toggleColorBlindMode('protanopia')}
-                >
-                  Protanopia
-                </div>
-                <div
-                  className={`${styles.settings_inside_lang_types_btn} ${
-                    colorBlindMode === 'tritanopia' &&
-                    styles.settings_inside_lang_types_btn_selected
-                  }`}
-                  onClick={() => toggleColorBlindMode('tritanopia')}
-                >
-                  Tritanopia
-                </div>
-                <div
-                  className={`${styles.settings_inside_lang_types_btn} ${
-                    colorBlindMode === 'achromatopsia' &&
-                    styles.settings_inside_lang_types_btn_selected
-                  }`}
-                  onClick={() => toggleColorBlindMode('achromatopsia')}
-                >
-                  Achromatopsia
-                </div>
-              </div>
-            </div>
-            <div className={styles.settings_inside_lang}>
-              <div className={styles.settings_inside_lang_title}>
-                {t('settings.minigameInterval')}
-              </div>
-              <span>[{minigameInterval} min]</span>
-              <input
-                type="range"
-                min="0.5"
-                max="15"
-                step="0.5"
-                value={minigameInterval}
-                onChange={(e) =>
-                  handleIntervalChange(parseFloat(e.target.value))
-                }
-              />
-            </div>
-            <div
-              className={`${styles.settings_inside_links} ${styles.settings_inside_links_first_of_type}`}
-            >
-              <Link to="/login" className={styles.settings_inside_links_btn}>
-                {t('settings.links.login')}
-              </Link>
-              <Link
-                to="/credentials"
-                className={styles.settings_inside_links_btn}
-              >
-                {t('settings.links.credentials')}
-              </Link>
-            </div>
-            <div className={styles.settings_inside_links}>
-              <Link
-                to="/documentation"
-                className={styles.settings_inside_links_btn}
-              >
-                {t('settings.links.documentation')}
-              </Link>
-              <Link
-                to="/development"
-                className={styles.settings_inside_links_btn}
-              >
-                {t('settings.links.development')}
-              </Link>
-              <Link to="/legal" className={styles.settings_inside_links_btn}>
-                {t('settings.links.legal')}
-              </Link>
-            </div>
+        <h1 className={styles.title}>{t('settings.settings')}</h1>
+
+        <section className={styles.group} aria-labelledby="settings-language">
+          <h2 id="settings-language">{t('settings.language')}</h2>
+          <LanguageSwitch />
+        </section>
+
+        <fieldset className={styles.group}>
+          <legend>{t('settings.colourVision')}</legend>
+          <p className={styles.help}>{t('settings.colourHelp')}</p>
+          <div className={styles.choices}>
+            {COLOUR_MODES.map((mode) => (
+              <label key={mode.id} className={styles.choice}>
+                <input
+                  type="radio"
+                  name="colour-mode"
+                  value={mode.id}
+                  checked={colourMode === mode.id}
+                  onChange={() => chooseColourMode(mode.id)}
+                />
+                <span>{t(`settings.${mode.key}`)}</span>
+              </label>
+            ))}
           </div>
-        </div>
+        </fieldset>
+
+        <section className={styles.group} aria-labelledby="settings-breaks">
+          <h2 id="settings-breaks">{t('settings.breaks')}</h2>
+          <label className={styles.range}>
+            <span className={styles.help}>
+              {t('settings.breaksHelp', { value: interval })}
+            </span>
+            <input
+              type="range"
+              min={0.5}
+              max={15}
+              step={0.5}
+              value={interval}
+              onChange={(e) => chooseInterval(parseFloat(e.target.value))}
+            />
+          </label>
+        </section>
+
+        <nav className={styles.links} aria-label={t('settings.more')}>
+          <Link to="/login" className="shell-link">
+            {t('settings.links.login')}
+          </Link>
+          <Link to="/credentials" className="shell-link">
+            {t('settings.links.credentials')}
+          </Link>
+          <Link to="/legal" className="shell-link">
+            {t('settings.links.legal')}
+          </Link>
+        </nav>
       </div>
-    </div>
+    </main>
   );
 };
 
