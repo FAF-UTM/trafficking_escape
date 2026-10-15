@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { usePageExitOnIntro } from '../../components/shell/minigameChromeContext';
 import Level1 from './levels/Level1';
 import Level2 from './levels/Level2';
 import Level3 from './levels/Level3';
@@ -12,6 +13,7 @@ interface ClickPlayGameProps {
 const ClickPlayGame: React.FC<ClickPlayGameProps> = ({ onComplete }) => {
   const [currentLevel, setCurrentLevel] = useState(1);
   const [showIntro, setShowIntro] = useState(true);
+  usePageExitOnIntro(showIntro);
   const { t } = useTranslation();
 
   const handleLevelComplete = () => {

@@ -121,6 +121,8 @@ export interface ChoiceOption {
   /** Decode: 1 = correct, 0 = wrong. Move: 3 = best, 1 = partly right, 0 = unsafe. */
   score: number;
   feedback: string;
+  /** Index in the source case — kept across shuffles so language swaps can remap text. */
+  sourceIndex?: number;
 }
 
 export interface EmojiCase {

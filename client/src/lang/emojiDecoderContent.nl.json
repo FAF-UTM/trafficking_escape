@@ -1,0 +1,699 @@
+{
+  "tactics": {
+    "loveBombing": {
+      "name": "Lovebombing",
+      "description": "Een stortvloed aan complimentjes en aandacht waardoor je snel vertrouwen krijgt, nog voordat je de tijd hebt om na te denken."
+    },
+    "isolation": {
+      "name": "Isolatie",
+      "description": "Een wig drijven tussen jou en de mensen die zouden merken dat er iets niet klopt."
+    },
+    "secrecy": {
+      "name": "Geheimhouding",
+      "description": "“Vertel het aan niemand.” Geheimen houden de volwassenen die kunnen helpen buiten beeld."
+    },
+    "platformSwitch": {
+      "name": "Appwissel",
+      "description": "Je naar apps met verdwijnende berichten krijgen: geen sporen, geen moderators."
+    },
+    "giftBait": {
+      "name": "Cadeaulokaas",
+      "description": "Cadeaus, tegoed of geld waardoor je het gevoel krijgt dat je iets terug verschuldigd bent."
+    },
+    "debtTrap": {
+      "name": "Schuldenval",
+      "description": "Een cadeau, reis of gunst verandert in een schuld die je moet terugbetalen op manieren waar je nooit mee hebt ingestemd."
+    },
+    "fakeOffer": {
+      "name": "Te mooi om waar te zijn",
+      "description": "Modellenwerk, banen of reizen met veel geld en zonder eisen. Echte aanbiedingen werken niet zo."
+    },
+    "imageRequest": {
+      "name": "Fotoverzoek",
+      "description": "Om foto’s vragen. Elke foto is een drukmiddel dat later tegen je gebruikt kan worden."
+    },
+    "pressure": {
+      "name": "Druk",
+      "description": "Blijven duwen nadat je nee hebt gezegd: “maar één”, “ik heb de mijne ook gestuurd”, “als je van me hield”, “nu of nooit”."
+    },
+    "sextortion": {
+      "name": "Sextortion",
+      "description": "Dreigen om foto’s te delen, echt of nep, tenzij je betaalt of meer stuurt. Het is een misdrijf en nooit jouw schuld."
+    },
+    "locationGrab": {
+      "name": "Locatie opvragen",
+      "description": "Vragen waar je bent, welke bus je neemt, of of je je live locatie aanzet."
+    },
+    "documentGrab": {
+      "name": "Documenten afpakken",
+      "description": "Vragen om je ID of paspoort, of het “veilig bewaren” zodat je niet weg kunt."
+    },
+    "exploitation": {
+      "name": "Uitbuiting",
+      "description": "Je vragen om “aardig te zijn” voor anderen of te “helpen” om een schuld af te betalen. Zo begint seksuele uitbuiting."
+    },
+    "criminalExploitation": {
+      "name": "Criminele uitbuiting",
+      "description": "Tieners gebruiken om pakketjes, geld of drugs te vervoeren. Bij de baan met “makkelijk geld” loop jij het risico."
+    }
+  },
+  "cases": {
+    "scout": {
+      "title": "De modelscout",
+      "clues": ["Account is 2 weken oud", "4 posts", "0 gezamenlijke vrienden"],
+      "setup": "Mary heeft vorige week foto’s van haar dansteam gepost. Vandaag glijdt er een “bureau” in haar DM’s.",
+      "thread": [
+        {
+          "text": "hoi! ik ben Elena, ik scout voor Lumen Models 👋",
+          "note": "Jezelf voorstellen is op zich geen rode vlag."
+        },
+        { "text": "hoi?" },
+        {
+          "text": "zag je pics op de pagina van het dansteam 📸 eerlijk, het mooiste meisje dat ik dit jaar heb gezien, je kunt echt beroemd worden ✨✨",
+          "note": "Overdreven complimenten van een vreemde zijn de haak."
+        },
+        {
+          "text": "hoe lang dans je al? 💃",
+          "note": "Een gewone vraag over haar hobby."
+        },
+        { "text": "zo’n 6 jaar" },
+        {
+          "text": "nice! doe je ook mee aan wedstrijden? 🏆",
+          "note": "Smalltalk. Geen rode vlag."
+        },
+        { "text": "soms" },
+        {
+          "text": "we casten voor een shoot in Milaan 🇮🇹 €3000 voor één week, geen ervaring nodig 💶",
+          "note": "Enorm veel geld, geen ervaring nodig, aangeboden aan een 15-jarige in een DM. Echte bureaus werken niet zo."
+        },
+        {
+          "text": "wij betalen ✈️ 🏨 vooraf, jij betaalt ons terug van je eerste klussen 💸",
+          "note": "“Betaal ons later terug” maakt van een gratis reis een schuld die zij in handen hebben."
+        },
+        { "text": "dan moet ik het eerst aan mijn mama vragen" },
+        {
+          "text": "tuurlijk, het is een grote beslissing 😊",
+          "note": "Een beleefd antwoord. Op zich geen rode vlag."
+        },
+        {
+          "text": "ouders flippen wel altijd 😅 teken eerst en laat het haar daarna zien, oké? 🤫",
+          "note": "Eerst tekenen en het haar mama later vertellen schakelt de volwassene uit die zou controleren."
+        }
+      ],
+      "decode": {
+        "question": "Wat zit er echt achter deze emoji’s?",
+        "options": [
+          {
+            "text": "Zij betalen vooraf, daarna is Mary hen geld schuldig: een schuld waarmee ze haar in het buitenland kunnen controleren.",
+            "feedback": "Precies. Reiskosten terugbetalen “van je eerste klussen” is een klassieke schuldenval die bij mensenhandel wordt gebruikt."
+          },
+          {
+            "text": "Een gratis reis, het bureau investeert in nieuw talent.",
+            "feedback": "Kijk naar de 💸: hier is niets gratis. Het is een lening."
+          },
+          {
+            "text": "Een gewone reiskostenvergoeding na de shoot.",
+            "feedback": "Bij een vergoeding krijgt Mary geld terug. Hier is ze hen geld schuldig, nog voordat ze iets heeft verdiend."
+          },
+          {
+            "text": "Een modelbeurs die haar kosten dekt.",
+            "feedback": "Een beurs hoef je niet terug te betalen van je “eerste klussen”."
+          }
+        ]
+      },
+      "move": {
+        "options": [
+          {
+            "text": "Teken niets en stuur niets. Maak screenshots van de chat, laat ze aan haar mama zien en rapporteer het account.",
+            "feedback": "Beste keuze. Bewijs plus een volwassene die ze vertrouwt, en het platform kan voorkomen dat het account anderen bereikt."
+          },
+          {
+            "text": "Eerst de scout vragen om de website en het telefoonnummer van het bureau.",
+            "feedback": "Checken is slim, maar nepbureaus hebben nepwebsites. Een volwassene moet het controleren, niet de scout."
+          },
+          {
+            "text": "Ja zeggen, maar een vriendin meenemen naar Milaan voor de veiligheid.",
+            "feedback": "Onveilig. Een vriendin maakt een schuld niet ongedaan en beschermt je niet in het buitenland. Nu lopen twee mensen risico."
+          },
+          {
+            "text": "Nu tekenen. Ze kan altijd later annuleren.",
+            "feedback": "Onveilig. Zodra de schuld er is, laten ze “annuleren” juist niet toe."
+          }
+        ]
+      }
+    },
+    "gamer": {
+      "title": "De squadgenoot",
+      "clues": ["Ontmoet in een online game", "Zegt dat hij 16 is", "Nooit gevideobeld"],
+      "setup": "Mary speelt al drie maanden in dezelfde squad als deze jongen. Vanavond appt hij na een match.",
+      "thread": [
+        {
+          "text": "gg vanavond 🔥 die laatste clutch was te gek",
+          "note": "Gewoon gamepraat."
+        },
+        {
+          "text": "morgen zelfde tijd? ik regel de squad 🎮",
+          "note": "De volgende game plannen. Geen rode vlag."
+        },
+        {
+          "text": "echt, jij bent de enige die me snapt. iedereen in het echt is zo nep 🙄",
+          "note": "“Alleen jij begrijpt me” bouwt snel een intense band op."
+        },
+        {
+          "text": "heb je de wiskunde huiswerk al af? ik loop zo achter lol 📚",
+          "note": "Gewoon een praatje over school."
+        },
+        {
+          "text": "zitten je ouders nog steeds op je huid over schermtijd? ze snappen je niet zoals ik 😔",
+          "note": "Mary tegen haar ouders opzetten haalt haar vangnet weg."
+        },
+        {
+          "text": "succes met je toets morgen trouwens 🍀",
+          "note": "Een vriendelijk berichtje. Geen rode vlag."
+        },
+        {
+          "text": "heb de battle pass voor je gekocht 🎁 je bent me wel wat verschuldigd hè 😏 vertel het niet aan je ouders",
+          "note": "Een geheim cadeau met “je bent me iets verschuldigd” erbij is grooming, geen vrijgevigheid."
+        },
+        { "text": "wacht echt?? thanks" },
+        {
+          "text": "np 😊 laten we naar 👻 gaan, voice hier lagt zo",
+          "note": "Verdwijnende berichten betekenen geen bewijs."
+        }
+      ],
+      "decode": {
+        "question": "Wat betekent dat cadeau hier echt?",
+        "options": [
+          {
+            "text": "Het cadeau creëert een schuld die hij later kan gebruiken om haar onder druk te zetten.",
+            "feedback": "Klopt. Cadeaus gevolgd door “je bent me wat verschuldigd” zijn hoe groomers een verplichting creëren."
+          },
+          {
+            "text": "Hij is een goede vriend en maakt een grapje.",
+            "feedback": "De 😏 en de geheimhouding zeggen iets anders. Vrienden houden niet in het geheim een score bij."
+          },
+          {
+            "text": "Hij wil dat ze ook een battle pass voor hem koopt.",
+            "feedback": "Dat zou eerlijk zijn, maar daar wijst “je bent me wat verschuldigd 😏” niet naar."
+          },
+          {
+            "text": "Hij wil dat ze vaker ranked matches met hem speelt.",
+            "feedback": "Kijk naar het hele gesprek: isolatie, geheimhouding, en dan een privé-app."
+          }
+        ]
+      },
+      "move": {
+        "options": [
+          {
+            "text": "De appwissel weigeren, screenshots maken van de chat en het aan een ouder of vertrouwde volwassene vertellen, ook over het cadeau.",
+            "feedback": "Beste keuze. Op dat cadeau rekent hij juist om haar stil te houden. Vertellen doorbreekt dat."
+          },
+          {
+            "text": "Hem de battle pass terugbetalen zodat ze niets schuldig is, en blijven gamen met hem.",
+            "feedback": "De schuld is weg, maar de isolatie en de druk om naar een privé-app te gaan gaan gewoon door."
+          },
+          {
+            "text": "Naar 👻 gaan maar daar nooit foto’s sturen.",
+            "feedback": "Onveilig. In de privé-app loopt de druk op, zonder sporen en zonder dat iemand meekijkt."
+          },
+          {
+            "text": "Het geheim houden zodat haar ouders haar console niet afpakken.",
+            "feedback": "Onveilig. Die angst is precies het drukmiddel dat hij heeft opgebouwd. Een vertrouwde volwassene straft haar hier niet voor."
+          }
+        ]
+      }
+    },
+    "sextortion": {
+      "title": "De dreiging",
+      "clues": ["Volgde Mary gisteren", "Profielfoto is een stockfoto"],
+      "setup": "Een nieuwe volger begint te chatten. Mary zegt nee tegen het sturen van een foto. Dan verandert de toon.",
+      "thread": [
+        {
+          "text": "hey 👋 coole profiel, ben je into fotografie?",
+          "note": "Een openingspraatje. Op zich geen rode vlag."
+        },
+        { "text": "ja een beetje" },
+        {
+          "text": "nice, ik hou van analoge camera’s 📷 waarmee fotografeer jij?",
+          "note": "Een gewone vraag over haar hobby."
+        },
+        { "text": "gewoon met mijn telefoon lol" },
+        {
+          "text": "zelfde haha. naar wat voor muziek luister je? 🎧",
+          "note": "Smalltalk. Geen rode vlag."
+        },
+        {
+          "text": "je bent schattig. stuur je een pic van jezelf in je pyjama? 📸😏",
+          "note": "Een vreemde die om een privéfoto vraagt."
+        },
+        { "text": "nee laat maar" },
+        {
+          "text": "kom op, maar één 🥺 ik heb de mijne ook gestuurd, je bent me wat verschuldigd",
+          "note": "Haar “nee” negeren en haar een schuldgevoel aanpraten."
+        },
+        {
+          "text": "prima. ik heb pics van je gemaakt 🔞 met jouw gezicht erop. €200 in 💳 cadeaukaarten binnen 24 uur ⏳ anders ziet je hele school ze",
+          "note": "Nepfoto’s plus een eis en een deadline is sextortion."
+        },
+        {
+          "text": "vertel het aan iemand en ik post ze meteen 🤫",
+          "note": "Een dreigement om haar stil te houden. Het aan iemand vertellen is juist wat het stopt."
+        }
+      ],
+      "decode": {
+        "question": "Wat eist hij?",
+        "options": [
+          {
+            "text": "Betalen met cadeaukaarten voor een deadline, anders deelt hij de foto’s.",
+            "feedback": "Ja. Onvolgbare betaling plus een countdown is het sextortion-script."
+          },
+          {
+            "text": "Hij wil haar een cadeaukaart sturen als excuus.",
+            "feedback": "De ⏳ en 📤 zijn een dreigement, geen excuus."
+          },
+          {
+            "text": "Hij vraagt haar zijn post te delen voordat die verloopt.",
+            "feedback": "Lees het samen met het gesprek: betaling, deadline, blootstelling."
+          },
+          {
+            "text": "Hij maakt een grapje, er zijn geen echte foto’s.",
+            "feedback": "Ook als de foto’s nep zijn, is de dreiging echt en serieus. Er moet toch iets gebeuren."
+          }
+        ]
+      },
+      "move": {
+        "options": [
+          {
+            "text": "Niet betalen en niet reageren. Screenshots van alles maken, blokkeren, rapporteren en het aan een vertrouwde volwassene of een hulplijn vertellen.",
+            "feedback": "Beste keuze. Het is niet haar schuld. Met bewijs kunnen platforms en politie ingrijpen, en hulplijnen kunnen helpen om foto’s offline te krijgen."
+          },
+          {
+            "text": "Hem blokkeren en de hele chat verwijderen zodat het allemaal weg is.",
+            "feedback": "Blokkeren is goed, maar verwijderen vernietigt het bewijs dat je nodig hebt om hem te rapporteren."
+          },
+          {
+            "text": "Eén keer betalen zodat hij ze verwijdert.",
+            "feedback": "Onveilig. Betalen laat zien dat het werkt. Eisen komen bijna altijd groter terug."
+          },
+          {
+            "text": "Hem smeken ze te verwijderen en beloven het niet te vertellen.",
+            "feedback": "Onveilig. Stilte beloven geeft hem meer controle. Het aan iemand vertellen maakt er een einde aan."
+          }
+        ]
+      }
+    },
+    "courier": {
+      "title": "De baan met makkelijk geld",
+      "clues": ["Plaatst alleen geld-emoji’s", "Reacties staan uit"],
+      "setup": "Een account dat Mary niet volgt stuurt een baanaanbod naar haar en een paar klasgenoten.",
+      "thread": [
+        {
+          "text": "hey 👋 zag dat je op zoek bent naar een zomerbaantje?",
+          "note": "Vragen naar een baan is op zich geen rode vlag."
+        },
+        { "text": "ja, hoezo?" },
+        {
+          "text": "💼 €500 per week, vanaf 15 jaar, geen ervaring, geen CV 💸",
+          "note": "€500 per week voor tieners zonder ervaring is geen echte baan."
+        },
+        { "text": "wat is de baan" },
+        {
+          "text": "haal een 📦 op bij het ene adres en lever het af bij een ander 🚲",
+          "note": "Onbekende pakketjes vervoeren is hoe tieners worden ingezet als drugs- of geldkoerier."
+        },
+        {
+          "text": "heb je een fiets? 🚲",
+          "note": "Een praktische vraag. Op zich geen rode vlag."
+        },
+        { "text": "ja" },
+        {
+          "text": "top, je kunt je eigen uren kiezen ⏰",
+          "note": "Flexibele uren zijn normaal bij zomerbaantjes."
+        },
+        { "text": "wat zit er in het pakketje" },
+        {
+          "text": "geen vragen stellen 😂 dat is de baan",
+          "note": "Als ze niet mag weten wat ze vervoert, is zij degene die het risico loopt."
+        },
+        {
+          "text": "stuur een pic van je ID 🪪 zodat we je kunnen betalen",
+          "note": "Met haar ID weten ze wie ze is en waar ze woont, en dat is een drukmiddel als ze eruit wil."
+        }
+      ],
+      "decode": {
+        "question": "Wat is deze “baan” echt?",
+        "options": [
+          {
+            "text": "Iets illegaals vervoeren voor criminelen, waarbij Mary het risico loopt als ze gepakt wordt.",
+            "feedback": "Klopt. Criminele uitbuiting richt zich op tieners omdat ze goedkoper en makkelijker te controleren zijn."
+          },
+          {
+            "text": "Een gewone bezorgbaan, zoals maaltijdbezorger.",
+            "feedback": "Bij bezorgbanen weet je wat je vervoert, en ze betalen geen €500 voor een fietstochtje."
+          },
+          {
+            "text": "Een verrassingsbezorging zoals bij Sinterklaas.",
+            "feedback": "De 🤐 en het geld zeggen iets anders."
+          },
+          {
+            "text": "Sneakers online doorverkopen.",
+            "feedback": "Er staat niets over doorverkopen in het gesprek."
+          }
+        ]
+      },
+      "move": {
+        "options": [
+          {
+            "text": "Niet reageren en haar ID niet sturen. Het account rapporteren en een vertrouwde volwassene waarschuwen, want klasgenoten kregen het ook.",
+            "feedback": "Beste keuze. Rekruteerders appen hele groepen, dus een volwassene inlichten kan ook haar klasgenoten beschermen."
+          },
+          {
+            "text": "Eén bezorging doen om te kijken of het echt is, en dan stoppen.",
+            "feedback": "Onveilig. De eerste klus is de haak. Daarna weten ze wie ze is en wordt er gedreigd als ze wil “stoppen”."
+          },
+          {
+            "text": "Negeren en niets zeggen.",
+            "feedback": "Zelf blijft ze veilig, maar het account blijft anderen benaderen. Rapporteren is belangrijk."
+          },
+          {
+            "text": "Eerst vragen wat er in de doos zit en dan beslissen.",
+            "feedback": "Onveilig. Ze weigerden het al te zeggen. Houd het gesprek gesloten."
+          }
+        ]
+      }
+    },
+    "loverboy": {
+      "title": "De vriend",
+      "clues": ["19 jaar oud", "Date Mary al 2 maanden", "Mary is 15"],
+      "setup": "Mary’s oudere vriend is al weken lief. De laatste tijd voelt het anders.",
+      "thread": [
+        {
+          "text": "goedemorgen ☀️ heb je goed geslapen?",
+          "note": "Een gewoon goedemorgenbericht. Het leeftijdsverschil is wel opvallend."
+        },
+        {
+          "text": "hoe ging je wiskundetoets? 📚",
+          "note": "Aandacht voor haar dag. Geen rode vlag."
+        },
+        { "text": "ik had een 7!!" },
+        {
+          "text": "trots op je 🥳",
+          "note": "Een lief antwoord. Geen rode vlag."
+        },
+        {
+          "text": "je vrienden zijn gewoon jaloers op ons. je moet niet meer met ze omgaan 🙄",
+          "note": "Haar bij vrienden weghalen neemt de mensen weg die haar zouden waarschuwen."
+        },
+        {
+          "text": "zin om na school bubble tea te halen? 🧋",
+          "note": "Een gewoon afspraakje."
+        },
+        {
+          "text": "heb deze voor je gekocht 👟 omdat je het beste verdient 💸",
+          "note": "Dure cadeaus wekken het gevoel dat je hem iets verschuldigd bent."
+        },
+        {
+          "text": "ik zit in de problemen 😰 ik ben wat gasten geld schuldig. mijn vriend geeft zaterdag een feest 🥂 wees gewoon aardig voor hem en dan is het goed",
+          "note": "“Wees aardig voor mijn vriend” om een schuld af te betalen is hoe loverboys seksuele uitbuiting beginnen."
+        },
+        { "text": "wat bedoel je met aardig zijn" },
+        {
+          "text": "als je van me hield zou je dat niet vragen ❤️‍🩹",
+          "note": "Haar liefde als wapen gebruiken zodat ze geen vragen meer stelt."
+        }
+      ],
+      "decode": {
+        "question": "Wat vraagt hij aan Mary?",
+        "options": [
+          {
+            "text": "Dingen te doen met zijn “vriend” zodat zijn schuld wordt betaald. Dit is de loverboymethode.",
+            "feedback": "Klopt. Romantiek, cadeaus, een plotselinge schuld en dan “help me even”: een bekend patroon van seksuele uitbuiting."
+          },
+          {
+            "text": "Beleefd te zijn op een feest en een goede indruk te maken.",
+            "feedback": "Waarom koppelt hij het dan aan zijn schuld, en waarom mag ze niet vragen wat hij bedoelt?"
+          },
+          {
+            "text": "Te helpen met het organiseren van het feest.",
+            "feedback": "In het gesprek gaat niets over organiseren."
+          },
+          {
+            "text": "Voor het eerst kennis te maken met zijn familie.",
+            "feedback": "Hij had het over zijn vriend, degene aan wie hij geld schuldig is, niet over familie."
+          }
+        ]
+      },
+      "move": {
+        "options": [
+          {
+            "text": "Niet gaan. De berichten bewaren en het aan een vertrouwde volwassene of een hulplijn vertellen. Dit is niet haar schuld.",
+            "feedback": "Beste keuze. Loverboys rekenen op schaamte en liefde om slachtoffers stil te houden. Het aan iemand vertellen doorbreekt die greep."
+          },
+          {
+            "text": "Het uitmaken met hem, maar het voor zichzelf houden omdat ze zich schaamt.",
+            "feedback": "Weggaan is goed, maar loverboys laten vaak niet makkelijk los. Dat moet ze niet alleen doen."
+          },
+          {
+            "text": "Naar het feest gaan, maar alleen als hij bij haar blijft.",
+            "feedback": "Onveilig. Hij is degene die dit opzet. Zijn aanwezigheid beschermt haar niet."
+          },
+          {
+            "text": "In plaats daarvan zijn schuld helpen betalen met haar spaargeld.",
+            "feedback": "Onveilig. De schuld is een middel. Als ze betaalt, leert hij dat ze onder druk te zetten is."
+          }
+        ]
+      }
+    },
+    "location": {
+      "title": "De “klasgenoot”",
+      "clues": [
+        "Zegt dat hij bij Mary op school zit",
+        "0 gezamenlijke vrienden",
+        "Account vorige week aangemaakt"
+      ],
+      "setup": "Iemand die zegt van Mary’s school te zijn begint te vragen naar haar dag.",
+      "thread": [
+        {
+          "text": "hey! ga je vrijdag naar de schoolkermis? 🎡",
+          "note": "Vragen naar een schoolevenement is geen rode vlag."
+        },
+        { "text": "misschien, hoezo" },
+        {
+          "text": "het wordt leuk, er is een dj 🎶",
+          "note": "Smalltalk. Geen rode vlag."
+        },
+        {
+          "text": "welke bus neem je naar huis na school? 🚌",
+          "note": "Aan haar dagelijkse route kan hij zien waar en wanneer hij haar kan vinden."
+        },
+        {
+          "text": "heb je de nieuwe spider-man film gezien? 🕷️",
+          "note": "Gewoon een praatje. Geen rode vlag."
+        },
+        {
+          "text": "zet je 📍 live locatie aan zodat ik je kan vinden op de kermis",
+          "note": "Met live locatie weet hij altijd waar ze is."
+        },
+        {
+          "text": "vertel je vrienden niet dat ik kom, het is een verrassing 🤫",
+          "note": "Geheimhouding betekent dat niemand weet waar ze naartoe is gegaan."
+        },
+        {
+          "text": "mijn neef kan ons daarna ergens naartoe rijden 🚗",
+          "note": "Haar in een auto met vreemden krijgen haalt elke uitweg weg."
+        }
+      ],
+      "decode": {
+        "question": "Wat is dit plan als je het allemaal samenneemt?",
+        "options": [
+          {
+            "text": "Precies weten waar ze is, ervoor zorgen dat niemand anders het weet, en haar in een auto krijgen.",
+            "feedback": "Ja. Locatie, geheimhouding en vervoer samen is hoe iemand wordt geïsoleerd en meegenomen."
+          },
+          {
+            "text": "Een leuk verrassingsafspraakje met een lift naar huis.",
+            "feedback": "Een echte klasgenoot zou gezamenlijke vrienden hebben en hoeft haar niet voor hen te verbergen."
+          },
+          {
+            "text": "Hij wil zijn eigen locatie met haar delen.",
+            "feedback": "Hij vroeg om de hare, niet andersom."
+          },
+          {
+            "text": "Een uitje met een schoolgroep.",
+            "feedback": "Een groepsuitje hoeft niet geheim te blijven voor haar vrienden."
+          }
+        ]
+      },
+      "move": {
+        "options": [
+          {
+            "text": "Locatie uit laten, niet zeggen welke bus. Screenshot maken, blokkeren en het aan een vertrouwde volwassene of een leraar vertellen.",
+            "feedback": "Beste keuze. Een leraar kan ook nagaan of deze “klasgenoot” wel bestaat."
+          },
+          {
+            "text": "Haar locatie alleen tijdens de kermis delen en hem daarna uitzetten.",
+            "feedback": "Onveilig. Eén middag is al genoeg."
+          },
+          {
+            "text": "Naar de kermis gaan, maar de hele tijd bij haar vrienden blijven.",
+            "feedback": "Vrienden helpen, maar hij kent nog steeds haar busroute en wil haar in een auto. Blokkeer hem en vertel het ook aan een volwassene."
+          },
+          {
+            "text": "Hem vragen te bewijzen dat hij op haar school zit.",
+            "feedback": "Iedereen kan bewijs vervalsen. Ze hoeft hem niet zelf te onderzoeken."
+          }
+        ]
+      }
+    },
+    "aupair": {
+      "title": "De droombaan in het buitenland",
+      "clues": ["Geen bedrijfswebsite gelinkt", "Stuurt alleen berichten ’s nachts"],
+      "setup": "Mary’s nicht Lina (17) laat haar een DM zien over een au pair-baan. Mary leest mee.",
+      "thread": [
+        {
+          "text": "Hoi Lina! Bedankt voor je interesse in ons au pair-programma 😊",
+          "note": "Een vriendelijke opening. Op zich geen rode vlag."
+        },
+        {
+          "text": "hou je van kinderen? 👶",
+          "note": "Een gewone vraag bij een baan."
+        },
+        {
+          "text": "het gezin heeft 2 kinderen, van 4 en 7 jaar 🧸",
+          "note": "Handige informatie over de baan. Geen rode vlag."
+        },
+        {
+          "text": "€2000 per maand in Londen 💶 geen ervaring, geen leeftijdscontrole nodig",
+          "note": "Enorm veel salaris en “geen leeftijdscontrole” voor een 17-jarige. Voor legale au pair-banen moet je 18 zijn."
+        },
+        {
+          "text": "welke talen spreek je? 🗣️",
+          "note": "Een gewone vraag bij een baan."
+        },
+        {
+          "text": "als je geland bent, bewaart het gezin je paspoort veilig 🔐",
+          "note": "Je paspoort afpakken is een belangrijk teken van mensenhandel. Zonder paspoort kun je niet weg."
+        },
+        {
+          "text": "je kunt naar huis bellen zodra je gesetteld bent 📵",
+          "note": "Het contact met familie verbreken is hoe slachtoffers hun steun kwijtraken."
+        },
+        {
+          "text": "nog maar 2 plekken over, beslis vanavond ⏳",
+          "note": "Een nepdeadline voorkomt dat ze het met iemand kan checken."
+        }
+      ],
+      "decode": {
+        "question": "Wat zou er met Lina in Londen gebeuren?",
+        "options": [
+          {
+            "text": "Haar paspoort wordt afgepakt en het contact met thuis wordt verbroken, waardoor ze niet weg kan.",
+            "feedback": "Klopt. Controle over documenten plus isolatie zijn kernsignalen van mensenhandel."
+          },
+          {
+            "text": "Het gezin is gewoon voorzichtig met belangrijke papieren.",
+            "feedback": "Niemand hoeft je paspoort voor je te bewaren. Het afpakken is controle, geen zorg."
+          },
+          {
+            "text": "Ze moet eerst een Britse telefoon regelen.",
+            "feedback": "📵 betekent hier geen telefoontjes naar huis, geen nieuwe simkaart."
+          },
+          {
+            "text": "Haar paspoort wordt op het vliegveld gecontroleerd.",
+            "feedback": "Na de paspoortcontrole krijg je je paspoort terug. Zij zeiden dat ze het zouden houden."
+          }
+        ]
+      },
+      "move": {
+        "options": [
+          {
+            "text": "Lina zeggen dat ze niets moet sturen, een screenshot van het aanbod maken en het samen aan een ouder laten zien.",
+            "feedback": "Beste keuze. Mary zag dat een vriendin in gevaar was. Het samen bij een volwassene brengen is precies goed."
+          },
+          {
+            "text": "Lina zeggen dat ze eerst moet vragen om een videogesprek met het gezin.",
+            "feedback": "Een gesprek kan nep zijn. Het paspoort afpakken is al op zichzelf een dealbreaker."
+          },
+          {
+            "text": "Lina laten beslissen. Het is haar leven en Mary moet zich er niet mee bemoeien.",
+            "feedback": "Onveilig. Signalen herkennen en je uitspreken is hoe vrienden elkaar beschermen."
+          },
+          {
+            "text": "Lina zeggen dat ze moet gaan, maar wel een kopie van haar paspoort bewaren.",
+            "feedback": "Onveilig. Een kopie brengt haar niet naar huis. De hele opzet is het probleem."
+          }
+        ]
+      }
+    },
+    "safe": {
+      "title": "De leergroep",
+      "clues": [
+        "Mary’s klasgenoot sinds klas 1",
+        "38 gezamenlijke vrienden",
+        "Ze hebben elkaar in het echt ontmoet"
+      ],
+      "setup": "Mary’s vriendin uit de klas appt over zaterdag. Is hier iets een rode vlag?",
+      "thread": [
+        {
+          "text": "kun je de bio-aantekeningen sturen 📚 ik was dinsdag ziek 🤒",
+          "note": "Een gewoon verzoek tussen klasgenoten."
+        },
+        { "text": "ja ik stuur ze nu" },
+        {
+          "text": "we hebben zaterdag om 14.00 een leergroep in de bieb 📖 doe je mee?",
+          "note": "Een openbare plek, een plan overdag, met mensen die Mary kent."
+        },
+        {
+          "text": "mijn mama kan ons brengen 🚗 ze zei dat ze jouw mama gaat appen",
+          "note": "Een bekende ouder, en Mary’s ouders weten ervan. Het tegenovergestelde van geheimhouding."
+        },
+        { "text": "top 🙌" },
+        {
+          "text": "neem snacks mee pls 🍪😂",
+          "note": "Gewoon snacks."
+        }
+      ],
+      "decode": {
+        "question": "Waarin verschilt dit plan van de risicovolle plannen?",
+        "options": [
+          {
+            "text": "Alles is open: een bekende vriendin, een openbare plek en de ouders weten het.",
+            "feedback": "Precies. Openheid is het teken van een veilig plan. Gevaar verstopt zich, veiligheid niet."
+          },
+          {
+            "text": "Het verschilt niet. Elke autorit is een rode vlag.",
+            "feedback": "De context telt. De ouder van een vriendin die Mary’s mama appt is niet hetzelfde als de neef van een vreemde."
+          },
+          {
+            "text": "Het is riskant omdat ze in het weekend afspreken.",
+            "feedback": "De dag van de week maakt iets niet riskant."
+          },
+          {
+            "text": "De snack-emoji is een code voor iets anders.",
+            "feedback": "Soms is een koekje gewoon een koekje. Doorschieten in achterdocht kan ervoor zorgen dat je echte waarschuwingssignalen mist."
+          }
+        ]
+      },
+      "move": {
+        "options": [
+          {
+            "text": "Gaan, en ook haar eigen ouders het plan laten weten.",
+            "feedback": "Beste keuze. Gevaar herkennen betekent ook zien wanneer iets veilig is."
+          },
+          {
+            "text": "Lotte voor de zekerheid blokkeren.",
+            "feedback": "Niets hier was een rode vlag. Iedereen wantrouwen isoleert jou ook."
+          },
+          {
+            "text": "Gaan, maar haar ouders niets vertellen. Het is maar de bieb.",
+            "feedback": "Waarschijnlijk prima, maar je ouders vertellen waar je bent is een goede gewoonte, ook bij veilige plannen."
+          },
+          {
+            "text": "Lotte vragen te bewijzen dat haar mama echt rijdt.",
+            "feedback": "Ze is een vriendin die Mary ook buiten het internet kent, en de ouders appen al met elkaar."
+          }
+        ]
+      }
+    }
+  }
+}

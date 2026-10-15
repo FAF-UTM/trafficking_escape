@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePageExitOnIntro } from '../../components/shell/minigameChromeContext';
 import { useTranslation } from 'react-i18next';
 import { useAudio } from '../../context/AudioContext';
 import styles from './TrueFalseFlashCards.module.css';
 import {
-  CARDS,
   CARDS_PER_RUN,
   POINTS_HIT,
   STREAK_BONUS,
   STREAK_BONUS_AT,
   type FlashCard,
 } from './flashCards';
+import { localizeFlashCards } from './localizeFlash';
 
 type Phase = 'intro' | 'play' | 'end';
 type FlipState = 'idle' | 'exit' | 'enter' | 'reveal';
@@ -60,12 +61,22 @@ interface TrueFalseFlashCardsProps {
 const TrueFalseFlashCards: React.FC<TrueFalseFlashCardsProps> = ({
   onComplete,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.resolvedLanguage ?? i18n.language;
   const { playClick } = useAudio();
   const screenRef = useRef<HTMLDivElement>(null);
 
-  const run = useMemo(() => shuffle(CARDS).slice(0, CARDS_PER_RUN), []);
+  const cards = useMemo(
+    () => localizeFlashCards(t),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-localize when language changes
+    [t, lang]
+  );
+  const run = useMemo(
+    () => shuffle(cards).slice(0, CARDS_PER_RUN),
+    [cards]
+  );
   const [phase, setPhase] = useState<Phase>('intro');
+  usePageExitOnIntro(phase === 'intro');
   const [index, setIndex] = useState(0);
   const [flip, setFlip] = useState<FlipState>('idle');
   const [picked, setPicked] = useState<boolean | null>(null);

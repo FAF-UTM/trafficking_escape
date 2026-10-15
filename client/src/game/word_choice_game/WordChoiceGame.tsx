@@ -1,16 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePageExitOnIntro } from '../../components/shell/minigameChromeContext';
 import { useTranslation } from 'react-i18next';
 import { useAudio } from '../../context/AudioContext';
 import styles from './WordChoiceGame.module.css';
 import {
-  CASES,
   POINTS_CORRECT,
   QUESTIONS_PER_RUN,
-  TACTICS,
   type TacticId,
   type WordCase,
   type WordOption,
 } from './wordCases';
+import {
+  localizeWordChoiceCases,
+  localizeWordChoiceTactics,
+} from './localizeWordChoice';
 
 type Phase = 'intro' | 'question' | 'feedback' | 'end';
 
@@ -23,8 +26,8 @@ const shuffle = <T,>(items: T[]): T[] => {
   return a;
 };
 
-const buildRun = (): WordCase[] =>
-  shuffle(CASES)
+const buildRun = (pool: WordCase[]): WordCase[] =>
+  shuffle(pool)
     .slice(0, QUESTIONS_PER_RUN)
     .map((c) => ({ ...c, options: shuffle(c.options) }));
 
@@ -89,12 +92,24 @@ interface WordChoiceGameProps {
 }
 
 const WordChoiceGame: React.FC<WordChoiceGameProps> = ({ onComplete }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.resolvedLanguage ?? i18n.language;
   const { playClick } = useAudio();
   const screenRef = useRef<HTMLDivElement>(null);
 
-  const run = useMemo(() => buildRun(), []);
+  const tactics = useMemo(
+    () => localizeWordChoiceTactics(t),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-localize when language changes
+    [t, lang]
+  );
+  const cases = useMemo(
+    () => localizeWordChoiceCases(t),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-localize when language changes
+    [t, lang]
+  );
+  const run = useMemo(() => buildRun(cases), [cases]);
   const [phase, setPhase] = useState<Phase>('intro');
+  usePageExitOnIntro(phase === 'intro');
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -262,11 +277,11 @@ const WordChoiceGame: React.FC<WordChoiceGameProps> = ({ onComplete }) => {
                 style={{ '--i': i } as React.CSSProperties}
               >
                 <span className={styles.tacticEmoji} aria-hidden="true">
-                  {TACTICS[id].emoji}
+                  {tactics[id].emoji}
                 </span>
-                <span className={styles.tacticName}>{TACTICS[id].name}</span>
+                <span className={styles.tacticName}>{tactics[id].name}</span>
                 <span className={styles.tacticText}>
-                  {TACTICS[id].description}
+                  {tactics[id].description}
                 </span>
                 {!caught.has(id) && (
                   <span className={styles.tacticMissed}>
@@ -395,8 +410,8 @@ const WordChoiceGame: React.FC<WordChoiceGameProps> = ({ onComplete }) => {
                 </p>
               )}
               <div className={styles.tacticChip}>
-                <span aria-hidden="true">{TACTICS[current.tactic].emoji}</span>
-                {TACTICS[current.tactic].name}
+                <span aria-hidden="true">{tactics[current.tactic].emoji}</span>
+                {tactics[current.tactic].name}
               </div>
               <button type="button" className="shell-button" onClick={next}>
                 {index >= run.length - 1

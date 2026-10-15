@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudio } from '../../../context/AudioContext';
 
 interface Level3Props {
@@ -6,6 +7,7 @@ interface Level3Props {
 }
 
 const Level3: React.FC<Level3Props> = ({ onComplete }) => {
+  const { t } = useTranslation();
   // Puzzle states
   const [shovelFound, setShovelFound] = useState(false);
   const [handleFound, setHandleFound] = useState(false);
@@ -53,7 +55,7 @@ const Level3: React.FC<Level3Props> = ({ onComplete }) => {
         setSelectedItem('shovel');
         return next;
       });
-      openModal('/assets/shovel.png', 'You found a shovel inside the shed!');
+      openModal('/assets/shovel.png', t('clickPuzzle.foundShovel'));
     }
   };
 
@@ -66,10 +68,7 @@ const Level3: React.FC<Level3Props> = ({ onComplete }) => {
         setSelectedItem('metal-handle');
         return next;
       });
-      openModal(
-        '/assets/metal-handle.png',
-        'You dug up a makeshift metal handle!'
-      );
+      openModal('/assets/metal-handle.png', t('clickPuzzle.dugHandle'));
     }
   };
 
@@ -82,10 +81,7 @@ const Level3: React.FC<Level3Props> = ({ onComplete }) => {
         setSelectedItem('final-key');
         return next;
       });
-      openModal(
-        '/assets/final-key.png',
-        'You unlocked the metal box and found a key!'
-      );
+      openModal('/assets/final-key.png', t('clickPuzzle.unlockedBox'));
     }
   };
 
@@ -93,10 +89,7 @@ const Level3: React.FC<Level3Props> = ({ onComplete }) => {
     playClick(8);
     if (!gateUnlocked && selectedItem === 'final-key') {
       setGateUnlocked(true);
-      openModal(
-        '',
-        'You opened the gate and escaped the courtyard! (Click outside to continue...)'
-      );
+      openModal('', t('clickPuzzle.escapedGate'));
     }
   };
 

@@ -1,0 +1,327 @@
+{
+  "tactics": {
+    "secrecy": {
+      "name": "Geheimhouding",
+      "description": "“Vertel het aan niemand” haalt tieners weg bij veilige volwassenen."
+    },
+    "urgency": {
+      "name": "Haast",
+      "description": "Een beslissing opjagen zodat er geen tijd is om te checken."
+    },
+    "giftBait": {
+      "name": "Cadeaulokaas",
+      "description": "Gratis cadeaus of VIP-voordelen als lokmiddel."
+    },
+    "fakeOffer": {
+      "name": "Nep-aanbod",
+      "description": "Banen, scouting of geld dat te makkelijk klinkt."
+    },
+    "platformSwitch": {
+      "name": "Appwissel",
+      "description": "Het gesprek verplaatsen naar een plek waar volwassenen niet meekijken."
+    },
+    "imageRequest": {
+      "name": "Fotoverzoek",
+      "description": "Aandringen op foto’s die later tegen je gebruikt kunnen worden."
+    },
+    "locationGrab": {
+      "name": "Locatie opvragen",
+      "description": "Vragen waar je bent, om een live pin of om je op te halen."
+    },
+    "isolation": {
+      "name": "Isolatie",
+      "description": "Iemand wegtrekken bij vrienden of ouders."
+    },
+    "documentGrab": {
+      "name": "Persoonlijke gegevens",
+      "description": "Vragen om je adres, ID, bankgegevens of telefoonnummer."
+    },
+    "pressure": {
+      "name": "Druk",
+      "description": "Schuldgevoel, dreigementen of “bewijs het maar” nadat je een grens hebt gesteld."
+    }
+  },
+  "cases": {
+    "secret-party": {
+      "title": "Uitnodiging voor een geheim feest",
+      "setup": "Een nieuw account stuurt Mary een DM over een feest waar ze nooit over heeft gepraat.",
+      "segments": [
+        {
+          "text": "Hé! ",
+          "clearNote": "Een gewone begroeting."
+        },
+        {
+          "text": "Geheim feest vanavond",
+          "note": "Met opzet verborgen voor volwassenen."
+        },
+        {
+          "text": " in een loods. "
+        },
+        {
+          "text": "Ouders mogen niet mee",
+          "note": "Haalt Mary weg bij veilige volwassenen."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Gratis cadeaus als je nu komt",
+          "note": "Cadeaus + haast = een klassiek lokmiddel."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Hou het tussen ons",
+          "note": "Een vraag om geheimhouding, zodat niemand haar kan waarschuwen."
+        },
+        {
+          "text": ".",
+          "clearNote": "Einde van het bericht."
+        }
+      ]
+    },
+    "model-scout": {
+      "title": "DM van een modelscout",
+      "setup": "Iemand zegt dat Mary is gevonden op een pagina van het schoolfeest.",
+      "segments": [
+        {
+          "text": "Zag je foto’s — je zou model kunnen zijn. "
+        },
+        {
+          "text": "Ik ben echt een scout, no cap",
+          "note": "Zelf zeggen dat je te vertrouwen bent is geen bewijs."
+        },
+        {
+          "text": ". Vul dit "
+        },
+        {
+          "text": "dringende formulier",
+          "note": "Ze opjagen voordat ze het kan checken."
+        },
+        {
+          "text": " in met je "
+        },
+        {
+          "text": "huisadres en telefoonnummer",
+          "note": "Persoonlijke gegevens die vreemden niet mogen krijgen."
+        },
+        {
+          "text": " om lid te worden van ons "
+        },
+        {
+          "text": "exclusieve team",
+          "note": "Exclusief doen laat de val bijzonder aanvoelen."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "private-app": {
+      "title": "Verhuizen naar een privé-app",
+      "setup": "Een volger die Mary amper kent wil het gesprek ergens rustiger voeren.",
+      "segments": [
+        {
+          "text": "Deze app is raar. "
+        },
+        {
+          "text": "Laten we overstappen naar Snap",
+          "note": "Van een veiligere app wegstappen verbergt het gesprek."
+        },
+        {
+          "text": " en stuur een "
+        },
+        {
+          "text": "snelle foto om vertrouwen te bewijzen",
+          "note": "Een foto als ‘test’ is een drukmiddel bij grooming."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Je hoeft het aan niemand te vertellen",
+          "note": "Hulp van volwassenen met opzet blokkeren."
+        },
+        {
+          "text": ". Ik "
+        },
+        {
+          "text": "verwijder de berichten daarna",
+          "note": "Bewijs wissen is een rode vlag, geen vriendelijkheid."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "ride-location": {
+      "title": "Lift + locatie",
+      "setup": "Mary loopt naar huis. Een vreemde biedt in de chat hulp aan.",
+      "segments": [
+        {
+          "text": "Ben je nog op school? "
+        },
+        {
+          "text": "Deel je live locatie",
+          "note": "Met een live pin weet een vreemde precies waar ze is."
+        },
+        {
+          "text": " en "
+        },
+        {
+          "text": "ik haal je op met mijn auto",
+          "note": "De auto van een vreemde haalt haar weg bij veilige plekken."
+        },
+        {
+          "text": ". Het is prima, "
+        },
+        {
+          "text": "ik beloof dat je veilig bent",
+          "note": "Geruststelling zonder bewijs is druk, geen veiligheid."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Vraag het eerst niet aan je ouders",
+          "note": "Je ouders erbuiten houden is precies het doel."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "easy-money": {
+      "title": "Aanbod van makkelijk geld",
+      "setup": "Een account dat Mary niet kent biedt aan om “haar familie te helpen”.",
+      "segments": [
+        {
+          "text": "Ik zag je story. "
+        },
+        {
+          "text": "Vandaag nog makkelijk geld",
+          "note": "Beloftes van snel geld zijn een bekend lokmiddel."
+        },
+        {
+          "text": " — stuur me je "
+        },
+        {
+          "text": "bankgegevens",
+          "note": "Financiële gegevens horen nooit naar een vreemde te gaan."
+        },
+        {
+          "text": " of "
+        },
+        {
+          "text": "spreek nu met me af om het geld op te halen",
+          "note": "Afspreken + nu = haastig contact."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Vertel het aan niemand",
+          "note": "Geheimhouding beschermt de oplichter."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "job-flyer": {
+      "title": "Te mooie vacature",
+      "setup": "Een flyerbericht over een “studentenbaan in het buitenland”.",
+      "segments": [
+        {
+          "text": "Studentenbaan: "
+        },
+        {
+          "text": "verdien snel geld",
+          "note": "Veel loon, weinig details — zie het als lokaas."
+        },
+        {
+          "text": " en "
+        },
+        {
+          "text": "geen ID nodig",
+          "note": "Geen ID nodig is geen voordeel; echte banen controleren papieren."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Deze week naar het buitenland",
+          "note": "Plotselinge reisdruk is een signaal voor mensenhandel."
+        },
+        {
+          "text": ", "
+        },
+        {
+          "text": "privacy gegarandeerd",
+          "note": "“Privacy” betekent hier: verberg het voor volwassenen."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Beperkt aantal plekken — meld je meteen aan",
+          "note": "Schaarste + meteen = geen tijd om te checken."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "owe-me": {
+      "title": "Cadeau met een addertje",
+      "setup": "Iemand uit Mary’s game kocht een pass voor haar, daarna veranderde de toon.",
+      "segments": [
+        {
+          "text": "Ik heb de battle pass voor je geregeld, hoop dat je ’m leuk vindt. "
+        },
+        {
+          "text": "Je bent me nu wel iets schuldig hè",
+          "note": "Cadeaus die een schuld maken zijn een valstrik."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Vertel het je ouders niet",
+          "note": "Door de gunst te verbergen blijft de druk privé."
+        },
+        {
+          "text": ". Voeg me ook toe op "
+        },
+        {
+          "text": "Discord, dan kunnen leraren niet meekijken",
+          "note": "Van platform wisselen om toezicht te ontlopen."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "safe-study": {
+      "title": "Chat over samen leren",
+      "setup": "Een klasgenoot die Mary van school kent — hier zouden geen rode vlaggen in moeten zitten.",
+      "segments": [
+        {
+          "text": "Hé, ben je na school vrij om de biologietoets door te nemen?",
+          "clearNote": "Een normaal schoolplan met iemand die ze kent."
+        },
+        {
+          "text": " We kunnen afspreken in de bibliotheek. "
+        },
+        {
+          "text": "Neem je aantekeningen mee als je wilt",
+          "clearNote": "Een normaal verzoek tussen klasgenoten."
+        },
+        {
+          "text": ". Ik zit bij de grote ramen."
+        }
+      ]
+    }
+  }
+}

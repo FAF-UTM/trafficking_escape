@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePageExitOnIntro } from '../../components/shell/minigameChromeContext';
 import { useTranslation } from 'react-i18next';
 import { useAudio } from '../../context/AudioContext';
 import styles from './WordScrambleGame.module.css';
 import {
-  CASES,
   CASES_PER_RUN,
   HINT_COST,
   POINTS_MOVE_BEST,
@@ -13,6 +13,7 @@ import {
   type MoveOption,
   type ScrambleCase,
 } from './scrambleCases';
+import { localizeScrambleCases } from './localizeScramble';
 
 type Phase = 'intro' | 'build' | 'move' | 'debrief' | 'end';
 
@@ -39,8 +40,8 @@ const makePool = (c: ScrambleCase): Tile[] => {
   return tiles;
 };
 
-const buildRun = (): ScrambleCase[] =>
-  shuffle(CASES)
+const buildRun = (pool: ScrambleCase[]): ScrambleCase[] =>
+  shuffle(pool)
     .slice(0, CASES_PER_RUN)
     .map((c) => ({
       ...c,
@@ -84,12 +85,19 @@ interface WordScrambleGameProps {
 }
 
 const WordScrambleGame: React.FC<WordScrambleGameProps> = ({ onComplete }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.resolvedLanguage ?? i18n.language;
   const { playClick } = useAudio();
   const screenRef = useRef<HTMLDivElement>(null);
 
-  const run = useMemo(() => buildRun(), []);
+  const cases = useMemo(
+    () => localizeScrambleCases(t),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-localize when language changes
+    [t, lang]
+  );
+  const run = useMemo(() => buildRun(cases), [cases]);
   const [phase, setPhase] = useState<Phase>('intro');
+  usePageExitOnIntro(phase === 'intro');
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);

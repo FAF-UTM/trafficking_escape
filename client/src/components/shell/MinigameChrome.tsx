@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAudio } from '../../context/AudioContext';
 import LanguageSwitch from './LanguageSwitch';
+import { MinigameChromeProvider } from './minigameChromeContext';
 import {
   PixelExitIcon,
   PixelGearIcon,
@@ -26,6 +27,7 @@ const MinigameChrome: React.FC<MinigameChromeProps> = ({
   const navigate = useNavigate();
   const { playClick, muted, setMuted } = useAudio();
   const [open, setOpen] = useState(false);
+  const [showPageExit, setShowPageExit] = useState(true);
   const panelId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -55,99 +57,118 @@ const MinigameChrome: React.FC<MinigameChromeProps> = ({
 
   const click = () => playClick(3);
 
+  const exit = () => {
+    click();
+    setOpen(false);
+    onExit();
+  };
+
   return (
-    <div className={styles.root}>
-      <div className={styles.bar}>
-        <button
-          type="button"
-          className={`shell-button shell-button--quiet ${styles.exit}`}
-          onClick={() => {
-            click();
-            onExit();
-          }}
-        >
-          <PixelExitIcon size={18} />
-          {t('minigameChrome.exit')}
-        </button>
-
-        <div className={styles.settingsWrap}>
-          <button
-            ref={buttonRef}
-            type="button"
-            className={styles.gear}
-            aria-label={t('minigameChrome.settings')}
-            aria-expanded={open}
-            aria-controls={panelId}
-            onClick={() => {
-              click();
-              setOpen((v) => !v);
-            }}
-          >
-            <PixelGearIcon size={20} />
-          </button>
-
-          {open && (
-            <div
-              ref={panelRef}
-              id={panelId}
-              className={styles.panel}
-              role="dialog"
-              aria-label={t('minigameChrome.settings')}
+    <MinigameChromeProvider value={{ setShowPageExit }}>
+      <div className={styles.root}>
+        <div className={styles.bar}>
+          {showPageExit ? (
+            <button
+              type="button"
+              className={`shell-button shell-button--quiet ${styles.exit}`}
+              onClick={exit}
             >
-              <p className={styles.panelTitle}>
-                <PixelGearIcon size={16} />
-                {t('minigameChrome.settings')}
-              </p>
-
-              <section className={styles.group}>
-                <h2 className={styles.groupTitle}>
-                  {t('minigameChrome.sound')}
-                </h2>
-                <button
-                  type="button"
-                  className={styles.toggle}
-                  aria-pressed={muted}
-                  onClick={() => {
-                    click();
-                    setMuted(!muted);
-                  }}
-                >
-                  {muted ? (
-                    <PixelSoundOffIcon size={18} />
-                  ) : (
-                    <PixelSoundOnIcon size={18} />
-                  )}
-                  {muted
-                    ? t('minigameChrome.soundOff')
-                    : t('minigameChrome.soundOn')}
-                </button>
-              </section>
-
-              <section className={styles.group}>
-                <h2 className={styles.groupTitle}>
-                  {t('minigameChrome.language')}
-                </h2>
-                <LanguageSwitch />
-              </section>
-
-              <button
-                type="button"
-                className={`shell-button shell-button--quiet ${styles.home}`}
-                onClick={() => {
-                  click();
-                  navigate('/');
-                }}
-              >
-                <PixelHomeIcon size={18} />
-                {t('minigameChrome.home')}
-              </button>
-            </div>
+              <PixelExitIcon size={18} />
+              {t('minigameChrome.exit')}
+            </button>
+          ) : (
+            <span className={styles.barSpacer} aria-hidden="true" />
           )}
-        </div>
-      </div>
 
-      <div className={styles.body}>{children}</div>
-    </div>
+          <div className={styles.settingsWrap}>
+            <button
+              ref={buttonRef}
+              type="button"
+              className={styles.gear}
+              aria-label={t('minigameChrome.settings')}
+              aria-expanded={open}
+              aria-controls={panelId}
+              onClick={() => {
+                click();
+                setOpen((v) => !v);
+              }}
+            >
+              <PixelGearIcon size={20} />
+            </button>
+
+            {open && (
+              <div
+                ref={panelRef}
+                id={panelId}
+                className={styles.panel}
+                role="dialog"
+                aria-label={t('minigameChrome.settings')}
+              >
+                <p className={styles.panelTitle}>
+                  <PixelGearIcon size={16} />
+                  {t('minigameChrome.settings')}
+                </p>
+
+                <section className={styles.group}>
+                  <h2 className={styles.groupTitle}>
+                    {t('minigameChrome.sound')}
+                  </h2>
+                  <button
+                    type="button"
+                    className={styles.toggle}
+                    aria-pressed={muted}
+                    onClick={() => {
+                      click();
+                      setMuted(!muted);
+                    }}
+                  >
+                    {muted ? (
+                      <PixelSoundOffIcon size={18} />
+                    ) : (
+                      <PixelSoundOnIcon size={18} />
+                    )}
+                    {muted
+                      ? t('minigameChrome.soundOff')
+                      : t('minigameChrome.soundOn')}
+                  </button>
+                </section>
+
+                <section className={styles.group}>
+                  <h2 className={styles.groupTitle}>
+                    {t('minigameChrome.language')}
+                  </h2>
+                  <LanguageSwitch />
+                </section>
+
+                <div className={styles.nav}>
+                  <button
+                    type="button"
+                    className={`shell-button shell-button--quiet ${styles.navBtn}`}
+                    onClick={() => {
+                      click();
+                      navigate('/');
+                    }}
+                  >
+                    <PixelHomeIcon size={18} />
+                    {t('minigameChrome.home')}
+                  </button>
+                  <button
+                    type="button"
+                    className={`shell-button shell-button--quiet ${styles.navBtn}`}
+                    onClick={exit}
+                  >
+                    <PixelExitIcon size={18} />
+                    {t('minigameChrome.exit')}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className={styles.body}>{children}</div>
+      </div>
+    </MinigameChromeProvider>
   );
 };
 

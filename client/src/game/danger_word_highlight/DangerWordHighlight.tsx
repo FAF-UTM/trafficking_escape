@@ -1,17 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePageExitOnIntro } from '../../components/shell/minigameChromeContext';
 import { useTranslation } from 'react-i18next';
 import PixelAvatar from '../../components/avatar/PixelAvatar';
 import { useAudio } from '../../context/AudioContext';
 import styles from './DangerWordHighlight.module.css';
 import {
-  CASES,
   CASES_PER_RUN,
   FALSE_ALARM_COST,
   HIT_POINTS,
-  TACTICS,
   type DangerCase,
   type TacticId,
 } from './dangerCases';
+import { localizeDangerCases, localizeDangerTactics } from './localizeDanger';
 
 type Phase = 'intro' | 'flag' | 'reveal' | 'end';
 
@@ -33,7 +33,8 @@ const shuffle = <T,>(items: T[]): T[] => {
   return a;
 };
 
-const buildRun = (): DangerCase[] => shuffle(CASES).slice(0, CASES_PER_RUN);
+const buildRun = (pool: DangerCase[]): DangerCase[] =>
+  shuffle(pool).slice(0, CASES_PER_RUN);
 
 const flagCount = (c: DangerCase) => c.segments.filter((s) => s.flag).length;
 
@@ -74,12 +75,24 @@ interface DangerWordHighlightProps {
 const DangerWordHighlight: React.FC<DangerWordHighlightProps> = ({
   onComplete,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.resolvedLanguage ?? i18n.language;
   const { playClick } = useAudio();
   const screenRef = useRef<HTMLDivElement>(null);
 
-  const run = useMemo(() => buildRun(), []);
+  const tactics = useMemo(
+    () => localizeDangerTactics(t),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-localize when language changes
+    [t, lang]
+  );
+  const cases = useMemo(
+    () => localizeDangerCases(t),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-localize when language changes
+    [t, lang]
+  );
+  const run = useMemo(() => buildRun(cases), [cases]);
   const [phase, setPhase] = useState<Phase>('intro');
+  usePageExitOnIntro(phase === 'intro');
   const [index, setIndex] = useState(0);
   const [flagged, setFlagged] = useState<Set<number>>(() => new Set());
   const [results, setResults] = useState<CaseResult[]>([]);
@@ -265,11 +278,11 @@ const DangerWordHighlight: React.FC<DangerWordHighlightProps> = ({
                 style={{ '--i': i } as React.CSSProperties}
               >
                 <span className={styles.tacticEmoji} aria-hidden="true">
-                  {TACTICS[id].emoji}
+                  {tactics[id].emoji}
                 </span>
-                <span className={styles.tacticName}>{TACTICS[id].name}</span>
+                <span className={styles.tacticName}>{tactics[id].name}</span>
                 <span className={styles.tacticText}>
-                  {TACTICS[id].description}
+                  {tactics[id].description}
                 </span>
                 {!caught.has(id) && (
                   <span className={styles.tacticMissed}>
@@ -373,7 +386,7 @@ const DangerWordHighlight: React.FC<DangerWordHighlightProps> = ({
                   {seg.text}
                   {phase === 'reveal' && seg.flag && (
                     <span className={styles.stamp}>
-                      {TACTICS[seg.flag].emoji} {TACTICS[seg.flag].name}
+                      {tactics[seg.flag].emoji} {tactics[seg.flag].name}
                       {verdict === 'miss' ? ` · ${t('dangerWord.missed')}` : ''}
                     </span>
                   )}

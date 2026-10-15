@@ -1,0 +1,292 @@
+{
+  "cases": {
+    "secrets": {
+      "answer": "GEHEIM",
+      "decoys": "TX",
+      "context": "Een nieuwe chat zegt: “Hou dit maar tussen ons, oké?”",
+      "clue": "Je met opzet verstoppen voor volwassenen — niet hetzelfde als privacy.",
+      "fact": "“Gewoon tussen ons” haalt Mary weg bij mensen die kunnen helpen. Dat is geheimhouding: een geheimpje dat de ander beschermt.",
+      "move": {
+        "question": "Wat moet Mary met dat bericht doen?",
+        "options": [
+          {
+            "text": "Beloven het stil te houden zodat ze haar vertrouwen",
+            "feedback": "Dat past in de val. Geheimhouding beschermt de ander, niet Mary."
+          },
+          {
+            "text": "De chat laten zien aan een vriend of ouder die ze vertrouwt",
+            "feedback": "Het verzoek om geheimhouding doorbreken is de veiligste zet."
+          },
+          {
+            "text": "Eerst vragen waarom, en dan beslissen",
+            "feedback": "Nieuwsgierigheid is normaal, maar uitstellen houdt het geheim in stand. Vertel het beter nu aan iemand."
+          }
+        ]
+      }
+    },
+    "groom": {
+      "answer": "GROOMING",
+      "decoys": "Z",
+      "context": "Ze stappen over naar een andere app en vragen om een “snelle foto” om “vertrouwen te bewijzen”.",
+      "clue": "Vertrouwen opbouwen dat verandert in een drukmiddel.",
+      "fact": "Privéchat + druk om een foto is een grooming-patroon: eerst vertrouwen, later controle.",
+      "move": {
+        "question": "Wat is de veiligste reactie?",
+        "options": [
+          {
+            "text": "Een foto zonder gezicht sturen zodat ze ophouden met vragen",
+            "feedback": "Elke foto kan worden bewaard of later gebruikt. Niet sturen."
+          },
+          {
+            "text": "Weigeren, blokkeren en het aan een vertrouwde volwassene vertellen",
+            "feedback": "Een duidelijk nee, dan het contact verbreken en hulp halen."
+          },
+          {
+            "text": "Op de openbare app blijven maar wel doorchatten",
+            "feedback": "Openbaar blijven is beter dan overstappen — maar na het fotoverzoek moet ze stoppen."
+          }
+        ]
+      }
+    },
+    "scout": {
+      "answer": "SCOUT",
+      "decoys": "HK",
+      "context": "“Ik ben modelscout, no cap. Kom vanavond afspreken. Je wordt beroemd.”",
+      "clue": "Een nepfunctie om snel een afspraak af te dwingen.",
+      "fact": "Echte scouts zetten tieners niet dezelfde avond nog onder druk via DM. Haast is het verraderlijke signaal.",
+      "move": {
+        "question": "Mary voelt zich gevleid. Wat is de zet?",
+        "options": [
+          {
+            "text": "Afspreken in een openbaar café “om meer te horen”",
+            "feedback": "Ook een openbare afspraak met een vreemde uit DM’s is riskant. Niet gaan."
+          },
+          {
+            "text": "Het gepraat over roem negeren en een ouder of leraar het laten checken",
+            "feedback": "Volwassenen kunnen aanbiedingen controleren. Druk over roem is geen bewijs dat het echt is."
+          },
+          {
+            "text": "Eerst om een website van het bedrijf vragen",
+            "feedback": "Websites kunnen nep zijn. Haal toch eerst een volwassene erbij."
+          }
+        ]
+      }
+    },
+    "block": {
+      "answer": "BLOKKEER",
+      "decoys": "UY",
+      "context": "Mary zei nee. Ze blijven duwen: “kom op, vertrouw me gewoon.”",
+      "clue": "Verbreek de verbinding als druk een grens negeert.",
+      "fact": "Blijven aandringen na een nee is een rode vlag. Blokkeren stopt het kanaal.",
+      "move": {
+        "question": "Ze heeft al twee keer nee gezegd. Wat nu?",
+        "options": [
+          {
+            "text": "Haar gevoel nog één keer uitleggen",
+            "feedback": "Ze hebben haar al genegeerd. Meer uitleggen helpt zelden."
+          },
+          {
+            "text": "Het account blokkeren en het aan iemand vertellen die ze vertrouwt",
+            "feedback": "Grens + back-up. Dat is de veilige combinatie."
+          },
+          {
+            "text": "Meldingen dempen maar de chat open laten",
+            "feedback": "Rustiger, maar ze kunnen nog steeds berichten sturen. Blokkeren is sterker."
+          }
+        ]
+      }
+    },
+    "report": {
+      "answer": "MELDEN",
+      "decoys": "KT",
+      "context": "Ze vragen om haar live locatie en bieden een lift naar huis aan.",
+      "clue": "Vertel het aan het platform (en aan een volwassene) als locatie + controle opduiken.",
+      "fact": "Live locatie + de auto van een vreemde is een isolatietactiek. Melden zorgt dat het wordt vastgelegd.",
+      "move": {
+        "question": "Wat hoort er in die melding?",
+        "options": [
+          {
+            "text": "Niets — melden maakt ze alleen maar bozer",
+            "feedback": "Hun reactie is niet haar zorg. Melden beschermt haar en anderen."
+          },
+          {
+            "text": "Screenshots van het verzoek, de gebruikersnaam en wat ze wilden",
+            "feedback": "Bewijs helpt. Vertel het daarna ook aan een vertrouwde volwassene."
+          },
+          {
+            "text": "Alleen de gebruikersnaam, geen screenshots",
+            "feedback": "De gebruikersnaam helpt, maar screenshots laten zien wat ze echt vroegen."
+          }
+        ]
+      }
+    },
+    "lures": {
+      "answer": "LOKAAS",
+      "decoys": "BWZ",
+      "context": "“Gratis cadeaus + VIP-feest als je vanavond komt. Vertel het aan niemand.”",
+      "clue": "Een aanbod dat te mooi én te dringend klinkt, om je erin te laten lopen.",
+      "fact": "Cadeaus, exclusiviteit en geheimhouding zijn klassiek lokaas om tieners te werven.",
+      "move": {
+        "question": "De cadeaus klinken echt. Wat nu?",
+        "options": [
+          {
+            "text": "Met een vriend meegaan, dan is het “veiliger”",
+            "feedback": "Een vriend meenemen maakt het geheime feest van een vreemde niet veilig."
+          },
+          {
+            "text": "Overslaan en de uitnodiging aan een volwassene laten zien",
+            "feedback": "Het lokaas weigeren en hulp erbij halen is de juiste keuze."
+          },
+          {
+            "text": "Eerst vragen wat voor cadeaus het zijn",
+            "feedback": "Details lossen geheimhouding + haast niet op. Ga toch niet."
+          }
+        ]
+      }
+    },
+    "isolate": {
+      "answer": "ISOLATIE",
+      "decoys": "W",
+      "context": "“Je vrienden zijn jaloers. Stop met ze op te trekken — je hebt mij.”",
+      "clue": "Iemand wegtrekken bij echte steun.",
+      "fact": "Mary losweken van haar vrienden maakt haar makkelijker te controleren. Dat is isolatie.",
+      "move": {
+        "question": "Wat moet Mary daarop antwoorden?",
+        "options": [
+          {
+            "text": "Minder tijd met vrienden doorbrengen om de chat tevreden te houden",
+            "feedback": "Dat is precies wat isolatie wil."
+          },
+          {
+            "text": "Haar vrienden dichtbij houden en vertellen wat er speelt",
+            "feedback": "Eerst je steun om je heen. Isolatie verliest kracht als vrienden het weten."
+          },
+          {
+            "text": "Vrienden blijven maar de chat voor ze verbergen",
+            "feedback": "Vrienden houden helpt — maar de chat verbergen laat haar alleen met het risico."
+          }
+        ]
+      }
+    },
+    "debt": {
+      "answer": "SCHULD",
+      "decoys": "QJM",
+      "context": "Ze kochten een game-pass voor haar en zeiden toen: “je bent me nog wat schuldig hè.”",
+      "clue": "Een “cadeau” dat verandert in druk.",
+      "fact": "Gunsten die een “je bent me wat schuldig” maken zijn een schuldval — cadeaus horen geen rekening te hebben.",
+      "move": {
+        "question": "Ze heeft de pass al aangenomen. Wat nu?",
+        "options": [
+          {
+            "text": "Een kleine gunst doen zodat het weer quitte is",
+            "feedback": "Dat leert ze dat de val werkt. Ze is niets schuldig."
+          },
+          {
+            "text": "Zeggen dat ze niets schuldig is, en blokkeren als ze blijven duwen",
+            "feedback": "Een duidelijke weigering. Met cadeaus koop je geen medewerking."
+          },
+          {
+            "text": "Aanbieden om ze later met geld terug te betalen",
+            "feedback": "Betalen kan de band in stand houden. Beter de schuld helemaal weigeren."
+          }
+        ]
+      }
+    },
+    "exit": {
+      "answer": "UITWEG",
+      "decoys": "KFP",
+      "context": "Mary krijgt een naar gevoel. De chat voelt niet goed en ze is alleen online.",
+      "clue": "Zorg dat je kunt weggaan voordat het erger wordt.",
+      "fact": "Een uitweg hebben — de chat sluiten, de plek verlaten, naar een veilige plek gaan — is belangrijker dan beleefd zijn.",
+      "move": {
+        "question": "Wat is een goed plan om weg te komen?",
+        "options": [
+          {
+            "text": "Blijven praten tot ze zeker weet dat het gevaarlijk is",
+            "feedback": "Wachten op zekerheid kost tijd. Een slecht gevoel is genoeg reden om weg te gaan."
+          },
+          {
+            "text": "De chat stoppen, naar een veilige plek gaan en het aan een volwassene vertellen",
+            "feedback": "Eerst weg, later uitleggen. Dat is het plan."
+          },
+          {
+            "text": "Uitloggen maar over een uur weer kijken",
+            "feedback": "Uitloggen helpt — maar het aan iemand vertellen is beter dan later alleen terugkijken."
+          }
+        ]
+      }
+    },
+    "verify": {
+      "answer": "CHECKEN",
+      "decoys": "QZ",
+      "context": "Een “baanaanbieding” belandt in haar DM’s met een link en een contract als pdf.",
+      "clue": "Kijk of het echt is voordat je iets deelt.",
+      "fact": "Links en pdf’s zijn makkelijk te vervalsen. Check het via een volwassene die je kent of een officieel kanaal — nooit via de vreemde.",
+      "move": {
+        "question": "Waar moet Mary de aanbieding checken?",
+        "options": [
+          {
+            "text": "Op de link klikken die ze stuurden — dat gaat sneller",
+            "feedback": "Hun link kan malware of een phishingpagina zijn. Niet doen."
+          },
+          {
+            "text": "Een leraar of ouder vragen en het bedrijf apart opzoeken",
+            "feedback": "Onafhankelijk checken + hulp van een volwassene. Dat is echt controleren."
+          },
+          {
+            "text": "De afzender om een telefoonnummer vragen",
+            "feedback": "Nummers kunnen ook nep zijn. Check het toch offline met iemand die ze vertrouwt."
+          }
+        ]
+      }
+    },
+    "consent": {
+      "answer": "AKKOORD",
+      "decoys": "XT",
+      "context": "Ze grappen “stuur het toch maar” nadat Mary al zei dat ze zich er niet prettig bij voelt.",
+      "clue": "Een duidelijk ja — druk na een nee telt niet.",
+      "fact": "Toestemming, een echt “akkoord”, blijft gelden zolang je het wilt en je mag het altijd intrekken. Aandringen na een nee is dwang, geen romantiek.",
+      "move": {
+        "question": "Mary zei al nee. Ze blijven erover grappen.",
+        "options": [
+          {
+            "text": "Erom lachen zodat het niet ongemakkelijk wordt",
+            "feedback": "Ongemakkelijk is veiliger dan toegeven. Haar nee blijft staan."
+          },
+          {
+            "text": "Haar nee herhalen en de chat verlaten als ze doorgaan",
+            "feedback": "Een stevige grens, dan weggaan. Dat is toestemming in actie."
+          },
+          {
+            "text": "Van onderwerp veranderen en hopen dat ze het vergeten",
+            "feedback": "Van onderwerp veranderen kan op korte termijn helpen, maar een duidelijk nee + weggaan is sterker."
+          }
+        ]
+      }
+    },
+    "pressure": {
+      "answer": "DWANG",
+      "decoys": "M",
+      "context": "“Als je me verwijdert krijg je spijt. Iedereen gaat het zien.”",
+      "clue": "Dreigementen om een keuze af te dwingen.",
+      "fact": "Dreigementen, schuldgevoel en “iedereen gaat het zien” zijn druk en dwang — vaak verbonden aan sextortion.",
+      "move": {
+        "question": "Ze dreigen haar. Wat is de eerste zet?",
+        "options": [
+          {
+            "text": "Betalen of sturen wat ze willen zodat het stopt",
+            "feedback": "Betalen maakt het meestal erger. Stuur niets."
+          },
+          {
+            "text": "Stoppen met antwoorden, screenshots maken, het aan een volwassene of hulplijn vertellen",
+            "feedback": "Niet reageren, bewijs bewaren, hulp halen. Dat is de veilige volgorde."
+          },
+          {
+            "text": "Beweren dat ze ongelijk hebben",
+            "feedback": "Ruziën houdt de chat levend. Stilte + hulp is beter."
+          }
+        ]
+      }
+    }
+  }
+}

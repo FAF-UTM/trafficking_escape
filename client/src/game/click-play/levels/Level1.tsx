@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudio } from '../../../context/AudioContext';
 
 interface Level1Props {
@@ -6,6 +7,7 @@ interface Level1Props {
 }
 
 const Level1: React.FC<Level1Props> = ({ onComplete }) => {
+  const { t } = useTranslation();
   const [fileFound, setFileFound] = useState(false);
   const [keyFound, setKeyFound] = useState(false);
 
@@ -45,7 +47,7 @@ const Level1: React.FC<Level1Props> = ({ onComplete }) => {
         setSelectedItem('file');
         return next;
       });
-      openModal('/assets/file.png', 'You found a file!');
+      openModal('/assets/file.png', t('clickPuzzle.foundFile'));
     }
   };
 
@@ -59,7 +61,7 @@ const Level1: React.FC<Level1Props> = ({ onComplete }) => {
         setSelectedItem('key');
         return next;
       });
-      openModal('/assets/key.png', 'You found a key!');
+      openModal('/assets/key.png', t('clickPuzzle.foundKey'));
     }
   };
 
@@ -68,7 +70,7 @@ const Level1: React.FC<Level1Props> = ({ onComplete }) => {
     playClick(8);
     if (selectedItem === 'key') {
       setDoorUnlocked(true);
-      openModal('', 'You unlocked the door! (Click outside to continue...)');
+      openModal('', t('clickPuzzle.unlockedDoor'));
     }
   };
 
@@ -82,10 +84,7 @@ const Level1: React.FC<Level1Props> = ({ onComplete }) => {
   // Note logic
   const handleNoteClick = () => {
     playClick(8);
-    openModal(
-      '/assets/note.png',
-      'A note: "Check under the jacket. You’ll find what you need."'
-    );
+    openModal('/assets/note.png', t('clickPuzzle.noteJacket'));
   };
 
   const handleSelectInventoryItem = (item: string) => {

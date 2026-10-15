@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePageExitOnIntro } from '../../components/shell/minigameChromeContext';
 import { useTranslation } from 'react-i18next';
 import PixelAvatar from '../../components/avatar/PixelAvatar';
 import { useAudio } from '../../context/AudioContext';
 import styles from './WhoToTrustGame.module.css';
 import {
-  CASES,
   CASES_PER_RUN,
   POINTS_BEST,
   POINTS_PARTLY,
@@ -12,6 +12,7 @@ import {
   type TrustCase,
   type TrustLevel,
 } from './trustCases';
+import { localizeTrustCases } from './localizeTrust';
 
 type Phase = 'intro' | 'choose' | 'debrief' | 'end';
 
@@ -24,8 +25,8 @@ const shuffle = <T,>(items: T[]): T[] => {
   return a;
 };
 
-const buildRun = (): TrustCase[] =>
-  shuffle(CASES)
+const buildRun = (pool: TrustCase[]): TrustCase[] =>
+  shuffle(pool)
     .slice(0, CASES_PER_RUN)
     .map((c) => ({ ...c, contacts: shuffle(c.contacts) }));
 
@@ -67,13 +68,20 @@ interface WhoToTrustGameProps {
 }
 
 const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.resolvedLanguage ?? i18n.language;
   const { playClick } = useAudio();
   const screenRef = useRef<HTMLDivElement>(null);
   const debriefRef = useRef<HTMLElement>(null);
 
-  const run = useMemo(() => buildRun(), []);
+  const cases = useMemo(
+    () => localizeTrustCases(t),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-localize when language changes
+    [t, lang]
+  );
+  const run = useMemo(() => buildRun(cases), [cases]);
   const [phase, setPhase] = useState<Phase>('intro');
+  usePageExitOnIntro(phase === 'intro');
   const [index, setIndex] = useState(0);
   const [pickedId, setPickedId] = useState<string | null>(null);
   const [score, setScore] = useState(0);

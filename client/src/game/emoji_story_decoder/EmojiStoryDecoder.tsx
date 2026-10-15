@@ -1,18 +1,23 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePageExitOnIntro } from '../../components/shell/minigameChromeContext';
 import { useTranslation } from 'react-i18next';
 import PixelAvatar from '../../components/avatar/PixelAvatar';
 import { useAudio } from '../../context/AudioContext';
 import styles from './EmojiStoryDecoder.module.css';
 import {
-  CASES,
   CASES_PER_RUN,
   DECODE_POINTS,
   MOVE_POINTS,
-  TACTICS,
   type ChoiceOption,
   type EmojiCase,
+  type Tactic,
   type TacticId,
 } from './emojiCases';
+import {
+  localizeCases,
+  localizeTactics,
+  relocalizeCase,
+} from './localizeEmoji';
 
 type Phase =
   'intro' | 'thread' | 'reveal' | 'decode' | 'move' | 'debrief' | 'end';
@@ -44,8 +49,8 @@ const shuffle = <T,>(items: T[]): T[] => {
   return a;
 };
 
-const buildRun = (): EmojiCase[] =>
-  shuffle(CASES)
+const buildRun = (pool: EmojiCase[]): EmojiCase[] =>
+  shuffle(pool)
     .slice(0, CASES_PER_RUN)
     .map((c) => ({
       ...c,
@@ -107,7 +112,10 @@ const Choices: React.FC<ChoicesProps> = ({
         else state = 'dim';
       }
       return (
-        <li key={option.text} style={{ '--i': i } as React.CSSProperties}>
+        <li
+          key={option.sourceIndex ?? i}
+          style={{ '--i': i } as React.CSSProperties}
+        >
           <button
             type="button"
             className={styles.choice}
@@ -127,28 +135,29 @@ const Choices: React.FC<ChoicesProps> = ({
   </ol>
 );
 
-const PREVIEW = CASES[0];
-
-const IntroPreview: React.FC = () => (
+const IntroPreview: React.FC<{
+  preview: EmojiCase;
+  tactics: Record<TacticId, Tactic>;
+}> = ({ preview, tactics }) => (
   <div className={styles.preview} aria-hidden="true">
     <div className={`${styles.phone} ${styles.previewPhone}`}>
       <div className={styles.profile}>
         <PixelAvatar
-          seed={PREVIEW.contact.handle}
+          seed={preview.contact.handle}
           size={48}
           className={styles.profileAvatar}
         />
         <div>
-          <p className={styles.handle}>@{PREVIEW.contact.handle}</p>
+          <p className={styles.handle}>@{preview.contact.handle}</p>
           <ul className={styles.clues}>
-            {PREVIEW.contact.clues.map((clue) => (
+            {preview.contact.clues.map((clue) => (
               <li key={clue}>{clue}</li>
             ))}
           </ul>
         </div>
       </div>
       <ol className={styles.thread}>
-        {PREVIEW.thread.slice(0, 5).map((m, i) => (
+        {preview.thread.slice(0, 5).map((m, i) => (
           <li
             key={i}
             className={`${styles.row} ${styles.previewRow}`}
@@ -160,7 +169,7 @@ const IntroPreview: React.FC = () => (
             {m.flag && (
               <div className={styles.stamp} data-verdict="hit">
                 <span className={styles.stampLabel}>
-                  🚩 {TACTICS[m.flag].name}
+                  🚩 {tactics[m.flag].name}
                 </span>
               </div>
             )}
@@ -178,11 +187,25 @@ interface EmojiStoryDecoderProps {
 const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({
   onComplete,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { playClick } = useAudio();
 
-  const [run] = useState(buildRun);
+  const lang = i18n.resolvedLanguage ?? i18n.language;
+  const tactics = useMemo(
+    () => localizeTactics(t),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-localize when language changes
+    [t, lang]
+  );
+  const cases = useMemo(
+    () => localizeCases(t),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-localize when language changes
+    [t, lang]
+  );
+  const preview = cases[0];
+
+  const [run, setRun] = useState<EmojiCase[]>([]);
   const [phase, setPhase] = useState<Phase>('intro');
+  usePageExitOnIntro(phase === 'intro');
   const [caseIndex, setCaseIndex] = useState(0);
   const [visible, setVisible] = useState(0);
   const [typing, setTyping] = useState(false);
@@ -197,13 +220,25 @@ const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({
   const panelRef = useRef<HTMLDivElement>(null);
   const threadEndRef = useRef<HTMLDivElement>(null);
 
+  // Keep the active run's case text in sync when language changes (incl. mid-game).
+  useEffect(() => {
+    setRun((prev) => {
+      if (!prev.length) return buildRun(cases);
+      const byId = new Map(cases.map((c) => [c.id, c]));
+      return prev.map((c) => {
+        const fresh = byId.get(c.id);
+        return fresh ? relocalizeCase(c, fresh) : c;
+      });
+    });
+  }, [cases]);
+
   const current = run[caseIndex];
-  const allVisible = visible >= current.thread.length;
+  const allVisible = !!current && visible >= current.thread.length;
   const totalMax = useMemo(
     () => run.reduce((sum, c) => sum + caseMax(c), 0),
     [run]
   );
-  const caseFlagMax = flagCount(current);
+  const caseFlagMax = current ? flagCount(current) : 0;
 
   const score = results.reduce(
     (sum, r) => sum + r.flagPoints + r.decode + r.move,
@@ -371,7 +406,7 @@ const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({
               {t('emojiDecoder.start')}
             </button>
           </section>
-          <IntroPreview />
+          <IntroPreview preview={preview} tactics={tactics} />
         </div>
       </div>
     );
@@ -421,11 +456,11 @@ const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({
                 style={{ '--i': i } as React.CSSProperties}
               >
                 <span className={styles.tacticEmoji} aria-hidden="true">
-                  {TACTICS[id].emoji}
+                  {tactics[id].emoji}
                 </span>
-                <span className={styles.tacticName}>{TACTICS[id].name}</span>
+                <span className={styles.tacticName}>{tactics[id].name}</span>
                 <span className={styles.tacticText}>
-                  {TACTICS[id].description}
+                  {tactics[id].description}
                 </span>
                 {!caught.has(id) && (
                   <span className={styles.tacticMissed}>
@@ -455,6 +490,8 @@ const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({
       </div>
     );
   }
+
+  if (!current) return null;
 
   const result = results[caseIndex];
   const pickedDecode =
@@ -536,7 +573,7 @@ const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({
           <ol className={styles.thread}>
             {current.thread.slice(0, visible).map((m, i) => {
               const verdict = phase === 'thread' ? null : verdictFor(i);
-              const tactic = m.flag ? TACTICS[m.flag] : null;
+              const tactic = m.flag ? tactics[m.flag] : null;
               return (
                 <li
                   key={i}
@@ -857,13 +894,13 @@ const EmojiStoryDecoder: React.FC<EmojiStoryDecoderProps> = ({
                           </span>
                         )}
                         <span className={styles.tacticEmoji} aria-hidden="true">
-                          {TACTICS[id].emoji}
+                          {tactics[id].emoji}
                         </span>
                         <span className={styles.tacticName}>
-                          {TACTICS[id].name}
+                          {tactics[id].name}
                         </span>
                         <span className={styles.tacticText}>
-                          {TACTICS[id].description}
+                          {tactics[id].description}
                         </span>
                       </li>
                     ))}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudio } from '../../../context/AudioContext';
 
 interface Level2Props {
@@ -6,6 +7,7 @@ interface Level2Props {
 }
 
 const Level2: React.FC<Level2Props> = ({ onComplete }) => {
+  const { t } = useTranslation();
   // Puzzle states
   const [crowbarFound, setCrowbarFound] = useState(false);
   const [wireCutterFound, setWireCutterFound] = useState(false);
@@ -54,7 +56,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
 
     // If user selects the note from inventory, show it again
     if (item === 'note2') {
-      openModal('/assets/note2.png', 'The note reads: "2451"');
+      openModal('/assets/note2.png', t('clickPuzzle.noteCode'));
     }
   };
 
@@ -68,7 +70,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
         setSelectedItem('note2');
         return next;
       });
-      openModal('/assets/note2.png', 'You found a note! It says: "2451"');
+      openModal('/assets/note2.png', t('clickPuzzle.foundNote'));
     }
   };
 
@@ -82,7 +84,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
         setSelectedItem('crowbar');
         return next;
       });
-      openModal('/assets/crowbar.png', 'You found a crowbar!');
+      openModal('/assets/crowbar.png', t('clickPuzzle.foundCrowbar'));
     }
   };
 
@@ -96,7 +98,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
         setSelectedItem('wirecutter');
         return next;
       });
-      openModal('/assets/wirecutter.png', 'You found wire cutters!');
+      openModal('/assets/wirecutter.png', t('clickPuzzle.foundWirecutters'));
     }
   };
 
@@ -105,7 +107,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
     playClick(8);
     if (!electricityOff && selectedItem === 'wirecutter') {
       setElectricityOff(true);
-      openModal('', 'You cut the cables! The door lock is offline.');
+      openModal('', t('clickPuzzle.cutCables'));
     }
   };
 
@@ -115,10 +117,7 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
     if (electricityOff) {
       // If power is off, lock is disabled
       setDoorUnlocked(true);
-      openModal(
-        '',
-        'The door is unlocked with the electricity off! (Click outside to continue...)'
-      );
+      openModal('', t('clickPuzzle.doorUnlockedPowerOff'));
     } else {
       // Show code input if electricity is on
       setShowCodeDialog(true);
@@ -136,13 +135,10 @@ const Level2: React.FC<Level2Props> = ({ onComplete }) => {
       setDoorUnlocked(true);
       setShowCodeDialog(false);
       setEnteredCode('');
-      openModal(
-        '',
-        'Correct code! The door is unlocked. (Click outside to continue...)'
-      );
+      openModal('', t('clickPuzzle.correctCode'));
     } else {
       // Wrong code
-      alert('Wrong code! Try again.');
+      alert(t('clickPuzzle.wrongCode'));
     }
   };
 

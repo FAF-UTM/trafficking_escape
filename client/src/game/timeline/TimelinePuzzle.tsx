@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePageExitOnIntro } from '../../components/shell/minigameChromeContext';
 import { useTranslation } from 'react-i18next';
 import { useAudio } from '../../context/AudioContext';
 import styles from './TimelinePuzzle.module.css';
@@ -111,6 +112,7 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
   const screenRef = useRef<HTMLDivElement>(null);
 
   const [phase, setPhase] = useState<Phase>('intro');
+  usePageExitOnIntro(phase === 'intro');
   const [levelIndex, setLevelIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [attempts, setAttempts] = useState(0);
