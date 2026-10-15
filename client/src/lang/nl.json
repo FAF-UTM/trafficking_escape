@@ -98,7 +98,6 @@
     "language": "Taal",
     "mode": "Modus",
     "adaptability": "Aanpassingsvermogen",
-    "minigameInterval": "Interval minigame",
     "links": {
       "login": "Inloggen",
       "credentials": "Referenties",
@@ -113,8 +112,6 @@
     "cvProtanopia": "Rood-groen (protanopie)",
     "cvTritanopia": "Blauw-geel (tritanopie)",
     "cvAchromatopsia": "Geen kleur (achromatopsie)",
-    "breaks": "Minigame-pauzes",
-    "breaksHelp": "Na {{value}} minuten chatten verschijnt er een minigame.",
     "more": "Meer"
   },
   "ending": {

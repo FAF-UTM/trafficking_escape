@@ -98,7 +98,6 @@
     "language": "Language",
     "mode": "Mode",
     "adaptability": "Adaptability",
-    "minigameInterval": "Minigame Interval",
     "links": {
       "login": "Login",
       "credentials": "Credentials",
@@ -113,8 +112,6 @@
     "cvProtanopia": "Red-green (protanopia)",
     "cvTritanopia": "Blue-yellow (tritanopia)",
     "cvAchromatopsia": "No colour (achromatopsia)",
-    "breaks": "Mini-game breaks",
-    "breaksHelp": "A mini-game appears after {{value}} minutes of chatting.",
     "more": "More"
   },
   "ending": {

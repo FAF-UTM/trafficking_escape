@@ -1,8 +1,7 @@
 import './App.css';
 import Platformer from './game/platformer/Platformer.tsx';
 import Home from './pages/home/Home.tsx';
-// import Chat from './chat/Chat.tsx';
-import ChatWithMinigames from './chat/ChatWithMinigames.tsx';
+import Chat from './chat/Chat.tsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import LoginPage from './pages/login/Login.tsx';
@@ -163,7 +162,7 @@ function App() {
               path="/chat"
               element={
                 <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                  <ChatWithMinigames />
+                  <Chat />
                 </ProtectedRoute>
               }
             />

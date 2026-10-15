@@ -12,9 +12,6 @@ const COLOUR_MODES = [
   { id: 'achromatopsia', key: 'cvAchromatopsia' },
 ] as const;
 
-// Must match DEFAULT_INTERVAL in ChatWithMinigames.
-const DEFAULT_INTERVAL = 5;
-
 const readStored = (key: string) => {
   try {
     return localStorage.getItem(key);
@@ -37,10 +34,6 @@ const SettingsPage: React.FC = () => {
   const [colourMode, setColourMode] = useState(
     () => readStored('colorBlindMode') || 'none'
   );
-  const [interval, setIntervalMinutes] = useState(() => {
-    const stored = parseFloat(readStored('minigameInterval') ?? '');
-    return Number.isFinite(stored) ? stored : DEFAULT_INTERVAL;
-  });
 
   const chooseColourMode = (mode: string) => {
     setColourMode(mode);
@@ -48,11 +41,6 @@ const SettingsPage: React.FC = () => {
     // The SVG filters are defined once in App.tsx.
     document.documentElement.style.filter =
       mode === 'none' ? 'none' : `url(#${mode})`;
-  };
-
-  const chooseInterval = (value: number) => {
-    setIntervalMinutes(value);
-    store('minigameInterval', String(value));
   };
 
   return (
@@ -87,23 +75,6 @@ const SettingsPage: React.FC = () => {
             ))}
           </div>
         </fieldset>
-
-        <section className={styles.group} aria-labelledby="settings-breaks">
-          <h2 id="settings-breaks">{t('settings.breaks')}</h2>
-          <label className={styles.range}>
-            <span className={styles.help}>
-              {t('settings.breaksHelp', { value: interval })}
-            </span>
-            <input
-              type="range"
-              min={0.5}
-              max={15}
-              step={0.5}
-              value={interval}
-              onChange={(e) => chooseInterval(parseFloat(e.target.value))}
-            />
-          </label>
-        </section>
 
         <nav className={styles.links} aria-label={t('settings.more')}>
           <Link to="/login" className="shell-link">

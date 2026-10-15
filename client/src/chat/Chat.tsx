@@ -54,7 +54,7 @@ interface SavedTurn {
   dangerLevel: number;
 }
 
-// Per tab, so it survives mini-games and reloads but not closing the game.
+// Per tab, so it survives reloads but not closing the game.
 const SAVED_TURNS_KEY = 'chatSavedTurns';
 
 const loadSavedTurns = (): Record<number, SavedTurn> => {
