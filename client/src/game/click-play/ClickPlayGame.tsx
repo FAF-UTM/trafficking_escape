@@ -819,11 +819,11 @@ const HOTSPOTS: Record<
     { id: 'door', x: 86, y: 8, w: 10, h: 76 },
   ],
   hallway: [
-    { id: 'cabinet', x: 2, y: 26, w: 14, h: 52 },
-    { id: 'fusebox', x: 18, y: 20, w: 13, h: 34 },
-    { id: 'whiteboard', x: 34, y: 14, w: 26, h: 40 },
-    { id: 'monitor', x: 62, y: 30, w: 14, h: 24 },
-    { id: 'toolbox', x: 64, y: 68, w: 16, h: 18 },
+    { id: 'cabinet', x: 4, y: 24, w: 14, h: 52 },
+    { id: 'fusebox', x: 23, y: 26, w: 10, h: 28 },
+    { id: 'whiteboard', x: 37, y: 22, w: 26, h: 32 },
+    { id: 'monitor', x: 66, y: 22, w: 10, h: 20 },
+    { id: 'toolbox', x: 58, y: 60, w: 15, h: 18 },
     { id: 'door', x: 84, y: 16, w: 14, h: 72 },
   ],
   bay: [
