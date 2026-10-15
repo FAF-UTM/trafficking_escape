@@ -1,17 +1,10 @@
-import React, { useEffect, useId, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAudio } from '../../context/AudioContext';
-import LanguageSwitch from './LanguageSwitch';
 import { MinigameChromeProvider } from './minigameChromeContext';
-import {
-  PixelExitIcon,
-  PixelGearIcon,
-  PixelHomeIcon,
-  PixelSoundOffIcon,
-  PixelSoundOnIcon,
-} from './pixelIcons';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import MinigameSettingsMenu from './MinigameSettingsMenu';
 import styles from './MinigameChrome.module.css';
+import { useAudio } from '../../context/AudioContext';
 
 interface MinigameChromeProps {
   children: React.ReactNode;
@@ -24,147 +17,36 @@ const MinigameChrome: React.FC<MinigameChromeProps> = ({
   onExit,
 }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { playClick, muted, setMuted } = useAudio();
-  const [open, setOpen] = useState(false);
+  const { playClick } = useAudio();
   const [showPageExit, setShowPageExit] = useState(true);
-  const panelId = useId();
-  const panelRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    const onPointer = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (
-        panelRef.current?.contains(target) ||
-        buttonRef.current?.contains(target)
-      ) {
-        return;
-      }
-      setOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    window.addEventListener('mousedown', onPointer);
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      window.removeEventListener('mousedown', onPointer);
-    };
-  }, [open]);
-
-  const click = () => playClick(3);
+  const [showSettings, setShowSettings] = useState(true);
 
   const exit = () => {
-    click();
-    setOpen(false);
+    playClick(3);
     onExit();
   };
 
   return (
-    <MinigameChromeProvider value={{ setShowPageExit }}>
+    <MinigameChromeProvider value={{ setShowPageExit, setShowSettings }}>
       <div className={styles.root}>
-        <div className={styles.bar}>
-          {showPageExit ? (
-            <button
-              type="button"
-              className={`shell-button shell-button--quiet ${styles.exit}`}
-              onClick={exit}
-            >
-              <PixelExitIcon size={18} />
-              {t('minigameChrome.exit')}
-            </button>
-          ) : (
-            <span className={styles.barSpacer} aria-hidden="true" />
-          )}
-
-          <div className={styles.settingsWrap}>
-            <button
-              ref={buttonRef}
-              type="button"
-              className={styles.gear}
-              aria-label={t('minigameChrome.settings')}
-              aria-expanded={open}
-              aria-controls={panelId}
-              onClick={() => {
-                click();
-                setOpen((v) => !v);
-              }}
-            >
-              <PixelGearIcon size={20} />
-            </button>
-
-            {open && (
-              <div
-                ref={panelRef}
-                id={panelId}
-                className={styles.panel}
-                role="dialog"
-                aria-label={t('minigameChrome.settings')}
+        {(showPageExit || showSettings) && (
+          <div className={styles.bar}>
+            {showPageExit ? (
+              <button
+                type="button"
+                className={`shell-button shell-button--quiet ${styles.exit}`}
+                onClick={exit}
               >
-                <p className={styles.panelTitle}>
-                  <PixelGearIcon size={16} />
-                  {t('minigameChrome.settings')}
-                </p>
-
-                <section className={styles.group}>
-                  <h2 className={styles.groupTitle}>
-                    {t('minigameChrome.sound')}
-                  </h2>
-                  <button
-                    type="button"
-                    className={styles.toggle}
-                    aria-pressed={muted}
-                    onClick={() => {
-                      click();
-                      setMuted(!muted);
-                    }}
-                  >
-                    {muted ? (
-                      <PixelSoundOffIcon size={18} />
-                    ) : (
-                      <PixelSoundOnIcon size={18} />
-                    )}
-                    {muted
-                      ? t('minigameChrome.soundOff')
-                      : t('minigameChrome.soundOn')}
-                  </button>
-                </section>
-
-                <section className={styles.group}>
-                  <h2 className={styles.groupTitle}>
-                    {t('minigameChrome.language')}
-                  </h2>
-                  <LanguageSwitch />
-                </section>
-
-                <div className={styles.nav}>
-                  <button
-                    type="button"
-                    className={`shell-button shell-button--quiet ${styles.navBtn}`}
-                    onClick={() => {
-                      click();
-                      navigate('/');
-                    }}
-                  >
-                    <PixelHomeIcon size={18} />
-                    {t('minigameChrome.home')}
-                  </button>
-                  <button
-                    type="button"
-                    className={`shell-button shell-button--quiet ${styles.navBtn}`}
-                    onClick={exit}
-                  >
-                    <PixelExitIcon size={18} />
-                    {t('minigameChrome.exit')}
-                  </button>
-                </div>
-              </div>
+                <LogoutRoundedIcon fontSize="small" />
+                {t('minigameChrome.exit')}
+              </button>
+            ) : (
+              <span className={styles.barSpacer} aria-hidden="true" />
             )}
+
+            {showSettings && <MinigameSettingsMenu onExit={onExit} />}
           </div>
-        </div>
+        )}
 
         <div className={styles.body}>{children}</div>
       </div>

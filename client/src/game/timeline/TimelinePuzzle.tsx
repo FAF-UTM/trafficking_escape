@@ -356,13 +356,11 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
 
   if (phase === 'intro') {
     return (
-      <div className={styles.screen} ref={screenRef} data-phase="intro">
-        <div
-          className={styles.bg}
-          style={{ backgroundImage: `url(${TIMELINE_BG})` }}
-          aria-hidden="true"
-        />
-        <div className={styles.veil} aria-hidden="true" />
+      <div
+        className={`${styles.screen} ${styles.shellScreen}`}
+        ref={screenRef}
+        data-phase="intro"
+      >
         <div className={styles.introLayout}>
           <section className={styles.intro} aria-labelledby="tp-intro-title">
             <p className={styles.kicker}>{t('timelinePuzzle.kicker')}</p>
@@ -390,21 +388,47 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
           </section>
 
           <aside className={styles.preview} aria-hidden="true">
-            <div className={styles.previewStack}>
-              {LEVELS[0].cards.map((card, i) => (
-                <div
-                  key={card.id}
-                  className={styles.previewCard}
-                  style={
-                    {
-                      backgroundImage: `url(${card.image})`,
-                      '--i': i,
-                    } as React.CSSProperties
-                  }
-                >
-                  <span>{t('timelinePuzzle.stepN', { n: i + 1 })}</span>
-                </div>
-              ))}
+            <div className={styles.previewCard}>
+              <div className={styles.previewCardGlow} />
+              <p className={styles.previewCardKicker}>
+                {t('timelinePuzzle.previewKicker')}
+              </p>
+              <h2 className={styles.previewCardTitle}>
+                {t('timelinePuzzle.previewTitle')}
+              </h2>
+              <ol className={styles.previewSlots}>
+                {(['first', 'mid', 'last'] as const).map((slot, i) => (
+                  <li
+                    key={slot}
+                    className={styles.previewSlot}
+                    style={{ '--i': i } as React.CSSProperties}
+                    data-slot={slot}
+                  >
+                    <span className={styles.previewSlotLabel}>
+                      {slot === 'mid'
+                        ? '…'
+                        : t(
+                            slot === 'first'
+                              ? 'timelinePuzzle.first'
+                              : 'timelinePuzzle.last'
+                          )}
+                    </span>
+                    <span className={styles.previewSlotBody}>?</span>
+                  </li>
+                ))}
+              </ol>
+              <div className={styles.previewDeck}>
+                {[0, 1, 2].map((i) => (
+                  <span
+                    key={i}
+                    className={styles.previewDeckCard}
+                    style={{ '--i': i } as React.CSSProperties}
+                  />
+                ))}
+              </div>
+              <p className={styles.previewCardNote}>
+                {t('timelinePuzzle.previewNote')}
+              </p>
             </div>
           </aside>
         </div>
@@ -418,13 +442,11 @@ const TimelinePuzzle: React.FC<TimelinePuzzleProps> = ({ onComplete }) => {
       percent >= 0.85 ? 'expert' : percent >= 0.55 ? 'sharp' : 'training';
 
     return (
-      <div className={styles.screen} ref={screenRef} data-phase="end">
-        <div
-          className={styles.bg}
-          style={{ backgroundImage: `url(${TIMELINE_BG})` }}
-          aria-hidden="true"
-        />
-        <div className={styles.veil} aria-hidden="true" />
+      <div
+        className={`${styles.screen} ${styles.shellScreen}`}
+        ref={screenRef}
+        data-phase="end"
+      >
         <section className={styles.end} aria-labelledby="tp-end-title">
           <p className={styles.kicker}>{t('timelinePuzzle.endKicker')}</p>
           <h1 id="tp-end-title" className={styles.introTitle}>

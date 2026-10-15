@@ -122,3 +122,4 @@ export const PixelHomeIcon: React.FC<IconProps> = (props) => (
     {px(9, 7, 2, 2)}
   </PixelSvg>
 );
+

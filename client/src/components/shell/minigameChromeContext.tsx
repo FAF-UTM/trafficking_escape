@@ -10,6 +10,8 @@ import React, {
 interface MinigameChromeContextValue {
   /** Show the top-bar Exit only on the pre-play intro screen. */
   setShowPageExit: (show: boolean) => void;
+  /** Show the floating top-right settings gear (hide when game embeds its own). */
+  setShowSettings: (show: boolean) => void;
 }
 
 const MinigameChromeContext = createContext<MinigameChromeContextValue | null>(
@@ -25,11 +27,10 @@ export const MinigameChromeProvider: React.FC<{
   </MinigameChromeContext.Provider>
 );
 
-/** Call from a minigame with `true` on intro, `false` once play starts. */
 export const useMinigameChrome = (): MinigameChromeContextValue => {
   const ctx = useContext(MinigameChromeContext);
   if (!ctx) {
-    return { setShowPageExit: () => {} };
+    return { setShowPageExit: () => {}, setShowSettings: () => {} };
   }
   return ctx;
 };
@@ -41,4 +42,16 @@ export const usePageExitOnIntro = (isIntro: boolean) => {
     setShowPageExit(isIntro);
     return () => setShowPageExit(false);
   }, [isIntro, setShowPageExit]);
+};
+
+/**
+ * Hide floating chrome settings while `embedded` is true (game shows its own gear).
+ * Restores on unmount / when embedded becomes false.
+ */
+export const useEmbeddedSettings = (embedded: boolean) => {
+  const { setShowSettings } = useMinigameChrome();
+  useEffect(() => {
+    setShowSettings(!embedded);
+    return () => setShowSettings(true);
+  }, [embedded, setShowSettings]);
 };
