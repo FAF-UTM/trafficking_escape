@@ -8,26 +8,34 @@ const Ending: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <div className={styles.ending}>
-      <div className={styles.ending_title}>{t('ending.title')}</div>
-      <div className={styles.ending_subtitle}>
-        {t('ending.subtitle_1')} <br />
-        {t('ending.subtitle_2')} <br />
-        {t('ending.subtitle_3')} <br />
-        <b>{t('ending.subtitle_4')}</b>
-      </div>
-      <div className={styles.button_row}>
-        <button onClick={() => navigate('/')} className={styles.ending_btn}>
-          {t('ending.button')}
-        </button>
-        <button
-          onClick={() => navigate('/feedback')}
-          className={styles.ending_btn}
-        >
-          {t('ending.feedback_button')}
-        </button>
-      </div>
-    </div>
+    <main className={styles.ending}>
+      <section className={styles.card} aria-labelledby="ending-title">
+        <p className={styles.eyebrow}>{t('ending.title')}</p>
+        <h1 id="ending-title" className={styles.title}>
+          {t('ending.subtitle_1')}
+        </h1>
+        <p className={styles.body}>{t('ending.subtitle_2')}</p>
+        <p className={styles.body}>{t('ending.subtitle_3')}</p>
+        <p className={styles.motto}>{t('ending.subtitle_4')}</p>
+
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className="shell-button"
+            onClick={() => navigate('/feedback')}
+          >
+            {t('ending.feedback_button')}
+          </button>
+          <button
+            type="button"
+            className="shell-button shell-button--quiet"
+            onClick={() => navigate('/')}
+          >
+            {t('ending.button')}
+          </button>
+        </div>
+      </section>
+    </main>
   );
 };
 
