@@ -1,93 +1,84 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './MinigamesShowcase.css';
+import { useTranslation } from 'react-i18next';
 import { useAudio } from '../../context/AudioContext.tsx';
+import styles from './MinigamesShowcase.module.css';
+
+type Accent = 'lamp' | 'coral' | 'screen' | 'leaf';
 
 interface Minigame {
-  name: string;
+  id: string;
   route: string;
-  description: string;
+  accent: Accent;
+  code: string;
 }
 
 const minigames: Minigame[] = [
-  {
-    name: 'Click Puzzle',
-    route: '/click-play',
-    description: 'Solve puzzles by discovering and using inventory items.',
-  },
-  {
-    name: 'Timeline Puzzle',
-    route: '/timeline-puzzle',
-    description:
-      'Arrange key events in the correct sequence to progress the story.',
-  },
-  {
-    name: 'Combination Lock',
-    route: '/combination-lock',
-    description: 'Decode hidden clues to unlock the door and escape.',
-  },
-  {
-    name: 'Who to Trust',
-    route: '/who-to-trust',
-    description:
-      'Decide whom to trust in tricky situations and learn about red flags.',
-  },
-  {
-    name: 'Flash Cards',
-    route: '/true-false',
-    description: 'Test your knowledge with quick fact-checking flashcards.',
-  },
-  {
-    name: 'Word Choice',
-    route: '/word-choice',
-    description: 'Complete sentences by choosing the correct word.',
-  },
-  {
-    name: 'Emoji Story',
-    route: '/emoji-story',
-    description: 'Decode emoji stories and pick the right meaning.',
-  },
-  {
-    name: 'Checklist Builder',
-    route: '/safety-checklist',
-    description: 'Select smart items to prepare your safety pack.',
-  },
-  {
-    name: 'Danger Words',
-    route: '/danger-highlight',
-    description: 'Spot red flag words in a fake job ad.',
-  },
-  {
-    name: 'Word Scramble',
-    route: '/word-scramble',
-    description: 'Unscramble words to reveal safety-related terms.',
-  },
+  { id: 'click', route: '/click-play', accent: 'lamp', code: '01' },
+  { id: 'timeline', route: '/timeline-puzzle', accent: 'screen', code: '02' },
+  { id: 'emoji', route: '/emoji-story', accent: 'coral', code: '03' },
+  { id: 'trust', route: '/who-to-trust', accent: 'leaf', code: '04' },
+  { id: 'danger', route: '/danger-highlight', accent: 'coral', code: '05' },
+  { id: 'choice', route: '/word-choice', accent: 'lamp', code: '06' },
+  { id: 'scramble', route: '/word-scramble', accent: 'screen', code: '07' },
+  { id: 'flash', route: '/true-false', accent: 'leaf', code: '08' },
 ];
 
 const MinigamesShowcase: React.FC = () => {
   const navigate = useNavigate();
   const { playClick } = useAudio();
+  const { t } = useTranslation();
 
   return (
-    <div className="minigames-container">
-      <h1 className="minigames-title">Minigames Showcase</h1>
-      <div className="minigames-list">
+    <div className={styles.screen}>
+      <div className={styles.aurora} aria-hidden="true" />
+      <div className={styles.gridGlow} aria-hidden="true" />
+
+      <header className={styles.header}>
+        <button
+          type="button"
+          className="shell-button shell-button--quiet"
+          onClick={() => {
+            playClick(3);
+            navigate('/');
+          }}
+        >
+          {t('general.home')}
+        </button>
+        <h1 className={styles.title}>{t('showcase.title')}</h1>
+      </header>
+
+      <ul className={styles.grid}>
         {minigames.map((game, index) => (
-          <div key={index} className="minigame-card">
-            <h2 className="minigame-name">{game.name}</h2>
-            <p className="minigame-description">{game.description}</p>
+          <li
+            key={game.id}
+            className={styles.card}
+            data-accent={game.accent}
+            style={{ '--i': index } as React.CSSProperties}
+          >
+            <div className={styles.cardTop}>
+              <span className={styles.code}>{game.code}</span>
+              <span className={styles.accentDot} aria-hidden="true" />
+            </div>
+            <h2 className={styles.name}>
+              {t(`showcase.games.${game.id}.name`)}
+            </h2>
+            <p className={styles.description}>
+              {t(`showcase.games.${game.id}.description`)}
+            </p>
             <button
-              className="play-button"
+              type="button"
+              className={`shell-button ${styles.play}`}
               onClick={() => {
                 playClick(3);
                 navigate(game.route);
               }}
             >
-              Play
+              {t('showcase.play')}
             </button>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

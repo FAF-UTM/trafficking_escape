@@ -1,8 +1,7 @@
 import './App.css';
 import Platformer from './game/platformer/Platformer.tsx';
 import Home from './pages/home/Home.tsx';
-// import Chat from './chat/Chat.tsx';
-import ChatWithMinigames from './chat/ChatWithMinigames.tsx';
+import Chat from './chat/Chat.tsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import LoginPage from './pages/login/Login.tsx';
@@ -12,13 +11,11 @@ import './i18n';
 import ClickPlayGameWrapper from './game/click-play/ClickPlayGameWrapper.tsx';
 import TimelinePuzzleWrapper from './game/timeline/TimelinePuzzleWrapper.tsx';
 import Settings from './pages/settings/Settings.tsx';
-import CombinationLockWrapper from './game/combination_lock/CombinationLockWrapper.tsx';
 import WhoToTrustGameWrapper from './game/who_to_trust_game/WhoToTrustGameWrapper.tsx';
 import MinigamesShowcase from './pages/minigames/MinigamesShowcase.tsx';
 import TrueFalseFlashCardsWrapper from './game/true_false_flash_cards/TrueFalseFlashCardsWrapper.tsx';
 import WordChoiceWrapper from './game/word_choice_game/WordChoiceWrapper.tsx';
 import EmojiStoryDecoderWrapper from './game/emoji_story_decoder/EmojiStoryDecoderWrapper.tsx';
-import SafetyChecklistBuilderWrapper from './game/safety_checklist_builder/SafetyChecklistBuilderWrapper.tsx';
 import DangerWordHighlightWrapper from './game/danger_word_highlight/DangerWordHighlightWrapper.tsx';
 import { AudioProvider, useAudio } from './context/AudioContext';
 import Ending from './pages/ending/Ending.tsx';
@@ -165,7 +162,7 @@ function App() {
               path="/chat"
               element={
                 <ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']}>
-                  <ChatWithMinigames />
+                  <Chat />
                 </ProtectedRoute>
               }
             />
@@ -175,10 +172,6 @@ function App() {
               path="/timeline-puzzle"
               element={<TimelinePuzzleWrapper />}
             />
-            <Route
-              path="/combination-lock"
-              element={<CombinationLockWrapper />}
-            />
             <Route path="/who-to-trust" element={<WhoToTrustGameWrapper />} />
             <Route
               path="/true-false"
@@ -186,10 +179,6 @@ function App() {
             />
             <Route path="/word-choice" element={<WordChoiceWrapper />} />
             <Route path="/emoji-story" element={<EmojiStoryDecoderWrapper />} />
-            <Route
-              path="/safety-checklist"
-              element={<SafetyChecklistBuilderWrapper />}
-            />
             <Route
               path="/danger-highlight"
               element={<DangerWordHighlightWrapper />}

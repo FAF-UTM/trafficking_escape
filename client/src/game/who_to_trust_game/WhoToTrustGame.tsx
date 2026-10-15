@@ -1,403 +1,393 @@
-import React, { useEffect, useState } from 'react';
-import './WhoToTrustGame.css';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePageExitOnIntro } from '../../components/shell/minigameChromeContext';
+import { useTranslation } from 'react-i18next';
+import PixelAvatar from '../../components/avatar/PixelAvatar';
+import { useAudio } from '../../context/AudioContext';
+import styles from './WhoToTrustGame.module.css';
+import {
+  CASES_PER_RUN,
+  POINTS_BEST,
+  POINTS_PARTLY,
+  type Contact,
+  type TrustCase,
+  type TrustLevel,
+} from './trustCases';
+import { localizeTrustCases } from './localizeTrust';
 
-/** Data structures for scenarios */
-interface TrustOption {
-  id: number;
-  name: string;
-  description: string;
-  feedback: string; // Explanation of consequences or lessons
-  isSafe: boolean; // Whether this choice is relatively safer or more risky
-}
+type Phase = 'intro' | 'choose' | 'debrief' | 'end';
 
-interface TrustScenario {
-  id: number;
-  scenarioTitle: string;
-  scenarioText: string;
-  options: TrustOption[];
-}
+const shuffle = <T,>(items: T[]): T[] => {
+  const a = [...items];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
 
-/** Define a set of scenarios for the game (8 total) */
-const allScenarios: TrustScenario[] = [
-  {
-    id: 1,
-    scenarioTitle: 'DM: Compliments + Urgency',
-    scenarioText:
-      'Mary gets a late-night DM: “You’re amazing ✨ let’s meet tonight, no parents.” They insist it’s safe and urgent.',
-    options: [
-      {
-        id: 1,
-        name: 'Say no, block, and tell a trusted adult',
-        description: 'Stop contact and get help now.',
-        feedback:
-          'Correct. Compliment-bombing + urgency + “no parents” are recruitment red flags. Refuse, block, and tell a trusted adult.',
-        isSafe: true,
-      },
-      {
-        id: 2,
-        name: 'Agree but meet in a public place',
-        description: 'Crowds make it safer, right?',
-        feedback:
-          'Unsafe. Traffickers exploit any meeting. Do not agree to meet at all.',
-        isSafe: false,
-      },
-      {
-        id: 3,
-        name: 'Ask for their ID and keep chatting',
-        description: 'Verify first.',
-        feedback:
-          'Risky. Continuing the chat increases manipulation risk. Stop and involve adults.',
-        isSafe: false,
-      },
-    ],
-  },
-  {
-    id: 2,
-    scenarioTitle: 'Move to Private + “Quick Pic”',
-    scenarioText:
-      'They ask Mary to move to a private app and send a quick selfie “to prove trust.” They promise to keep it secret.',
-    options: [
-      {
-        id: 1,
-        name: 'Refuse, block, and tell a parent/teacher',
-        description: 'No private apps, no pictures.',
-        feedback:
-          'Correct. Moving private + photo requests are grooming tactics used to gain leverage or blackmail.',
-        isSafe: true,
-      },
-      {
-        id: 2,
-        name: 'Send a harmless selfie',
-        description: 'It’s just a face pic.',
-        feedback:
-          'Unsafe. Any image can be misused. Do not send images to strangers.',
-        isSafe: false,
-      },
-      {
-        id: 3,
-        name: 'Ask them for a selfie first',
-        description: 'Make it fair.',
-        feedback:
-          'Unsafe. “Trading” images still fuels manipulation. End the conversation.',
-        isSafe: false,
-      },
-    ],
-  },
-  {
-    id: 3,
-    scenarioTitle: 'Share Location + Ride Offer',
-    scenarioText:
-      'They ask for Mary’s live location 📍 and offer to pick her up 🚗 “for a quick trip.”',
-    options: [
-      {
-        id: 1,
-        name: 'Refuse, block, and tell a trusted adult',
-        description: 'Protect your location.',
-        feedback:
-          'Correct. Requests for live location and rides are isolation tactics. Never share your pin or accept rides.',
-        isSafe: true,
-      },
-      {
-        id: 2,
-        name: 'Share a nearby landmark instead',
-        description: 'Close, not exact.',
-        feedback:
-          'Unsafe. Any location sharing can expose where Mary is. Decline and report.',
-        isSafe: false,
-      },
-      {
-        id: 3,
-        name: 'Meet during the day with a friend',
-        description: 'Daytime seems safer.',
-        feedback: 'Unsafe. Do not meet strangers for rides in any setting.',
-        isSafe: false,
-      },
-    ],
-  },
-  {
-    id: 4,
-    scenarioTitle: '“Scout” With a Link',
-    scenarioText:
-      'A “model scout” sends Mary a link to fill out with personal details, saying “no cap” it’s legit and urgent.',
-    options: [
-      {
-        id: 1,
-        name: 'Verify with a parent/teacher and report the message',
-        description: 'Check safely and report.',
-        feedback:
-          'Correct. Real opportunities do not pressure minors over DMs. Verification and reporting protect you and others.',
-        isSafe: true,
-      },
-      {
-        id: 2,
-        name: 'Click and complete the form quickly',
-        description: 'Don’t miss the chance!',
-        feedback:
-          'Unsafe. Links can steal data and pressure tactics indicate a scam/recruitment attempt.',
-        isSafe: false,
-      },
-      {
-        id: 3,
-        name: 'Ignore silently and keep it to yourself',
-        description: 'Avoid drama.',
-        feedback:
-          'Safer than engaging, but still tell a trusted adult so they can help keep you safe.',
-        isSafe: true,
-      },
-    ],
-  },
-  {
-    id: 5,
-    scenarioTitle: 'Secret Party + Free Gifts',
-    scenarioText:
-      'A group invites Mary to a “secret party” 🎉 at night 🌙 with free gifts 🎁 and insists “no parents.”',
-    options: [
-      {
-        id: 1,
-        name: 'Refuse and tell a trusted adult immediately',
-        description: 'Major red flags.',
-        feedback:
-          'Correct. Secrecy + gifts + night parties are classic lures. Refuse and inform adults.',
-        isSafe: true,
-      },
-      {
-        id: 2,
-        name: 'Go but share live location with a friend',
-        description: 'Try to be careful.',
-        feedback:
-          'Unsafe. Do not attend secret events from strangers. Live location does not remove the risk.',
-        isSafe: false,
-      },
-      {
-        id: 3,
-        name: 'Ask for more details first',
-        description: 'Gather info.',
-        feedback:
-          'Unsafe. Engaging further increases manipulation risk. End contact and tell adults.',
-        isSafe: false,
-      },
-    ],
-  },
-  {
-    id: 6,
-    scenarioTitle: '“We Can Help Your Family”',
-    scenarioText:
-      'Someone says they can “help with money” if Mary shares bank details 💳 or meets to pick up cash now.',
-    options: [
-      {
-        id: 1,
-        name: 'Refuse, report, and tell a parent/teacher',
-        description: 'Protect personal info.',
-        feedback:
-          'Correct. Financial “help” tied to personal data or urgent meetings is exploitation/scam risk. Report it.',
-        isSafe: true,
-      },
-      {
-        id: 2,
-        name: 'Share a little info to test them',
-        description: 'Just a bit.',
-        feedback:
-          'Unsafe. Any sharing can be abused or used for identity theft.',
-        isSafe: false,
-      },
-      {
-        id: 3,
-        name: 'Meet in public to collect the gift',
-        description: 'It’s free, right?',
-        feedback: 'Unsafe. Do not meet strangers for money or gifts.',
-        isSafe: false,
-      },
-    ],
-  },
-  {
-    id: 7,
-    scenarioTitle: '“Just Between Us”',
-    scenarioText:
-      'They insist Mary keep everything secret 🤫 and delete chats to “avoid drama.”',
-    options: [
-      {
-        id: 1,
-        name: 'Refuse secrecy and tell a trusted adult',
-        description: 'No secrets from safety adults.',
-        feedback:
-          'Correct. Secrecy protects predators. Trusted adults help keep you safe.',
-        isSafe: true,
-      },
-      {
-        id: 2,
-        name: 'Agree to keep it private',
-        description: 'It’s not a big deal.',
-        feedback: 'Unsafe. Secrecy allows harm to grow. Do not agree.',
-        isSafe: false,
-      },
-      {
-        id: 3,
-        name: 'Ask why it must be secret and continue chatting',
-        description: 'Understand first.',
-        feedback:
-          'Unsafe. Continued chatting increases risk. Stop and involve adults.',
-        isSafe: false,
-      },
-    ],
-  },
-  {
-    id: 8,
-    scenarioTitle: 'Impersonation Risk',
-    scenarioText:
-      'An account claims to be a classmate and asks for personal details “to add you to a group.” Something feels off.',
-    options: [
-      {
-        id: 1,
-        name: 'Verify via known channels and tell a teacher/parent',
-        description: 'Confirm identity safely.',
-        feedback:
-          'Correct. Impersonation is common. Verify through known contacts and inform adults.',
-        isSafe: true,
-      },
-      {
-        id: 2,
-        name: 'Share your details to be friendly',
-        description: 'It’s just a group.',
-        feedback:
-          'Unsafe. Do not share personal info with unverified accounts.',
-        isSafe: false,
-      },
-      {
-        id: 3,
-        name: 'Ignore and keep it to yourself',
-        description: 'Avoid drama.',
-        feedback:
-          'Safer than engaging, but still inform adults, especially if impersonation is suspected.',
-        isSafe: true,
-      },
-    ],
-  },
-];
+const buildRun = (pool: TrustCase[]): TrustCase[] =>
+  shuffle(pool)
+    .slice(0, CASES_PER_RUN)
+    .map((c) => ({ ...c, contacts: shuffle(c.contacts) }));
+
+const pointsFor = (level: TrustLevel) =>
+  level === 'best' ? POINTS_BEST : level === 'partly' ? POINTS_PARTLY : 0;
+
+const reducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const useCountUp = (target: number, duration = 600) => {
+  const [value, setValue] = useState(target);
+  const fromRef = useRef(target);
+
+  useEffect(() => {
+    const from = fromRef.current;
+    fromRef.current = target;
+    if (from === target || reducedMotion()) {
+      setValue(target);
+      return;
+    }
+    const start = performance.now();
+    let frame = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(from + (target - from) * eased));
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [target, duration]);
+
+  return value;
+};
 
 interface WhoToTrustGameProps {
   onComplete: () => void;
 }
 
-/**
- * A short decision-making game with randomized scenarios.
- */
 const WhoToTrustGame: React.FC<WhoToTrustGameProps> = ({ onComplete }) => {
-  // Stage can be "intro", "scenario", "feedback", "end"
-  const [stage, setStage] = useState<'intro' | 'scenario' | 'feedback' | 'end'>(
-    'intro'
+  const { t, i18n } = useTranslation();
+  const lang = i18n.resolvedLanguage ?? i18n.language;
+  const { playClick } = useAudio();
+  const screenRef = useRef<HTMLDivElement>(null);
+  const debriefRef = useRef<HTMLElement>(null);
+
+  const cases = useMemo(
+    () => localizeTrustCases(t),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-localize when language changes
+    [t, lang]
   );
-  // Selected (random) scenarios
-  const [scenarios, setScenarios] = useState<TrustScenario[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [chosenOption, setChosenOption] = useState<TrustOption | null>(null);
+  const run = useMemo(() => buildRun(cases), [cases]);
+  const [phase, setPhase] = useState<Phase>('intro');
+  usePageExitOnIntro(phase === 'intro');
+  const [index, setIndex] = useState(0);
+  const [pickedId, setPickedId] = useState<string | null>(null);
+  const [score, setScore] = useState(0);
+  const [bestCount, setBestCount] = useState(0);
+
+  const current = run[index];
+  const shownScore = useCountUp(score);
+  const maxScore = run.length * POINTS_BEST;
+  const picked: Contact | null =
+    pickedId && current
+      ? (current.contacts.find((c) => c.id === pickedId) ?? null)
+      : null;
 
   useEffect(() => {
-    const shuffled = [...allScenarios].sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, 4).map((s) => ({
-      ...s,
-      options: [...s.options].sort(() => Math.random() - 0.5),
-    }));
-    setScenarios(selected);
-  }, []);
-
-  const currentScenario = scenarios[currentIndex];
-
-  /** Move to the scenario stage from intro */
-  const handleStart = () => {
-    setStage('scenario');
-  };
-
-  /** When the user picks an option, move to feedback stage */
-  const handleOptionSelect = (option: TrustOption) => {
-    setChosenOption(option);
-    setStage('feedback');
-  };
-
-  /** Move to next scenario or end if done */
-  const handleNextScenario = () => {
-    if (currentIndex < scenarios.length - 1) {
-      setCurrentIndex((i) => i + 1);
-      setChosenOption(null);
-      setStage('scenario');
-    } else {
-      setStage('end');
+    if (phase === 'debrief' && debriefRef.current) {
+      debriefRef.current.scrollIntoView({
+        block: 'nearest',
+        behavior: reducedMotion() ? 'auto' : 'smooth',
+      });
+      return;
     }
+    screenRef.current?.scrollTo({
+      top: 0,
+      behavior: reducedMotion() ? 'auto' : 'smooth',
+    });
+  }, [phase, index]);
+
+  const start = () => {
+    playClick(8);
+    setPhase('choose');
   };
 
-  /** After final reflection, call onComplete to proceed */
-  const handleFinish = () => {
-    onComplete();
+  const pick = (contact: Contact) => {
+    if (phase !== 'choose' || pickedId) return;
+    playClick(8);
+    setPickedId(contact.id);
+    const pts = pointsFor(contact.trust);
+    if (pts) setScore((s) => s + pts);
+    if (contact.trust === 'best') setBestCount((n) => n + 1);
+    setPhase('debrief');
   };
+
+  const next = () => {
+    playClick(8);
+    if (index >= run.length - 1) {
+      setPhase('end');
+      return;
+    }
+    setIndex((i) => i + 1);
+    setPickedId(null);
+    setPhase('choose');
+  };
+
+  if (phase === 'intro') {
+    return (
+      <div className={styles.screen} ref={screenRef}>
+        <div className={styles.introLayout}>
+          <section className={styles.intro} aria-labelledby="wt-intro-title">
+            <p className={styles.kicker}>{t('whoToTrust.kicker')}</p>
+            <h1 id="wt-intro-title" className={styles.introTitle}>
+              {t('whoToTrust.introTitle')}
+            </h1>
+            <p className={styles.introText}>{t('whoToTrust.introText')}</p>
+            <ol className={styles.introSteps}>
+              {(['1', '2', '3'] as const).map((n, i) => (
+                <li key={n} style={{ '--i': i } as React.CSSProperties}>
+                  <span className={styles.introStepNum}>{n}</span>
+                  <span>
+                    <strong>{t(`whoToTrust.introStep${n}Title`)}</strong>
+                    {t(`whoToTrust.introStep${n}Text`)}
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <p className={styles.introNote}>
+              {t('whoToTrust.introNote', {
+                count: run.length,
+                best: POINTS_BEST,
+                partly: POINTS_PARTLY,
+              })}
+            </p>
+            <button type="button" className="shell-button" onClick={start}>
+              {t('whoToTrust.start')}
+            </button>
+          </section>
+
+          <aside className={styles.preview} aria-hidden="true">
+            <div className={styles.previewCard}>
+              <p className={styles.previewLabel}>
+                {t('whoToTrust.previewLabel')}
+              </p>
+              <ul className={styles.previewPeople}>
+                {(
+                  [
+                    ['previewMom', 'best'],
+                    ['previewDm', 'unsafe'],
+                    ['previewOnline', 'unsafe'],
+                  ] as const
+                ).map(([key, tone], i) => (
+                  <li
+                    key={key}
+                    data-tone={tone}
+                    style={{ '--i': i } as React.CSSProperties}
+                  >
+                    <PixelAvatar seed={key} size={40} />
+                    <span>{t(`whoToTrust.${key}`)}</span>
+                    <small>{t(`whoToTrust.tone_${tone}`)}</small>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase === 'end') {
+    const percent = maxScore ? score / maxScore : 0;
+    const rank =
+      percent >= 0.85 ? 'expert' : percent >= 0.55 ? 'sharp' : 'training';
+
+    return (
+      <div className={styles.screen} ref={screenRef}>
+        <section className={styles.end} aria-labelledby="wt-end-title">
+          <p className={styles.kicker}>{t('whoToTrust.endKicker')}</p>
+          <h1 id="wt-end-title" className={styles.introTitle}>
+            {t('whoToTrust.endTitle')}
+          </h1>
+          <div className={styles.rank} data-rank={rank}>
+            <span className={styles.rankScore}>
+              {shownScore}
+              <small>/{maxScore}</small>
+            </span>
+            <span className={styles.rankName}>
+              {t(`whoToTrust.rank_${rank}`)}
+            </span>
+          </div>
+          <p className={styles.introText}>
+            {t(`whoToTrust.rank_${rank}_text`, {
+              best: bestCount,
+              total: run.length,
+            })}
+          </p>
+
+          <h2 className={styles.sectionTitle}>
+            {t('whoToTrust.lessonsTitle')}
+          </h2>
+          <ul className={styles.lessonList}>
+            {run.map((c, i) => (
+              <li key={c.id} style={{ '--i': i } as React.CSSProperties}>
+                <span className={styles.lessonNum}>{i + 1}</span>
+                <span>
+                  <strong>{c.concept}</strong>
+                  <em className={styles.lessonCase}>{c.title}</em>
+                  {c.conceptExplain}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <section className={styles.safety} aria-labelledby="wt-safety">
+            <h2 id="wt-safety" className={styles.sectionTitle}>
+              {t('whoToTrust.safetyTitle')}
+            </h2>
+            <ol className={styles.safetySteps}>
+              {(['1', '2', '3', '4'] as const).map((n) => (
+                <li key={n}>{t(`whoToTrust.safety${n}`)}</li>
+              ))}
+            </ol>
+            <p className={styles.helpline}>{t('whoToTrust.helpline')}</p>
+          </section>
+
+          <button type="button" className="shell-button" onClick={onComplete}>
+            {t('whoToTrust.continue')}
+          </button>
+        </section>
+      </div>
+    );
+  }
+
+  if (!current) {
+    return <div className={styles.screen} ref={screenRef} />;
+  }
 
   return (
-    <div className="who-to-trust-container">
-      {/* Intro modal */}
-      {stage === 'intro' && (
-        <div className="modal-overlay" onClick={handleStart}>
-          <div
-            className="modal-content intro"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="intro-title">How to play</h2>
-            <p className="intro-text">
-              Mary is chatting online. Each scenario shows a choice. Pick the
-              safest option that protects Mary and avoids manipulation.
-            </p>
-            <p className="intro-text">
-              Look for red flags: secrecy, urgency, gifts, location requests,
-              rides, and moving to private apps. (Click outside to start)
-            </p>
-          </div>
+    <div className={styles.screen} ref={screenRef}>
+      <header className={styles.hud}>
+        <div className={styles.hudCase}>
+          <span className={styles.hudLabel}>
+            {t('whoToTrust.caseOf', {
+              n: index + 1,
+              total: run.length,
+            })}
+          </span>
+          <span className={styles.hudTitle}>{current.title}</span>
         </div>
-      )}
-
-      {/* Scenario stage */}
-      {stage === 'scenario' && currentScenario && (
-        <div className="scenario-screen fade-in">
-          <h2 className="scenario-title">{currentScenario.scenarioTitle}</h2>
-          <p className="scenario-text">{currentScenario.scenarioText}</p>
-          <div className="options-container">
-            {currentScenario.options.map((opt) => (
-              <div
-                key={opt.id}
-                className="option-card"
-                onClick={() => handleOptionSelect(opt)}
-              >
-                <h3 className="option-name">{opt.name}</h3>
-                <p className="option-description">{opt.description}</p>
-              </div>
-            ))}
-          </div>
+        <ol className={styles.progress} aria-hidden="true">
+          {run.map((c, i) => (
+            <li
+              key={c.id}
+              data-state={i < index ? 'done' : i === index ? 'current' : 'todo'}
+            />
+          ))}
+        </ol>
+        <div className={styles.hudScore}>
+          <span className={styles.hudLabel}>{t('whoToTrust.score')}</span>
+          <span className={styles.hudScoreValue}>{shownScore}</span>
         </div>
-      )}
+      </header>
 
-      {/* Feedback stage */}
-      {stage === 'feedback' && chosenOption && (
-        <div className="feedback-screen fade-in">
-          <h2 className="feedback-title">
-            {chosenOption.isSafe ? 'Safer Choice' : 'Risky Move?'}
-          </h2>
-          <p className="feedback-text">{chosenOption.feedback}</p>
-          <button className="next-button" onClick={handleNextScenario}>
-            Continue
-          </button>
-        </div>
-      )}
-
-      {/* End stage */}
-      {stage === 'end' && (
-        <div className="end-screen fade-in">
-          <h2 className="end-title">Reflection</h2>
-          <p className="end-text">
-            You’ve practiced weighing trust. If something feels off, protect
-            your privacy, stop, and tell a trusted adult. Awareness keeps you
-            safer.
+      <div className={styles.layout} key={`${current.id}-${phase}`}>
+        <section className={styles.situation} aria-labelledby="wt-situation">
+          <p className={styles.situationLabel}>
+            {t('whoToTrust.situationLabel')}
           </p>
-          <button className="end-button" onClick={handleFinish}>
-            Finish
-          </button>
-        </div>
-      )}
+          <h2 id="wt-situation" className={styles.situationText}>
+            {current.situation}
+          </h2>
+          <p className={styles.question}>{current.question}</p>
+        </section>
+
+        <section
+          className={styles.contacts}
+          aria-label={t('whoToTrust.contactsLabel')}
+        >
+          {current.contacts.map((contact, i) => {
+            let state = 'idle';
+            if (phase === 'debrief' && picked) {
+              if (contact.id === picked.id) state = contact.trust;
+              else if (contact.trust === 'best') state = 'revealBest';
+              else state = 'dim';
+            }
+            return (
+              <button
+                key={contact.id}
+                type="button"
+                className={styles.contact}
+                data-state={state}
+                disabled={phase !== 'choose'}
+                onClick={() => pick(contact)}
+                style={{ '--i': i } as React.CSSProperties}
+              >
+                <div className={styles.contactHead}>
+                  <PixelAvatar
+                    seed={contact.handle || contact.name}
+                    size={56}
+                    className={styles.avatar}
+                  />
+                  <div className={styles.contactTitles}>
+                    <span className={styles.contactName}>{contact.name}</span>
+                    {contact.handle && (
+                      <span className={styles.contactHandle}>
+                        @{contact.handle}
+                      </span>
+                    )}
+                    <span className={styles.contactRole}>{contact.role}</span>
+                  </div>
+                  {phase === 'debrief' && contact.trust === 'best' && (
+                    <span className={styles.bestBadge}>
+                      {t('whoToTrust.bestBadge')}
+                    </span>
+                  )}
+                </div>
+                <ul className={styles.clues}>
+                  {contact.clues.map((clue) => (
+                    <li key={clue}>{clue}</li>
+                  ))}
+                </ul>
+              </button>
+            );
+          })}
+        </section>
+
+        {phase === 'debrief' && picked && (
+          <section
+            ref={debriefRef}
+            className={styles.debrief}
+            data-trust={picked.trust}
+            aria-live="polite"
+          >
+            <p className={styles.debriefTitle}>
+              {t(`whoToTrust.result_${picked.trust}`, {
+                points: pointsFor(picked.trust),
+              })}
+            </p>
+            <p className={styles.debriefText}>{picked.feedback}</p>
+            <aside
+              className={styles.concept}
+              aria-label={t('whoToTrust.conceptLabel')}
+            >
+              <p className={styles.conceptLabel}>
+                {t('whoToTrust.conceptLabel')}
+              </p>
+              <p className={styles.conceptName}>{current.concept}</p>
+              <p className={styles.conceptExplain}>{current.conceptExplain}</p>
+              <p className={styles.debriefLesson}>{current.lesson}</p>
+            </aside>
+            <button type="button" className="shell-button" onClick={next}>
+              {index >= run.length - 1
+                ? t('whoToTrust.seeResults')
+                : t('whoToTrust.next')}
+            </button>
+          </section>
+        )}
+      </div>
     </div>
   );
 };

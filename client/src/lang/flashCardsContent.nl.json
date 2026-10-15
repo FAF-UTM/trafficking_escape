@@ -1,0 +1,172 @@
+{
+  "cards": {
+    "one-more-pic": {
+      "concept": "De sunk-cost-val",
+      "setup": "Jay heeft al één foto in zijn blote bovenlijf in de spiegel gestuurd naar iemand van wie hij dacht dat het een meisje van een andere school was. Nu zeggen ze: “Stuur er nog eentje of ik post de eerste.”",
+      "statement": "Nog een foto sturen is de rationele zet — het koopt stilte en beperkt de schade tot wat al bestaat.",
+      "explanation": "Extra materiaal is een drukmiddel, geen kwitantie. Mensen die chanteren stoppen bijna nooit na “nog eentje”; ze escaleren omdat je hebt bewezen dat angst werkt. Stop het contact, bewaar bewijs, vertel het een vertrouwde volwassene of hulplijn — voed het archief niet.",
+      "trapNote": "Je brein gaat onderhandelen: “Ik heb al een fout gemaakt, dus ga ik door.” Dat is de haak."
+    },
+    "robux-manners": {
+      "concept": "Cadeauschuld vermomd als goede manieren",
+      "setup": "Iemand op Discord geeft Mary voor €40 aan gamegeld, en later: “Ik was lief voor je… het minste wat je kunt doen is in de VC blijven en mijn vragen beantwoorden. Wees niet ondankbaar.”",
+      "statement": "Ze is sociaal verplicht om te blijven praten — vriendelijkheid afwijzen nadat je die hebt aangenomen is eigenlijk iemand gebruiken.",
+      "explanation": "Een verrassingscadeau accepteren verkoopt je tijd, privacy of lichaam niet. “Wees niet ondankbaar” maakt van een haak een kwestie van beleefdheid. Ze kan bedanken en blokkeren, niets terugdoen, en een volwassene inlichten als ze aandringen op geheimhouding of gunsten.",
+      "trapNote": "Tieners leren beleefd te zijn. Daders lenen dat script."
+    },
+    "deepfake-harmless": {
+      "concept": "Synthetische chantage",
+      "setup": "Een vreemde stuurt bewerkte naaktbeelden met Mary's gezicht: “Betaal, of dit gaat naar je klasstory. Het is toch AI — niemand kan bewijzen dat jij het bent.”",
+      "statement": "Omdat de beelden nep zijn, is de dreiging vooral een bluf en niet de moeite waard om volwassenen bij te betrekken — de slimme zet is negeren en alleen verdergaan.",
+      "explanation": "Deepfakes beschadigen nog steeds je reputatie en geestelijke gezondheid, en “alleen negeren” laat je zonder bewijsplan. Maak screenshots, betaal niet, vertel het een vertrouwde volwassene. Platforms en hulplijnen (NL: helpwanted.nl / 0800‑0432) nemen misbruik met AI-seksbeelden serieus.",
+      "trapNote": "“Het is niet echt” is bedoeld om je dom te laten voelen omdat je bang bent."
+    },
+    "discord-not-stranger": {
+      "concept": "Bekend ≠ geverifieerd",
+      "setup": "Lex zit al maanden op dezelfde Discord met 2000 leden, deelt dagelijks memes en kent Mary's gamertag en tijdzone. Hij vraagt om naar Telegram te gaan “zodat mods het niet zien”.",
+      "statement": "Na maanden op dezelfde openbare server is Lex geen vreemde meer — Telegram is gewoon een normale privacy-upgrade.",
+      "explanation": "Samen memes delen is geen bewijs van identiteit. Een gemodereerde plek verlaten precies wanneer de vragen persoonlijk worden, is een klassieke isolatiestap: minder getuigen, moeilijker melden. Houd riskante gesprekken waar je screenshots kunt maken en volwassenen kunt betrekken.",
+      "trapNote": "Hoe vaak je contact hebt voelt als vertrouwen. Het is geen verificatie."
+    },
+    "peer-share-illegal": {
+      "concept": "Doorsturen is ook verspreiden",
+      "setup": "De intieme foto van een klasgenoot belandt in de groepschat van het hele leerjaar. De helft zegt: “Ik heb hem niet gemaakt, ik deel alleen de roddel.”",
+      "statement": "Als je de foto niet zelf hebt gemaakt, kun je door hem door te sturen in een memechat geen juridische problemen of problemen op school krijgen.",
+      "explanation": "Intieme beelden van een minderjarige (of intieme beelden zonder toestemming) delen kan strafbaar zijn en tegen de schoolregels, ook als jij niet de fotograaf was. Verwijder, ga er niet in mee, vertel het aan school — “alleen de roddel” is nog steeds verspreiden.",
+      "trapNote": "Afstand tot de camera voelt als onschuld. Platforms en de wet kijken naar wie het verspreidde."
+    },
+    "apartment-casting": {
+      "concept": "Omgekeerde veiligheidssignalen",
+      "setup": "Twee Instagram-“scouts” sturen Sophia een DM. A: wil contact met ouder/docent + het adres van een studio overdag. B: “Privé-testshoot in een appartement vanavond, neem een vriendin mee als je zenuwachtig bent, exclusief.”",
+      "statement": "B is veiliger — “neem een vriendin mee” aanbieden en het exclusief noemen laat zien dat ze relaxed en professioneel zijn.",
+      "explanation": "Haast + privéwoning + complimenten is het risicopatroon. Echte kansen kunnen tegen daglicht, controle en volwassenen. “Neem een vriendin mee” is een geruststelling die een onbekend appartement niet veilig maakt.",
+      "trapNote": "De vriendin-clausule is bedoeld om jouw alarm te dempen, niet het hunne weg te nemen."
+    },
+    "lovebomb-cycle": {
+      "concept": "Intermitterende bekrachtiging",
+      "setup": "Online “situationship”: een week vol complimenten, dan koude stilte tot Mary spraakberichten of haar locatie stuurt. Daarna stromen de complimenten weer binnen.",
+      "statement": "Het warm-koud-patroon betekent dat de band dieper wordt — gemengde signalen zijn normaal als iemand je echt leuk vindt.",
+      "explanation": "Dat is een controlelus: beloning → terugtrekken → eisen → beloning. Het traint je om basale vriendelijkheid te verdienen. Gezonde interesse vraagt niet dat je na elke koude periode met privacy of meegaandheid betaalt.",
+      "trapNote": "De opluchting als ze terugkomen voelt als liefde. Vaak is het conditionering."
+    },
+    "led-them-on": {
+      "concept": "De schaammuilkorf",
+      "setup": "Mary flirtte twee weken, zei toen nee tegen afspreken. Ze reageren: “Je hebt me aan het lijntje gehouden. Als je het iemand vertelt, zeg ik dat je erom smeekte.”",
+      "statement": "Omdat zij als eerste flirtte, pakt het vertellen aan een docent of ouder meestal verkeerd uit — volwassenen kiezen toch de kant van “zij begon”.",
+      "explanation": "Flirten is geen contract voor afspreken, foto's of zwijgen. Schaamte + dreiging is hoe mensen je geïsoleerd houden. Vertrouwde volwassenen en hulplijnen horen dit patroon voortdurend; vroeg bewijs wint van hun verhaal.",
+      "trapNote": "Ze vallen je geloofwaardigheid aan zodat je die nooit test."
+    },
+    "visa-giftcards": {
+      "concept": "Oplichtingsroute: eerst betalen, dan werk",
+      "setup": "“Hotelstage in Spanje, €3.000 per maand, vluchten betaald.” Daarna: koop vandaag cadeaukaarten / crypto voor “visumkosten”, anders gaat de plek naar iemand anders.",
+      "statement": "Kleine kosten vooraf betalen met cadeaukaarten is een normale route voor tieners naar glamoureus horecawerk in het buitenland.",
+      "explanation": "Echte werving eist geen cadeaukaarten of geheimhouding met een aftellende klok. Haast + niet-traceerbare betaling + buitenland + “vertel het je ouders niet” is een stapel van werving/oplichting. Controleer het via school/ouders/officiële kanalen — nooit via de plaatser.",
+      "trapNote": "De salarisfantasie laat de kosten voelen als een ticket, niet als verlies."
+    },
+    "chains-required": {
+      "concept": "Controle zonder handboeien",
+      "setup": "Een “cafébaan” voor een 16-jarige: paspoort “voor papierwerk” ingehouden, fooi blijft bij de baas, telefoon wordt gecontroleerd, diensten die nooit eindigen, dreigementen over immigratie of “verschuldigde” opleidingskosten.",
+      "statement": "Als niemand een deur op slot deed of iemand een bestelbus in sleurde, kan het geen mensenhandel zijn — dan is het gewoon een giftige werkplek.",
+      "explanation": "Moderne uitbuiting draait vaak op schuld, angst, controle over documenten en “je kunt niet weg”, niet op kidnapping zoals in films. Dwang kan psychologisch en economisch zijn. Dat telt ook — vertel het een vertrouwde volwassene / de autoriteiten / hulplijn.",
+      "trapNote": "Films leerden je ketens. Echte zaken zien eruit als slechte banen met vallen."
+    },
+    "cross-border-pay": {
+      "concept": "Afstand is geen immuniteit",
+      "setup": "Een sextortion-account beweert in een ander land te zitten: “De politie hier geeft er niks om. Betaal €200 in crypto of je rugbyteam ziet alles.”",
+      "statement": "Als de chanteur in het buitenland zit, heeft het geen zin volwassenen te betrekken — het enige drukmiddel dat je hebt is één keer betalen om het te sluiten.",
+      "explanation": "Grensoverschrijdende zaken worden onderzocht; platforms kunnen accounts aanpakken; betalen laat zien dat je een betalend doelwit bent. Stop het contact, bewaar bewijs, vertel het een volwassene/hulplijn. Geografie is hun intimidatiemiddel.",
+      "trapNote": "Hopeloosheid is onderdeel van het script."
+    },
+    "bio-dox-lite": {
+      "concept": "Lekkend dagpatroon",
+      "setup": "Mary's openbare bio noemt de initialen van haar school, het rugnummer van haar club, een busstop-meme en dagelijkse story's van “net klaar met training”.",
+      "statement": "Zolang ze nooit haar huisnummer post, kunnen vreemden haar offline routine nog steeds niet bruikbaar voorspellen.",
+      "explanation": "School + planning + routes = dagpatroon. Mensen puzzelen daaruit wanneer je alleen of onderweg bent. Je bent het internet geen live kaart van je week verschuldigd — maak story's beperkter, laat precieze routines weg, vertel het een volwassene als er iemand “opduikt”.",
+      "trapNote": "Elke post voelt klein. Samen zijn ze een dienstregeling."
+    },
+    "kindertelefoon-permission": {
+      "concept": "Hulp zonder toestemmingsbriefje",
+      "setup": "Noah is bang om zijn ouders over bedreigingen te vertellen. Een vriend zegt dat de Kindertelefoon niet met hem praat tenzij een ouder toestemming geeft.",
+      "statement": "In Nederland vereist De Kindertelefoon toestemming van je ouders voordat je anoniem kunt bellen.",
+      "explanation": "Je kunt De Kindertelefoon (0800‑0432) gratis en anoniem bellen zonder toestemming van je ouders. helpwanted.nl gaat over online seksueel misbruik. Ook volwassenen op school kunnen helpen — de angst dat je “toestemming nodig hebt” is een mythe die mensen vast laat zitten.",
+      "trapNote": "Daders houden van het idee dat elke uitweg een ouderlijke stempel nodig heeft."
+    },
+    "consent-stacking": {
+      "concept": "Toestemming stapelt niet",
+      "setup": "Ze voicechatten al een maand. Nu: “Je vertrouwt me al — zet je camera aan / ontmoet me achter het station. Nu nee zeggen is nep.”",
+      "statement": "Eerder instemmen met voicechat betekent dat weigeren van video of een offline afspraak inconsistent is — ze heeft al ingestemd met nabijheid.",
+      "explanation": "Toestemming geldt per handeling, per moment. Voice ≠ video ≠ afspreken ≠ foto's. Druk die verwijst naar eerdere ja's om een huidig nee te overrulen, is dwang vermomd als logica.",
+      "trapNote": "Ze behandelen je geschiedenis als een contract dat je nooit hebt getekend."
+    },
+    "block-is-bullying": {
+      "concept": "Grens ≠ pesten",
+      "setup": "Na seksuele druk blokkeert Maya. De persoon stuurt een massabericht naar gezamenlijke contacten: “Ze cyberpest me door me te blokkeren, meld haar.”",
+      "statement": "Iemand blokkeren nadat die seksuele content opdringt is een vorm van cyberpesten omdat je diegene openlijk afwijst.",
+      "explanation": "Blokkeren is een grens, geen aanval. Je hoeft geen intimidatie in je inbox te dulden. Bewaar bewijs van de druk, meld het account, vertel het een volwassene als ze je vrienden gaan lastigvallen.",
+      "trapNote": "Ze draaien het slachtofferlabel om zodat jij de deur weer opent."
+    },
+    "willing-then-trapped": {
+      "concept": "De “je koos het zelf”-herschrijving",
+      "setup": "Een tiener reageert op een modellen-DM, reist voor wat een echte baan leek, en dan worden telefoons afgenomen en verschijnen er “schulden” voor reis/huisvesting.",
+      "statement": "Omdat ze de reis zelf boekten, kan wat later gebeurt geen mensenhandel zijn — ze deden het vrijwillig.",
+      "explanation": "Oorspronkelijke bereidheid geeft geen vrijbrief voor latere dwang. Fraude, schuldslavernij, ingehouden documenten, bedreigingen — die maken van een “keuze” uitbuiting. “Je koos het zelf” is een mondsnoer, geen juridisch schild voor daders.",
+      "trapNote": "Schaamte over het eerste ja houdt mensen ervan af de val te melden."
+    },
+    "peer-exploiter": {
+      "concept": "Uitbuiting is niet alleen van volwassenen",
+      "setup": "Een populaire 17-jarige zet een 14-jarige in schoolchats onder druk voor naaktfoto's en bepaalt daarna wie ze ziet.",
+      "statement": "Als beide mensen onder de 18 zijn, kan er geen sprake zijn van uitbuiting zoals bij mensenhandel — dat is alleen iets van volwassen vreemden online.",
+      "explanation": "Machtsverschil door leeftijd, chantage en dwang door leeftijdsgenoten zijn echt. Uitbuiting gaat over controle en schade, niet alleen over een “enge volwassene in een bestelbus”. Vertel het aan school/ouders; scholen en politie nemen misbruik van beelden door leeftijdsgenoten serieus.",
+      "trapNote": "“We zijn allebei tieners” wordt gebruikt om het machtsverschil te bagatelliseren."
+    },
+    "story-pickup": {
+      "concept": "Bewakingspraatje",
+      "setup": "Iemand die Mary nooit in het echt ontmoette: “Ik weet dat je om 17:40 klaar bent met atletiek — ik wacht bij het hek zodat je niet alleen loopt. Deel je live locatie.”",
+      "statement": "Details uit haar openbare story's gebruiken om een lift aan te bieden laat aandacht en beschermende interesse zien.",
+      "explanation": "Dat is bewaking die als zorg wordt verkocht. Je routine kennen zonder echte relatie is een waarschuwing, geen compliment. Kom thuis via mensen die je ook offline vertrouwt; meld het account.",
+      "trapNote": "“Gezien” worden voelt intiem. Hier is het in kaart brengen."
+    },
+    "popular-untouchable": {
+      "concept": "Intimidatie door status",
+      "setup": "De persoon die Noah onder druk zet is een school-influencer met docenten als fans. Vrienden zeggen dat melden sociale zelfmoord is.",
+      "statement": "Als de dader status heeft, is vastleggen en het aan school vertellen zinloos — instellingen beschermen altijd de populaire leerling.",
+      "explanation": "Status maakt melden eng, niet zinloos. Bewijs + een vertrouwde volwassene/hulplijn verandert nog steeds de uitkomst; zwijgen garandeert dat het gedrag doorgaat (voor jou of het volgende doelwit). Je hoeft ze niet alleen te confronteren.",
+      "trapNote": "Ze gebruiken de hiërarchie op school als wapen."
+    },
+    "telegram-privacy-flex": {
+      "concept": "Privacy vs. isolatie",
+      "setup": "“IG bespioneert ons. Ga naar Signal/Telegram geheime chat — ik bescherm je privacy tegen je nieuwsgierige moeder.”",
+      "statement": "Elk verzoek om een app waar je screenshots kunt maken te verlaten voor een meer besloten app is automatisch een grooming-waarschuwingssignaal.",
+      "explanation": "Privéapps zijn niet standaard slecht — vrienden gebruiken ze ook. Het waarschuwingssignaal is de combinatie: geheimhouding voor volwassenen + escalerende vragen + straf als je weigert. Beoordeel het patroon, niet het logo.",
+      "trapNote": "Alles-of-niets-regels voelen slim… en missen hoe echte grooming zich verbergt in gewone tools."
+    },
+    "library-ok": {
+      "concept": "Kalibreren, geen paranoia",
+      "setup": "Maya van biologie — zit elke dag naast Mary — appt in hun gewone chat: openbare bibliotheek, 16:00, toets leren, geen geheimhouding.",
+      "statement": "Na het leren over grooming moet Mary dit als een dreiging behandelen en elk offline plan met klasgenoten afzeggen.",
+      "explanation": "Veiligheidsvaardigheid is onderscheid maken: bekende klasgenoot + openbare plek + normale schoolcontext ≠ onverwachte DM met cadeaus en geheimhouding. Vertel een ouder waar je bent — dat is routine, geen paniek.",
+      "trapNote": "Trauma door enge lessen kan doorschieten. Precisie wint van dichtklappen."
+    },
+    "delete-first": {
+      "concept": "Eerst bewijs, dan wissen",
+      "setup": "De dreigementen komen binnen. Noahs instinct: de chat wissen zodat zijn ouders nooit zien dat hij erop inging.",
+      "statement": "De thread meteen wissen is de sterkste eerste zet — het haalt het probleem en het schaamtespoor weg.",
+      "explanation": "Stoppen met reageren helpt; bewijs vernietigen helpt hen. Maak eerst screenshots/exporteer, blokkeer dan. Volwassenen en hulplijnen kunnen beter werken met bewijs dan met “ik heb het verwijderd omdat ik in paniek raakte”.",
+      "trapNote": "Schaamte wil een schone telefoon. Zaken willen een tijdlijn."
+    },
+    "only-sex-trafficking": {
+      "concept": "Arbeid hoort bij de definitie",
+      "setup": "Klasdebat: een leerling zegt dat mensenhandel “alleen over seksmisdrijven gaat”, dus nepbanen in een magazijn tellen niet mee in deze game.",
+      "statement": "Mensenhandel omvat per definitie alleen seksuele uitbuiting — gedwongen werk is een apart, minder groot probleem.",
+      "explanation": "Gedwongen arbeid is kerngebied van mensenhandel: werving met leugens, schuld, ingehouden loon/documenten, bedreigingen. Seksuele uitbuiting is één vorm, niet de hele kaart.",
+      "trapNote": "Smalle definities laten arbeidsroutes eruitzien als “gewoon hustlen”."
+    },
+    "screenshot-forbidden": {
+      "concept": "Je mag bewijs bewaren",
+      "setup": "Ze typen: “Screenshots maken is illegaal. Verwijder dat. Als je het iemand laat zien, doe ik aangifte.”",
+      "statement": "In een privéchat is het maken van screenshots van berichten die iemand je stuurde over het algemeen iets wat je nooit mag doen — het is automatisch illegaal.",
+      "explanation": "Bewijs van dreigementen/druk bewaren om aan een vertrouwde volwassene of hulplijn te laten zien is een standaard veiligheidsstap. Hun “ik doe aangifte”-zin is meestal intimidatie. Vraag bij twijfel een volwassene/hulplijn hoe je het veilig bewaart.",
+      "trapNote": "Ze controleren je bewijs zodat alleen hun verhaal overleeft."
+    }
+  }
+}

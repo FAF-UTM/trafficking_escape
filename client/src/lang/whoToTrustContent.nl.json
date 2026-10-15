@@ -1,0 +1,415 @@
+{
+  "cases": {
+    "secret-party": {
+      "title": "Het geheime feestje",
+      "concept": "De geheimhoudingsval",
+      "conceptExplain": "Als iemand zegt “vertel het aan niemand”, beschermt die persoon vaak het plan — niet jou. Echte vrienden en veilige plannen kunnen er prima tegen dat een ouder het weet.",
+      "situation": "Mary krijgt om 11 uur 's avonds een DM: “Feest in een loods vanavond. Gratis cadeautjes bij de deur. Geen ouders. Houden we onder ons 🤫.” Het account volgt haar sinds gisteren en heeft coole feestfoto's.",
+      "question": "Met wie moet Mary eerst praten?",
+      "lesson": "Geheimhouding + vreemden + “gratis spullen” is een klassiek lokmiddel. Een vertrouwde volwassene bel je als eerste — niet nóg een onbekend account.",
+      "contacts": {
+        "mom": {
+          "name": "Haar moeder",
+          "role": "Ouder thuis",
+          "clues": [
+            "Kent Mary's echte planning",
+            "Kan samen met haar naar de chat kijken",
+            "Stelt misschien vragen die Mary ongemakkelijk vindt"
+          ],
+          "feedback": "Beste keuze. Ongemakkelijke vragen zijn beter dan in een val lopen. Laat haar de DM zien — “geen ouders” + gratis cadeaus + een gloednieuw account: daar zijn volwassenen precies voor."
+        },
+        "party-acc": {
+          "name": "Party.VIP",
+          "handle": "party.vip.tonight",
+          "role": "Nieuw account met feestfoto's",
+          "clues": [
+            "Volgt Mary sinds gisteren",
+            "Post non-stop feeststory's",
+            "Reageert snel en hypet haar op"
+          ],
+          "feedback": "Onveilig. Dit is het account dat de uitnodiging verkoopt. Aan hen vragen “is het wel veilig?” is alsof je een oplichter vraagt of de oplichting echt is."
+        },
+        "online-friend": {
+          "name": "Lex",
+          "handle": "lex.night.owl",
+          "role": "Online vriend — nooit in het echt ontmoet",
+          "clues": [
+            "Chat bijna elke avond met Mary",
+            "Zegt “ik zie je daar”",
+            "Klinkt relaxed en grappig"
+          ],
+          "feedback": "Onveilig. Je online close voelen is niet hetzelfde als iemand in het echt kennen. Dat Lex haar aanspoort om te gaan, is geen veiligheidsplan."
+        }
+      }
+    },
+    "fake-scout": {
+      "title": "De modelscout",
+      "concept": "Nepkansen",
+      "conceptExplain": "Echte banen en bureaus jagen tieners niet via DM op voor hun adres. Complimenten + haast + “exclusief” is hoe nepscouts aan persoonlijke info komen.",
+      "situation": "Een DM: “Hoi, je hebt een mooie look. Ik ben scout — vul vanavond dit formulier in met je adres voor exclusieve castings. Denk er niet te lang over na.” Mary voelt zich gevleid… en onzeker.",
+      "question": "Wie kan dit het veiligst voor haar checken?",
+      "lesson": "Onverwachte DM's die “vanavond” je adres willen, zijn geen kansen. Check het bij iemand die de plicht heeft jou te beschermen — niet bij de afzender.",
+      "contacts": {
+        "teacher": {
+          "name": "Mevrouw de Vries",
+          "role": "Lerares op school",
+          "clues": [
+            "Heeft eerder verdachte “talent”-aanbiedingen gezien",
+            "Kan helpen het account te melden",
+            "Vertelt het misschien ook aan Mary's ouders"
+          ],
+          "feedback": "Beste keuze. Docenten (en ouders) kunnen checken of een bureau echt is. De “scout” moet nooit degene zijn die bewijst dat de scout deugt."
+        },
+        "cousin": {
+          "name": "Nicht Ana",
+          "role": "Familie, 19, woont dichtbij",
+          "clues": [
+            "Is gek op fashion-TikTok",
+            "Zegt “OMG misschien is het echt??”",
+            "Wil dat Mary zich speciaal voelt"
+          ],
+          "feedback": "Deels goed. Ana geeft om haar — maar enthousiasme is geen controle. Betrek toch een ouder of docent, zodat iemand het goed checkt."
+        },
+        "scout": {
+          "name": "Elena",
+          "handle": "lumen.scout.eu",
+          "role": "Zegt dat ze scout is",
+          "clues": [
+            "Account is ongeveer 2 weken oud",
+            "Stuurt een formulierlink voor haar adres",
+            "Noemt het “dringend / exclusief”"
+          ],
+          "feedback": "Onveilig. Vertrouw nooit degene die het aanbod doet als bewijs dat het veilig is. Adres + haast in een onverwachte DM is een harde nee."
+        }
+      }
+    },
+    "live-pin": {
+      "title": "Het aanbod voor een lift",
+      "concept": "Isolatiemoves",
+      "conceptExplain": "Vragen om je live locatie, een privéauto aanbieden en zeggen “vertel het je ouders niet” gaat erom je alleen te krijgen — niet om behulpzaam te zijn.",
+      "situation": "Mary maakt huiswerk in de bibliotheek. Een DM: “Het is donker — ik haal je op. Stuur je live locatie, ik ben er over 10 minuten. Val je ouders er niet mee lastig, ik regel het.”",
+      "question": "Wie moet Mary vertrouwen om thuis te komen?",
+      "lesson": "Live locatie + vreemde + auto = je alleen krijgen. Hulp komt van mensen die je ook buiten internet al kent.",
+      "contacts": {
+        "dad": {
+          "name": "Haar vader",
+          "role": "Ouder — kan haar ophalen",
+          "clues": [
+            "Kent de bibliotheek",
+            "Doet er misschien 15–20 minuten over",
+            "Vraagt waarschijnlijk “wie heeft je geDM'd?”"
+          ],
+          "feedback": "Beste keuze. Een langzame veilige rit is beter dan een snelle met een onbekende. Bel of app papa — stuur nooit een live locatie naar iemand die ze niet kent."
+        },
+        "library-staff": {
+          "name": "Baliemedewerkers van de bibliotheek",
+          "role": "Volwassenen in het gebouw",
+          "clues": [
+            "Zijn er tot sluitingstijd",
+            "Kunnen met haar wachten of naar huis bellen",
+            "Kennen haar familie niet goed"
+          ],
+          "feedback": "Deels goed. De medewerkers kunnen haar helpen een ouder te bereiken en haar op een openbare plek houden. Reageer toch niet op die vreemde."
+        },
+        "stranger": {
+          "name": "Mike",
+          "handle": "mike.rides.24",
+          "role": "Vreemde in haar DM's",
+          "clues": [
+            "Biedt meteen een lift aan",
+            "Vraagt om live locatie",
+            "Klinkt bezorgd dat ze alleen loopt"
+          ],
+          "feedback": "Onveilig. “Behulpzaam” + live locatie + “vertel het je ouders niet” is een klassieke isolatiemove — geen vriendelijkheid."
+        }
+      }
+    },
+    "private-pic": {
+      "title": "Bewijs dat je me vertrouwt",
+      "concept": "Fototests",
+      "conceptExplain": "Mensen die om je geven hebben geen privéfoto nodig om “vertrouwen te bewijzen”. Overstappen naar Snap + “ik verwijder hem daarna” + “vertel het niemand” is druk zetten, geen romantiek.",
+      "situation": "Een volger die Mary amper kent: “Voeg me toe op Snap. Stuur even een foto zodat ik weet dat je echt bent. Ik verwijder hem. Doe niet raar — en vertel het niemand.”",
+      "question": "Wie moet Mary hiermee vertrouwen?",
+      "lesson": "Privéapps + fototests zijn hoe sommige mensen meer controle proberen te krijgen. Vertrouw mensen die jouw privacy beschermen — niet mensen die erom eisen.",
+      "contacts": {
+        "parent": {
+          "name": "Een ouder / verzorger",
+          "role": "Vertrouwde volwassene thuis",
+          "clues": [
+            "Kan helpen blokkeren en melden",
+            "Voelt misschien beschamend om te vertellen",
+            "Vraagt Mary niet om de foto"
+          ],
+          "feedback": "Beste keuze. Schaamte gaat over. Laat ze de chat zien: geen foto, niet overstappen naar een andere app — eerst hulp van een volwassene."
+        },
+        "bestie": {
+          "name": "Sophia",
+          "role": "Goede vriendin van school",
+          "clues": [
+            "Mary vertrouwt haar in het echt",
+            "Zegt waarschijnlijk “bah, blokkeer hem”",
+            "Is ook 14 en weet misschien niet hoe je meldt"
+          ],
+          "feedback": "Deels goed. Vrienden zijn top voor steun — maar vertel bij druk om foto's ook een vertrouwde volwassene, zodat het goed wordt gemeld."
+        },
+        "follower": {
+          "name": "Jaden",
+          "handle": "jaden.k__",
+          "role": "Volgt haar sinds gisteren",
+          "clues": [
+            "Geeft veel complimenten op haar story's",
+            "Wil Snap + een “snelle foto”",
+            "Zegt dat hij hem verwijdert"
+          ],
+          "feedback": "Onveilig. Degene die om een “vertrouwensfoto” vraagt, is het risico. “Ik verwijder hem” is een belofte die je niet kunt controleren."
+        }
+      }
+    },
+    "fake-classmate": {
+      "title": "De nepklasgenoot",
+      "concept": "Nepidentiteit",
+      "conceptExplain": "Accounts kunnen doen alsof ze iemand van je school zijn. Check het altijd via een manier die je al kent (in het echt, oude chat, docent) — nooit door het nieuwe account te geven wat het wil.",
+      "situation": "“Maya uit 4B” stuurt een DM: “hey, voeg me toe aan de klassenapp — stuur je nummer?” Mary zit in de klas naast Maya… maar dit account ziet er nieuw uit en Mary weet niet dat ze zo ooit met haar gechat heeft.",
+      "question": "Wat is de veiligste manier om dit te checken?",
+      "lesson": "Nepaccounts komen vaak voor. Controleer het via mensen en chats die je al vertrouwt — nooit via het verdachte account.",
+      "contacts": {
+        "real-maya": {
+          "name": "Maya (bekende chat / op school)",
+          "role": "Echte klasgenoot",
+          "clues": [
+            "Mary kan het haar morgen in de klas vragen",
+            "Ze hebben al een oude groepschat",
+            "Vraagt een beetje geduld"
+          ],
+          "feedback": "Beste keuze. Vraag het de echte Maya via een kanaal dat Mary al gebruikt. Is het nep, vertel het dan aan een docent zodat anderen er niet intrappen."
+        },
+        "ignore": {
+          "name": "Negeren en niks zeggen",
+          "role": "Het alleen oplossen",
+          "clues": [
+            "Geeft haar nummer niet",
+            "Voelt als weinig gedoe",
+            "Niemand anders hoort dat het account nep is"
+          ],
+          "feedback": "Deels goed. Haar nummer niet delen is slim — maar een docent of ouder vertellen helpt voorkomen dat het nepaccount de volgende uitkiest."
+        },
+        "fake": {
+          "name": "maya.4b.new",
+          "handle": "maya.4b.new",
+          "role": "Niet-geverifieerd account",
+          "clues": [
+            "Vorige week aangemaakt",
+            "Gebruikt Maya's naam en klas",
+            "Vraagt eerst om haar nummer"
+          ],
+          "feedback": "Onveilig. Je “verifieert” een verdacht account niet door het persoonlijke gegevens te geven. Dat is juist de val."
+        }
+      }
+    },
+    "owe-me": {
+      "title": "Je bent me wat verschuldigd",
+      "concept": "Cadeauschuld",
+      "conceptExplain": "Een gratis cadeau met “je bent me er een verschuldigd” en “vertel het je ouders niet” is geen vriendelijkheid — het is een haak. Je bent nooit iets verschuldigd voor iets waar je niet om gevraagd hebt.",
+      "situation": "Iemand in Mary's game heeft een battle pass voor haar gekocht. Daarna: “lol je bent me nu wel een dingetje verschuldigd 😉 vertel het alleen je ouders niet ok.” Later vraagt die persoon haar om laat in de voicechat te blijven.",
+      "question": "Wie moet Mary hierover vertrouwen?",
+      "lesson": "Cadeaus die geheime schuld creëren, zijn een val. Volwassenen helpen het “je bent me iets verschuldigd”-verhaal te doorbreken — de gever bepaalt de regels niet.",
+      "contacts": {
+        "parents": {
+          "name": "Haar ouders",
+          "role": "Vertrouwde volwassenen",
+          "clues": [
+            "Kunnen duidelijk zeggen dat ze niets verschuldigd is",
+            "Beperken misschien even de gamechat",
+            "Geven meer om haar dan om de battle pass"
+          ],
+          "feedback": "Beste keuze. Vertel het ze. Een cadeau betekent nooit dat ze gunsten moet doen — zeker geen geheime. Blokkeren mag."
+        },
+        "gamer-friend": {
+          "name": "Theo",
+          "role": "Vriend van school + dezelfde game",
+          "clues": [
+            "Weet hoe gamecadeaus werken",
+            "Zegt waarschijnlijk “dat is raar, blokkeer”",
+            "Kan haar accountinstellingen niet voor haar aanpassen"
+          ],
+          "feedback": "Deels goed. Theo is een goede back-up — vertel het toch aan een ouder, want de geheimhouding (“vertel het niet”) hoorde bij de druk."
+        },
+        "giver": {
+          "name": "SquadMate_x",
+          "handle": "squad.mate.x",
+          "role": "Degene die haar iets cadeau deed",
+          "clues": [
+            "Kocht iets duurs voor haar in de game",
+            "Maakt grappen over “verschuldigd zijn”",
+            "Wil langere privé-voicechats"
+          ],
+          "feedback": "Onveilig. Onderhandelen met degene die cadeauschuld gebruikt, voedt de val. Ze is geen gesprek, foto of geheim verschuldigd."
+        }
+      }
+    },
+    "job-abroad": {
+      "title": "De baan in het buitenland",
+      "concept": "Te mooie reisbanen",
+      "conceptExplain": "“Snel cash in het buitenland, geen ID nodig, deze week vertrekken, hou het privé” is geen normale tienerbaan. Dit soort zinnen duikt op in advertenties van mensenhandel en oplichting, omdat ze elke veiligheidscheck overslaan.",
+      "situation": "Sophia laat Mary een opvallende story zien: “Verdien snel geld in het buitenland — geen ID nodig, vluchten deze week, privacy gegarandeerd 💰✈️.” Het ziet er spannend uit. Ze zijn allebei nieuwsgierig.",
+      "question": "Wie moeten zij vertrouwen om dit aan te pakken?",
+      "lesson": "Banen waarbij ID wordt overgeslagen en je snel moet reizen, zijn gevaarsignalen. Volwassenen op school en officiële hulplijnen verslaan de “privacy” van de plaatser.",
+      "contacts": {
+        "teacher": {
+          "name": "Hun docent",
+          "role": "Volwassene op school",
+          "clues": [
+            "Kan het melden zodat anderen een waarschuwing zien",
+            "Kent officiële hulplijnen",
+            "Maakt er misschien een klassengesprek van"
+          ],
+          "feedback": "Beste keuze. Neem de screenshot mee naar een docent. Checken bij een hulplijn beschermt meer leerlingen dan een stille DM ooit zal doen."
+        },
+        "sophia-plan": {
+          "name": "Alleen Sophia — samen uitzoeken",
+          "role": "Vriendin van dezelfde leeftijd",
+          "clues": [
+            "Ze kunnen de bedrijfsnaam googelen",
+            "Voelt minder als een “enge volwassene”",
+            "Twee tieners kunnen nog steeds waarschuwingssignalen missen"
+          ],
+          "feedback": "Deels goed. Samen uitzoeken is beter dan alleen klikken — vertel het toch aan een docent of ouder. Buitenland + geen ID heeft een volwassene nodig, niet alleen Google."
+        },
+        "poster": {
+          "name": "internships.fast",
+          "handle": "internships.fast",
+          "role": "Account dat het aanbod plaatst",
+          "clues": [
+            "Belooft snel geld en reizen",
+            "Zegt dat ID niet nodig is",
+            "Reageert met meer “exclusieve” links"
+          ],
+          "feedback": "Onveilig. Vraag nooit aan de plaatser van een te mooie baan in het buitenland om het “uit te leggen”. Zo worden mensen dieper naar binnen getrokken."
+        }
+      }
+    },
+    "threat": {
+      "title": "De dreiging",
+      "concept": "Dreigementen na een “nee”",
+      "conceptExplain": "Als iemand je bedreigt nadat je geweigerd hebt (foto's, geld, “iedereen gaat het zien”), is dat dwang — angst gebruiken om jou te controleren. Je hoeft dit niet alleen op te lossen en je moet niet betalen of meer sturen.",
+      "situation": "Mary zei nee tegen een foto. Het account reageert: “Verwijder me en je krijgt er spijt van. Iedereen op school gaat het zien.” Ze is bang en staart naar het scherm.",
+      "question": "Wie moet Mary nu vertrouwen voor hulp?",
+      "lesson": "Dreigementen na een nee gaan over angst en controle. Betaal niet, ga niet alleen in discussie — eerst een vertrouwde volwassene en een hulplijn.",
+      "contacts": {
+        "adult-helpline": {
+          "name": "Vertrouwde volwassene + hulplijn",
+          "role": "Ouder/docent + Kindertelefoon",
+          "clues": [
+            "Kunnen helpen met screenshots en melden",
+            "Weten dat je niet moet betalen of meer moet sturen",
+            "Mary moet misschien huilen of schaamt zich — dat is oké"
+          ],
+          "feedback": "Beste keuze. Stop met reageren, bewaar bewijs, vertel het een volwassene. In Nederland: 0800‑0432 (De Kindertelefoon) of helpwanted.nl."
+        },
+        "delete-alone": {
+          "name": "Alles alleen verwijderen",
+          "role": "Het privé afhandelen",
+          "clues": [
+            "Voelt als de controle nemen",
+            "Wist misschien nuttige screenshots",
+            "Laat haar alleen met de angst zitten"
+          ],
+          "feedback": "Deels goed. Stoppen met de chat helpt — maar maak eerst een screenshot en vertel het een volwassene. Dreigementen voelen kleiner als je er niet alleen mee zit."
+        },
+        "threatener": {
+          "name": "Het account dat haar bedreigt",
+          "handle": "sorry.not.sorry",
+          "role": "Gebruikt angst om te controleren",
+          "clues": [
+            "Heeft haar “nee” al genegeerd",
+            "Dwingt haar snel te reageren",
+            "Praat over “iedereen gaat het zien”"
+          ],
+          "feedback": "Onveilig. Betalen, discussiëren of smeken maakt het meestal erger. Geef ze niet meer aandacht of meer materiaal."
+        }
+      }
+    },
+    "jealous-friends": {
+      "title": "Breek met je vrienden",
+      "concept": "Je isoleren van anderen",
+      "conceptExplain": "“Je vrienden zijn jaloers — je hebt alleen mij nodig” is hoe controle begint. Mensen die om je geven vragen je niet om je hele steunnetwerk los te laten.",
+      "situation": "Iemand met wie Mary elke dag chat, zegt: “Je vrienden zijn jaloers op ons. Hang niet meer met ze rond. Je hebt mij — dat is genoeg.” De laatste tijd wordt die persoon chagrijnig als ze bij Sophia is.",
+      "question": "Wie moet Mary vertrouwen?",
+      "lesson": "Isolatie begint vaak zacht: “zij begrijpen ons niet.” Echte zorg vraagt nooit dat je je vrienden verliest.",
+      "contacts": {
+        "friends": {
+          "name": "Haar vrienden in het echt",
+          "role": "Mensen die ze kent van school",
+          "clues": [
+            "Al jaren offline bekend",
+            "Zeggen misschien “die chat klinkt controlerend”",
+            "Vragen haar niet om zich voor haar ouders te verstoppen"
+          ],
+          "feedback": "Beste keuze. Houd haar vrienden — en vertel hun (en een ouder) wat deze persoon zegt. Isolatie wordt kleiner als je het hardop zegt."
+        },
+        "balance": {
+          "name": "Stil blijven en “beide combineren”",
+          "role": "Ruzie vermijden",
+          "clues": [
+            "Houdt voorlopig haar vrienden",
+            "Vermijdt drama in de chat",
+            "De druk blijft een geheim"
+          ],
+          "feedback": "Deels goed — vrienden houden is belangrijk. Benoem het gedrag toch bij iemand die ze vertrouwt, zodat het niet in het geheim escaleert."
+        },
+        "isolator": {
+          "name": "De chatpartner",
+          "handle": "only.us.now",
+          "role": "Wil meer van haar tijd",
+          "clues": [
+            "Appt de hele dag",
+            "Wordt kil als ze bij vrienden is",
+            "Verpakt het als “ze zijn jaloers”"
+          ],
+          "feedback": "Onveilig. Iedereen die wil dat ze haar vrienden loslaat, bouwt controle op — geen gezondere relatie."
+        }
+      }
+    },
+    "safe-study": {
+      "title": "De uitnodiging om samen te leren",
+      "concept": "Niet elk bericht is een val",
+      "conceptExplain": "Veiligheidsvaardigheden betekenen niet “vertrouw niemand”. Bekende klasgenoten, openbare plekken en normale plannen kunnen prima zijn. De vaardigheid is druk, geheimhouding en vreemden herkennen — niet je hele leven op slot zetten.",
+      "situation": "Maya van biologie — Mary zit in de klas naast haar — appt in hun gewone chat: “Na school naar de bieb om de toets te leren? Ik zit bij de ramen. Neem snacks mee als je wilt.”",
+      "question": "Wat is hier redelijk?",
+      "lesson": "Bekende klasgenoten + een openbare plek + geen geheimhouding kan gewoon normaal zijn. Vertel toch een ouder waar je naartoe gaat — dat is gewone veiligheid, geen paniek.",
+      "contacts": {
+        "maya": {
+          "name": "Maya",
+          "role": "Klasgenoot die Mary offline kent",
+          "clues": [
+            "Elke week dezelfde klas",
+            "Openbare bibliotheek, overdag",
+            "Geen cadeaus, geheimen of haast"
+          ],
+          "feedback": "Beste keuze. Dit lijkt een normaal schoolplan. Vertel toch een ouder waar ze naartoe gaat — dat is alledaagse veiligheid, geen wantrouwen."
+        },
+        "skip-all": {
+          "name": "Afzeggen — online nooit iemand vertrouwen",
+          "role": "Totale shutdown",
+          "clues": [
+            "Vermijdt wat online risico",
+            "Blokkeert ook normale schoolplannen",
+            "Behandelt Maya als een vreemde"
+          ],
+          "feedback": "Deels goed. Voorzichtigheid is slim — maar een bekende klasgenoot en een leerafspraak op een openbare plek zijn niet hetzelfde als een DM van een groomer. Paniek is niet de vaardigheid; inschatten wel."
+        },
+        "stranger-offer": {
+          "name": "Een willekeurige “bijles”-DM",
+          "handle": "free.tutors.nl",
+          "role": "Onbekend account",
+          "clues": [
+            "Biedt dezelfde middag gratis hulp aan",
+            "Stelt voor Mary daarna op te halen",
+            "Wil van de schoolchat naar een andere plek verhuizen"
+          ],
+          "feedback": "Onveilig. Ruil het plan met een bekende klasgenoot niet in voor de “hulp” van een vreemde, zeker niet als die een privé-ophaalafspraak wil."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,327 @@
+{
+  "tactics": {
+    "secrecy": {
+      "name": "Secrecy",
+      "description": "“Don’t tell anyone” cuts teens off from safe adults."
+    },
+    "urgency": {
+      "name": "Urgency",
+      "description": "Rushing a decision so there’s no time to check."
+    },
+    "giftBait": {
+      "name": "Gift bait",
+      "description": "Free gifts or VIP perks used as a lure."
+    },
+    "fakeOffer": {
+      "name": "Fake offer",
+      "description": "Jobs, scouting, or money that sound too easy."
+    },
+    "platformSwitch": {
+      "name": "Platform switch",
+      "description": "Moving the chat somewhere adults can’t see it."
+    },
+    "imageRequest": {
+      "name": "Image request",
+      "description": "Pushing for photos that can be used later."
+    },
+    "locationGrab": {
+      "name": "Location grab",
+      "description": "Asking where you are, live pin, or for a ride."
+    },
+    "isolation": {
+      "name": "Isolation",
+      "description": "Pulling someone away from friends or parents."
+    },
+    "documentGrab": {
+      "name": "Personal data",
+      "description": "Asking for address, ID, bank details, or phone."
+    },
+    "pressure": {
+      "name": "Pressure",
+      "description": "Guilt, threats, or “prove it” after a boundary."
+    }
+  },
+  "cases": {
+    "secret-party": {
+      "title": "Secret party invite",
+      "setup": "A new account DMs Mary about a party she never mentioned.",
+      "segments": [
+        {
+          "text": "Hey! ",
+          "clearNote": "A normal greeting."
+        },
+        {
+          "text": "Secret party tonight",
+          "note": "Hidden from adults on purpose."
+        },
+        {
+          "text": " at a warehouse. "
+        },
+        {
+          "text": "No parents allowed",
+          "note": "Cuts Mary off from safe adults."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Free gifts if you come now",
+          "note": "Gifts + rush = classic lure."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Keep it between us",
+          "note": "Secrecy request so nobody can warn her."
+        },
+        {
+          "text": ".",
+          "clearNote": "End of the message."
+        }
+      ]
+    },
+    "model-scout": {
+      "title": "Model scout DM",
+      "setup": "Someone claims they found Mary on a school dance page.",
+      "segments": [
+        {
+          "text": "Saw your pics — you could model. "
+        },
+        {
+          "text": "I'm a real scout, no cap",
+          "note": "Self-proving “trust me” is not verification."
+        },
+        {
+          "text": ". Fill this "
+        },
+        {
+          "text": "urgent form",
+          "note": "Rushing her before she can check."
+        },
+        {
+          "text": " with your "
+        },
+        {
+          "text": "home address and phone",
+          "note": "Personal data strangers should not get."
+        },
+        {
+          "text": " to join our "
+        },
+        {
+          "text": "exclusive team",
+          "note": "Exclusivity is used to make the trap feel special."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "private-app": {
+      "title": "Move to a private app",
+      "setup": "A follower Mary barely knows wants the chat somewhere quieter.",
+      "segments": [
+        {
+          "text": "This app is weird. "
+        },
+        {
+          "text": "Let's switch to Snap",
+          "note": "Moving off a safer app hides the chat."
+        },
+        {
+          "text": " and send a "
+        },
+        {
+          "text": "quick pic to prove trust",
+          "note": "Photos as a “test” are grooming leverage."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "No need to tell anyone",
+          "note": "Blocking adult help on purpose."
+        },
+        {
+          "text": ". I'll "
+        },
+        {
+          "text": "delete the messages after",
+          "note": "Erasing evidence is a red flag, not kindness."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "ride-location": {
+      "title": "Ride + location",
+      "setup": "Mary is walking home. A stranger offers help in the chat.",
+      "segments": [
+        {
+          "text": "You still at school? "
+        },
+        {
+          "text": "Share your live location",
+          "note": "Live pin tells a stranger exactly where she is."
+        },
+        {
+          "text": " and "
+        },
+        {
+          "text": "I'll pick you up in my car",
+          "note": "A stranger’s car isolates her from safe places."
+        },
+        {
+          "text": ". It's fine, "
+        },
+        {
+          "text": "I promise you are safe",
+          "note": "Reassurance without proof is pressure, not safety."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Don't ask your parents first",
+          "note": "Keeping parents out is the point."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "easy-money": {
+      "title": "Easy money offer",
+      "setup": "An account Mary doesn’t know offers to “help her family.”",
+      "segments": [
+        {
+          "text": "I saw your story. "
+        },
+        {
+          "text": "Easy money today",
+          "note": "Fast cash promises are common bait."
+        },
+        {
+          "text": " if you send "
+        },
+        {
+          "text": "bank details",
+          "note": "Financial data should never go to a stranger."
+        },
+        {
+          "text": " or "
+        },
+        {
+          "text": "meet me now to collect cash",
+          "note": "Meet + now = rushed contact."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Do not tell anyone",
+          "note": "Secrecy protects the scammer."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "job-flyer": {
+      "title": "Too-good job ad",
+      "setup": "A flyer-style message about a “student job abroad.”",
+      "segments": [
+        {
+          "text": "Student job: "
+        },
+        {
+          "text": "earn quick cash",
+          "note": "Big pay, low detail — treat as bait."
+        },
+        {
+          "text": " with "
+        },
+        {
+          "text": "no ID needed",
+          "note": "Skipping ID is not a perk; real jobs check papers."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Travel abroad this week",
+          "note": "Sudden travel pressure is a trafficking risk signal."
+        },
+        {
+          "text": ", "
+        },
+        {
+          "text": "privacy guaranteed",
+          "note": "“Privacy” here means hide it from adults."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Limited places — apply instantly",
+          "note": "Scarcity + instantly = no time to verify."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "owe-me": {
+      "title": "Gift with a catch",
+      "setup": "Someone from Mary’s game bought her a pass, then the tone changed.",
+      "segments": [
+        {
+          "text": "Got you the battle pass, hope you like it. "
+        },
+        {
+          "text": "You're gonna owe me one tho",
+          "note": "Gifts that create debt are a trap."
+        },
+        {
+          "text": ". "
+        },
+        {
+          "text": "Don't tell your parents",
+          "note": "Hiding the favour keeps the pressure private."
+        },
+        {
+          "text": ". Also add me on "
+        },
+        {
+          "text": "Discord so teachers can’t see",
+          "note": "Switching platforms to avoid oversight."
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    "safe-study": {
+      "title": "Study group chat",
+      "setup": "A classmate Mary knows from school — this one should have no red flags.",
+      "segments": [
+        {
+          "text": "Hey, are you free after school to review the biology quiz?",
+          "clearNote": "Normal school plan with someone she knows."
+        },
+        {
+          "text": " We can meet at the library. "
+        },
+        {
+          "text": "Bring your notes if you want",
+          "clearNote": "A normal request between classmates."
+        },
+        {
+          "text": ". I'll be by the big windows."
+        }
+      ]
+    }
+  }
+}

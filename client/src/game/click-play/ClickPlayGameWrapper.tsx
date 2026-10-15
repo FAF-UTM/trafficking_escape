@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { sendBeaconJson } from '../../lib/api';
 import ClickPlayGame from './ClickPlayGame.tsx';
 import { useNavigate } from 'react-router-dom';
+import MinigameChrome from '../../components/shell/MinigameChrome';
 
 const ClickPlayGameWrapper: React.FC = () => {
   const navigate = useNavigate();
@@ -15,10 +16,18 @@ const ClickPlayGameWrapper: React.FC = () => {
   }, []);
 
   const handleComplete = async () => {
-    navigate(-1);
+    navigate('/mini-games');
   };
 
-  return <ClickPlayGame onComplete={handleComplete} />;
+  const handleExit = () => {
+    navigate('/mini-games');
+  };
+
+  return (
+    <MinigameChrome onExit={handleExit}>
+      <ClickPlayGame onComplete={handleComplete} />
+    </MinigameChrome>
+  );
 };
 
 export default ClickPlayGameWrapper;

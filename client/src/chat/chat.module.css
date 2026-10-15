@@ -2,15 +2,6 @@
    the room stays dimly visible behind a chunky pixel window, the title bar takes
    the coral of the monitor's sky, and every corner is a stepped pixel notch. */
 
-/* Wrapper used by ChatWithMinigames around the chat and the mini-games. */
-.chat_wrap {
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-}
-
 .room {
   --notch: 4px;
   --pixel-corners: polygon(
@@ -30,7 +21,9 @@
 
   position: relative;
   box-sizing: border-box;
-  flex: 1 1 auto;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   min-height: 0;
   display: flex;
   justify-content: center;

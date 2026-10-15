@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { sendBeaconJson } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
+import MinigameChrome from '../../components/shell/MinigameChrome';
 import WhoToTrustGame from './WhoToTrustGame.tsx';
 
 const WhoToTrustGameWrapper: React.FC = () => {
@@ -29,10 +30,18 @@ const WhoToTrustGameWrapper: React.FC = () => {
       Math.round((Date.now() - startRef.current) / 1000)
     );
     postSession(totalSeconds);
-    navigate(-1);
+    navigate('/mini-games');
   };
 
-  return <WhoToTrustGame onComplete={handleComplete} />;
+  const handleExit = () => {
+    navigate('/mini-games');
+  };
+
+  return (
+    <MinigameChrome onExit={handleExit}>
+      <WhoToTrustGame onComplete={handleComplete} />
+    </MinigameChrome>
+  );
 };
 
 export default WhoToTrustGameWrapper;

@@ -1,0 +1,270 @@
+{
+  "tactics": {
+    "secrecy": {
+      "name": "Geheimhouding",
+      "description": "“Vertel het aan niemand” haalt tieners weg bij volwassenen die kunnen helpen."
+    },
+    "grooming": {
+      "name": "Grooming",
+      "description": "Eerst vertrouwen opbouwen, dan aandringen op privéchats, foto’s of geheimen."
+    },
+    "isolation": {
+      "name": "Isolatie",
+      "description": "Iemand wegtrekken bij vrienden, school of veilige plekken."
+    },
+    "refuse": {
+      "name": "Veilig weigeren",
+      "description": "Duidelijk nee zeggen en het daarna aan een vertrouwde volwassene vertellen."
+    },
+    "recruitment": {
+      "name": "Lokmiddel voor werving",
+      "description": "Banen, feesten of cadeaus om iemand in een valstrik te lokken."
+    },
+    "locationGrab": {
+      "name": "Locatie opvragen",
+      "description": "Vragen waar je bent, om je live locatie of je adres."
+    },
+    "manipulation": {
+      "name": "Manipulatie",
+      "description": "Schuldgevoel, loyaliteit of “vertrouwen” verdraaien om te krijgen wat ze willen."
+    },
+    "coercion": {
+      "name": "Dwang",
+      "description": "Druk nadat je een grens hebt gesteld: dreigementen, schuldgevoel of “bewijs het maar”."
+    },
+    "loveBombing": {
+      "name": "Lovebombing",
+      "description": "Overdreven complimenten aan het begin om snel vertrouwen en afhankelijkheid te krijgen."
+    },
+    "debtTrap": {
+      "name": "Schuldval",
+      "description": "Cadeaus of gunsten die veranderen in “je bent me iets schuldig”."
+    },
+    "imageRequest": {
+      "name": "Fotoverzoek",
+      "description": "Aandringen op foto’s die later voor chantage gebruikt kunnen worden."
+    },
+    "platformSwitch": {
+      "name": "Appwissel",
+      "description": "Het gesprek van een veiligere app wegtrekken zodat volwassenen het niet kunnen zien."
+    }
+  },
+  "cases": {
+    "no-parents": {
+      "context": "Een nieuwe DM. Mary kent deze persoon niet.",
+      "sentence": "Ze schrijven: “Laten we vanavond chillen, zonder ouders.” Daders gebruiken ___ om tieners weg te houden bij veilige volwassenen.",
+      "options": [
+        {
+          "word": "geheimhouding",
+          "feedback": "“Zonder ouders” is geheimhouding. Het scheidt Mary van de mensen die haar kunnen beschermen."
+        },
+        {
+          "word": "privacy",
+          "feedback": "Privacy is zelf kiezen wat je deelt. Geheimhouding is je met opzet verstoppen voor volwassenen — dát is de rode vlag."
+        },
+        {
+          "word": "zelfstandigheid",
+          "feedback": "Zelfstandigheid is iets anders dan horen dat je je moet verstoppen. “Zonder ouders” is een geheimhoudingstruc."
+        }
+      ]
+    },
+    "quick-pic": {
+      "context": "Iemand die Mary amper kent verplaatst het gesprek naar privé.",
+      "sentence": "Ze stappen over naar een andere app en vragen om een “snelle foto” om “vertrouwen te bewijzen”. Dat patroon heet ___.",
+      "options": [
+        {
+          "word": "grooming",
+          "feedback": "Privéchat + een foto “om vertrouwen te bewijzen” is klassieke grooming: eerst vertrouwen, later drukmiddelen."
+        },
+        {
+          "word": "flirten",
+          "feedback": "Flirten heeft geen privé-app en bewijsfoto nodig. Die druk is grooming."
+        },
+        {
+          "word": "netwerken",
+          "feedback": "Netwerken eist geen privéfoto’s. Naar een andere app gaan en op foto’s aandringen is grooming."
+        }
+      ]
+    },
+    "live-location": {
+      "context": "Mary loopt van school naar huis.",
+      "sentence": "Iemand vraagt om haar live locatie en biedt een lift aan. Dat is een tactiek van ___.",
+      "options": [
+        {
+          "word": "isolatie",
+          "feedback": "Locatie + een lift kan Mary naar een plek brengen waar niemand meekijkt. Dat is isolatie."
+        },
+        {
+          "word": "vriendelijkheid",
+          "feedback": "Een vreemde die om je live locatie vraagt is niet vriendelijk. Zo houdt hij of zij grip op waar ze is."
+        },
+        {
+          "word": "vriendschap",
+          "feedback": "Echte vrienden hebben je live pin en een auto niet nodig. Die combinatie draait om isolatie."
+        }
+      ]
+    },
+    "meet-tonight": {
+      "context": "Een online “scout” zet Mary onder druk.",
+      "sentence": "Ze zeggen: “no cap, kom vanavond afspreken.” De veiligste zet is om te ___.",
+      "options": [
+        {
+          "word": "weigeren",
+          "feedback": "Weiger duidelijk, blokkeer als dat nodig is en vertel het aan een vertrouwde volwassene. Haast is onderdeel van de val."
+        },
+        {
+          "word": "onderhandelen",
+          "feedback": "Onderhandelen houdt het gesprek open. Veiliger: weigeren en het aan een volwassene vertellen."
+        },
+        {
+          "word": "uitstellen",
+          "feedback": "“Misschien later” laat de deur nog open. Weiger en haal hulp bij iemand die je vertrouwt."
+        }
+      ]
+    },
+    "secret-party": {
+      "context": "Er komt een uitnodiging binnen van een account dat Mary niet herkent.",
+      "sentence": "Een geheim feest met gratis cadeaus en “alleen voor coole kids” is een klassiek voorbeeld van ___.",
+      "options": [
+        {
+          "word": "werving",
+          "feedback": "Cadeaus + geheimhouding + exclusiviteit zijn bekende lokmiddelen om tieners binnen te halen."
+        },
+        {
+          "word": "feestvieren",
+          "feedback": "Een echt feest heeft geen geheimhouding en cadeaus van vreemden nodig. Dat is een lokmiddel voor werving."
+        },
+        {
+          "word": "een kans",
+          "feedback": "“Kans” is hoe het wordt verkocht. Het patroon — geheim + cadeaus — is werving."
+        }
+      ]
+    },
+    "send-gift": {
+      "context": "Mary wint een “giveaway” waar ze nooit aan meedeed.",
+      "sentence": "Ze vragen om haar huisadres om “een prijs te sturen”. Dat verzoek is ___.",
+      "options": [
+        {
+          "word": "gevaarlijk",
+          "feedback": "Deel je adres nooit met vreemden online. Zo weten ze waar je woont."
+        },
+        {
+          "word": "royaal",
+          "feedback": "Echte prijzen komen niet uit willekeurige DM’s die je huisadres vragen. Het is gevaarlijk."
+        },
+        {
+          "word": "normaal",
+          "feedback": "Het kan normaal lijken, maar je adres aan een vreemde geven is gevaarlijk."
+        }
+      ]
+    },
+    "between-us": {
+      "context": "Mary heeft gezegd dat ze zich ongemakkelijk voelt.",
+      "sentence": "“Hou dit maar gewoon tussen ons” is een rode vlag voor ___.",
+      "options": [
+        {
+          "word": "manipulatie",
+          "feedback": "Vragen om geheimhouding is manipulatie: ze proberen hulp van volwassenen te blokkeren voordat het erger wordt."
+        },
+        {
+          "word": "loyaliteit",
+          "feedback": "Loyaliteit bewijs je niet door dingen te verbergen. “Gewoon tussen ons” is manipulatie."
+        },
+        {
+          "word": "respect",
+          "feedback": "Respect is een grens accepteren. Mary vragen het te verbergen is manipulatie."
+        }
+      ]
+    },
+    "trust-me": {
+      "context": "Mary heeft al nee gezegd tegen het sturen van een foto.",
+      "sentence": "Ze antwoorden “vertrouw me gewoon 💯” en blijven duwen. Dat is een vorm van ___.",
+      "options": [
+        {
+          "word": "dwang",
+          "feedback": "Blijven duwen na een duidelijk nee is geen zorg — het is dwang om haar grens te doorbreken."
+        },
+        {
+          "word": "zelfvertrouwen",
+          "feedback": "Zelfvertrouwen negeert geen nee. Druk blijven zetten na een grens is dwang."
+        },
+        {
+          "word": "romantiek",
+          "feedback": "Romantiek betekent niet dat je toestemming negeert. Dit is dwang."
+        }
+      ]
+    },
+    "famous-overnight": {
+      "context": "Iemand heeft Mary gevonden op een pagina van het schoolfeest.",
+      "sentence": "“Het mooiste meisje dat ik ooit heb gezien, je wordt beroemd” in het eerste gesprek is ___.",
+      "options": [
+        {
+          "word": "lovebombing",
+          "feedback": "Zoveel complimenten zo snel is lovebombing: het jaagt vertrouwen op, zodat de volgende vraag moeilijker te weigeren voelt."
+        },
+        {
+          "word": "complimentjes geven",
+          "feedback": "Eén aardige opmerking is een compliment. Praten over roem en overdreven lof zo vroeg is lovebombing."
+        },
+        {
+          "word": "talentscouting",
+          "feedback": "Echte scouts gaan niet los over roem in een DM van een vreemde. Dat is lovebombing."
+        }
+      ]
+    },
+    "owe-me": {
+      "context": "Iemand kocht een game-pass voor Mary “als cadeautje”.",
+      "sentence": "Daarna zeggen ze: “je bent me nog wat schuldig hè.” Dat cadeau werd zomaar een ___.",
+      "options": [
+        {
+          "word": "schuldval",
+          "feedback": "Gratis cadeaus waar “je bent me wat schuldig” van komt zijn schuldvallen. Gunsten horen geen druk te geven."
+        },
+        {
+          "word": "vriendschap",
+          "feedback": "Vrienden houden niet zo de score bij. “Je bent me wat schuldig” na een cadeau is een schuldval."
+        },
+        {
+          "word": "grapje",
+          "feedback": "Ook als ze het wegwuiven: een cadeau koppelen aan een tegenprestatie is een schuldval."
+        }
+      ]
+    },
+    "pjs-pic": {
+      "context": "In de chat werd gegrapt, daarna veranderde de toon.",
+      "sentence": "“Stuur een foto in je pyjama 😏” nadat Mary zei dat ze moe is, is een onveilig ___.",
+      "options": [
+        {
+          "word": "fotoverzoek",
+          "feedback": "Aandringen op een persoonlijke foto — zeker na een zacht nee — is een fotoverzoek dat tot chantage kan leiden."
+        },
+        {
+          "word": "uitdaging",
+          "feedback": "Het een uitdaging noemen maakt het niet veilig. Het blijft een fotoverzoek dat ze mag weigeren."
+        },
+        {
+          "word": "check-in",
+          "feedback": "Bij een check-in vraag je of ze oké is. Een pyjamafoto vragen is een fotoverzoek."
+        }
+      ]
+    },
+    "move-to-snap": {
+      "context": "Mary chat al een tijdje op een app die op school veilig is.",
+      "sentence": "Ze zeggen: “voeg me toe op Snap, leraren kunnen het niet zien.” Het gesprek verplaatsen is een ___.",
+      "options": [
+        {
+          "word": "appwissel",
+          "feedback": "Overstappen naar een app met verdwijnende berichten verbergt het gesprek voor volwassenen. Dat is een appwissel."
+        },
+        {
+          "word": "privacytip",
+          "feedback": "Je verstoppen voor leraren is geen privacytip — het is een appwissel om toezicht te ontlopen."
+        },
+        {
+          "word": "tech-upgrade",
+          "feedback": "Het doel is geen betere techniek. Het is Mary naar een plek krijgen waar volwassenen niet kunnen meekijken. Appwissel."
+        }
+      ]
+    }
+  }
+}

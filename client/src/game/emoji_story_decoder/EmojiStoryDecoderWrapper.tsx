@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { sendBeaconJson } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
+import MinigameChrome from '../../components/shell/MinigameChrome';
 import EmojiStoryDecoder from './EmojiStoryDecoder.tsx';
 
 const EmojiStoryDecoderWrapper: React.FC = () => {
@@ -29,10 +30,18 @@ const EmojiStoryDecoderWrapper: React.FC = () => {
       Math.round((Date.now() - startRef.current) / 1000)
     );
     postSession(totalSeconds);
-    navigate(-1);
+    navigate('/mini-games');
   };
 
-  return <EmojiStoryDecoder onComplete={handleComplete} />;
+  const handleExit = () => {
+    navigate('/mini-games');
+  };
+
+  return (
+    <MinigameChrome onExit={handleExit}>
+      <EmojiStoryDecoder onComplete={handleComplete} />
+    </MinigameChrome>
+  );
 };
 
 export default EmojiStoryDecoderWrapper;

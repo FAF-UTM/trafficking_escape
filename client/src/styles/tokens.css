@@ -63,6 +63,16 @@
   --radius-m: 8px;
   --pixel-shadow: 4px 4px 0 0 var(--dusk-900);
   --pixel-shadow-pressed: 1px 1px 0 0 var(--dusk-900);
+
+  /* Pixelify Sans swaps "fi" and "fl" for glyphs that read as "A". */
+  font-feature-settings: 'liga' 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font-feature-settings: inherit;
 }
 
 /* Shared shell primitives, used by pages through plain class names. */

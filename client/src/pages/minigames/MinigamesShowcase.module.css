@@ -1,0 +1,260 @@
+/* Minigames showcase: centered shell grid, border-box so rows don’t collide. */
+
+.screen {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--space-5) clamp(var(--space-4), 4vw, var(--space-7))
+    var(--space-7);
+  color: var(--shell-text);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(ellipse at 15% 0%, rgb(255 181 71 / 0.14), transparent 46%),
+    radial-gradient(ellipse at 90% 20%, rgb(94 196 232 / 0.12), transparent 42%),
+    radial-gradient(ellipse at 50% 100%, rgb(79 178 134 / 0.1), transparent 48%),
+    repeating-linear-gradient(
+      0deg,
+      rgb(255 255 255 / 0.018) 0 1px,
+      transparent 1px 4px
+    ),
+    var(--shell-bg);
+}
+
+.screen *,
+.screen *::before,
+.screen *::after {
+  box-sizing: border-box;
+}
+
+.aurora,
+.gridGlow {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.aurora {
+  background: conic-gradient(
+    from 90deg at 40% 30%,
+    rgb(255 181 71 / 0.07),
+    rgb(94 196 232 / 0.06),
+    rgb(242 112 91 / 0.07),
+    rgb(79 178 134 / 0.06),
+    rgb(255 181 71 / 0.07)
+  );
+  filter: blur(48px);
+  opacity: 0.85;
+  animation: auroraSpin 18s linear infinite;
+}
+
+.gridGlow {
+  background-image:
+    linear-gradient(rgb(143 156 200 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(143 156 200 / 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
+
+.header,
+.grid {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 76rem);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin: 0 0 var(--space-6);
+  animation: rise 400ms ease-out both;
+}
+
+.header :global(.shell-button) {
+  justify-self: start;
+}
+
+.title {
+  margin: 0;
+  justify-self: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step-5);
+  line-height: 1;
+  text-align: center;
+  text-shadow: 4px 4px 0 var(--dusk-900);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.75rem;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  --accent: var(--lamp);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 20rem;
+  padding: clamp(var(--space-5), 2.2vw, var(--space-6));
+  border: 3px solid var(--dusk-900);
+  border-top: 5px solid var(--accent);
+  border-radius: var(--radius-m);
+  background: var(--dusk-700);
+  box-shadow: var(--pixel-shadow);
+  text-align: left;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease;
+  animation: cardIn 420ms ease-out both;
+  animation-delay: calc(60ms + var(--i) * 50ms);
+}
+
+.card[data-accent='lamp'] {
+  --accent: var(--lamp);
+}
+
+.card[data-accent='coral'] {
+  --accent: var(--coral);
+}
+
+.card[data-accent='screen'] {
+  --accent: var(--screen);
+}
+
+.card[data-accent='leaf'] {
+  --accent: var(--leaf);
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: var(--accent);
+  background: var(--dusk-600);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code {
+  color: var(--shell-text-muted);
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.accentDot {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 2px;
+  background: var(--accent);
+  box-shadow: 2px 2px 0 var(--dusk-900);
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.description {
+  flex: 1;
+  margin: 0;
+  color: var(--shell-text-muted);
+  font-size: var(--step-0);
+  line-height: 1.5;
+}
+
+.play {
+  align-self: stretch;
+  width: 100%;
+  min-height: 3.5rem;
+  margin-top: auto;
+  font-size: var(--step-1);
+}
+
+.card:hover .play,
+.card:focus-within .play {
+  background: var(--accent);
+  color: var(--dusk-900);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes auroraSpin {
+  from {
+    transform: rotate(0deg) scale(1.15);
+  }
+  to {
+    transform: rotate(360deg) scale(1.15);
+  }
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: var(--space-4);
+  }
+
+  .header :global(.shell-button) {
+    justify-self: center;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora,
+  .header,
+  .card {
+    animation: none !important;
+  }
+}

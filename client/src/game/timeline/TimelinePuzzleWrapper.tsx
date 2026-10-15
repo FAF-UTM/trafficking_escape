@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { sendBeaconJson } from '../../lib/api';
 import TimelinePuzzle from './TimelinePuzzle.tsx';
 import { useNavigate } from 'react-router-dom';
+import MinigameChrome from '../../components/shell/MinigameChrome';
 
 const TimelinePuzzleWrapper: React.FC = () => {
   const navigate = useNavigate();
@@ -29,10 +30,18 @@ const TimelinePuzzleWrapper: React.FC = () => {
       Math.round((Date.now() - startRef.current) / 1000)
     );
     postSession(totalSeconds);
-    navigate(-1);
+    navigate('/mini-games');
   };
 
-  return <TimelinePuzzle onComplete={handleComplete} />;
+  const handleExit = () => {
+    navigate('/mini-games');
+  };
+
+  return (
+    <MinigameChrome onExit={handleExit}>
+      <TimelinePuzzle onComplete={handleComplete} />
+    </MinigameChrome>
+  );
 };
 
 export default TimelinePuzzleWrapper;

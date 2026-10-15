@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import './TraffickerSelection.css';
+import styles from './TraffickerSelection.module.css';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../lib/api';
+import PixelAvatar from '../../components/avatar/PixelAvatar';
 
 interface ChatSummary {
   id: number;
@@ -77,24 +78,34 @@ const TraffickerSelection: React.FC = () => {
   const handleCloseModal = () => navigate('/ending');
 
   return (
-    <div className="final-select-container">
-      <h2 className="title">{t('finalSelect.title')}</h2>
-      <p className="instruction">{t('finalSelect.instruction')}</p>
+    <div className={styles.page}>
+      <h1 className={styles.title}>{t('finalSelect.title')}</h1>
+      <p className={styles.instruction}>{t('finalSelect.instruction')}</p>
 
-      <div className="names-block">
+      <div className={styles.names}>
         {chats.map((c) => (
-          <span
+          <button
             key={c.id}
-            className={`name-chip ${selectedIds.has(c.id) ? 'selected' : ''}`}
+            type="button"
+            className={styles.chip}
+            aria-pressed={selectedIds.has(c.id)}
             onClick={() => toggle(c.id)}
+            disabled={submitted}
           >
-            {c.name}
-          </span>
+            <span className={styles.avatarWrap}>
+              <PixelAvatar seed={c.name} size={80} className={styles.avatar} />
+              <span className={styles.check} aria-hidden="true">
+                ✓
+              </span>
+            </span>
+            <span className={styles.chipName}>{c.name}</span>
+          </button>
         ))}
       </div>
 
       <button
-        className="submit-button"
+        type="button"
+        className={`shell-button ${styles.submit}`}
         onClick={handleSubmit}
         disabled={submitted}
       >
@@ -102,51 +113,62 @@ const TraffickerSelection: React.FC = () => {
       </button>
 
       {submitted && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className={styles.overlay} onClick={handleCloseModal}>
+          <div
+            className={styles.modal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="final-result-title"
+            onClick={(e) => e.stopPropagation()}
+          >
             {missed.length === 0 && falsePositives.length === 0 ? (
               <>
-                <h3 className="result-title">{t('finalSelect.great')}</h3>
-                <p className="result-text">{t('finalSelect.allIdentified')}</p>
-                <p className="result-text yellow">
-                  {t('finalSelect.continue')}
+                <h2 id="final-result-title" className={styles.resultTitle}>
+                  {t('finalSelect.great')}
+                </h2>
+                <p className={styles.resultText}>
+                  {t('finalSelect.allIdentified')}
                 </p>
               </>
             ) : (
               <>
-                <h3 className="result-title">{t('finalSelect.almost')}</h3>
+                <h2 id="final-result-title" className={styles.resultTitle}>
+                  {t('finalSelect.almost')}
+                </h2>
                 {correct.length > 0 && (
                   <>
-                    <p className="result-text">
+                    <p className={styles.resultText}>
                       {t('finalSelect.correctPicks')}
                     </p>
-                    <p className="result-text yellow">{correct.join(', ')}</p>
+                    <p className={styles.resultNames} data-tone="safe">
+                      {correct.join(', ')}
+                    </p>
                   </>
                 )}
                 {falsePositives.length > 0 && (
                   <>
-                    <p className="result-text">
+                    <p className={styles.resultText}>
                       {t('finalSelect.selectedNotTraffickers')}
                     </p>
-                    <p className="result-text yellow">
+                    <p className={styles.resultNames} data-tone="risk">
                       {falsePositives.join(', ')}
                     </p>
                   </>
                 )}
                 {missed.length > 0 && (
                   <>
-                    <p className="result-text">
+                    <p className={styles.resultText}>
                       {t('finalSelect.missedTraffickers')}
                     </p>
-                    <p className="result-text yellow">{missed.join(', ')}</p>
+                    <p className={styles.resultNames} data-tone="missed">
+                      {missed.join(', ')}
+                    </p>
                   </>
                 )}
-                <p className="result-text">{t('finalSelect.thanks')}</p>
-                <p className="result-text yellow">
-                  {t('finalSelect.continue')}
-                </p>
+                <p className={styles.resultText}>{t('finalSelect.thanks')}</p>
               </>
             )}
+            <p className={styles.continue}>{t('finalSelect.continue')}</p>
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { sendBeaconJson } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
+import MinigameChrome from '../../components/shell/MinigameChrome';
 import WordScrambleGame from './WordScrambleGame.tsx';
 
 const WordScrambleWrapper: React.FC = () => {
@@ -29,10 +30,18 @@ const WordScrambleWrapper: React.FC = () => {
       Math.round((Date.now() - startRef.current) / 1000)
     );
     postSession(totalSeconds);
-    navigate(-1);
+    navigate('/mini-games');
   };
 
-  return <WordScrambleGame onComplete={handleComplete} />;
+  const handleExit = () => {
+    navigate('/mini-games');
+  };
+
+  return (
+    <MinigameChrome onExit={handleExit}>
+      <WordScrambleGame onComplete={handleComplete} />
+    </MinigameChrome>
+  );
 };
 
 export default WordScrambleWrapper;
