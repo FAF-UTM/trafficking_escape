@@ -1,0 +1,321 @@
+export interface FlashCard {
+  id: string;
+  /** Short tactic / myth name shown after the answer. */
+  concept: string;
+  /** Mini scene — puts the claim in a real teen context. */
+  setup: string;
+  /** Claim the player judges true or false. */
+  statement: string;
+  answer: boolean;
+  /** Dense explainer — teaches the mechanism, not a slogan. */
+  explanation: string;
+  /** Why a sharp teen still falls for it. */
+  trapNote?: string;
+}
+
+export const CARDS_PER_RUN = 8;
+export const POINTS_HIT = 12;
+export const STREAK_BONUS = 4;
+/** Streak length required before bonus applies (on that hit). */
+export const STREAK_BONUS_AT = 3;
+
+export const CARDS: FlashCard[] = [
+  {
+    id: 'one-more-pic',
+    concept: 'The sunk-cost trap',
+    setup:
+      'Jay already sent one shirtless mirror pic to someone he thought was a girl from another school. Now they say: “Send one more or I post the first.”',
+    statement:
+      'Sending one more pic is the rational move — it buys silence and limits the damage to what already exists.',
+    answer: false,
+    explanation:
+      'Extra content is leverage, not a receipt. People who blackmail almost never stop after “one more”; they escalate because you proved fear works. Freeze contact, keep evidence, tell a trusted adult / helpline — don’t feed the archive.',
+    trapNote:
+      'Your brain bargains: “I already messed up, so double down.” That’s the hook.',
+  },
+  {
+    id: 'robux-manners',
+    concept: 'Gift debt dressed as manners',
+    setup:
+      'Someone on Discord drops €40 of game currency on Mary, then later: “I was nice to you… least you can do is stay on VC and answer my questions. Don’t be ungrateful.”',
+    statement:
+      'She’s socially obligated to keep talking — rejecting generosity after accepting it is basically using someone.',
+    answer: false,
+    explanation:
+      'Accepting a surprise gift doesn’t sell your time, privacy, or body. “Don’t be ungrateful” reframes a hook as etiquette. She can say thanks-and-block, return nothing, and tell an adult if they push secrecy or favours.',
+    trapNote: 'Teens are trained to be polite. Predators borrow that script.',
+  },
+  {
+    id: 'deepfake-harmless',
+    concept: 'Synthetic blackmail',
+    setup:
+      'A stranger DMs edited nudes with Mary’s face: “Pay or these go to your class story. It’s AI anyway — nobody can prove it’s you.”',
+    statement:
+      'Because the images are fake, the threat is mostly bluff and not worth involving adults — the smart flex is to ignore and move on alone.',
+    answer: false,
+    explanation:
+      'Deepfakes still wreck reputation and mental health, and “ignore alone” leaves you without evidence strategy. Screenshot, don’t pay, tell a trusted adult. Platforms and helplines (NL: helpwanted.nl / 0800‑0432) treat AI sexual image abuse seriously.',
+    trapNote:
+      '“It’s not real” is meant to make you feel stupid for being scared.',
+  },
+  {
+    id: 'discord-not-stranger',
+    concept: 'Familiar ≠ verified',
+    setup:
+      'Lex has been in the same 2k-member Discord for months, shares memes daily, knows Mary’s gamertag and timezone. He asks to move to Telegram “so mods don’t see.”',
+    statement:
+      'After months in the same public server, Lex isn’t a stranger anymore — Telegram is just a normal privacy upgrade.',
+    answer: false,
+    explanation:
+      'Shared meme history isn’t identity proof. Moving off a moderated space right when asks get personal is a classic isolation step: fewer witnesses, harder reporting. Keep high-risk chats where you can screenshot and involve adults.',
+    trapNote: 'Frequency of contact feels like trust. It isn’t verification.',
+  },
+  {
+    id: 'peer-share-illegal',
+    concept: 'Forwarding is still distribution',
+    setup:
+      'Someone’s intimate photo of a classmate hits the year-group chat. Half the people say “I didn’t take it, I’m just sharing the tea.”',
+    statement:
+      'If you didn’t create the photo, forwarding it in a meme chat can’t get you in legal or school trouble.',
+    answer: false,
+    explanation:
+      'Sharing intimate images of a minor (or non-consensual intimate images) can be illegal and against school rules even if you weren’t the photographer. Delete, don’t pile on, tell staff — “just the tea” is still distribution.',
+    trapNote:
+      'Distance from the camera feels like innocence. Platforms and law look at who spread it.',
+  },
+  {
+    id: 'apartment-casting',
+    concept: 'Inverted safety signals',
+    setup:
+      'Two Instagram “scouts” DM Sophia. A: wants parent/teacher contact + daytime studio address. B: “Private apartment test shoot tonight, bring a friend if you’re nervous, exclusive.”',
+    statement:
+      'B is safer — offering “bring a friend” and calling it exclusive shows they’re chill and professional.',
+    answer: false,
+    explanation:
+      'Rush + private home + flattery is the risk pattern. Real opportunities tolerate daylight, verification, and adults. “Bring a friend” is a comfort prop that doesn’t make an unknown apartment safe.',
+    trapNote:
+      'The friend clause is designed to quiet your alarm, not remove theirs.',
+  },
+  {
+    id: 'lovebomb-cycle',
+    concept: 'Intermittent reinforcement',
+    setup:
+      'Online “situationship”: week of constant praise, then cold silence until Mary sends voice notes / location. Then praise floods back.',
+    statement:
+      'The hot-cold pattern means the connection is getting deeper — mixed signals are normal when someone really likes you.',
+    answer: false,
+    explanation:
+      'That’s a control loop: reward → withdraw → demand → reward. It trains you to earn basic kindness. Healthy interest doesn’t require you to pay with privacy or compliance after every freeze-out.',
+    trapNote:
+      'Relief when they return feels like love. It’s often conditioning.',
+  },
+  {
+    id: 'led-them-on',
+    concept: 'The shame muzzle',
+    setup:
+      'Mary flirted for two weeks, then said no to meeting. They reply: “You led me on. If you tell anyone I’ll say you begged for it.”',
+    statement:
+      'Because she flirted first, telling a teacher or parent will mostly backfire — adults will side with “she started it.”',
+    answer: false,
+    explanation:
+      'Flirting isn’t a contract for meets, pics, or silence. Shame + threat is how people keep you isolated. Trusted adults and helplines hear this pattern constantly; early evidence beats their story.',
+    trapNote: 'They attack your credibility so you never test it.',
+  },
+  {
+    id: 'visa-giftcards',
+    concept: 'Fee-before-job scam pipeline',
+    setup:
+      '“Hotel internship in Spain, €3k/month, flights covered.” Then: buy gift cards / crypto for a “visa processing fee” today or the slot goes to someone else.',
+    statement:
+      'Paying small upfront fees by gift card is a normal teen pathway into glamorous hospitality work abroad.',
+    answer: false,
+    explanation:
+      'Real hiring doesn’t demand gift cards or secrecy on a countdown. Urgency + untraceable payment + abroad + “don’t tell parents” is a recruitment/scam stack. Verify with school/parents/official channels — never the poster.',
+    trapNote:
+      'The salary fantasy makes the fee feel like a ticket, not a loss.',
+  },
+  {
+    id: 'chains-required',
+    concept: 'Control without handcuffs',
+    setup:
+      'A “café job” for a 16-year-old: passport held “for paperwork,” tips kept by the boss, phone checked, shifts that never end, threats about immigration or “owing” training costs.',
+    statement:
+      'If nobody locked a door or dragged them into a van, it can’t be trafficking — it’s just a toxic workplace.',
+    answer: false,
+    explanation:
+      'Modern exploitation often runs on debt, fear, document control, and “you can’t leave,” not Hollywood kidnapping. Force can be psychological and economic. That still counts — tell a trusted adult / authorities / helpline.',
+    trapNote:
+      'Movies taught you chains. Real cases look like bad jobs with traps.',
+  },
+  {
+    id: 'cross-border-pay',
+    concept: 'Distance isn’t immunity',
+    setup:
+      'Sextortion account claims to be in another country: “Cops here don’t care. Pay €200 in crypto or your rugby team sees everything.”',
+    statement:
+      'If the blackmailer is abroad, involving adults is pointless — the only lever you have is paying once to close it.',
+    answer: false,
+    explanation:
+      'Cross-border cases are investigated; platforms can act on accounts; paying advertises you’re a paying target. Stop contact, preserve evidence, tell an adult/helpline. Geography is their intimidation prop.',
+    trapNote: 'Hopelessness is part of the script.',
+  },
+  {
+    id: 'bio-dox-lite',
+    concept: 'Pattern-of-life leakage',
+    setup:
+      'Mary’s public bio lists school initials, club jersey number, bus stop meme, and daily “leaving training” stories.',
+    statement:
+      'As long as she never posts her house number, strangers still can’t usefully predict her offline routine.',
+    answer: false,
+    explanation:
+      'School + schedule + routes = pattern-of-life. People stitch that into when you’re alone or moving. You don’t owe the internet a live map of your week — tighten stories, drop precise routines, tell an adult if someone “shows up.”',
+    trapNote: 'Each post feels tiny. Together they’re a timetable.',
+  },
+  {
+    id: 'kindertelefoon-permission',
+    concept: 'Help without a permission slip',
+    setup:
+      'Noah is scared to tell his parents about threats. A friend says Kindertelefoon won’t talk to him unless a parent signs off.',
+    statement:
+      'In the Netherlands, De Kindertelefoon requires parental permission before you can call anonymously.',
+    answer: false,
+    explanation:
+      'You can contact De Kindertelefoon (0800‑0432) free and anonymously without parent approval. helpwanted.nl covers online sexual abuse. Adults at school can also help — fear of “needing permission” is a myth that keeps people stuck.',
+    trapNote: 'Abusers love the idea that every exit needs a parent stamp.',
+  },
+  {
+    id: 'consent-stacking',
+    concept: 'Consent doesn’t cascade',
+    setup:
+      'They voice-chatted for a month. Now: “You already trust me — turn the camera on / meet behind the station. Saying no now is fake.”',
+    statement:
+      'Agreeing to voice chat earlier means refusing video or an offline meet is inconsistent — she already consented to closeness.',
+    answer: false,
+    explanation:
+      'Consent is per action, per moment. Voice ≠ video ≠ meet ≠ photos. Pressure that cites past yeses to override a current no is coercion dressed as logic.',
+    trapNote: 'They treat your history like a contract you never signed.',
+  },
+  {
+    id: 'block-is-bullying',
+    concept: 'Boundary ≠ bullying',
+    setup:
+      'After sexual pressure, Maya blocks. The person mass-messages mutuals: “She’s cyberbullying me by blocking, report her.”',
+    statement:
+      'Blocking someone after they push sexual content is a form of cyberbullying because it publicly rejects them.',
+    answer: false,
+    explanation:
+      'Blocking is a boundary, not an attack. You’re not required to host harassment in your inbox. Save evidence of the pressure, report the account, tell an adult if they raid your friends.',
+    trapNote: 'They flip the victim label to make you reopen the door.',
+  },
+  {
+    id: 'willing-then-trapped',
+    concept: 'The “you chose this” rewrite',
+    setup:
+      'A teen answers a modelling DM, travels for what they thought was a legit job, then phones are taken and “debts” appear for travel/housing.',
+    statement:
+      'Because they booked the trip themselves, what happens later can’t be trafficking — they volunteered.',
+    answer: false,
+    explanation:
+      'Initial willingness doesn’t license later coercion. Fraud, debt bondage, withheld documents, threats — those convert a “choice” into exploitation. “You chose this” is a silencing line, not a legal shield for abusers.',
+    trapNote: 'Shame about the first yes keeps people from reporting the trap.',
+  },
+  {
+    id: 'peer-exploiter',
+    concept: 'Exploitation isn’t only adults',
+    setup:
+      'A popular 17-year-old pressures a 14-year-old in school chats for nudes, then controls who sees them.',
+    statement:
+      'If both people are under 18, it can’t involve trafficking-style exploitation — that’s only adult strangers online.',
+    answer: false,
+    explanation:
+      'Age-gap power, blackmail, and peer coercion are real. Exploitation is about control and harm, not only “creepy adult in a van.” Tell staff/parents; schools and police take peer image abuse seriously.',
+    trapNote: '“We’re both teens” is used to minimise the power gap.',
+  },
+  {
+    id: 'story-pickup',
+    concept: 'Surveillance pitch',
+    setup:
+      'Someone Mary never met IRL: “I know you finish athletics at 17:40 — I’ll wait by the gate so you don’t walk alone. Share live pin.”',
+    statement:
+      'Using details from her public stories to offer a pickup shows attentiveness and protective interest.',
+    answer: false,
+    explanation:
+      'That’s surveillance marketed as care. Knowing your routine without a real-world relationship is a warning, not a compliment. Get home via people you already trust offline; report the account.',
+    trapNote: 'Being “seen” feels intimate. Here it’s mapping.',
+  },
+  {
+    id: 'popular-untouchable',
+    concept: 'Status intimidation',
+    setup:
+      'The person pressuring Noah is a school influencer with teacher fans. Friends say reporting is career suicide.',
+    statement:
+      'If the abuser has status, documenting and telling staff is useless — institutions always protect the popular kid.',
+    answer: false,
+    explanation:
+      'Status makes reporting scary, not pointless. Evidence + a trusted adult/helpline still changes outcomes; silence guarantees the behaviour continues (for you or the next target). You don’t have to confront them alone.',
+    trapNote: 'They borrow the school hierarchy as a weapon.',
+  },
+  {
+    id: 'telegram-privacy-flex',
+    concept: 'Privacy vs. isolation',
+    setup:
+      '“IG spies on us. Move to Signal/Telegram secret chat — I’m protecting your privacy from your nosy mum.”',
+    statement:
+      'Any request to leave a screenshot-friendly app for a more private one is automatically a grooming red flag.',
+    answer: false,
+    explanation:
+      'Private apps aren’t evil by default — friends use them too. The red flag is the combo: secrecy from adults + escalating asks + punishment if you refuse. Judge the pattern, not the logo.',
+    trapNote:
+      'All-or-nothing rules feel smart… and miss how real grooming hides in normal tools.',
+  },
+  {
+    id: 'library-ok',
+    concept: 'Calibration, not paranoia',
+    setup:
+      'Maya from biology — sits next to Mary daily — texts on their usual chat: public library, 16:00, quiz revision, no secrecy.',
+    statement:
+      'After learning about grooming, Mary should treat this like a threat and cancel any offline plan with classmates.',
+    answer: false,
+    explanation:
+      'Safety skill is discrimination: known classmate + public place + normal school context ≠ cold DM with gifts and secrecy. Tell a parent where you are — that’s routine, not panic.',
+    trapNote:
+      'Trauma from scary lessons can overfire. Precision beats shutdown.',
+  },
+  {
+    id: 'delete-first',
+    concept: 'Evidence before erase',
+    setup:
+      'Threats land. Noah’s instinct: wipe the chat so his parents never see he engaged.',
+    statement:
+      'Wiping the thread immediately is the strongest first move — it removes the problem and the shame trail.',
+    answer: false,
+    explanation:
+      'Stopping replies helps; destroying evidence helps them. Screenshot/export first, then block. Adults and helplines work better with receipts than with “I deleted it because I panicked.”',
+    trapNote: 'Shame wants a clean phone. Cases want a timeline.',
+  },
+  {
+    id: 'only-sex-trafficking',
+    concept: 'Labour is in the definition',
+    setup:
+      'Class debate: a kid says trafficking “just means sex crimes,” so fake warehouse jobs don’t count in this game.',
+    statement:
+      'Human trafficking, by definition, only covers sexual exploitation — forced work is a separate, lesser issue.',
+    answer: false,
+    explanation:
+      'Forced labour is core trafficking territory: recruitment by lies, debt, withheld wages/documents, threats. Sexual exploitation is one form, not the whole map.',
+    trapNote:
+      'Narrow definitions let labour pipelines look like “just hustle.”',
+  },
+  {
+    id: 'screenshot-forbidden',
+    concept: 'You can keep receipts',
+    setup:
+      'They type: “Screenshotting is illegal. Delete that. If you show anyone I’ll press charges.”',
+    statement:
+      'In a private chat, screenshotting messages someone sent you is generally something you must never do — it’s automatically illegal.',
+    answer: false,
+    explanation:
+      'Saving evidence of threats/pressure to show a trusted adult or helpline is a standard safety move. Their “I’ll press charges” line is usually intimidation. When in doubt, ask an adult/helpline how to store it safely.',
+    trapNote: 'They police your evidence so only their story survives.',
+  },
+];
