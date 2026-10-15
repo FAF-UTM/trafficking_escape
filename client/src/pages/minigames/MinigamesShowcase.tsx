@@ -22,15 +22,20 @@ const minigames: Minigame[] = [
       'Arrange key events in the correct sequence to progress the story.',
   },
   {
+    name: 'Emoji Story',
+    route: '/emoji-story',
+    description: 'Decode emoji stories and pick the right meaning.',
+  },
+  {
     name: 'Who to Trust',
     route: '/who-to-trust',
     description:
       'Decide whom to trust in tricky situations and learn about red flags.',
   },
   {
-    name: 'Flash Cards',
-    route: '/true-false',
-    description: 'Test your knowledge with quick fact-checking flashcards.',
+    name: 'Danger Words',
+    route: '/danger-highlight',
+    description: 'Spot red flag phrases in risky DMs.',
   },
   {
     name: 'Word Choice',
@@ -38,19 +43,14 @@ const minigames: Minigame[] = [
     description: 'Complete sentences by choosing the correct word.',
   },
   {
-    name: 'Emoji Story',
-    route: '/emoji-story',
-    description: 'Decode emoji stories and pick the right meaning.',
-  },
-  {
-    name: 'Danger Words',
-    route: '/danger-highlight',
-    description: 'Spot red flag words in a fake job ad.',
-  },
-  {
     name: 'Word Scramble',
     route: '/word-scramble',
-    description: 'Unscramble words to reveal safety-related terms.',
+    description: 'Build safety words from letter tiles, then pick Mary’s move.',
+  },
+  {
+    name: 'Flash Cards',
+    route: '/true-false',
+    description: 'Test your knowledge with quick fact-checking flashcards.',
   },
 ];
 
