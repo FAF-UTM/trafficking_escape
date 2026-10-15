@@ -335,10 +335,6 @@ const ClickPlayGame: React.FC<ClickPlayGameProps> = ({ onComplete }) => {
         return;
       case 'door':
         if (flagged('hallDoor')) return;
-        if (!flagged('decoded')) {
-          say('doorNeedDecode');
-          return;
-        }
         openCode('padHallDoor', '6294', () => {
           setFlag('hallDoor');
           setPendingAdvance(true);
@@ -827,12 +823,12 @@ const HOTSPOTS: Record<
     { id: 'door', x: 84, y: 16, w: 14, h: 72 },
   ],
   bay: [
-    { id: 'crate', x: 2, y: 28, w: 22, h: 44 },
-    { id: 'label', x: 8, y: 36, w: 12, h: 14 },
-    { id: 'pallet', x: 6, y: 74, w: 26, h: 16 },
-    { id: 'radio', x: 28, y: 46, w: 12, h: 18 },
-    { id: 'lockbox', x: 40, y: 28, w: 11, h: 18 },
-    { id: 'gate', x: 56, y: 10, w: 40, h: 80 },
+    { id: 'crate', x: 24, y: 47, w: 14, h: 18 },
+    { id: 'label', x: 13, y: 40, w: 8, h: 8 },
+    { id: 'pallet', x: 0, y: 68, w: 28, h: 16 },
+    { id: 'radio', x: 26, y: 34, w: 8, h: 14 },
+    { id: 'lockbox', x: 38, y: 24, w: 7, h: 16 },
+    { id: 'gate', x: 54, y: 6, w: 41, h: 58 },
   ],
 };
 

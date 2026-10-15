@@ -350,7 +350,7 @@
     "padDoor": "Deurkeypad — 4 cijfers",
     "padCabinet": "Kastslot — 3 cijfers",
     "padHallDoor": "Exit-keypad — 4 cijfers",
-    "padRadio": "Radiofrequentie — voer 883 in voor 88.3",
+    "padRadio": "Radio — voer frequentie in (3 cijfers)",
     "padLockbox": "Muurkluis — 4 cijfers",
     "endKicker": "Ontsnapping gelukt",
     "endTitle": "Mary is buiten",
@@ -420,7 +420,7 @@
     "crateNeedCrowbar": "Verzegelde kist. Iets zwaars erin — je hebt hefboomkracht nodig.",
     "foundCutters": "De koevoet breekt de kist open. Erin: een boltang.",
     "crateEmpty": "Lege kist.",
-    "shippingLabel": "Label: RADIO 88.3 FM · LOCKBOX ORDER A3-B1-C2-D4 · MAP: A3=2 B1=5 C2=9 D4=0",
+    "shippingLabel": "Label: RADIO 88.3 FM — stem eerst de radio af.",
     "radioMessage": "Frequentie vast. Een vlakke stem: “Kluis… twee vijf negen nul… knip daarna de ketting.”",
     "radioDone": "Radio blijft op dat kanaal.",
     "lockboxSilent": "Kluis blijft donker tot de radio het kanaal bevestigt.",
@@ -439,8 +439,8 @@
     "hint_hallway_3": "Hint: selecteer het cijferblad, tik op het whiteboard, en match ★ ◆ ● ▲ op je blad.",
     "hint_hallway_4": "Hint: exit-keypad is 6294. (Schroevendraaier op de zekeringenkast wekt de monitor.)",
     "hint_bay_1": "Hint: koevoet onder de pallet; gebruik die op de kist.",
-    "hint_bay_2": "Hint: lees het verzendlabel en stem de radio af op 88.3 (voer 883 in).",
-    "hint_bay_3": "Hint: kluiscode uit de labelkaart is 2590.",
+    "hint_bay_2": "Hint: het verzendlabel noemt het radiostation — voer het in als drie cijfers.",
+    "hint_bay_3": "Hint: als de radio vastzit, luister — de kluiscode is 2590.",
     "hint_bay_4": "Hint: knip de hekketting met de boltang en selecteer daarna de remote."
   },
   "emojiDecoder": {

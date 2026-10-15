@@ -350,7 +350,7 @@
     "padDoor": "Door keypad — 4 digits",
     "padCabinet": "Cabinet lock — 3 digits",
     "padHallDoor": "Exit keypad — 4 digits",
-    "padRadio": "Radio frequency — enter 883 for 88.3",
+    "padRadio": "Radio — enter frequency (3 digits)",
     "padLockbox": "Wall lockbox — 4 digits",
     "endKicker": "Escape complete",
     "endTitle": "Mary is out",
@@ -420,7 +420,7 @@
     "crateNeedCrowbar": "Sealed crate. Something heavy inside — needs leverage.",
     "foundCutters": "Crowbar cracks the crate. Inside: bolt cutters.",
     "crateEmpty": "Empty crate.",
-    "shippingLabel": "Label reads: RADIO 88.3 FM · LOCKBOX ORDER A3-B1-C2-D4 · MAP: A3=2 B1=5 C2=9 D4=0",
+    "shippingLabel": "Label reads: RADIO 88.3 FM — tune the set before anything else.",
     "radioMessage": "Frequency locks. A flat voice: “Lockbox… two five nine zero… then cut the chain.”",
     "radioDone": "Radio stays on that channel.",
     "lockboxSilent": "Lockbox stays dark until the radio confirms the channel.",
@@ -439,8 +439,8 @@
     "hint_hallway_3": "Hint: select the cipher sheet, tap the whiteboard, then match ★ ◆ ● ▲ on your sheet.",
     "hint_hallway_4": "Hint: exit keypad is 6294. (Screwdriver on the fuse box wakes the monitor.)",
     "hint_bay_1": "Hint: crowbar is under the pallet; use it on the crate.",
-    "hint_bay_2": "Hint: read the shipping label, then tune the radio to 88.3 (enter 883).",
-    "hint_bay_3": "Hint: lockbox code from the label map is 2590.",
+    "hint_bay_2": "Hint: the shipping label names the radio station — enter it as three digits.",
+    "hint_bay_3": "Hint: after the radio locks, listen — the lockbox code is 2590.",
     "hint_bay_4": "Hint: cut the gate chain with bolt cutters, then select the remote."
   },
   "emojiDecoder": {
