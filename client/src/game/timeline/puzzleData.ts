@@ -6,15 +6,22 @@ export interface PuzzleCard {
 }
 
 export interface PuzzleLevel {
+  id: string;
   levelNumber: number;
   cards: PuzzleCard[];
+  titleKey: string;
   descriptionKey: string;
+  /** Shown after the level is solved. */
+  lessonKey: string;
 }
 
-export const puzzleLevels: PuzzleLevel[] = [
+export const LEVELS: PuzzleLevel[] = [
   {
+    id: 'secret-party',
     levelNumber: 1,
+    titleKey: 'timelinePuzzle.level1.title',
     descriptionKey: 'timelinePuzzle.level1.description',
+    lessonKey: 'timelinePuzzle.level1.lesson',
     cards: [
       {
         id: 1,
@@ -37,8 +44,11 @@ export const puzzleLevels: PuzzleLevel[] = [
     ],
   },
   {
+    id: 'fake-scout',
     levelNumber: 2,
+    titleKey: 'timelinePuzzle.level2.title',
     descriptionKey: 'timelinePuzzle.level2.description',
+    lessonKey: 'timelinePuzzle.level2.lesson',
     cards: [
       {
         id: 1,
@@ -73,8 +83,11 @@ export const puzzleLevels: PuzzleLevel[] = [
     ],
   },
   {
+    id: 'job-flyer',
     levelNumber: 3,
+    titleKey: 'timelinePuzzle.level3.title',
     descriptionKey: 'timelinePuzzle.level3.description',
+    lessonKey: 'timelinePuzzle.level3.lesson',
     cards: [
       {
         id: 1,
@@ -121,3 +134,6 @@ export const puzzleLevels: PuzzleLevel[] = [
     ],
   },
 ];
+
+/** Kept for any imports that still use the old name. */
+export const puzzleLevels = LEVELS;
